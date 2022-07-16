@@ -13,12 +13,18 @@ object NetworkManager {
 
     val currentEnvironment = Environment.FIXED
     val environments: HashMap<Environment, Url> = hashMapOf(
-        Environment.NOTHING to Url("", ""),
+        Environment.NOTHING to Url(
+            "https://videos.assemblee-nationale.fr/live/xml/edito_20220714.xml",
+            ""
+        ),
         Environment.FIXED to Url(
-            "",
+            "https://videos.assemblee-nationale.fr/live/xml/edito_20220713.xml",
             "https://web.archive.org/web/20201104094313/http://videos.assemblee-nationale.fr/live/live.txt"
         ),
-        Environment.REAL_TIME to Url("", "https://videos.assemblee-nationale.fr/live/live.txt"),
+        Environment.REAL_TIME to Url(
+            "https://videos.assemblee-nationale.fr/live/xml/edito.xml",
+            "https://videos.assemblee-nationale.fr/live/live.txt"
+        ),
     )
 
     fun getliveURL(): String {

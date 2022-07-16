@@ -1,12 +1,14 @@
 package fr.fgognet.antv.activity
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.util.MimeTypes
+import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.StreamManager
 
@@ -20,9 +22,21 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val events = StreamManager.getLiveInfos()
-        Log.w("antv", "coucou")
+        val editos = StreamManager.getLiveInfos()
         setContentView(R.layout.activity_main)
+        val layout = findViewById<LinearLayout>(R.id.edito_elements)
+        if (editos?.element == null) {
+            var textView = TextView(this)
+            textView.text = editos!!.introduction
+            layout.addView(textView)
+        } else {
+            for (diffusion: Diffusion in editos.element!!) {
+                var textView = TextView(this)
+                textView.text = diffusion.sujet
+                layout.addView(textView)
+            }
+        }
+
     }
 
     override fun onStart() {
