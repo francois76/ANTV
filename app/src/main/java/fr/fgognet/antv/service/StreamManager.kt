@@ -2,9 +2,9 @@ package fr.fgognet.antv.service
 
 import android.util.Log
 import fr.fgognet.antv.Editorial
+import org.simpleframework.xml.Serializer
+import org.simpleframework.xml.core.Persister
 import java.net.URL
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBException
 
 object StreamManager {
 
@@ -26,22 +26,13 @@ object StreamManager {
 
     fun getLiveInfos(): Editorial? {
         Log.i(TAG, "Using URL " + NetworkManager.getEditorialUrl())
-        val jaxbContext: JAXBContext
-        try {
-            jaxbContext = JAXBContext.newInstance(Editorial::class.java)
-            val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
-            return jaxbUnmarshaller.unmarshal(
-                URL(
+        val serializer: Serializer = Persister()
+        return serializer.read(
+            Editorial::class.java, URL(
 
-                    NetworkManager.getEditorialUrl()
+                NetworkManager.getEditorialUrl()
 
-                ).openStream()
-            ) as Editorial
-
-        } catch (e: JAXBException) {
-            e.printStackTrace()
-            return Editorial("Network exception", e.stackTraceToString())
-        }
-
+            ).openStream()
+        )
     }
 }

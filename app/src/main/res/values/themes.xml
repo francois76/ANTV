@@ -1,4 +1,13 @@
 <resources>
 
     <style name="Theme.ANTV" parent="@style/Theme.Leanback" />
+
+    <style name="Theme.ANTV.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ANTV.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ANTV.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

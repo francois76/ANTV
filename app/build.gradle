@@ -44,18 +44,35 @@ android {
         exclude 'META-INF/mailcap.default'
         exclude("META-INF/*.kotlin_module")
     }
+    buildFeatures {
+        viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.leanback:leanback:1.0.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // hls video player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.18.0'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.0'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.0'
-    implementation 'me.champeau.openbeans:openbeans:1.0.2'
-    implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.3'
-    implementation 'jakarta.activation:jakarta.activation-api:2.1.0'
-    // Required -- JUnit 4 framework
+    // for xml
+    implementation group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
+    // navigation
+    def nav_version = "2.5.0"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+    // Junit
     testImplementation "junit:junit:4.13.2"
 }

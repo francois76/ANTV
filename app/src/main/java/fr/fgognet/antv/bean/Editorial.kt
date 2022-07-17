@@ -1,43 +1,77 @@
 package fr.fgognet.antv
 
-import javax.xml.bind.annotation.XmlElement
-import javax.xml.bind.annotation.XmlRootElement
+import org.simpleframework.xml.Attribute
+import org.simpleframework.xml.Element
+import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.Root
 
-@XmlRootElement(name = "editorial")
+
+@Root(name = "editorial")
 data class Editorial(
-    @XmlElement(name = "titre")
+    @field:Element(name = "titre")
+    @param:Element(name = "titre")
     val titre: String = "",
-    @XmlElement(name = "introduction")
+    @field:Element(name = "introduction")
+    @param:Element(name = "introduction")
     val introduction: String = "",
-    @XmlElement(name = "element")
-    var element: List<Diffusion>? = null
+    @field:ElementList(entry = "diffusion", required = false, inline = true)
+    @param:ElementList(entry = "diffusion", required = false, inline = true)
+    var diffusions: List<Diffusion>? = null
 
 )
 
+@Root(name = "diffusion")
 data class Diffusion(
-    @XmlElement(name = "id_organe")
+    @field:Element(name = "id_organe", required = false)
+    @param:Element(name = "id_organe", required = false)
     var id_organe: String? = null,
-    @XmlElement(name = "libelle")
+    @field:Element(name = "libelle", required = false)
+    @param:Element(name = "libelle", required = false)
     var libelle: String? = null,
-    @XmlElement(name = "libelle_court")
+    @field:Element(name = "libelle_court", required = false)
+    @param:Element(name = "libelle_court", required = false)
     var libelle_court: String? = null,
-    @XmlElement(name = "heure")
+    @field:Element(name = "heure", required = false)
+    @param:Element(name = "heure", required = false)
     var heure: String? = null,
-    @XmlElement(name = "flux")
+    @field:Element(name = "flux", required = false)
+    @param:Element(name = "flux", required = false)
     var flux: Int? = null,
-    @XmlElement(name = "sujet")
+    @field:Element(name = "sujet", required = false)
+    @param:Element(name = "sujet", required = false)
     var sujet: String? = null,
-    @XmlElement(name = "uid_referentiel")
+    @field:Element(name = "uid_referentiel", required = false)
+    @param:Element(name = "uid_referentiel", required = false)
     var uid_referentiel: String? = null,
-    @XmlElement(name = "lieu")
+    @field:Element(name = "lieu", required = false)
+    @param:Element(name = "lieu", required = false)
     var lieu: String? = null,
-    @XmlElement(name = "lieu_ref")
+    @field:Element(name = "lieu_ref", required = false)
+    @param:Element(name = "lieu_ref", required = false)
     var lieu_ref: String? = null,
-    @XmlElement(name = "programme_ratp")
+    @field:Element(name = "programme_ratp", required = false)
+    @param:Element(name = "programme_ratp", required = false)
     var programme_ratp: String? = null,
-    @XmlElement(name = "teledistribution")
+    @field:Element(name = "teledistribution", required = false)
+    @param:Element(name = "teledistribution", required = false)
     var teledistribution: String? = null,
-    @XmlElement(name = "video_url")
-    var video_url: String? = null
+    @field:Element(name = "video_url", required = false)
+    @param:Element(name = "video_url", required = false)
+    var video_url: String? = null,
+    @field:Element(name = "indexation", required = false)
+    @param:Element(name = "indexation", required = false)
+    var indexation: String? = null,
+    @field:Element(name = "titre", required = false)
+    @param:Element(name = "titre", required = false)
+    var titre: String? = null,
+    @field:Attribute(name = "dateModification", required = false)
+    @param:Attribute(name = "dateModification", required = false)
+    var dateModification: String? = null,
+    @field:Attribute(name = "dateSuppression", required = false)
+    @param:Attribute(name = "dateSuppression", required = false)
+    var dateSuppression: String? = null,
+    @field:Attribute(name = "id", required = false)
+    @param:Attribute(name = "id", required = false)
+    var id: String? = null
 
 )
