@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.util.MimeTypes
 import fr.fgognet.antv.R
-import fr.fgognet.antv.databinding.FragmentPlayerBinding
 import fr.fgognet.antv.service.StreamManager
 
 // TODO: Rename parameter arguments, choose names that match
@@ -48,8 +48,7 @@ class PlayerFragment : Fragment() {
         this.player!!.setMediaItem(mediaItem)
         this.player!!.prepare()
         this.player!!.play()
-        val view = FragmentPlayerBinding.inflate(layoutInflater)
-        view.videoView.player = this.player
+        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.player
 
     }
 

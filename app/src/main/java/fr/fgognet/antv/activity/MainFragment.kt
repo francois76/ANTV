@@ -6,17 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
-import fr.fgognet.antv.databinding.FragmentMainBinding
 import fr.fgognet.antv.service.StreamManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,17 +39,19 @@ class MainFragment : Fragment() {
                 val editos = StreamManager.getLiveInfos()
                 withContext(Dispatchers.Main) {
                     Log.w(TAG, editos.toString())
-
-                    val layout = FragmentMainBinding.inflate(layoutInflater).editos
                     if (editos?.diffusions == null) {
                         val textView = TextView(context)
                         textView.text = editos!!.introduction
-                        layout.addView(textView)
+                        view.findViewById<LinearLayout>(R.id.editos).addView(textView)
                     } else {
                         for (diffusion: Diffusion in editos.diffusions!!) {
-                            val textView = TextView(context)
-                            textView.text = diffusion.sujet
-                            layout.addView(textView)
+                            val button = Button(context)
+                            button.text = diffusion.libelle
+                            Log.w(TAG, "adding button" + diffusion.libelle + "to fragment")
+                            button.setOnClickListener {
+                                Navigation.findNavController(it).navigate(R.id.playerFragment)
+                            }
+                            view.findViewById<LinearLayout>(R.id.editos).addView(button)
                         }
                     }
                 }
@@ -63,9 +66,6 @@ class MainFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-        view.findViewById<Button>(R.id.go_to_video_btn).setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.playerFragment)
-        }
         return view
     }
 
