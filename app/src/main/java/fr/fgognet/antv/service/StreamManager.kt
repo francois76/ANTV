@@ -3,7 +3,6 @@ package fr.fgognet.antv.service
 import android.util.Log
 import fr.fgognet.antv.Editorial
 import java.net.URL
-import java.net.URLEncoder
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
 
@@ -27,17 +26,15 @@ object StreamManager {
 
     fun getLiveInfos(): Editorial? {
         Log.i(TAG, "Using URL " + NetworkManager.getEditorialUrl())
-
         val jaxbContext: JAXBContext
         try {
             jaxbContext = JAXBContext.newInstance(Editorial::class.java)
             val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
             return jaxbUnmarshaller.unmarshal(
                 URL(
-                    URLEncoder.encode(
-                        NetworkManager.getEditorialUrl(),
-                        "UTF-8"
-                    )
+
+                    NetworkManager.getEditorialUrl()
+
                 ).openStream()
             ) as Editorial
 

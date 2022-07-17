@@ -49,14 +49,14 @@ package java.beans;
 
 public class Introspector extends java.lang.Object {
 
-
     private Introspector() {
         super();
+
     }
 
 
     public static String decapitalize(String name) {
-        return null;
+        return com.googlecode.openbeans.Introspector.decapitalize(name);
     }
 
 }

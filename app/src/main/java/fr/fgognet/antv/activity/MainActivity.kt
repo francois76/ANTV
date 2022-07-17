@@ -1,6 +1,7 @@
 package fr.fgognet.antv.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -11,6 +12,8 @@ import com.google.android.exoplayer2.util.MimeTypes
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.StreamManager
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 /**
@@ -19,22 +22,16 @@ import fr.fgognet.antv.service.StreamManager
 class MainActivity : FragmentActivity() {
     var player: ExoPlayer? = null
 
+    val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val editos = StreamManager.getLiveInfos()
         setContentView(R.layout.activity_main)
-        val layout = findViewById<LinearLayout>(R.id.edito_elements)
-        if (editos?.element == null) {
-            var textView = TextView(this)
-            textView.text = editos!!.introduction
-            layout.addView(textView)
-        } else {
-            for (diffusion: Diffusion in editos.element!!) {
-                var textView = TextView(this)
-                textView.text = diffusion.sujet
-                layout.addView(textView)
-            }
+        val executor: ExecutorService = Executors.newFixedThreadPool(10)
+        val t = this
+        executor.submit {
+            Log.w(TAG, "Submitting task..")
+            Task(t)
         }
 
     }
@@ -60,4 +57,22 @@ class MainActivity : FragmentActivity() {
         this.player!!.release()
     }
 
+    class Task(val t: MainActivity) : Runnable {
+        override fun run() {
+            val editos = StreamManager.getLiveInfos()
+            Log.w(t.TAG, editos.toString())
+            val layout = t.findViewById<LinearLayout>(R.id.edito_elements)
+            if (editos?.element == null) {
+                var textView = TextView(t)
+                textView.text = editos!!.introduction
+                layout.addView(textView)
+            } else {
+                for (diffusion: Diffusion in editos.element!!) {
+                    var textView = TextView(t)
+                    textView.text = diffusion.sujet
+                    layout.addView(textView)
+                }
+            }
+        }
+    }
 }
