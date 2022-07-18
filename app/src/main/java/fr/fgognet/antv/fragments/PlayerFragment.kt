@@ -16,9 +16,7 @@ private const val ARG_URL = "url"
 
 
 /**
- * A simple [Fragment] subclass.
- * Use the [PlayerFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * PlayerFragment the fragment that hosts the player implementation
  */
 class PlayerFragment : Fragment() {
     private var url: String? = null

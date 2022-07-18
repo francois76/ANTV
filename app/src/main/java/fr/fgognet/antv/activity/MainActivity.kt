@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import fr.fgognet.antv.R
 
-
 /**
- * Loads [MainFragment].
+ * MainActivity activity that hold the navigation
  */
 class MainActivity : FragmentActivity() {
 

@@ -18,21 +18,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * MainFragment is the main fragment handle by navigation
  */
 class MainFragment : Fragment() {
-    val TAG = "MainFragment"
+    private val TAG = "MainFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState != null) {
+            return
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val editos = StreamManager.getLiveInfos()
@@ -44,17 +40,15 @@ class MainFragment : Fragment() {
                         view.findViewById<LinearLayout>(R.id.editos).addView(textView)
                     } else {
                         for (diffusion: Diffusion in editos.diffusions!!) {
-
-
-                            Log.w(TAG, "adding button" + diffusion.libelle + "to fragment")
                             val fragTransaction: FragmentTransaction =
                                 parentFragmentManager.beginTransaction()
-
+                            Log.w(TAG, "adding card" + diffusion.libelle + "to fragment")
                             val cardFragment =
                                 CardFragment.newInstance(
                                     diffusion.libelle ?: "dissusion sans titre",
+                                    diffusion.lieu ?: "lieu inconnu",
                                     diffusion.sujet ?: "",
-                                    diffusion.id_organe ?: "",
+                                    if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                                     diffusion.video_url ?: ""
                                 )
                             fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
@@ -67,13 +61,13 @@ class MainFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
 
