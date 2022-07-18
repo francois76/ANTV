@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainFragment">
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:context=".fragments.MainFragment">
 
-    <LinearLayout
-        android:id="@+id/editos"
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:layout_height="0dp"
+        android:layout_gravity="start"
+        android:layout_weight="2"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="40dp"
+        android:text="@string/app_name" />
 
-</FrameLayout>
+    <HorizontalScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_weight="7"
+        android:contentDescription="@string/live_items">
+
+        <LinearLayout
+            android:id="@+id/editos"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:isScrollContainer="false"
+            android:layoutDirection="locale"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="1" />
+
+
+</LinearLayout>

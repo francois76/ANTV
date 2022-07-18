@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.ANTV" parent="@style/Theme.Leanback" />
+    <style name="Theme.ANTV" parent="@style/Theme.Material3.Dark" />
 
     <style name="Theme.ANTV.NoActionBar">
         <item name="windowActionBar">false</item>

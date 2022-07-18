@@ -1,16 +1,15 @@
-package fr.fgognet.antv.activity
+package fr.fgognet.antv.fragments
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.StreamManager
@@ -45,13 +44,21 @@ class MainFragment : Fragment() {
                         view.findViewById<LinearLayout>(R.id.editos).addView(textView)
                     } else {
                         for (diffusion: Diffusion in editos.diffusions!!) {
-                            val button = Button(context)
-                            button.text = diffusion.libelle
+
+
                             Log.w(TAG, "adding button" + diffusion.libelle + "to fragment")
-                            button.setOnClickListener {
-                                Navigation.findNavController(it).navigate(R.id.playerFragment)
-                            }
-                            view.findViewById<LinearLayout>(R.id.editos).addView(button)
+                            val fragTransaction: FragmentTransaction =
+                                parentFragmentManager.beginTransaction()
+
+                            val cardFragment =
+                                CardFragment.newInstance(
+                                    diffusion.libelle ?: "dissusion sans titre",
+                                    diffusion.sujet ?: "",
+                                    diffusion.id_organe ?: "",
+                                    diffusion.video_url ?: ""
+                                )
+                            fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
+                            fragTransaction.commit()
                         }
                     }
                 }
