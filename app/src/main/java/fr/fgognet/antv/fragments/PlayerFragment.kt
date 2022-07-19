@@ -22,6 +22,7 @@ private const val ARG_URL = "url"
 class PlayerFragment : Fragment() {
     private var url: String? = null
     private var videoView: VideoViewModel? = null
+    private var player: ExoPlayer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,18 +35,18 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.videoView = ViewModelProvider(this).get()
-        if (this.videoView?.player == null) {
-            this.videoView?.initPlayer(url!!, ExoPlayer.Builder(this.requireContext()).build())
+        if (!this.videoView!!.isPlayerInit) {
+            this.player = this.videoView?.initPlayer(url!!)
+        } else {
+            this.player = this.videoView?.buildPlayer()
         }
 
     }
 
     override fun onStart() {
         super.onStart()
-        if (this.videoView?.player?.isPlaying == false) {
-            this.videoView?.player?.play()
-        }
-        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.videoView?.player
+        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.player
+        this.player?.play()
     }
 
 
@@ -60,7 +61,7 @@ class PlayerFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        this.videoView?.player!!.release()
+        this.player?.release()
     }
 
     companion object {
