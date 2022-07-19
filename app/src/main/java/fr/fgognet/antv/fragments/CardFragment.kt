@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private const val TAG = "CardFragment"
+private const val TAG = "ANTV/CardFragment"
 private const val ARG_TITLE = "title"
 private const val ARG_SUBTITLE = "subtitle"
 private const val ARG_DESCRIPTION = "description"
@@ -37,6 +37,7 @@ class CardFragment : Fragment() {
     private var bitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
             title = it.getString(ARG_TITLE)
@@ -51,6 +52,7 @@ class CardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_card, container, false)
         view.findViewById<TextView>(R.id.card_title).text = title
@@ -89,9 +91,9 @@ class CardFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        Log.d(TAG, "onSaveInstanceState")
         // outState.putParcelable("bitmap", bitmap)
         super.onSaveInstanceState(outState)
-        Log.i(TAG, "instance saved")
     }
 
     companion object {
@@ -104,6 +106,7 @@ class CardFragment : Fragment() {
             live: String
         ) =
             CardFragment().apply {
+                Log.d(TAG, "new instance of cardFragment")
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_SUBTITLE, subtitle)

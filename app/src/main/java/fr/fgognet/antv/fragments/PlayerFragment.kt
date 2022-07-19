@@ -13,7 +13,7 @@ import fr.fgognet.antv.viewmodel.VideoViewModel
 
 
 private const val ARG_URL = "url"
-private const val TAG = "PlayerFragment"
+private const val TAG = "ANTV/PlayerFragment"
 
 /**
  * PlayerFragment the fragment that hosts the player implementation
@@ -23,6 +23,7 @@ class PlayerFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
             url = it.getString(ARG_URL)
@@ -30,6 +31,7 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
         videoView.updateUrl(url!!)
@@ -44,19 +46,8 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_player, container, false)
-    }
-
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(url: String) =
-            PlayerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_URL, url)
-                }
-            }
     }
 }

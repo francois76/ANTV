@@ -22,13 +22,11 @@ import kotlinx.coroutines.withContext
  * MainFragment is the main fragment handle by navigation
  */
 class MainFragment : Fragment() {
-    private val TAG = "MainFragment"
+    private val TAG = "ANTV/MainFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState != null) {
-            return
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val editos = StreamManager.getLiveInfos()
@@ -66,6 +64,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
