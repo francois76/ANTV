@@ -64,6 +64,9 @@ data class Diffusion(
     @field:Element(name = "titre", required = false)
     @param:Element(name = "titre", required = false)
     var titre: String? = null,
+    @field:Attribute(name = "dateCreation", required = false)
+    @param:Attribute(name = "dateCreation", required = false)
+    var dateCreation: String? = null,
     @field:Attribute(name = "dateModification", required = false)
     @param:Attribute(name = "dateModification", required = false)
     var dateModification: String? = null,

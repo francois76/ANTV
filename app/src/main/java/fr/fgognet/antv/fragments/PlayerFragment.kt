@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.android.exoplayer2.util.MimeTypes
 import fr.fgognet.antv.R
+import fr.fgognet.antv.viewmodel.VideoViewModel
 
 
 private const val ARG_URL = "url"
@@ -20,7 +21,8 @@ private const val ARG_URL = "url"
  */
 class PlayerFragment : Fragment() {
     private var url: String? = null
-    var player: ExoPlayer? = null
+    private var videoView: VideoViewModel? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,19 +31,21 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.videoView = ViewModelProvider(this).get()
+        if (this.videoView?.player == null) {
+            this.videoView?.initPlayer(url!!, ExoPlayer.Builder(this.requireContext()).build())
+        }
+
+    }
+
     override fun onStart() {
         super.onStart()
-
-        this.player = this.context?.let { ExoPlayer.Builder(it).build() }
-        val mediaItem: MediaItem =
-            MediaItem.Builder()
-                .setUri(url)
-                .setMimeType(MimeTypes.APPLICATION_M3U8).build()
-        this.player!!.setMediaItem(mediaItem)
-        this.player!!.prepare()
-        this.player!!.play()
-        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.player
-
+        if (this.videoView?.player?.isPlaying == false) {
+            this.videoView?.player?.play()
+        }
+        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.videoView?.player
     }
 
 
@@ -53,9 +57,10 @@ class PlayerFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
-        this.player!!.release()
+        this.videoView?.player!!.release()
     }
 
     companion object {
