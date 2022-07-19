@@ -9,13 +9,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
-import fr.fgognet.antv.service.StreamManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import fr.fgognet.antv.viewmodel.EditoViewModel
 
 
 /**
@@ -27,35 +24,32 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val editos = StreamManager.getLiveInfos()
-                withContext(Dispatchers.Main) {
-                    Log.w(TAG, editos.toString())
-                    if (editos?.diffusions == null) {
-                        val textView = TextView(context)
-                        textView.text = editos!!.introduction
-                        view.findViewById<LinearLayout>(R.id.editos).addView(textView)
-                    } else {
-                        for (diffusion: Diffusion in editos.diffusions!!) {
-                            val fragTransaction: FragmentTransaction =
-                                parentFragmentManager.beginTransaction()
-                            Log.w(TAG, "adding card" + diffusion.libelle + "to fragment")
-                            val cardFragment =
-                                CardFragment.newInstance(
-                                    diffusion.libelle ?: "dissusion sans titre",
-                                    diffusion.lieu ?: "lieu inconnu",
-                                    diffusion.sujet ?: "",
-                                    if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                                    diffusion.video_url ?: ""
-                                )
-                            fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
-                            fragTransaction.commit()
-                        }
-                    }
+        val editosView = ViewModelProvider(this)[EditoViewModel::class.java]
+        editosView.editos.observe(viewLifecycleOwner) {
+            Log.i(TAG, "refreshing editos")
+            if (it?.diffusions == null) {
+                val textView = TextView(context)
+                textView.text = it!!.introduction
+                view.findViewById<LinearLayout>(R.id.editos).addView(textView)
+            } else {
+                for (diffusion: Diffusion in it.diffusions!!) {
+                    val fragTransaction: FragmentTransaction =
+                        parentFragmentManager.beginTransaction()
+                    Log.w(TAG, "adding card" + diffusion.libelle + "to fragment")
+                    val cardFragment =
+                        CardFragment.newInstance(
+                            diffusion.libelle ?: "dissusion sans titre",
+                            diffusion.lieu ?: "lieu inconnu",
+                            diffusion.sujet ?: "",
+                            if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
+                            diffusion.video_url ?: ""
+                        )
+                    fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
+                    fragTransaction.commit()
+                    
                 }
-
             }
+
         }
     }
 

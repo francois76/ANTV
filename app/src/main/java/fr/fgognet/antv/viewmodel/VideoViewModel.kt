@@ -8,7 +8,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.util.MimeTypes
 
-private val TAG = "VideoViewModel"
+private val TAG = "ANTV/VideoViewModel"
 
 class VideoViewModel(application: Application) : AndroidViewModel(application),
     DefaultLifecycleObserver {
