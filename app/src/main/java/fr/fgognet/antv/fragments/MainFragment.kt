@@ -35,18 +35,18 @@ class MainFragment : Fragment() {
                 for (diffusion: Diffusion in it.diffusions!!) {
                     val fragTransaction: FragmentTransaction =
                         parentFragmentManager.beginTransaction()
-                    Log.w(TAG, "adding card" + diffusion.libelle + "to fragment")
+                    Log.i(TAG, "adding card" + diffusion.libelle + "to fragment")
                     val cardFragment =
                         CardFragment.newInstance(
-                            diffusion.libelle ?: "dissusion sans titre",
+                            diffusion.libelle ?: "discussion sans titre",
                             diffusion.lieu ?: "lieu inconnu",
-                            diffusion.sujet ?: "",
+                            diffusion.sujet?.replace("<br>", "\n") ?: "",
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             diffusion.video_url ?: ""
                         )
                     fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
                     fragTransaction.commit()
-                    
+
                 }
             }
 
