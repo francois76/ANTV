@@ -1,28 +1,25 @@
 package fr.fgognet.antv.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.viewmodel.VideoViewModel
 
 
 private const val ARG_URL = "url"
-
+private const val TAG = "PlayerFragment"
 
 /**
  * PlayerFragment the fragment that hosts the player implementation
  */
 class PlayerFragment : Fragment() {
     private var url: String? = null
-    private var videoView: VideoViewModel? = null
-    private var player: ExoPlayer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,19 +31,12 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.videoView = ViewModelProvider(this).get()
-        if (!this.videoView!!.isPlayerInit) {
-            this.player = this.videoView?.initPlayer(url!!)
-        } else {
-            this.player = this.videoView?.buildPlayer()
+        val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
+        videoView.updateUrl(url!!)
+        videoView.player.observe(viewLifecycleOwner) {
+            Log.i(TAG, "refreshing player with URL$url")
+            this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = it
         }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        this.view?.findViewById<StyledPlayerView>(R.id.video_view)?.player = this.player
-        this.player?.play()
     }
 
 
@@ -58,11 +48,6 @@ class PlayerFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        this.player?.release()
-    }
 
     companion object {
 

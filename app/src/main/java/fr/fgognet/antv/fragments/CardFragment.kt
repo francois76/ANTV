@@ -89,7 +89,7 @@ class CardFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable("bitmap", bitmap)
+        // outState.putParcelable("bitmap", bitmap)
         super.onSaveInstanceState(outState)
         Log.i(TAG, "instance saved")
     }
