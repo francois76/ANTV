@@ -26,6 +26,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val editosView = ViewModelProvider(this)[EditoViewModel::class.java]
         editosView.editos.observe(viewLifecycleOwner) {
+            view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
             Log.i(TAG, "refreshing editos")
             if (it?.diffusions == null) {
                 val textView = TextView(context)
