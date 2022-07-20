@@ -6,7 +6,7 @@ import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 
 
-@Root(name = "editorial")
+@Root(name = "editorial", strict = false)
 data class Editorial(
     @field:Element(name = "titre")
     @param:Element(name = "titre")
@@ -20,7 +20,7 @@ data class Editorial(
 
 )
 
-@Root(name = "diffusion")
+@Root(name = "diffusion", strict = false)
 data class Diffusion(
     @field:Element(name = "id_organe", required = false)
     @param:Element(name = "id_organe", required = false)
@@ -75,6 +75,9 @@ data class Diffusion(
     var dateSuppression: String? = null,
     @field:Attribute(name = "id", required = false)
     @param:Attribute(name = "id", required = false)
-    var id: String? = null
+    var id: String? = null,
+    @field:Attribute(name = "utilisateur", required = false)
+    @param:Attribute(name = "utilisateur", required = false)
+    var utilisateur: Int? = null
 
 )
