@@ -21,8 +21,8 @@ object StreamManager {
         )
     }
 
-    fun getLiveInfos(): Editorial? {
-        Log.d(TAG, "getLiveInfos")
+    fun getEditorialInfos(): Editorial? {
+        Log.d(TAG, "getEditorialInfos")
         Log.i(TAG, "Using URL " + NetworkManager.getEditorialUrl())
         val serializer: Serializer = Persister()
         return serializer.read(
@@ -30,6 +30,17 @@ object StreamManager {
                 NetworkManager.getEditorialUrl()
             ).openStream()
         )
+    }
+
+    fun getLiveInfos(): List<Int> {
+        Log.d(TAG, "getLiveInfos")
+        Log.i(TAG, "Using URL " + NetworkManager.getliveURL())
+        val result = ArrayList<Int>()
+        for (line in URL(NetworkManager.getliveURL()).readText().reader().readLines()) {
+            val k = Integer.parseInt(line.split(" ")[0])
+            result.add(k)
+        }
+        return result
     }
 
     fun getLiveButtonLabel(diffusion: Diffusion): String {

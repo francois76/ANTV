@@ -26,9 +26,18 @@ class EditoViewModel(application: Application) : AndroidViewModel(application),
         super.onStart(owner)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = StreamManager.getLiveInfos()
+                val result = StreamManager.getEditorialInfos()
+                val live = StreamManager.getLiveInfos()
                 withContext(Dispatchers.Main) {
+                    if (result?.diffusions != null) {
+                        for (diffusion in result.diffusions!!) {
+                            if (live.contains(diffusion.flux)) {
+                                diffusion.isLive = true
+                            }
+                        }
+                    }
                     _editos.value = result
+
                 }
 
             }
