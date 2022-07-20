@@ -81,8 +81,7 @@ class CardFragment : Fragment() {
                 }
             }
         }
-
-        view.findViewById<TextView>(R.id.go_to_live_btn).setOnClickListener {
+        view.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("url", live)
             Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
