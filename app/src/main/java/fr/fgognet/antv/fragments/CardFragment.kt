@@ -57,7 +57,7 @@ class CardFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_card, container, false)
         view.findViewById<TextView>(R.id.card_title).text = title
         view.findViewById<TextView>(R.id.card_subtitle).text = subtitle
-        view.findViewById<TextView>(R.id.card_description).text = title
+        view.findViewById<TextView>(R.id.card_description).text = description
         val t = this
         val savedBitmap = savedInstanceState?.getParcelable<Bitmap>("bitmap")
         val imageView = view.findViewById<ImageView>(R.id.card_image_id)
@@ -109,7 +109,7 @@ class CardFragment : Fragment() {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_SUBTITLE, subtitle)
-                    putString(ARG_SUBTITLE, description)
+                    putString(ARG_DESCRIPTION, description)
                     putString(ARG_IMAGE, image)
                     putString(ARG_LIVE, live)
                 }
