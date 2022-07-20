@@ -80,11 +80,15 @@ class CardFragment : Fragment() {
 
         val button = view.findViewById<Button>(R.id.live_button)
         button.text = buttonLabel
-        button.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("url", live)
-            Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+        if (buttonLabel == "live") {
+            button.setBackgroundColor(resources.getColor(androidx.appcompat.R.color.button_material_light))
+            button.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("url", live)
+                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+            }
         }
+
         return view
     }
 
