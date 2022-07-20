@@ -24,6 +24,7 @@ private const val ARG_SUBTITLE = "subtitle"
 private const val ARG_DESCRIPTION = "description"
 private const val ARG_IMAGE = "image"
 private const val ARG_LIVE = "live"
+private const val ARG_BUTTON_LABEL = "buttonLabel"
 
 /**
  * CardFragment fragment that handle each element representing a card on the homepage
@@ -35,6 +36,7 @@ class CardFragment : Fragment() {
     private var description: String? = null
     private var image: String? = null
     private var live: String? = null
+    private var buttonLabel: String? = null
     private var bitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +48,7 @@ class CardFragment : Fragment() {
             description = it.getString(ARG_DESCRIPTION)
             image = it.getString(ARG_IMAGE)
             live = it.getString(ARG_LIVE)
+            buttonLabel = it.getString(ARG_BUTTON_LABEL)
         }
     }
 
@@ -59,30 +62,25 @@ class CardFragment : Fragment() {
         view.findViewById<TextView>(R.id.card_title).text = title
         view.findViewById<TextView>(R.id.card_subtitle).text = subtitle
         view.findViewById<TextView>(R.id.card_description).text = description
-        val t = this
-        val savedBitmap = savedInstanceState?.getParcelable<Bitmap>("bitmap")
         val imageView = view.findViewById<ImageView>(R.id.card_image_id)
         imageView.contentDescription = title
-        if (savedBitmap != null) {
-            t.bitmap = savedBitmap
-            imageView.setImageBitmap(
-                bitmap
-            )
-        } else {
-            // new instance, we need to fetch
-            viewLifecycleOwner.lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    t.bitmap = StreamManager.getLiveImage(image!!)
-                    Log.w(TAG, "fetched bitmap :$bitmap")
-                    withContext(Dispatchers.Main) {
-                        imageView.setImageBitmap(
-                            bitmap
-                        )
-                    }
+        val t = this
+        // new instance, we need to fetch
+        viewLifecycleOwner.lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                t.bitmap = StreamManager.getLiveImage(image!!)
+                Log.w(TAG, "fetched bitmap :$bitmap")
+                withContext(Dispatchers.Main) {
+                    imageView.setImageBitmap(
+                        bitmap
+                    )
                 }
             }
         }
-        view.findViewById<Button>(R.id.live_button).setOnClickListener {
+
+        val button = view.findViewById<Button>(R.id.live_button)
+        button.text = buttonLabel
+        button.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("url", live)
             Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
@@ -90,11 +88,6 @@ class CardFragment : Fragment() {
         return view
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "onSaveInstanceState")
-        // outState.putParcelable("bitmap", bitmap)
-        super.onSaveInstanceState(outState)
-    }
 
     companion object {
         @JvmStatic
@@ -103,7 +96,8 @@ class CardFragment : Fragment() {
             subtitle: String,
             description: String,
             image: String,
-            live: String
+            live: String,
+            buttonLabel: String,
         ) =
             CardFragment().apply {
                 Log.d(TAG, "new instance of cardFragment")
@@ -113,6 +107,7 @@ class CardFragment : Fragment() {
                     putString(ARG_DESCRIPTION, description)
                     putString(ARG_IMAGE, image)
                     putString(ARG_LIVE, live)
+                    putString(ARG_BUTTON_LABEL, buttonLabel)
                 }
             }
     }

@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
+import fr.fgognet.antv.service.StreamManager
 import fr.fgognet.antv.viewmodel.EditoViewModel
 
 
@@ -43,7 +44,8 @@ class MainFragment : Fragment() {
                             diffusion.lieu ?: "lieu inconnu",
                             diffusion.sujet?.replace("<br>", "\n") ?: "",
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                            diffusion.video_url ?: ""
+                            diffusion.video_url ?: "",
+                            StreamManager.getLiveButtonLabel(diffusion)
                         )
                     fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
                     fragTransaction.commit()
