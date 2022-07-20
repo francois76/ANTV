@@ -23,9 +23,9 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
     }
 
 
-    override fun onStop(owner: LifecycleOwner) {
-        super.onStop(owner)
-        Log.i(TAG, "onStop")
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        Log.i(TAG, "onDestroy")
         releasePlayer()
     }
 
