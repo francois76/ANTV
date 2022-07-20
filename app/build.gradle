@@ -5,7 +5,7 @@ plugins {
 
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "fr.fgognet.antv"
@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.0'
     // for xml
     implementation group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
-    implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.5.0'
     // navigation
     def nav_version = "2.5.0"
     implementation "androidx.navigation:navigation-fragment:$nav_version"

@@ -7,6 +7,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_margin="8dp">
@@ -34,6 +35,13 @@
                 android:padding="16dp">
 
                 <!-- Title, secondary and supporting text -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/live_button"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+
                 <TextView
                     android:id="@+id/card_title"
                     android:layout_width="wrap_content"
