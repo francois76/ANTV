@@ -1,4 +1,4 @@
-package fr.fgognet.antv.fragments
+package fr.fgognet.antv.view.live
 
 import android.os.Bundle
 import android.util.Log
@@ -13,14 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.StreamManager
-import fr.fgognet.antv.viewmodel.EditoViewModel
+import fr.fgognet.antv.view.card.CardFragment
 
+private val TAG = "ANTV/MainFragment"
 
 /**
- * MainFragment is the main fragment handle by navigation
+ * LiveFragment is the main fragment handle by navigation
  */
-class MainFragment : Fragment() {
-    private val TAG = "ANTV/MainFragment"
+class LiveFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated")

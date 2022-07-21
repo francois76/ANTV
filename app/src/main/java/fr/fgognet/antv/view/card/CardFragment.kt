@@ -1,4 +1,4 @@
-package fr.fgognet.antv.fragments
+package fr.fgognet.antv.view.card
 
 import android.graphics.Bitmap
 import android.os.Bundle

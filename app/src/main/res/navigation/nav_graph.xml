@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/playerFragment"
-        android:name="fr.fgognet.antv.fragments.PlayerFragment"
+        android:name="fr.fgognet.antv.view.player.PlayerFragment"
         android:label="fragment_player"
         tools:layout="@layout/fragment_player">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="fr.fgognet.antv.fragments.MainFragment"
+        android:name="fr.fgognet.antv.view.live.LiveFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
         <action

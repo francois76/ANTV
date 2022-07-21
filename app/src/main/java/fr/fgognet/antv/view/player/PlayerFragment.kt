@@ -1,4 +1,4 @@
-package fr.fgognet.antv.fragments
+package fr.fgognet.antv.view.player
 
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import fr.fgognet.antv.R
-import fr.fgognet.antv.viewmodel.VideoViewModel
 
 
 private const val ARG_URL = "url"
