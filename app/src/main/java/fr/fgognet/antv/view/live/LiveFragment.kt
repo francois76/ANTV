@@ -24,11 +24,25 @@ class LiveFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.v(TAG, "onViewCreated")
+        val fragTransaction: FragmentTransaction =
+            parentFragmentManager.beginTransaction()
+        var i = 0
+        var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$i")
+        while (fragmentToRemove != null) {
+            Log.d(TAG, "removing fragment cardFragment$i")
+            fragTransaction.remove(fragmentToRemove)
+            i++
+            fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$i")
+        }
+
+
+        fragTransaction.commit()
+
         super.onViewCreated(view, savedInstanceState)
         model = ViewModelProvider(this)[LiveViewModel::class.java]
         model.cards.observe(viewLifecycleOwner) {
+            view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
             Log.i(TAG, "refreshing editos")
-            view.findViewById<LinearLayout>(R.id.editos)?.removeAllViews()
             if (it?.isEmpty() == true) {
                 val textView = TextView(context)
                 textView.text = "Aucun live aujourd'hui"
@@ -36,23 +50,26 @@ class LiveFragment : Fragment() {
             } else {
                 val fragTransaction: FragmentTransaction =
                     parentFragmentManager.beginTransaction()
+                var i = 0
                 for (cardData: CardData in it!!) {
-                    Log.i(TAG, "adding card" + cardData.title + "to fragment")
+                    Log.d(TAG, "adding fragment cardFragment$i")
                     val card = CardFragment.newInstance(cardData)
                     fragTransaction.add(
                         R.id.editos,
                         card,
-                        "fragment$card"
+                        "cardFragment$i"
                     )
+                    i++
                 }
                 fragTransaction.commit()
+
             }
 
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.v(TAG, "onCreateView")
+        Log.v(TAG, "onSaveInstanceState")
         super.onSaveInstanceState(outState)
     }
 
@@ -64,6 +81,11 @@ class LiveFragment : Fragment() {
         Log.v(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main, container, false)
+    }
+
+    override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
+        super.onDestroy()
     }
 
 

@@ -80,5 +80,5 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
         }
         return result
     }
-    
+
 }
