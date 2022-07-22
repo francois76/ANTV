@@ -24,10 +24,18 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
 
 
     override fun onDestroy(owner: LifecycleOwner) {
+        Log.v(TAG, "onDestroy")
         super.onDestroy(owner)
-        Log.i(TAG, "onDestroy")
         releasePlayer()
     }
+
+    override fun onCleared() {
+        Log.v(TAG, "onCleared")
+        super.onCleared()
+        releasePlayer()
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+    }
+
 
     fun updateUrl(url: String) {
         if (url != this.url) {
@@ -58,11 +66,5 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
         player.release()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.i(TAG, "onCleared")
-        releasePlayer()
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-    }
 
 }

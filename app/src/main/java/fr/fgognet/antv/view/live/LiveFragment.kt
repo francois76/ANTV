@@ -10,50 +10,50 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import fr.fgognet.antv.Diffusion
 import fr.fgognet.antv.R
-import fr.fgognet.antv.service.StreamManager
 import fr.fgognet.antv.view.card.CardFragment
 
-private val TAG = "ANTV/MainFragment"
+private val TAG = "ANTV/LiveFragment"
 
 /**
  * LiveFragment is the main fragment handle by navigation
  */
 class LiveFragment : Fragment() {
 
+    lateinit var model: LiveViewModel
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d(TAG, "onViewCreated")
+        Log.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        val editosView = ViewModelProvider(this)[EditoViewModel::class.java]
-        editosView.editos.observe(viewLifecycleOwner) {
-            view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
+        model = ViewModelProvider(this)[LiveViewModel::class.java]
+        model.cards.observe(viewLifecycleOwner) {
             Log.i(TAG, "refreshing editos")
-            if (it?.diffusions == null) {
+            view.findViewById<LinearLayout>(R.id.editos)?.removeAllViews()
+            if (it?.isEmpty() == true) {
                 val textView = TextView(context)
-                textView.text = it!!.introduction
+                textView.text = "Aucun live aujourd'hui"
                 view.findViewById<LinearLayout>(R.id.editos).addView(textView)
             } else {
-                for (diffusion: Diffusion in it.diffusions!!) {
-                    val fragTransaction: FragmentTransaction =
-                        parentFragmentManager.beginTransaction()
-                    Log.i(TAG, "adding card" + diffusion.libelle + "to fragment")
-                    val cardFragment =
-                        CardFragment.newInstance(
-                            diffusion.libelle ?: "discussion sans titre",
-                            diffusion.lieu ?: "lieu inconnu",
-                            diffusion.sujet?.replace("<br>", "\n") ?: "",
-                            if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                            diffusion.video_url ?: "",
-                            StreamManager.getLiveButtonLabel(diffusion)
-                        )
-                    fragTransaction.add(R.id.editos, cardFragment, "fragment$cardFragment")
-                    fragTransaction.commit()
-
+                val fragTransaction: FragmentTransaction =
+                    parentFragmentManager.beginTransaction()
+                for (cardData: CardData in it!!) {
+                    Log.i(TAG, "adding card" + cardData.title + "to fragment")
+                    val card = CardFragment.newInstance(cardData)
+                    fragTransaction.add(
+                        R.id.editos,
+                        card,
+                        "fragment$card"
+                    )
                 }
+                fragTransaction.commit()
             }
 
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.v(TAG, "onCreateView")
+        super.onSaveInstanceState(outState)
     }
 
 
@@ -61,7 +61,7 @@ class LiveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(TAG, "onCreateView")
+        Log.v(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main, container, false)
     }

@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.card
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,13 +9,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.service.StreamManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import fr.fgognet.antv.service.NetworkManager
+import fr.fgognet.antv.view.live.CardData
 
 private const val TAG = "ANTV/CardFragment"
 private const val ARG_TITLE = "title"
@@ -25,93 +21,88 @@ private const val ARG_DESCRIPTION = "description"
 private const val ARG_IMAGE = "image"
 private const val ARG_LIVE = "live"
 private const val ARG_BUTTON_LABEL = "buttonLabel"
+private const val ARG_IS_LIVE = "isLive"
 
 /**
  * CardFragment fragment that handle each element representing a card on the homepage
  */
 class CardFragment : Fragment() {
 
-    private var title: String? = null
-    private var subtitle: String? = null
-    private var description: String? = null
-    private var image: String? = null
-    private var live: String? = null
-    private var buttonLabel: String? = null
-    private var bitmap: Bitmap? = null
+    lateinit var data: CardData
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate")
+        Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
-            title = it.getString(ARG_TITLE)
-            subtitle = it.getString(ARG_SUBTITLE)
-            description = it.getString(ARG_DESCRIPTION)
-            image = it.getString(ARG_IMAGE)
-            live = it.getString(ARG_LIVE)
-            buttonLabel = it.getString(ARG_BUTTON_LABEL)
+            this.data = CardData(
+                it.getString(ARG_TITLE) ?: "",
+                it.getString(ARG_SUBTITLE) ?: "",
+                it.getString(ARG_DESCRIPTION) ?: "",
+                it.getString(ARG_IMAGE) ?: "",
+                it.getString(ARG_LIVE) ?: "",
+                it.getString(ARG_BUTTON_LABEL) ?: "",
+                it.getBoolean(ARG_IS_LIVE),
+            )
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "onCreateView")
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_card, container, false)
-        view.findViewById<TextView>(R.id.card_title).text = title
-        view.findViewById<TextView>(R.id.card_subtitle).text = subtitle
-        view.findViewById<TextView>(R.id.card_description).text = description
-        val imageView = view.findViewById<ImageView>(R.id.card_image_id)
-        imageView.contentDescription = title
-        val t = this
-        // new instance, we need to fetch
-        viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                t.bitmap = StreamManager.getLiveImage(image!!)
-                Log.w(TAG, "fetched bitmap :$bitmap")
-                withContext(Dispatchers.Main) {
-                    imageView.setImageBitmap(
-                        bitmap
-                    )
-                }
-            }
-        }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.v(TAG, "onViewCreated")
+        view.findViewById<TextView>(R.id.card_title).text = data.title
+        view.findViewById<TextView>(R.id.card_subtitle).text = data.subtitle
+        view.findViewById<TextView>(R.id.card_description).text = data.description
+        val imageView = view.findViewById<ImageView>(R.id.card_image_id)
+        imageView.contentDescription = data.title
+        imageView.setImageBitmap(NetworkManager.imageCodeToBitmap[data.imageCode])
         val button = view.findViewById<Button>(R.id.live_button)
-        button.text = buttonLabel
-        if (buttonLabel == "live") {
+        button.text = data.buttonLabel
+        if (data.buttonLabel == "live") {
             button.setBackgroundColor(resources.getColor(androidx.appcompat.R.color.button_material_light))
             button.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putString("url", live)
+                bundle.putString("url", data.live)
                 Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
             }
         }
+    }
 
-        return view
+    override fun onDestroyView() {
+        Log.v(TAG, "onDestroyView")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
+        super.onDestroy()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.v(TAG, "onCreateView")
+        return inflater.inflate(R.layout.fragment_card, container, false)
     }
 
 
     companion object {
         @JvmStatic
         fun newInstance(
-            title: String,
-            subtitle: String,
-            description: String,
-            image: String,
-            live: String,
-            buttonLabel: String,
+            cardData: CardData
         ) =
             CardFragment().apply {
+                Log.v(TAG, "newInstance")
                 Log.d(TAG, "new instance of cardFragment")
                 arguments = Bundle().apply {
-                    putString(ARG_TITLE, title)
-                    putString(ARG_SUBTITLE, subtitle)
-                    putString(ARG_DESCRIPTION, description)
-                    putString(ARG_IMAGE, image)
-                    putString(ARG_LIVE, live)
-                    putString(ARG_BUTTON_LABEL, buttonLabel)
+                    putString(ARG_TITLE, cardData.title)
+                    putString(ARG_SUBTITLE, cardData.subtitle)
+                    putString(ARG_DESCRIPTION, cardData.description)
+                    putString(ARG_IMAGE, cardData.imageCode)
+                    putString(ARG_LIVE, cardData.live)
+                    putString(ARG_BUTTON_LABEL, cardData.buttonLabel)
+                    putBoolean(ARG_IS_LIVE, cardData.isLive)
                 }
             }
     }

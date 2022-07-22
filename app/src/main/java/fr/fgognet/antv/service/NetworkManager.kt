@@ -1,5 +1,7 @@
 package fr.fgognet.antv.service
 
+import android.graphics.Bitmap
+
 enum class Environment {
     NOTHING, // no current stream
     FIXED, // fixed on 13 july 2022
@@ -25,6 +27,10 @@ object NetworkManager {
             "https://videos.assemblee-nationale.fr/php/getedito.php",
             "https://videos.assemblee-nationale.fr/live/live.txt"
         ),
+    )
+
+    var imageCodeToBitmap: HashMap<String, Bitmap> = hashMapOf(
+
     )
 
     fun getliveURL(): String {

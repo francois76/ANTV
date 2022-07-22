@@ -79,7 +79,4 @@ data class Diffusion(
     @field:Attribute(name = "utilisateur", required = false)
     @param:Attribute(name = "utilisateur", required = false)
     var utilisateur: Int? = null
-) {
-    // transcient fields
-    var isLive: Boolean = false
-}
+)

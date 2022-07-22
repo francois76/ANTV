@@ -22,7 +22,7 @@ class PlayerFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate")
+        Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
             url = it.getString(ARG_URL)
@@ -30,7 +30,7 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d(TAG, "onViewCreated")
+        Log.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
         videoView.updateUrl(url!!)
@@ -45,7 +45,7 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(TAG, "onCreateView")
+        Log.v(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
