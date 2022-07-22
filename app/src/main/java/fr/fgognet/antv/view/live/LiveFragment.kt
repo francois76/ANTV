@@ -42,7 +42,7 @@ class LiveFragment : Fragment() {
         model = ViewModelProvider(this)[LiveViewModel::class.java]
         model.cards.observe(viewLifecycleOwner) {
             view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
-            Log.i(TAG, "refreshing editos")
+            Log.i(TAG, "refreshing editos in view")
             if (it?.isEmpty() == true) {
                 val textView = TextView(context)
                 textView.text = "Aucun live aujourd'hui"
@@ -64,7 +64,6 @@ class LiveFragment : Fragment() {
                 fragTransaction.commit()
 
             }
-
         }
     }
 

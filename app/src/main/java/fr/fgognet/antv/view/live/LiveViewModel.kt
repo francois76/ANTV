@@ -37,9 +37,18 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
         super.onStart(owner)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val editorial = StreamManager.getEditorialInfos()
-                val live = StreamManager.getLiveInfos()
+                var editorial: Editorial
+                var live: List<Int>
+                try {
+                    editorial = StreamManager.getEditorialInfos()
+                    live = StreamManager.getLiveInfos()
+                } catch (e: Exception) {
+                    editorial = Editorial("Impossible de charger les données", "", null)
+                    live = arrayListOf()
+                }
+
                 withContext(Dispatchers.Main) {
+                    Log.i(TAG, "dispatching regenerated view")
                     _cards.value = generateCardData(editorial, live)
                 }
             }
@@ -68,13 +77,18 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                 live.contains(diffusion.flux)
             )
             result.add(cardData)
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                for (cardData in result) {
                     val bitmap = StreamManager.getLiveImage(cardData.imageCode)
                     Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
                     withContext(Dispatchers.Main) {
                         NetworkManager.imageCodeToBitmap[cardData.imageCode] = bitmap
                     }
+                }
+                withContext(Dispatchers.Main) {
+                    _cards.value = cards.value
                 }
             }
         }
