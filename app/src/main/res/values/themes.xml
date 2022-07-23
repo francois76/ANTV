@@ -1,5 +1,15 @@
 <resources>
 
-    <style name="Theme.ANTV" parent="@style/Theme.Material3.Light" />
-    
+    <style name="Theme.ANTV" parent="@style/Theme.Material3.Light">
+        <item name="android:navigationBarColor">
+            @android:color/transparent
+        </item>
+        <!-- Optional, if drawing behind the status bar too -->
+        <item name="android:statusBarColor">
+            @android:color/transparent
+        </item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+    </style>
+
 </resources>

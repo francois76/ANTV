@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ANTV" parent="@style/Theme.Material3.Dark" />
-    
+    <style name="Theme.ANTV" parent="@style/Theme.Material3.Dark">
+        <item name="android:navigationBarColor">
+            @android:color/transparent
+        </item>
+        <!-- Optional, if drawing behind the status bar too -->
+        <item name="android:statusBarColor">
+            @android:color/transparent
+        </item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+    </style>
+
 </resources>

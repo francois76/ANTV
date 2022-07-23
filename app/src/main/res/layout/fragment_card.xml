@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="2dp"
-    android:paddingTop="5dp"
     android:paddingRight="2dp"
-    android:paddingBottom="10dp"
     tools:context=".view.card.CardFragment">
 
     <com.google.android.material.card.MaterialCardView
