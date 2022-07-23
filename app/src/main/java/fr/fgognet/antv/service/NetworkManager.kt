@@ -1,6 +1,12 @@
 package fr.fgognet.antv.service
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import fr.fgognet.antv.Editorial
+import org.simpleframework.xml.Serializer
+import org.simpleframework.xml.core.Persister
+import java.net.URL
 
 enum class Environment {
     NOTHING, // no current stream
@@ -8,36 +14,42 @@ enum class Environment {
     REAL_TIME // current live
 }
 
-data class Url(val editorialURL: String, val liveURL: String)
+val TAG = "ANTV/NetworkManager"
 
 object NetworkManager {
 
 
-    val currentEnvironment = Environment.REAL_TIME
-    val environments: HashMap<Environment, Url> = hashMapOf(
-        Environment.NOTHING to Url(
-            "https://videos.assemblee-nationale.fr/live/xml/edito_20220714.xml",
-            ""
-        ),
-        Environment.FIXED to Url(
-            "https://videos.assemblee-nationale.fr/live/xml/edito_20220713.xml",
-            "https://web.archive.org/web/20201104094313/http://videos.assemblee-nationale.fr/live/live.txt"
-        ),
-        Environment.REAL_TIME to Url(
-            "https://videos.assemblee-nationale.fr/php/getedito.php",
-            "https://videos.assemblee-nationale.fr/live/live.txt"
-        ),
+    private val currentEnvironment = Environment.REAL_TIME
+    private val environments: HashMap<Environment, String> = hashMapOf(
+        Environment.NOTHING to
+                "https://videos.assemblee-nationale.fr/live/xml/edito_20220714.xml",
+        Environment.FIXED to
+                "https://videos.assemblee-nationale.fr/live/xml/edito_20220713.xml",
+        Environment.REAL_TIME to
+                "https://videos.assemblee-nationale.fr/php/getedito.php"
     )
 
-    var imageCodeToBitmap: HashMap<String, Bitmap> = hashMapOf(
+    var imageCodeToBitmap: HashMap<String, Bitmap> = hashMapOf()
 
-    )
 
-    fun getliveURL(): String {
-        return environments[currentEnvironment]!!.liveURL
+    fun getLiveImage(image: String): Bitmap {
+        Log.d(TAG, "getLiveImage")
+        if (imageCodeToBitmap.contains(image)) {
+            return imageCodeToBitmap[image]!!
+        }
+        return BitmapFactory.decodeStream(
+            URL(image).openStream()
+        )
     }
 
-    fun getEditorialUrl(): String {
-        return environments[currentEnvironment]!!.editorialURL
+    fun getEditorialInfos(): Editorial {
+        Log.d(TAG, "getEditorialInfos")
+        Log.i(TAG, "Using URL " + environments[currentEnvironment])
+        val serializer: Serializer = Persister()
+        return serializer.read(
+            Editorial::class.java, URL(
+                environments[currentEnvironment]
+            ).openStream()
+        )
     }
 }

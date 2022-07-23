@@ -21,7 +21,7 @@ data class Editorial(
 )
 
 @Root(name = "diffusion", strict = false)
-data class Diffusion(
+class Diffusion(
     @field:Element(name = "id_organe", required = false)
     @param:Element(name = "id_organe", required = false)
     var id_organe: String? = null,
@@ -79,4 +79,25 @@ data class Diffusion(
     @field:Attribute(name = "utilisateur", required = false)
     @param:Attribute(name = "utilisateur", required = false)
     var utilisateur: Int? = null
-)
+) {
+
+    fun isLive(): Boolean {
+        return programme_ratp == "1"
+    }
+
+    fun getLiveButtonLabel(): String {
+        if (isLive()) {
+            return "live"
+        }
+        if (heure == null || heure == "") {
+            return ""
+        }
+
+        val firstCharacter = heure?.substring(0, 1)
+        if (firstCharacter == "0") {
+            return heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
+        } else {
+            return heure?.substring(0, 2) + "h" + heure?.substring(2, 4)
+        }
+    }
+}
