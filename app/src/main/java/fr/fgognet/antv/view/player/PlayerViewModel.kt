@@ -6,12 +6,13 @@ import androidx.lifecycle.*
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
 import com.google.android.exoplayer2.util.MimeTypes
 
 private val TAG = "ANTV/VideoViewModel"
 
 class VideoViewModel(application: Application) : AndroidViewModel(application),
-    DefaultLifecycleObserver {
+    DefaultLifecycleObserver, SessionAvailabilityListener {
 
     private val _player = MutableLiveData<Player?>()
     val player: LiveData<Player?> get() = _player
@@ -66,5 +67,12 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
         player.release()
     }
 
+    override fun onCastSessionAvailable() {
+        Log.v(TAG, "onCastSessionAvailable")
+    }
+
+    override fun onCastSessionUnavailable() {
+        Log.v(TAG, "onCastSessionUnavailable")
+    }
 
 }

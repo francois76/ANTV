@@ -49,4 +49,5 @@ class PlayerFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
+
 }
