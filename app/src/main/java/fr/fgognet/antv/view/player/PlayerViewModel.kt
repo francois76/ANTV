@@ -13,16 +13,16 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.gms.cast.framework.CastContext
 
 
-private val TAG = "ANTV/VideoViewModel"
+private const val TAG = "ANTV/VideoViewModel"
 
 class VideoViewModel(application: Application) : AndroidViewModel(application),
     DefaultLifecycleObserver, SessionAvailabilityListener, Player.Listener {
 
-    private val _player = MutableLiveData<Player?>()
-    val player: LiveData<Player?> get() = _player
+    private val _player = MutableLiveData<Player>()
+    val player: LiveData<Player> get() = _player
 
-    private var localPlayer: Player? = null
-    private var castPlayer: CastPlayer? = null
+    private lateinit var localPlayer: Player
+    private lateinit var castPlayer: CastPlayer
     private var url: String? = null
 
     init {
@@ -57,15 +57,13 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
     private fun setUpPlayer(castContext: CastContext) {
         Log.i(TAG, "setUpPlayer")
         castPlayer = CastPlayer(castContext)
-        castPlayer?.addListener(this)
-        castPlayer?.setSessionAvailabilityListener(this)
+        castPlayer.addListener(this)
+        castPlayer.setSessionAvailabilityListener(this)
 
-        val newPlayer: Player
-        if (castPlayer?.isCastSessionAvailable == true) {
-            newPlayer = castPlayer!!
+        val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
+            castPlayer
         } else {
-            newPlayer =
-                ExoPlayer.Builder(this.getApplication<Application>().applicationContext).build()
+            ExoPlayer.Builder(this.getApplication<Application>().applicationContext).build()
         }
 
 
@@ -95,30 +93,26 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
         setCurrentPlayer(localPlayer)
     }
 
-    private fun setCurrentPlayer(currentPlayer: Player?) {
-        if (currentPlayer === this.player.value) {
+    private fun setCurrentPlayer(currentPlayer: Player) {
+        if (this.player.value == null || currentPlayer === this.player.value) {
             return
         }
-
-
+        val previousPlayer: Player = this.player.value!!
         // Player state management.
         var playbackPositionMs = C.TIME_UNSET
         var playWhenReady = false
-        val previousPlayer: Player? = this.player.value
-        val previousMediaItem = previousPlayer?.currentMediaItem
-        if (previousPlayer != null) {
-            // Save state from the previous player.
-            val playbackState = previousPlayer.playbackState
-            if (playbackState != Player.STATE_ENDED) {
-                playbackPositionMs = previousPlayer.currentPosition
-                playWhenReady = previousPlayer.playWhenReady
-            }
-            previousPlayer.stop()
-            previousPlayer.clearMediaItems()
+        // Save state from the previous player.
+        val previousMediaItem = previousPlayer.currentMediaItem
+        val playbackState = previousPlayer.playbackState
+        if (playbackState != Player.STATE_ENDED) {
+            playbackPositionMs = previousPlayer.currentPosition
+            playWhenReady = previousPlayer.playWhenReady
         }
-        currentPlayer?.setMediaItem(previousMediaItem!!, playbackPositionMs)
-        currentPlayer?.playWhenReady = playWhenReady
-        currentPlayer?.prepare()
+        previousPlayer.stop()
+        previousPlayer.clearMediaItems()
+        currentPlayer.setMediaItem(previousMediaItem!!, playbackPositionMs)
+        currentPlayer.playWhenReady = playWhenReady
+        currentPlayer.prepare()
         this._player.value = currentPlayer
 
     }

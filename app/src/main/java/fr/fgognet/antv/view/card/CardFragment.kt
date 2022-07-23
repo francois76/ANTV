@@ -69,12 +69,15 @@ class CardFragment : Fragment() {
             button.setBackgroundColor(
                 background.data
             )
+            button.isEnabled = true
             button.setTextColor(Color.WHITE)
             button.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putString("url", data.live)
                 Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
             }
+        } else {
+            button.isEnabled = false
         }
     }
 

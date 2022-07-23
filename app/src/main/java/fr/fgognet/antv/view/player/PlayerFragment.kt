@@ -64,8 +64,8 @@ class PlayerFragment : Fragment() {
                 playerView.showController()
                 playerView.defaultArtwork = ResourcesCompat.getDrawable(
                     context?.resources!!,
-                    R.drawable.ic_baseline_cast_connected_400,  /* theme= */
-                    null
+                    R.drawable.ic_baseline_cast_connected_400,
+                    context?.theme
                 )
             } else { // currentPlayer == localPlayer
                 playerView.controllerHideOnTouch = false

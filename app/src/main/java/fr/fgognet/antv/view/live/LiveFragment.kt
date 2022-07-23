@@ -13,26 +13,26 @@ import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.card.CardFragment
 
-private val TAG = "ANTV/LiveFragment"
+private const val TAG = "ANTV/LiveFragment"
 
 /**
  * LiveFragment is the main fragment handle by navigation
  */
 class LiveFragment : Fragment() {
 
-    lateinit var model: LiveViewModel
+    private lateinit var model: LiveViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.v(TAG, "onViewCreated")
         val fragTransaction: FragmentTransaction =
             parentFragmentManager.beginTransaction()
-        var i = 0
-        var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$i")
+        var index = 0
+        var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
         while (fragmentToRemove != null) {
-            Log.d(TAG, "removing fragment cardFragment$i")
+            Log.d(TAG, "removing fragment cardFragment$index")
             fragTransaction.remove(fragmentToRemove)
-            i++
-            fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$i")
+            index++
+            fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
         }
 
 
@@ -45,23 +45,21 @@ class LiveFragment : Fragment() {
             Log.i(TAG, "refreshing editos in view")
             if (it?.isEmpty() == true) {
                 val textView = TextView(context)
-                textView.text = "Aucun live aujourd'hui"
+                textView.text = resources.getText(R.string.no_live)
                 view.findViewById<LinearLayout>(R.id.editos).addView(textView)
             } else {
-                val fragTransaction: FragmentTransaction =
+                val transaction: FragmentTransaction =
                     parentFragmentManager.beginTransaction()
-                var i = 0
-                for (cardData: CardData in it!!) {
-                    Log.d(TAG, "adding fragment cardFragment$i")
+                for ((indexOfCard, cardData: CardData) in it!!.withIndex()) {
+                    Log.d(TAG, "adding fragment cardFragment$indexOfCard")
                     val card = CardFragment.newInstance(cardData)
-                    fragTransaction.add(
+                    transaction.add(
                         R.id.editos,
                         card,
-                        "cardFragment$i"
+                        "cardFragment$indexOfCard"
                     )
-                    i++
                 }
-                fragTransaction.commit()
+                transaction.commit()
 
             }
         }
