@@ -7,8 +7,6 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.dynamite.DynamiteModule.LoadingException
 import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
 
@@ -20,24 +18,10 @@ val TAG = "ANTV/MainActivity"
  */
 class MainActivity : FragmentActivity() {
 
-    private var castContext: CastContext? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        // Getting the cast context later than onStart can cause device discovery not to take place.
-        try {
-            castContext = CastContext.getSharedInstance(this)
-        } catch (e: RuntimeException) {
-            var cause = e.cause
-            while (cause != null) {
-                if (cause is LoadingException) {
-                    return
-                }
-                cause = cause.cause
-            }
-            throw e
-        }
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
