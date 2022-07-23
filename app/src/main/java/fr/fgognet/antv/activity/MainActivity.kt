@@ -38,10 +38,6 @@ class MainActivity : FragmentActivity() {
     }
 
 
-    /**
-     * We need to populate the Cast button across all activities as suggested by Google Cast Guide:
-     * https://developers.google.com/cast/docs/design_checklist/cast-button#sender-cast-icon-available
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         Log.v(TAG, "onCreateOptionsMenu")
         val result = super.onCreateOptionsMenu(menu)

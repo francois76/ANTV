@@ -1,7 +1,9 @@
 package fr.fgognet.antv.view.card
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +30,7 @@ private const val ARG_IS_LIVE = "isLive"
  */
 class CardFragment : Fragment() {
 
-    lateinit var data: CardData
+    private lateinit var data: CardData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
@@ -58,7 +60,16 @@ class CardFragment : Fragment() {
         val button = view.findViewById<Button>(R.id.live_button)
         button.text = data.buttonLabel
         if (data.buttonLabel == "live") {
-            button.setBackgroundColor(resources.getColor(androidx.appcompat.R.color.button_material_light))
+            val background = TypedValue()
+            context?.theme?.resolveAttribute(
+                android.R.attr.colorError,
+                background,
+                true
+            )
+            button.setBackgroundColor(
+                background.data
+            )
+            button.setTextColor(Color.WHITE)
             button.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putString("url", data.live)
@@ -94,7 +105,6 @@ class CardFragment : Fragment() {
         ) =
             CardFragment().apply {
                 Log.v(TAG, "newInstance")
-                Log.d(TAG, "new instance of cardFragment")
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, cardData.title)
                     putString(ARG_SUBTITLE, cardData.subtitle)

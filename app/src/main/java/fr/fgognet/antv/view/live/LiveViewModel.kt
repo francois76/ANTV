@@ -71,7 +71,7 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                 if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                 diffusion.video_url ?: "",
                 StreamManager.getLiveButtonLabel(
-                    live.contains(diffusion.flux),
+                    diffusion.programme_ratp == "1",
                     diffusion.heure ?: ""
                 ),
                 live.contains(diffusion.flux)
