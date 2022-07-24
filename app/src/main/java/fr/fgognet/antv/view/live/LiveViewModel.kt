@@ -39,6 +39,10 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
     override fun onStart(owner: LifecycleOwner) {
         Log.v(TAG, "onStart")
         super.onStart(owner)
+        loadCardData()
+    }
+
+    fun loadCardData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var editorial: Editorial
@@ -55,8 +59,6 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                 }
             }
         }
-
-
     }
 
     private fun generateCardData(editorial: Editorial): List<CardData> {

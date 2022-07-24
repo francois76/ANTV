@@ -13,8 +13,8 @@ import fr.fgognet.antv.R
 /**
  * MainActivity activity that hold the navigation
  */
-class MainActivity : FragmentActivity() {
-    val TAG = "ANTV/MainActivity"
+open class MainActivity : FragmentActivity() {
+    open val TAG = "ANTV/MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")

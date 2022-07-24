@@ -6,5 +6,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="image_base_description">Image</string>
     <string name="no_live">Aucun live aujourd\'hui</string>
+    <string name="reload">Actualiser</string>
 
 </resources>

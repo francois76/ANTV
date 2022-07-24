@@ -12,7 +12,10 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
+import fr.fgognet.antv.utils.debounce
 import fr.fgognet.antv.view.card.CardFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 private const val TAG = "ANTV/LiveFragment"
 
@@ -25,46 +28,52 @@ class LiveFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.v(TAG, "onViewCreated")
-        val fragTransaction: FragmentTransaction =
-            parentFragmentManager.beginTransaction()
-        var index = 0
-        var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-        while (fragmentToRemove != null) {
-            Log.d(TAG, "removing fragment cardFragment$index")
-            fragTransaction.remove(fragmentToRemove)
-            index++
-            fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-        }
 
-
-        fragTransaction.commit()
 
         super.onViewCreated(view, savedInstanceState)
         model = ViewModelProvider(this)[LiveViewModel::class.java]
-        model.liveData.observe(viewLifecycleOwner) {
-            view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
-            view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = it.title
-            Log.i(TAG, "refreshing editos in view")
-            if (it.cards.isEmpty()) {
-                val textView = TextView(context)
-                textView.text = resources.getText(R.string.no_live)
-                view.findViewById<LinearLayout>(R.id.editos).addView(textView)
-            } else {
-                val transaction: FragmentTransaction =
-                    parentFragmentManager.beginTransaction()
-                for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
-                    Log.d(TAG, "adding fragment cardFragment$indexOfCard")
-                    val card = CardFragment.newInstance(cardData)
-                    transaction.add(
-                        R.id.editos,
-                        card,
-                        "cardFragment$indexOfCard"
-                    )
-                }
-                transaction.commit()
 
+        model.liveData.debounce(500L, CoroutineScope(Dispatchers.Main))
+            .observe(viewLifecycleOwner) {
+                val fragTransaction: FragmentTransaction =
+                    parentFragmentManager.beginTransaction()
+                var index = 0
+                var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
+                while (fragmentToRemove != null) {
+                    Log.d(TAG, "removing fragment cardFragment$index")
+                    fragTransaction.remove(fragmentToRemove)
+                    index++
+                    fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
+                }
+                fragTransaction.commit()
+                view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
+                view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = it.title
+                Log.i(TAG, "refreshing editos in view")
+                if (it.cards.isEmpty()) {
+                    val textView = TextView(context)
+                    textView.text = resources.getText(R.string.no_live)
+                    view.findViewById<LinearLayout>(R.id.editos).addView(textView)
+                } else {
+                    val transaction: FragmentTransaction =
+                        parentFragmentManager.beginTransaction()
+                    for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
+                        Log.d(TAG, "adding fragment cardFragment$indexOfCard")
+                        val card = CardFragment.newInstance(cardData)
+                        transaction.add(
+                            R.id.editos,
+                            card,
+                            "cardFragment$indexOfCard"
+                        )
+                    }
+                    transaction.commit()
+                }
             }
-        }
+        view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
+            .setOnMenuItemClickListener {
+                model.loadCardData()
+                view.dispatchConfigurationChanged(resources.configuration)
+                true
+            }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
