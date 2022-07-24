@@ -11,6 +11,11 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/LiveViewModel"
 
+data class LiveViewData(
+    var cards: List<CardData>,
+    var title: String
+)
+
 data class CardData(
     var title: String,
     var subtitle: String,
@@ -28,8 +33,8 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
-    private val _cards = MutableLiveData<List<CardData>?>()
-    val cards: LiveData<List<CardData>?> get() = _cards
+    private val _liveData = MutableLiveData<LiveViewData>()
+    val liveData: LiveData<LiveViewData> get() = _liveData
 
     override fun onStart(owner: LifecycleOwner) {
         Log.v(TAG, "onStart")
@@ -45,7 +50,8 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
 
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
-                    _cards.value = generateCardData(editorial)
+
+                    _liveData.value = LiveViewData(generateCardData(editorial), editorial.titre)
                 }
             }
         }
@@ -81,7 +87,7 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                     }
                 }
                 withContext(Dispatchers.Main) {
-                    _cards.value = cards.value
+                    _liveData.value = _liveData.value
                 }
             }
         }

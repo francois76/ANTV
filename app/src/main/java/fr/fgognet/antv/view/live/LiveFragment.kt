@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.card.CardFragment
 
@@ -40,17 +41,18 @@ class LiveFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         model = ViewModelProvider(this)[LiveViewModel::class.java]
-        model.cards.observe(viewLifecycleOwner) {
+        model.liveData.observe(viewLifecycleOwner) {
             view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
+            view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = it.title
             Log.i(TAG, "refreshing editos in view")
-            if (it?.isEmpty() == true) {
+            if (it.cards.isEmpty()) {
                 val textView = TextView(context)
                 textView.text = resources.getText(R.string.no_live)
                 view.findViewById<LinearLayout>(R.id.editos).addView(textView)
             } else {
                 val transaction: FragmentTransaction =
                     parentFragmentManager.beginTransaction()
-                for ((indexOfCard, cardData: CardData) in it!!.withIndex()) {
+                for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
                     Log.d(TAG, "adding fragment cardFragment$indexOfCard")
                     val card = CardFragment.newInstance(cardData)
                     transaction.add(

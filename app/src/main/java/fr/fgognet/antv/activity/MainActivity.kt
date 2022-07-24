@@ -10,13 +10,11 @@ import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
 
 
-val TAG = "ANTV/MainActivity"
-
 /**
  * MainActivity activity that hold the navigation
  */
 class MainActivity : FragmentActivity() {
-
+    val TAG = "ANTV/MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")

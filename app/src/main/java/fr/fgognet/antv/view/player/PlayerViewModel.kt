@@ -59,11 +59,13 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
         castPlayer = CastPlayer(castContext)
         castPlayer.addListener(this)
         castPlayer.setSessionAvailabilityListener(this)
+        localPlayer =
+            ExoPlayer.Builder(this.getApplication<Application>().applicationContext).build()
 
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
             castPlayer
         } else {
-            ExoPlayer.Builder(this.getApplication<Application>().applicationContext).build()
+            localPlayer
         }
 
 
