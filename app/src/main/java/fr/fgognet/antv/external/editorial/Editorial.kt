@@ -1,4 +1,4 @@
-package fr.fgognet.antv
+package fr.fgognet.antv.external.editorial
 
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element

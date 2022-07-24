@@ -3,9 +3,9 @@ package fr.fgognet.antv.view.live
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import fr.fgognet.antv.Editorial
-import fr.fgognet.antv.external.Editorial.EditorialRepository
 import fr.fgognet.antv.external.Images.ImageRepository
+import fr.fgognet.antv.external.editorial.Editorial
+import fr.fgognet.antv.external.editorial.EditorialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

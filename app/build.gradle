@@ -66,6 +66,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-process:2.5.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // rest
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0-RC"
+
     // navigation
     def nav_version = "2.5.0"
     implementation "androidx.navigation:navigation-fragment:$nav_version"

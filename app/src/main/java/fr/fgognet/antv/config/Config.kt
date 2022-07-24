@@ -7,5 +7,5 @@ enum class Environment {
 }
 
 object Config {
-    val currentEnvironment = Environment.FIXED
+    val currentEnvironment = Environment.REAL_TIME
 }

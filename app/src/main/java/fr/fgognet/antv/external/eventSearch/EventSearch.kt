@@ -1,5 +1,8 @@
-package fr.fgognet.antv.external.EventSearch
+package fr.fgognet.antv.external.eventSearch
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class EventSearch(
 
     var nid: Int?,

@@ -1,8 +1,6 @@
-package fr.fgognet.antv.external.Editorial
+package fr.fgognet.antv.external.editorial
 
 import android.util.Log
-import fr.fgognet.antv.Diffusion
-import fr.fgognet.antv.Editorial
 import fr.fgognet.antv.config.Config
 import fr.fgognet.antv.config.Environment
 import org.simpleframework.xml.Serializer
