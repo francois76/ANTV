@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.service.NetworkManager
+import fr.fgognet.antv.external.Images.ImageRepository
 import fr.fgognet.antv.view.live.CardData
 
 private const val TAG = "ANTV/CardFragment"
@@ -56,7 +56,7 @@ class CardFragment : Fragment() {
         view.findViewById<TextView>(R.id.card_description).text = data.description
         val imageView = view.findViewById<ImageView>(R.id.card_image_id)
         imageView.contentDescription = data.title
-        imageView.setImageBitmap(NetworkManager.imageCodeToBitmap[data.imageCode])
+        imageView.setImageBitmap(ImageRepository.imageCodeToBitmap[data.imageCode])
         val button = view.findViewById<Button>(R.id.live_button)
         button.text = data.buttonLabel
         if (data.buttonLabel == "live") {

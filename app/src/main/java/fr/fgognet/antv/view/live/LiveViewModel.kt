@@ -4,7 +4,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import fr.fgognet.antv.Editorial
-import fr.fgognet.antv.service.NetworkManager
+import fr.fgognet.antv.external.Editorial.EditorialRepository
+import fr.fgognet.antv.external.Images.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,7 +48,7 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
             withContext(Dispatchers.IO) {
                 var editorial: Editorial
                 try {
-                    editorial = NetworkManager.getEditorialInfos()
+                    editorial = EditorialRepository.getEditorialInfos()
                 } catch (e: Exception) {
                     editorial = Editorial("Impossible de charger les données", "", null)
                 }
@@ -82,10 +83,10 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 for (cardData in result) {
-                    val bitmap = NetworkManager.getLiveImage(cardData.imageCode)
+                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
                     Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
                     withContext(Dispatchers.Main) {
-                        NetworkManager.imageCodeToBitmap[cardData.imageCode] = bitmap
+                        ImageRepository.imageCodeToBitmap[cardData.imageCode] = bitmap
                     }
                 }
                 withContext(Dispatchers.Main) {

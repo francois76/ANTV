@@ -1,4 +1,4 @@
-package fr.fgognet.antv.bean
+package fr.fgognet.antv.external.EventSearch
 
 data class EventSearch(
 
@@ -16,3 +16,4 @@ data class EventSearch(
     var url: String?,
     var size: Int?
 )
+
