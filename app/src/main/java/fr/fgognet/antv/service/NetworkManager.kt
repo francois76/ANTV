@@ -45,7 +45,7 @@ object NetworkManager {
                 arrayListOf()
             )
             Environment.FIXED -> return Editorial(
-                "Titre mock fixed",
+                "Mercredi 13 juillet 2022",
                 "Programme du jour",
                 arrayListOf(
                     Diffusion(

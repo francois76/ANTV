@@ -47,6 +47,10 @@ open class MainActivity : FragmentActivity() {
             "nav_state",
             navController.saveState()
         )
+        savedInstanceState.putString(
+            "title",
+            findViewById<MaterialToolbar>(R.id.topAppBar).title.toString()
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -56,6 +60,7 @@ open class MainActivity : FragmentActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         navController.restoreState(savedInstanceState.getBundle("nav_state"))
+        findViewById<MaterialToolbar>(R.id.topAppBar).title = savedInstanceState.getString("title")
     }
 
 
