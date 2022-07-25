@@ -32,5 +32,13 @@
     <fragment
         android:id="@+id/replaySearchFragment"
         android:name="fr.fgognet.antv.view.replaySearch.ReplaySearchFragment"
-        android:label="ReplaySearchFragment" />
+        android:label="ReplaySearchFragment">
+        <action
+            android:id="@+id/action_replaySearchFragment_to_replayFragment"
+            app:destination="@id/replayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/replayFragment"
+        android:name="fr.fgognet.antv.view.cardList.replay.ReplayFragment"
+        android:label="ReplayFragment" />
 </navigation>
