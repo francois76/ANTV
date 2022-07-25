@@ -24,26 +24,19 @@ object EventSearchManager {
             )
         val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?Date=" + dateMorning +
                 "-" + dateEvening
-        val connection =
-            URL(
-                "https://videos.assemblee-nationale.fr/php/eventsearch.php?Date=" + dateMorning +
-                        "-" + dateEvening
-            ).openConnection()
+
+
 
         Log.i(TAG, "reading url $url")
-        var content = ByteArray(4096)
-        try {
-            connection.getInputStream().read(content)
-        } catch (e: Exception) {
-            content = ByteArray(0)
-        } finally {
-            connection.getInputStream().close()
-        }
-        val cleanedInput = "[" + content.decodeToString().split("[")[1].split("]")[0] + "]"
-        Log.i(TAG, cleanedInput)
+
+        val content = "[" + URL(
+            "https://videos.assemblee-nationale.fr/php/eventsearch.php?Date=" + dateMorning +
+                    "-" + dateEvening
+        ).readText().split("[")[1].split("]")[0] + "]"
+        Log.i(TAG, content)
         return json.decodeFromString(
             ListSerializer(EventSearch.serializer()),
-            cleanedInput
+            content
         )
 
     }
