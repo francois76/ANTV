@@ -1,8 +1,8 @@
 package fr.fgognet.antv.external.eventSearch
 
 import android.util.Log
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import java.io.BufferedReader
 import java.net.URL
 import java.time.LocalDateTime
@@ -37,7 +37,7 @@ object EventSearchManager {
             content = it.readText()
         }
         Log.i(TAG, content)
-        return json.decodeFromString(serializer(), content)
+        return json.decodeFromString(ListSerializer(EventSearch.serializer()), content)
 
     }
 }
