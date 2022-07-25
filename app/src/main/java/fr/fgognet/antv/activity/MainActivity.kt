@@ -31,14 +31,19 @@ open class MainActivity : FragmentActivity() {
         )
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        findViewById<BottomNavigationView>(R.id.bottom_navigation).menu.findItem(R.id.menu_live_id)
+        val menu = findViewById<BottomNavigationView>(R.id.bottom_navigation).menu
+        menu.findItem(R.id.menu_live_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.mainFragment, Bundle())
+                menu.findItem(R.id.menu_replay_id).isChecked = false
+                it.isChecked = true
                 true
             }
-        findViewById<BottomNavigationView>(R.id.bottom_navigation).menu.findItem(R.id.menu_replay_id)
+        menu.findItem(R.id.menu_replay_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.replaySearchFragment, Bundle())
+                menu.findItem(R.id.menu_live_id).isChecked = false
+                it.isChecked = true
                 true
             }
 
