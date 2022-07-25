@@ -31,8 +31,9 @@ class ReplaySearchFragment : Fragment() {
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =
             resources.getText(R.string.title_search)
         view.findViewById<MaterialButton>(R.id.search_button).setOnClickListener {
-            val date = view.findViewById<CalendarView>(R.id.calendarView).date
+            val time = view.findViewById<CalendarView>(R.id.calendarView).date
             val bundle = Bundle()
+            bundle.putLong("time", time)
             Navigation.findNavController(it).navigate(R.id.replayFragment, bundle)
         }
         super.onViewCreated(view, savedInstanceState)

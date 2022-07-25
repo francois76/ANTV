@@ -3,7 +3,6 @@ package fr.fgognet.antv.view.live
 import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.R
 
-private const val TAG = "ANTV/LiveFragment"
 
 /**
  * LiveFragment is the main fragment handle by navigation

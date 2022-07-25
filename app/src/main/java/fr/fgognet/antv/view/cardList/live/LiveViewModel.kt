@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.live
 
 import android.app.Application
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.external.Images.ImageRepository
@@ -17,7 +18,7 @@ private const val TAG = "ANTV/LiveViewModel"
 class LiveViewModel(application: Application) : AbstractCardListViewModel(application) {
 
 
-    override fun loadCardData() {
+    override fun loadCardData(params: Bundle?) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var editorial: Editorial

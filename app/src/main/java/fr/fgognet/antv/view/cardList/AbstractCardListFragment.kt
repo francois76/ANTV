@@ -39,6 +39,7 @@ abstract class AbstractCardListFragment : Fragment() {
                 savedInstanceState.getString("title")
         }
         model = initViewModelProvider()
+        model.loadCardData(savedInstanceState)
 
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
@@ -73,7 +74,7 @@ abstract class AbstractCardListFragment : Fragment() {
             }
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
             .setOnMenuItemClickListener {
-                model.loadCardData()
+                model.loadCardData(savedInstanceState)
                 view.dispatchConfigurationChanged(resources.configuration)
                 true
             }

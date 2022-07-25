@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.live
 
 import android.app.Application
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
 
@@ -35,10 +36,9 @@ abstract class AbstractCardListViewModel(application: Application) : AndroidView
     override fun onStart(owner: LifecycleOwner) {
         Log.v(TAG, "onStart")
         super.onStart(owner)
-        loadCardData()
     }
 
-    abstract fun loadCardData()
+    abstract fun loadCardData(params: Bundle?)
 
 
 }
