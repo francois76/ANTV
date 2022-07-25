@@ -2,48 +2,22 @@ package fr.fgognet.antv.view.live
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.external.Images.ImageRepository
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.set
 
 private const val TAG = "ANTV/LiveViewModel"
 
-data class LiveViewData(
-    var cards: List<CardData>,
-    var title: String
-)
 
-data class CardData(
-    var title: String,
-    var subtitle: String,
-    var description: String,
-    var imageCode: String,
-    var live: String,
-    var buttonLabel: String,
-    var isLive: Boolean
-)
+class LiveViewModel(application: Application) : AbstractCardListViewModel(application) {
 
-class LiveViewModel(application: Application) : AndroidViewModel(application),
-    DefaultLifecycleObserver {
-    init {
-        // Alternatively expose this as a dependency
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-    }
 
-    private val _liveData = MutableLiveData<LiveViewData>()
-    val liveData: LiveData<LiveViewData> get() = _liveData
-
-    override fun onStart(owner: LifecycleOwner) {
-        Log.v(TAG, "onStart")
-        super.onStart(owner)
-        loadCardData()
-    }
-
-    fun loadCardData() {
+    override fun loadCardData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var editorial: Editorial
@@ -56,7 +30,8 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
 
-                    _liveData.value = LiveViewData(generateCardData(editorial), editorial.titre)
+                    _cardListData.value =
+                        CardListViewData(generateCardData(editorial), editorial.titre)
                 }
             }
         }
@@ -90,7 +65,7 @@ class LiveViewModel(application: Application) : AndroidViewModel(application),
                     }
                 }
                 withContext(Dispatchers.Main) {
-                    _liveData.value = _liveData.value
+                    _cardListData.value = _cardListData.value
                 }
             }
         }

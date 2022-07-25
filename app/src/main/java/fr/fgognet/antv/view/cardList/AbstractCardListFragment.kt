@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
 import fr.fgognet.antv.utils.debounce
@@ -17,23 +16,31 @@ import fr.fgognet.antv.view.card.CardFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-private const val TAG = "ANTV/LiveFragment"
+private const val TAG = "ANTV/AbstractCardListFragment"
 
 /**
- * LiveFragment is the main fragment handle by navigation
+ * AbstractCardListFragment is the main fragment handle by navigation
  */
-class LiveFragment : Fragment() {
+abstract class AbstractCardListFragment : Fragment() {
 
-    private lateinit var model: LiveViewModel
+    private lateinit var model: AbstractCardListViewModel
+
+    abstract fun initViewModelProvider(): AbstractCardListViewModel
+    abstract fun getTitle(): String
+    abstract fun getResource(): Int
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.v(TAG, "onViewCreated")
 
-
         super.onViewCreated(view, savedInstanceState)
-        model = ViewModelProvider(this)[LiveViewModel::class.java]
+        view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = getTitle()
+        if (savedInstanceState != null) {
+            view.findViewById<TextView>(R.id.cardListTitle).text =
+                savedInstanceState.getString("title")
+        }
+        model = initViewModelProvider()
 
-        model.liveData.debounce(500L, CoroutineScope(Dispatchers.Main))
+        model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
                 val fragTransaction: FragmentTransaction =
                     parentFragmentManager.beginTransaction()
@@ -47,13 +54,9 @@ class LiveFragment : Fragment() {
                 }
                 fragTransaction.commit()
                 view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
-                view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = it.title
+                view.findViewById<TextView>(R.id.cardListTitle).text = it.title
                 Log.i(TAG, "refreshing editos in view")
-                if (it.cards.isEmpty()) {
-                    val textView = TextView(context)
-                    textView.text = resources.getText(R.string.no_live)
-                    view.findViewById<LinearLayout>(R.id.editos).addView(textView)
-                } else {
+                if (it.cards.isNotEmpty()) {
                     val transaction: FragmentTransaction =
                         parentFragmentManager.beginTransaction()
                     for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
@@ -78,6 +81,10 @@ class LiveFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         Log.v(TAG, "onSaveInstanceState")
+        outState.putString(
+            "title",
+            view?.findViewById<TextView>(R.id.cardListTitle)?.text.toString()
+        )
         super.onSaveInstanceState(outState)
     }
 
@@ -88,7 +95,7 @@ class LiveFragment : Fragment() {
     ): View? {
         Log.v(TAG, "onCreateView")
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_live, container, false)
+        return inflater.inflate(getResource(), container, false)
     }
 
     override fun onDestroy() {

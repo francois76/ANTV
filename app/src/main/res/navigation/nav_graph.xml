@@ -18,7 +18,7 @@
         android:id="@+id/mainFragment"
         android:name="fr.fgognet.antv.view.live.LiveFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_live">
+        tools:layout="@layout/fragment_card_list">
         <action
             android:id="@+id/action_blankFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
