@@ -10,5 +10,8 @@
     <string name="menu_live">Live</string>
     <string name="menu_replay">Replay</string>
     <string name="buttom_search">Rechercher</string>
+    <string name="title_search">Rechercher</string>
+    <string name="title_live">Live</string>
+    <string name="title_replay">Replay</string>
 
 </resources>

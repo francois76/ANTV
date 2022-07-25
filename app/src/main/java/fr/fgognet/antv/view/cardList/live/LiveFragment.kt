@@ -14,7 +14,7 @@ class LiveFragment : AbstractCardListFragment() {
     }
 
     override fun getTitle(): String {
-        return "Live"
+        return return resources.getText(R.string.title_live).toString()
     }
 
     override fun getResource(): Int {
