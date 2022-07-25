@@ -60,6 +60,9 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                 if (eventSearch.thumbnail != null) eventSearch.thumbnail!!.replace(
                     "\\",
                     ""
+                ).replace(
+                    "http",
+                    "https"
                 ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                 "",
                 "Voir",

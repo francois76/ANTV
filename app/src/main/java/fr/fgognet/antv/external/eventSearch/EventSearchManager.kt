@@ -3,7 +3,6 @@ package fr.fgognet.antv.external.eventSearch
 import android.util.Log
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import java.io.BufferedReader
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -25,19 +24,27 @@ object EventSearchManager {
             )
         val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?Date=" + dateMorning +
                 "-" + dateEvening
-        val reader = BufferedReader(
+        val connection =
             URL(
                 "https://videos.assemblee-nationale.fr/php/eventsearch.php?Date=" + dateMorning +
                         "-" + dateEvening
-            ).openStream().reader()
-        )
-        val content: String
+            ).openConnection()
+
         Log.i(TAG, "reading url $url")
-        reader.use {
-            content = it.readText()
+        var content = ByteArray(4096)
+        try {
+            connection.getInputStream().read(content)
+        } catch (e: Exception) {
+            content = ByteArray(0)
+        } finally {
+            connection.getInputStream().close()
         }
-        Log.i(TAG, content)
-        return json.decodeFromString(ListSerializer(EventSearch.serializer()), content)
+        val cleanedInput = "[" + content.decodeToString().split("[")[1].split("]")[0] + "]"
+        Log.i(TAG, cleanedInput)
+        return json.decodeFromString(
+            ListSerializer(EventSearch.serializer()),
+            cleanedInput
+        )
 
     }
 }

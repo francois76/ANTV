@@ -13,10 +13,11 @@ object ImageRepository {
 
 
     fun getLiveImage(image: String): Bitmap {
-        Log.d(TAG, "getLiveImage")
+        Log.v(TAG, "getLiveImage")
         if (imageCodeToBitmap.contains(image)) {
             return imageCodeToBitmap[image]!!
         }
+        Log.d(TAG, "fetching image $image")
         return BitmapFactory.decodeStream(
             URL(image).openStream()
         )
