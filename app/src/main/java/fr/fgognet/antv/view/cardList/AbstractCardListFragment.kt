@@ -43,6 +43,7 @@ abstract class AbstractCardListFragment : Fragment() {
 
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
+                Log.d(TAG, "updating cardList with following: $it")
                 val fragTransaction: FragmentTransaction =
                     parentFragmentManager.beginTransaction()
                 var index = 0
@@ -56,7 +57,7 @@ abstract class AbstractCardListFragment : Fragment() {
                 fragTransaction.commit()
                 view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
                 view.findViewById<TextView>(R.id.cardListTitle).text = it.title
-                Log.i(TAG, "refreshing editos in view")
+                Log.i(TAG, "refreshing cards in view")
                 if (it.cards.isNotEmpty()) {
                     val transaction: FragmentTransaction =
                         parentFragmentManager.beginTransaction()

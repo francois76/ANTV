@@ -18,5 +18,6 @@ data class EventSearch(
     var title: String?,
     var url: String?,
     var size: Int?
+
 )
 

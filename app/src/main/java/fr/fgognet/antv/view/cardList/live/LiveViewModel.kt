@@ -46,7 +46,7 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
         }
         for (diffusion in editorial.diffusions!!) {
             val cardData = CardData(
-                diffusion.libelle ?: "discussion sans titre",
+                diffusion.libelle ?: "diffusion sans titre",
                 diffusion.lieu ?: "lieu inconnu",
                 diffusion.sujet?.replace("<br>", "\n") ?: "",
                 if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",

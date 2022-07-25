@@ -27,8 +27,13 @@ class ReplayFragment : AbstractCardListFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.v(TAG, "onViewCreated")
-        super.onViewCreated(view, savedInstanceState)
+        Log.v(TAG, "onViewCreated: $savedInstanceState")
+        var enrichedBundle = savedInstanceState
+        if (enrichedBundle == null) {
+            enrichedBundle = Bundle()
+        }
+        enrichedBundle.putLong("time", time)
+        super.onViewCreated(view, enrichedBundle)
 
 
     }
