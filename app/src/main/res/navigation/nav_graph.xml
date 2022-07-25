@@ -22,8 +22,15 @@
         <action
             android:id="@+id/action_blankFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_replaySearchFragment2"
+            app:destination="@id/replaySearchFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_mainFragment"
         app:destination="@id/mainFragment" />
+    <fragment
+        android:id="@+id/replaySearchFragment"
+        android:name="fr.fgognet.antv.view.replaySearch.ReplaySearchFragment"
+        android:label="ReplaySearchFragment" />
 </navigation>

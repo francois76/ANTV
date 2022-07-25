@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import fr.fgognet.antv.R
 
 
@@ -14,7 +15,10 @@ import fr.fgognet.antv.R
  * MainActivity activity that hold the navigation
  */
 open class MainActivity : FragmentActivity() {
+
+
     open val TAG = "ANTV/MainActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
@@ -25,6 +29,18 @@ open class MainActivity : FragmentActivity() {
             findViewById<MaterialToolbar>(R.id.topAppBar).menu,
             R.id.media_route_menu_item
         )
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        findViewById<BottomNavigationView>(R.id.bottom_navigation).menu.findItem(R.id.menu_live_id)
+            .setOnMenuItemClickListener {
+                navHostFragment.navController.navigate(R.id.mainFragment, Bundle())
+                true
+            }
+        findViewById<BottomNavigationView>(R.id.bottom_navigation).menu.findItem(R.id.menu_replay_id)
+            .setOnMenuItemClickListener {
+                navHostFragment.navController.navigate(R.id.replaySearchFragment, Bundle())
+                true
+            }
 
     }
 

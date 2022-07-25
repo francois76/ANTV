@@ -9,5 +9,6 @@
     <string name="reload">Actualiser</string>
     <string name="menu_live">Live</string>
     <string name="menu_replay">Replay</string>
+    <string name="buttom_search">Rechercher</string>
 
 </resources>
