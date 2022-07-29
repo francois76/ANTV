@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import android.util.TypedValue
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -39,15 +40,16 @@ object PlayerService {
     // players
     private lateinit var localPlayer: Player
     private lateinit var castPlayer: CastPlayer
-    private var player: Player? = null
+    private lateinit var player: Player
 
     // context
     private lateinit var applicationContext: Context
 
+    private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var mediaSessionConnector: MediaSessionConnector
     private var currentMediaData: MediaData? = null
     private var currentMediaItem: MediaItem? = null
-    private var mediaSession: MediaSessionCompat? = null
-    private var mediaSessionConnector: MediaSessionConnector? = null
+
 
     private const val CHANNEL_ID = "media_playback_channel"
     private var mStateBuilder: PlaybackStateCompat.Builder =
@@ -65,17 +67,17 @@ object PlayerService {
             if (isPlaying) {
                 mStateBuilder.setState(
                     PlaybackStateCompat.STATE_PLAYING,
-                    player!!.currentPosition, 1f
+                    player.currentPosition, 1f
                 )
                 Log.d(TAG, "PLAYING")
             } else {
                 mStateBuilder.setState(
                     PlaybackStateCompat.STATE_PAUSED,
-                    player!!.currentPosition, 1f
+                    player.currentPosition, 1f
                 )
                 Log.d(TAG, "PAUSED")
             }
-            mediaSession?.setPlaybackState(mStateBuilder.build())
+            mediaSession.setPlaybackState(mStateBuilder.build())
             showNotification(mStateBuilder.build())
         }
     }
@@ -84,7 +86,7 @@ object PlayerService {
 
     fun updateCurrentMedia(mediaData: MediaData) {
         Log.v(TAG, "updateUrl")
-        if (player == null || mediaData.url == currentMediaData?.url) {
+        if (mediaData.url == currentMediaData?.url) {
             return
         }
         this.currentMediaData = mediaData
@@ -92,20 +94,20 @@ object PlayerService {
             MediaItem.Builder()
                 .setUri(mediaData.url)
                 .setMimeType(MimeTypes.APPLICATION_M3U8).build()
-        player?.setMediaItem(this.currentMediaItem!!)
-        player?.prepare()
-        player?.play()
+        player.setMediaItem(this.currentMediaItem!!)
+        player.prepare()
+        player.play()
     }
 
-    fun getPlayer(castContext: CastContext, applicationContext: Context): Player? {
+    fun getPlayer(castContext: CastContext, applicationContext: Context): Player {
         Log.v(TAG, "getPlayer")
-        if (this.player == null) {
+        if (!this::player.isInitialized) {
             return setUpPlayer(castContext, applicationContext)
         }
         return this.player
     }
 
-    private fun setUpPlayer(castContext: CastContext, applicationContext: Context): Player? {
+    private fun setUpPlayer(castContext: CastContext, applicationContext: Context): Player {
         Log.v(TAG, "setUpPlayer")
         this.applicationContext = applicationContext
         castPlayer = CastPlayer(castContext)
@@ -118,9 +120,9 @@ object PlayerService {
         }
         this.player = newPlayer
         this.mediaSession = initMediaSession()
-        mediaSessionConnector = MediaSessionConnector(mediaSession!!)
-        mediaSessionConnector?.setPlayer(newPlayer)
-        player?.addListener(listeners)
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
+        mediaSessionConnector.setPlayer(newPlayer)
+        player.addListener(listeners)
 
         return player
     }
@@ -160,6 +162,12 @@ object PlayerService {
                 .setShowBadge(false).build()
         )
 
+        val background = TypedValue()
+        applicationContext.theme?.resolveAttribute(
+            android.R.attr.colorBackground,
+            background,
+            true
+        )
         mNotificationManager.notify(
             0,
             NotificationCompat.Builder(this.applicationContext, CHANNEL_ID).setContentTitle(
@@ -171,20 +179,22 @@ object PlayerService {
                         applicationContext, 0, Intent(
                             applicationContext,
                             MainActivity::class.java
-                        ), PendingIntent.FLAG_MUTABLE
+                        ), PendingIntent.FLAG_IMMUTABLE
                     )
                 )
                 .setSmallIcon(R.drawable.logo)
                 .setLargeIcon(currentMediaData?.bitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setColor(background.data)
+                .setColorized(true)
                 .setStyle(
-                    androidx.media.app.NotificationCompat.MediaStyle()
-                        .setMediaSession(mediaSession?.sessionToken)
-                        .setShowActionsInCompactView(0, 1)
+                    androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle()
+                        .setMediaSession(mediaSession.sessionToken)
+                        .setShowActionsInCompactView(0, 1, 2)
                 )
                 .addAction(
                     NotificationCompat.Action(
-                        com.google.android.exoplayer2.ui.R.drawable.exo_controls_previous,
+                        R.drawable.ic_baseline_skip_previous_24,
                         "restart",
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                             applicationContext,
@@ -194,16 +204,26 @@ object PlayerService {
                 )
                 .addAction(
                     if (state.state == PlaybackStateCompat.STATE_PLAYING) NotificationCompat.Action(
-                        com.google.android.exoplayer2.ui.R.drawable.exo_icon_pause, "pause",
+                        R.drawable.ic_baseline_pause_24, "pause",
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                             applicationContext,
                             PlaybackStateCompat.ACTION_PAUSE
                         )
                     ) else NotificationCompat.Action(
-                        com.google.android.exoplayer2.ui.R.drawable.exo_icon_play, "play",
+                        R.drawable.ic_baseline_play_arrow_24, "play",
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                             applicationContext,
                             PlaybackStateCompat.ACTION_PLAY
+                        )
+                    )
+                )
+                .addAction(
+                    NotificationCompat.Action(
+                        R.drawable.ic_baseline_skip_next_24,
+                        "next",
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(
+                            applicationContext,
+                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                         )
                     )
                 ).build()
@@ -212,10 +232,10 @@ object PlayerService {
 
     private fun setCurrentPlayer(currentPlayer: Player) {
         Log.v(TAG, "setCurrentPlayer")
-        if (this.player == null || currentPlayer === this.player) {
+        if (currentPlayer === this.player) {
             return
         }
-        val previousPlayer: Player = this.player!!
+        val previousPlayer: Player = this.player
         // Player state management.
         var playbackPositionMs = C.TIME_UNSET
         var playWhenReady = false
@@ -232,8 +252,8 @@ object PlayerService {
         currentPlayer.setMediaItem(this.currentMediaItem!!, playbackPositionMs)
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
-        mediaSessionConnector?.setPlayer(currentPlayer)
-        mediaSession?.isActive = true
+        mediaSessionConnector.setPlayer(currentPlayer)
+        mediaSession.isActive = true
         this.player = currentPlayer
     }
 
