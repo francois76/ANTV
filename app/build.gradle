@@ -1,14 +1,16 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlin.android" version "1.7.10"
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
 }
 
+
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "fr.fgognet.antv"
-        minSdk 29
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -17,6 +19,7 @@ android {
 
     buildTypes {
         release {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -27,22 +30,58 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/license.txt'
         exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE-notice.md'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/NOTICE.md'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/mimetypes.default'
+        exclude 'META-INF/mailcap.default'
         exclude("META-INF/*.kotlin_module")
     }
+    buildFeatures {
+        viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
-
 
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.leanback:leanback:1.0.0'
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.0'
-    implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.0'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.0'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.0.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // exoplayer
+    def exoplayer_version = "2.18.1"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "com.google.android.exoplayer:extension-cast:$exoplayer_version"
+    implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
+    // for xml
+    implementation group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
+
+    // rest
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0-RC"
+
+    // navigation
+    def nav_version = "2.5.1"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+    // Junit
+    testImplementation "junit:junit:4.13.2"
 }

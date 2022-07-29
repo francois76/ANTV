@@ -1,4 +1,19 @@
 <resources>
 
-    <style name="Theme.ANTV" parent="@style/Theme.Leanback" />
+    <!-- base theme-->
+    <style name="Theme.ANTV.base" parent="@style/Theme.Material3.Light" />
+
+    <!-- common modifications for all configurations-->
+    <style name="Theme.ANTV.common" parent="Theme.ANTV.base">
+        <item name="android:navigationBarColor">
+            @android:color/transparent
+        </item>
+        <item name="android:statusBarColor">
+            @android:color/transparent
+        </item>
+    </style>
+
+    <!-- full theme, to be overriden in specific configurations -->
+    <style name="Theme.ANTV" parent="Theme.ANTV.common" />
+
 </resources>
