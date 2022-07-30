@@ -35,7 +35,6 @@ class PlayerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         requireActivity().window.decorView.keepScreenOn = true
         arguments?.let {
             mediaData = MediaData(
@@ -49,8 +48,6 @@ class PlayerFragment : Fragment() {
 
     override fun onDestroy() {
         Log.v(TAG, "onDestroy")
-        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        requireActivity().window.decorView.keepScreenOn = false
         super.onDestroy()
     }
 
@@ -61,23 +58,15 @@ class PlayerFragment : Fragment() {
         val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
         this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
-        val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
-        val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
-        topBar.visibility = View.GONE
-        bottom.visibility = View.GONE
+        hideWindow(view)
         playerView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
             Log.v(TAG, "Player controler visibility Changed: $visibility")
             when (visibility) {
                 View.VISIBLE -> {
-                    activity?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, true) }
-                    topBar.visibility = View.VISIBLE
-                    bottom.visibility = View.VISIBLE
+                    showWindow(view)
                 }
                 View.GONE -> {
-                    activity?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
-                    topBar.visibility = View.GONE
-                    bottom.visibility = View.GONE
-
+                    hideWindow(view)
                 }
             }
         })
@@ -103,6 +92,25 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.v(TAG, "onSaveInstanceState")
+        this.view?.let { showWindow(it) }
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroyView() {
+        Log.v(TAG, "onDestroyView")
+
+        super.onDestroyView()
+    }
+
+    override fun onStop() {
+        Log.v(TAG, "onStop")
+        requireActivity().window.decorView.keepScreenOn = false
+        view?.let { showWindow(it) }
+        super.onStop()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,6 +119,28 @@ class PlayerFragment : Fragment() {
         Log.v(TAG, "onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_player, container, false)
+    }
+
+    private fun hideWindow(view: View) {
+        val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
+        val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
+        activity?.window?.let {
+            WindowCompat.setDecorFitsSystemWindows(it, false)
+            it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+        topBar.visibility = View.GONE
+        bottom.visibility = View.GONE
+    }
+
+    private fun showWindow(view: View) {
+        val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
+        val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
+        activity?.window?.let {
+            WindowCompat.setDecorFitsSystemWindows(it, true)
+            it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
+        topBar.visibility = View.VISIBLE
+        bottom.visibility = View.VISIBLE
     }
 
 }
