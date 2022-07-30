@@ -13,5 +13,6 @@
     <string name="title_search">Rechercher</string>
     <string name="title_live">Live</string>
     <string name="title_replay">Replay</string>
+    <string name="search_summary">Paramètre(s) de recherche : </string>
 
 </resources>

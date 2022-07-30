@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import fr.fgognet.antv.R
 import fr.fgognet.antv.external.Images.ImageRepository
 import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 
 private const val TAG = "ANTV/ReplayViewModel"
@@ -27,17 +29,19 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
         if (super.cardListData.value?.title != null && !force) {
             return
         }
+        val app = super.getApplication<Application>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var eventSearchs: List<EventSearch>
-                val date: Long = params?.getLong("time")!!
+                val date: LocalDateTime =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(params?.getLong("time")!!),
+                        ZoneOffset.UTC
+                    )
                 try {
                     eventSearchs =
                         EventSearchRepository.findEventSearchByDate(
-                            LocalDateTime.ofInstant(
-                                Instant.ofEpochMilli(date),
-                                ZoneOffset.UTC
-                            )
+                            date
                         )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -47,7 +51,12 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
                     _cardListData.value =
-                        CardListViewData(generateCardData(eventSearchs), date.toString())
+                        CardListViewData(
+                            generateCardData(eventSearchs),
+                            app.resources.getString(R.string.search_summary) + " " + date.format(
+                                DateTimeFormatter.ofPattern("d/MM/yyyy")
+                            )
+                        )
                 }
             }
         }
