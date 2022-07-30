@@ -41,7 +41,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_replay_24.xml" value="0.1205" />
         <entry key="app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.1" />
-        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.1147396293027361" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="app/src/main/res/layout/custom_exo_styled_player_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/exo_playback_control_view.xml" value="0.17346014492753623" />

@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.Images.ImageRepository
@@ -60,7 +61,7 @@ class PlayerFragment : Fragment() {
         val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
         this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
-        val topBar = view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar)
+        val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
         val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
         topBar.visibility = View.GONE
         bottom.visibility = View.GONE
@@ -68,16 +69,15 @@ class PlayerFragment : Fragment() {
             Log.v(TAG, "Player controler visibility Changed: $visibility")
             when (visibility) {
                 View.VISIBLE -> {
+                    activity?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, true) }
                     topBar.visibility = View.VISIBLE
                     bottom.visibility = View.VISIBLE
-                    activity?.window?.decorView?.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_VISIBLE
                 }
                 View.GONE -> {
+                    activity?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
                     topBar.visibility = View.GONE
                     bottom.visibility = View.GONE
-                    activity?.window?.decorView?.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_FULLSCREEN
+
                 }
             }
         })

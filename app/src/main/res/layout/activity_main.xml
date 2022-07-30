@@ -8,7 +8,9 @@
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame">
 
-    <com.google.android.material.appbar.AppBarLayout style="@style/Theme.ANTV.TopBar">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        style="@style/Theme.ANTV.TopBar">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
