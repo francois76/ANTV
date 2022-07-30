@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 
 
@@ -32,7 +32,7 @@ open class MainActivity : FragmentActivity() {
         )
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val menu = findViewById<BottomNavigationView>(R.id.bottom_navigation).menu
+        val menu = findViewById<NavigationBarView>(R.id.bottom_navigation).menu
         menu.findItem(R.id.menu_live_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.mainFragment, Bundle())

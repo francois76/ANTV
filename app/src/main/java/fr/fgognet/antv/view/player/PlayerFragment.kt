@@ -12,7 +12,7 @@ import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.Images.ImageRepository
 import fr.fgognet.antv.service.MediaData
@@ -61,7 +61,7 @@ class PlayerFragment : Fragment() {
         this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
         val topBar = view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar)
-        val bottom = view.rootView.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
         topBar.visibility = View.GONE
         bottom.visibility = View.GONE
         playerView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
