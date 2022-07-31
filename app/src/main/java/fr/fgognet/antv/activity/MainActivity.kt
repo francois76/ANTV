@@ -2,14 +2,20 @@ package fr.fgognet.antv.activity
 
 import android.app.PictureInPictureParams
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.util.Log
 import android.view.Menu
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
+
 
 private const val TAG = "ANTV/MainActivity"
 
@@ -23,25 +29,42 @@ open class MainActivity : FragmentActivity() {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val topMenu = findViewById<MaterialToolbar>(R.id.topAppBar).menu
         CastButtonFactory.setUpMediaRouteButton(
             applicationContext,
-            findViewById<MaterialToolbar>(R.id.topAppBar).menu,
+            topMenu,
             R.id.media_route_menu_item
         )
+        val s = SpannableString(resources.getString(R.string.credits))
+        Linkify.addLinks(s, Linkify.ALL)
+        topMenu.findItem(R.id.info_menu_item).setOnMenuItemClickListener {
+            val dialog = MaterialAlertDialogBuilder(
+                this,
+                com.google.android.material.R.style.MaterialAlertDialog_Material3
+            )
+                .setTitle(resources.getString(R.string.info))
+                .setMessage(
+                    s
+                )
+                .show()
+            (dialog.findViewById<TextView>(android.R.id.message))?.movementMethod =
+                LinkMovementMethod.getInstance()
+            true
+        }
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val menu = findViewById<NavigationBarView>(R.id.bottom_navigation).menu
-        menu.findItem(R.id.menu_live_id)
+        val bottomMenu = findViewById<NavigationBarView>(R.id.bottom_navigation).menu
+        bottomMenu.findItem(R.id.menu_live_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.mainFragment, Bundle())
-                menu.findItem(R.id.menu_replay_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_replay_id).isChecked = false
                 it.isChecked = true
                 true
             }
-        menu.findItem(R.id.menu_replay_id)
+        bottomMenu.findItem(R.id.menu_replay_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.replaySearchFragment, Bundle())
-                menu.findItem(R.id.menu_live_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_live_id).isChecked = false
                 it.isChecked = true
                 true
             }
