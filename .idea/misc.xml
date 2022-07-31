@@ -48,7 +48,7 @@
         <entry key="app/src/main/res/layout/exo_playback_control_view.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/exo_styled_player_view.xml" value="0.15833333333333333" />
         <entry key="app/src/main/res/layout/fragment_card.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_card_list.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/fragment_card_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_live.xml" value="0.10104166666666667" />
         <entry key="app/src/main/res/layout/fragment_player.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/layout/fragment_replay.xml" value="0.10104166666666667" />
