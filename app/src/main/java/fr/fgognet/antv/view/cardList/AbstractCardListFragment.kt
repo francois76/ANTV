@@ -5,10 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
 import com.google.android.material.appbar.MaterialToolbar
 import fr.fgognet.antv.R
 import fr.fgognet.antv.utils.debounce
@@ -40,6 +42,9 @@ abstract class AbstractCardListFragment : Fragment() {
         }
         model = initViewModelProvider()
         model.loadCardData(savedInstanceState, false)
+        view.findViewById<Button>(R.id.is_playing_btn).setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.playerFragment, null)
+        }
 
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {

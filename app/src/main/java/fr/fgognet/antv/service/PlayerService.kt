@@ -47,7 +47,8 @@ object PlayerService {
 
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
-    private var currentMediaData: MediaData? = null
+    var currentMediaData: MediaData? = null
+        private set
     private var currentMediaItem: MediaItem? = null
 
 
@@ -137,8 +138,8 @@ object PlayerService {
         setCurrentPlayer(localPlayer)
     }
 
-    fun <T> registerCastListener(listener: T) where T : SessionAvailabilityListener {
-        Log.v(TAG, "registerCastListener")
+    fun <T> setSessionAvailabilityListener(listener: T) where T : SessionAvailabilityListener {
+        Log.v(TAG, "setSessionAvailabilityListener")
         castPlayer.setSessionAvailabilityListener(listener)
     }
 

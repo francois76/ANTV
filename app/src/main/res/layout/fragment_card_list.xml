@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="10">
 
     <TextView
         android:id="@+id/cardListTitle"
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <HorizontalScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="top"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/editos"
@@ -25,6 +26,14 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/is_playing_btn"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/is_playing" />
 
 </LinearLayout>
 

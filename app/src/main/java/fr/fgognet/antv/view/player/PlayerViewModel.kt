@@ -28,7 +28,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
             castContext = CastContext.getSharedInstance(this.getApplication())
             val player =
                 PlayerService.getPlayer(castContext, getApplication<Application>().baseContext)
-            PlayerService.registerCastListener(this)
+            PlayerService.setSessionAvailabilityListener(this)
             this._player.value = player
         } catch (e: RuntimeException) {
             Log.e(TAG, e.toString())

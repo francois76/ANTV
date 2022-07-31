@@ -18,5 +18,6 @@
     <string name="no_title_broadcast">Diffusion sans titre</string>
     <string name="card_button_label_live">Live</string>
     <string name="card_button_label_replay">Voir</string>
+    <string name="is_playing">Contenu en cours de lecture</string>
 
 </resources>

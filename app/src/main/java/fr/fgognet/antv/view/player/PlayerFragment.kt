@@ -36,13 +36,22 @@ class PlayerFragment : Fragment() {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         requireActivity().window.decorView.keepScreenOn = true
-        arguments?.let {
-            mediaData = MediaData(
-                it.getString(ARG_URL) ?: "",
-                it.getString(ARG_TITLE),
-                it.getString(ARG_DESCRIPTION),
-                ImageRepository.imageCodeToBitmap[it.getString(ARG_IMAGE_CODE) ?: ""],
-            )
+        if (arguments == null) {
+            // if the view is launched without any params, we just keep the current media
+            mediaData = PlayerService.currentMediaData
+        } else {
+            if (requireArguments().getString(ARG_URL) == null) {
+                // if the view is launched without any params, we just keep the current media
+                mediaData = PlayerService.currentMediaData
+            } else {
+                mediaData = MediaData(
+                    requireArguments().getString(ARG_URL) ?: "",
+                    requireArguments().getString(ARG_TITLE),
+                    requireArguments().getString(ARG_DESCRIPTION),
+                    ImageRepository.imageCodeToBitmap[requireArguments().getString(ARG_IMAGE_CODE)
+                        ?: ""],
+                )
+            }
         }
     }
 
@@ -56,7 +65,7 @@ class PlayerFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         val model = ViewModelProvider(this)[PlayerViewModel::class.java]
-        this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
+        this.context?.let { mediaData?.let { it1 -> PlayerService.updateCurrentMedia(it1) } }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
         hideWindow(view)
         playerView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
