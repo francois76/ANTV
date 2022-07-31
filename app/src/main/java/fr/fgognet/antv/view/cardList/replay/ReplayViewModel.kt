@@ -83,6 +83,7 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     false
                 )
                 var urlReplay = ""
+                var subTitle = ""
                 var isLive = false
                 withContext(Dispatchers.IO) {
 
@@ -91,11 +92,13 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                             eventSearch.url!!
                         )
                         urlReplay = nvs.getReplayURL()
+                        subTitle = nvs.getSubtitle()
                         isLive = true
                     }
                     withContext(Dispatchers.Main) {
                         cardData.url = urlReplay
                         cardData.isEnabled = isLive
+                        cardData.subtitle = subTitle
                         result.add(cardData)
                     }
                 }

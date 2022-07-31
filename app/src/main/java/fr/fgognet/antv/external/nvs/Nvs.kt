@@ -35,13 +35,19 @@ class Nvs(
             .first()
     }
 
-    fun getLiveURL(): String {
+    fun getSubtitle(): String {
 
-        return this.files.files
-            .filter { it.title == "live" }
-            .map { it.url?.split("?DVR")?.get(0) ?: "" }
-            .first()
+        val metadatas = this.metadatas.metadatas
+            .filter { it.name == "commission" || it.name == "video_type" }
+            .associate { it -> Pair(it.name, it) }
+        return when (metadatas.size) {
+            1 -> return metadatas["video_type"]?.label ?: ""
+            2 -> return metadatas["commission"]?.label ?: metadatas["video_type"]?.label
+            ?: ""
+            else -> ""
+        }
     }
+
 }
 
 @Root
@@ -71,10 +77,13 @@ data class MetadataList(
 
 @Root(strict = false)
 data class Metadata(
-    @field:Attribute(name = "name")
-    @param:Attribute(name = "name")
+    @field:Attribute(name = "name", required = false)
+    @param:Attribute(name = "name", required = false)
     var name: String?,
-    @field:Attribute(name = "value")
-    @param:Attribute(name = "value")
-    var value: String?
+    @field:Attribute(name = "value", required = false)
+    @param:Attribute(name = "value", required = false)
+    var value: String?,
+    @field:Attribute(name = "label", required = false)
+    @param:Attribute(name = "label", required = false)
+    var label: String?
 )
