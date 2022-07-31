@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ANTV_base" parent="@style/Theme.Material3.Dark" />
+    <style name="Theme.ANTV_base" parent="@style/Theme.Material3.DynamicColors.Dark" />
 
 </resources>

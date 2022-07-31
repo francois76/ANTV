@@ -12,6 +12,7 @@ import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
+import fr.fgognet.antv.view.cardList.CardStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,11 +80,11 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     "",
                     getApplication<Application>().resources.getString(R.string.card_button_label_replay),
-                    false
+                    CardStatus.DISABLED
                 )
                 var urlReplay = ""
                 var subTitle = ""
-                var isLive = false
+                var cardStatus = CardStatus.DISABLED
                 withContext(Dispatchers.IO) {
 
                     if (eventSearch.url != null) {
@@ -92,11 +93,12 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                         )
                         urlReplay = nvs.getReplayURL()
                         subTitle = nvs.getSubtitle()
-                        isLive = true
+                        cardStatus =
+                            CardStatus.REPLAY // the status is valorized here to ensure the card actualy has the URL
                     }
                     withContext(Dispatchers.Main) {
                         cardData.url = urlReplay
-                        cardData.isEnabled = isLive
+                        cardData.cardStatus = cardStatus
                         cardData.subtitle = subTitle
                         result.add(cardData)
                     }

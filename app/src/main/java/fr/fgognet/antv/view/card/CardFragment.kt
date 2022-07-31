@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardStatus
 
 private const val TAG = "ANTV/CardFragment"
 private const val ARG_TITLE = "title"
@@ -23,7 +24,7 @@ private const val ARG_DESCRIPTION = "description"
 private const val ARG_IMAGE = "image"
 private const val ARG_LIVE = "live"
 private const val ARG_BUTTON_LABEL = "buttonLabel"
-private const val ARG_IS_LIVE = "isLive"
+private const val ARG_STATUS = "status"
 
 /**
  * CardFragment fragment that handle each element representing a card on the homepage
@@ -43,7 +44,7 @@ class CardFragment : Fragment() {
                 it.getString(ARG_IMAGE) ?: "",
                 it.getString(ARG_LIVE) ?: "",
                 it.getString(ARG_BUTTON_LABEL) ?: "",
-                it.getBoolean(ARG_IS_LIVE),
+                CardStatus.valueOf(it.getString(ARG_STATUS) ?: CardStatus.DISABLED.toString()),
             )
         }
     }
@@ -59,13 +60,22 @@ class CardFragment : Fragment() {
         imageView.setImageBitmap(ImageRepository.imageCodeToBitmap[data.imageCode])
         val button = view.findViewById<Button>(R.id.live_button)
         button.text = data.buttonLabel
-        if (data.isEnabled) {
+        if (data.cardStatus == CardStatus.LIVE || data.cardStatus == CardStatus.REPLAY) {
             val background = TypedValue()
-            context?.theme?.resolveAttribute(
-                android.R.attr.colorError,
-                background,
-                true
-            )
+            if (data.cardStatus == CardStatus.LIVE) {
+                context?.theme?.resolveAttribute(
+                    android.R.attr.colorError,
+                    background,
+                    true
+                )
+            } else {
+                context?.theme?.resolveAttribute(
+                    android.R.attr.colorPrimaryDark,
+                    background,
+                    true
+                )
+            }
+
             button.setBackgroundColor(
                 background.data
             )
@@ -118,7 +128,7 @@ class CardFragment : Fragment() {
                     putString(ARG_IMAGE, cardData.imageCode)
                     putString(ARG_LIVE, cardData.url)
                     putString(ARG_BUTTON_LABEL, cardData.buttonLabel)
-                    putBoolean(ARG_IS_LIVE, cardData.isEnabled)
+                    putString(ARG_STATUS, cardData.cardStatus.toString())
                 }
             }
     }
