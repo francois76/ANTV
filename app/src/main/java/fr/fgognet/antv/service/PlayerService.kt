@@ -137,9 +137,8 @@ object PlayerService {
         setCurrentPlayer(localPlayer)
     }
 
-    fun <T> registerCastListener(listener: T) where T : SessionAvailabilityListener, T : Player.Listener {
+    fun <T> registerCastListener(listener: T) where T : SessionAvailabilityListener {
         Log.v(TAG, "registerCastListener")
-        castPlayer.addListener(listener)
         castPlayer.setSessionAvailabilityListener(listener)
     }
 

@@ -12,7 +12,7 @@ import fr.fgognet.antv.service.PlayerService
 private const val TAG = "ANTV/PlayerViewModel"
 
 class PlayerViewModel(application: Application) : AndroidViewModel(application),
-    DefaultLifecycleObserver, SessionAvailabilityListener, Player.Listener {
+    DefaultLifecycleObserver, SessionAvailabilityListener {
 
     private val _player = MutableLiveData<Player>()
     val player: LiveData<Player> get() = _player
