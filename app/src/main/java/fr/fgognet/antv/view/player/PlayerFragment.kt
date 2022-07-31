@@ -55,7 +55,7 @@ class PlayerFragment : Fragment() {
         Log.v(TAG, "onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
-        val videoView = ViewModelProvider(this)[PlayerViewModel::class.java]
+        val model = ViewModelProvider(this)[PlayerViewModel::class.java]
         this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
         hideWindow(view)
@@ -70,7 +70,7 @@ class PlayerFragment : Fragment() {
                 }
             }
         })
-        videoView.player.observe(viewLifecycleOwner) {
+        model.player.observe(viewLifecycleOwner) {
             Log.i(TAG, "refreshing player with URL ${mediaData?.url}")
             playerView.player = it
 
