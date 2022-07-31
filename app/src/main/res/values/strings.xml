@@ -14,5 +14,9 @@
     <string name="title_live">Live</string>
     <string name="title_replay">Replay</string>
     <string name="search_summary">Paramètre(s) de recherche : </string>
+    <string name="fail_load_data">Impossible de charger les données </string>
+    <string name="no_title_broadcast">Diffusion sans titre</string>
+    <string name="card_button_label_live">Live</string>
+    <string name="card_button_label_replay">Voir</string>
 
 </resources>

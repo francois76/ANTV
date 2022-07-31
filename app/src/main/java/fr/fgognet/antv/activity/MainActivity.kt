@@ -11,14 +11,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 
+private const val TAG = "ANTV/MainActivity"
 
 /**
  * MainActivity activity that hold the navigation
  */
 open class MainActivity : FragmentActivity() {
-
-
-    open val TAG = "ANTV/MainActivity"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

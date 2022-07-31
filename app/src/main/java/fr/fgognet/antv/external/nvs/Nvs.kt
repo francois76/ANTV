@@ -18,15 +18,14 @@ class Nvs(
     fun getMeetingID(): String {
 
         return this.metadatas.metadatas
-            .filter { it.name == "meeting_id" }
-            .map { it.value }
-            .filterNotNull()
+            .filter { it.name == "meeting_id" }.mapNotNull { it.value }
             .first()
     }
 
     fun getReplayURL(): String {
 
         return this.files.files
+            .asSequence()
             .filter { it.title == "source" }
             .map { it.url }
             .filterNotNull()
@@ -39,7 +38,7 @@ class Nvs(
 
         val metadatas = this.metadatas.metadatas
             .filter { it.name == "commission" || it.name == "video_type" }
-            .associate { it -> Pair(it.name, it) }
+            .associateBy { it.name }
         return when (metadatas.size) {
             1 -> return metadatas["video_type"]?.label ?: ""
             2 -> return metadatas["commission"]?.label ?: metadatas["video_type"]?.label

@@ -13,8 +13,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.Images.ImageRepository
-import fr.fgognet.antv.view.live.CardData
+import fr.fgognet.antv.external.image.ImageRepository
+import fr.fgognet.antv.view.cardList.CardData
 
 private const val TAG = "ANTV/CardFragment"
 private const val ARG_TITLE = "title"

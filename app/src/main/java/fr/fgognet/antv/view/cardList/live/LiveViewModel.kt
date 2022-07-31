@@ -1,14 +1,18 @@
-package fr.fgognet.antv.view.live
+package fr.fgognet.antv.view.cardList.live
 
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import fr.fgognet.antv.external.Images.ImageRepository
+import fr.fgognet.antv.R
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
+import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardListViewData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,11 +30,14 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
         }
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                var editorial: Editorial
-                try {
-                    editorial = EditorialRepository.getEditorialInfos()
+                val editorial: Editorial = try {
+                    EditorialRepository.getEditorialInformation()
                 } catch (e: Exception) {
-                    editorial = Editorial("Impossible de charger les données", "", null)
+                    Editorial(
+                        getApplication<Application>().resources.getString(R.string.fail_load_data),
+                        "",
+                        null
+                    )
                 }
 
                 withContext(Dispatchers.Main) {
@@ -50,31 +57,33 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
             return result
         }
         viewModelScope.launch {
-            var liveInfos: Map<Int, String> = hashMapOf()
+            var liveInformation: Map<Int, String>
             withContext(Dispatchers.IO) {
-                liveInfos = LiveRepository.getLiveInfos()
+                liveInformation = LiveRepository.getLiveInformation()
                 withContext(Dispatchers.Main) {
                     for (diffusion in editorial.diffusions!!) {
                         val cardData = CardData(
-                            diffusion.libelle ?: "diffusion sans titre",
-                            diffusion.lieu ?: "lieu inconnu",
+                            diffusion.libelle
+                                ?: getApplication<Application>().resources.getString(R.string.no_title_broadcast),
+                            diffusion.lieu ?: "",
                             diffusion.sujet?.replace("<br>", "\n") ?: "",
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             "",
                             diffusion.getFormattedHour(),
                             false
                         )
-                        if (!liveInfos.containsKey(diffusion.flux)) {
+                        if (!liveInformation.containsKey(diffusion.flux)) {
                             result.add(cardData)
                         } else {
                             withContext(Dispatchers.IO) {
                                 val nvs = NvsRepository.getNvsByCode(
-                                    liveInfos[diffusion.flux]!!
+                                    liveInformation[diffusion.flux]!!
                                 )
                                 withContext(Dispatchers.Main) {
-                                    if (liveInfos.containsKey(diffusion.flux) && diffusion.uid_referentiel == nvs.getMeetingID()
+                                    if (liveInformation.containsKey(diffusion.flux) && diffusion.uid_referentiel == nvs.getMeetingID()
                                     ) {
-                                        cardData.buttonLabel = "Live"
+                                        cardData.buttonLabel =
+                                            getApplication<Application>().resources.getString(R.string.card_button_label_live)
                                         cardData.isEnabled = true
                                         cardData.url =
                                             "https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"

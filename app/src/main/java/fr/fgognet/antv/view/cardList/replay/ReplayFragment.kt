@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.R
-import fr.fgognet.antv.view.live.AbstractCardListFragment
-import fr.fgognet.antv.view.live.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.AbstractCardListFragment
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 
 private const val TAG = "ANTV/ReplayFragment"
 

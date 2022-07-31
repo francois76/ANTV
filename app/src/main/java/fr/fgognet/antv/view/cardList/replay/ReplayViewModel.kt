@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.Images.ImageRepository
 import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
+import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.live.AbstractCardListViewModel
-import fr.fgognet.antv.view.live.CardData
-import fr.fgognet.antv.view.live.CardListViewData
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardListViewData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,27 +32,26 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
         val app = super.getApplication<Application>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                var eventSearchs: List<EventSearch>
+                val eventSearches: List<EventSearch>
                 val date: LocalDateTime =
                     LocalDateTime.ofInstant(
                         Instant.ofEpochMilli(params?.getLong("time")!!),
                         ZoneOffset.UTC
                     )
-                try {
-                    eventSearchs =
-                        EventSearchRepository.findEventSearchByDate(
-                            date
-                        )
+                eventSearches = try {
+                    EventSearchRepository.findEventSearchByDate(
+                        date
+                    )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
-                    eventSearchs = arrayListOf()
+                    arrayListOf()
                 }
 
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
                     _cardListData.value =
                         CardListViewData(
-                            generateCardData(eventSearchs),
+                            generateCardData(eventSearches),
                             app.resources.getString(R.string.search_summary) + " " + date.format(
                                 DateTimeFormatter.ofPattern("d/MM/yyyy")
                             )
@@ -62,11 +61,11 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
         }
     }
 
-    private fun generateCardData(eventSearchs: List<EventSearch>): List<CardData> {
+    private fun generateCardData(eventSearches: List<EventSearch>): List<CardData> {
         Log.v(TAG, "generateCardData")
         val result = arrayListOf<CardData>()
         viewModelScope.launch {
-            for (eventSearch in eventSearchs) {
+            for (eventSearch in eventSearches) {
                 val cardData = CardData(
                     eventSearch.title ?: "video sans titre",
                     "",
@@ -79,7 +78,7 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                         "https"
                     ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     "",
-                    "Voir",
+                    getApplication<Application>().resources.getString(R.string.card_button_label_replay),
                     false
                 )
                 var urlReplay = ""

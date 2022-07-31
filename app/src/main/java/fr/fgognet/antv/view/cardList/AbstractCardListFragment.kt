@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.live
+package fr.fgognet.antv.view.cardList
 
 import android.os.Bundle
 import android.util.Log

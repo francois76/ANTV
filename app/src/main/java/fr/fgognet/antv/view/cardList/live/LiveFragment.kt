@@ -1,7 +1,9 @@
-package fr.fgognet.antv.view.live
+package fr.fgognet.antv.view.cardList.live
 
 import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.R
+import fr.fgognet.antv.view.cardList.AbstractCardListFragment
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 
 
 /**
@@ -13,7 +15,7 @@ class LiveFragment : AbstractCardListFragment() {
     }
 
     override fun getTitle(): String {
-        return return resources.getText(R.string.title_live).toString()
+        return resources.getText(R.string.title_live).toString()
     }
 
     override fun getResource(): Int {

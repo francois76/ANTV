@@ -12,8 +12,8 @@ private const val TAG = "ANTV/EditorialRepository"
 
 object EditorialRepository {
 
-    fun getEditorialInfos(): Editorial {
-        Log.v(TAG, "getEditorialInfos")
+    fun getEditorialInformation(): Editorial {
+        Log.v(TAG, "getEditorialInformation")
         when (Config.currentEnvironment) {
             Environment.NOTHING -> return Editorial(
                 "Titre mock nothing",

@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.Images.ImageRepository
+import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.service.MediaData
 import fr.fgognet.antv.service.PlayerService
 
