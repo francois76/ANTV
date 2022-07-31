@@ -9,9 +9,9 @@ import com.google.android.gms.cast.framework.CastContext
 import fr.fgognet.antv.service.PlayerService
 
 
-private const val TAG = "ANTV/VideoViewModel"
+private const val TAG = "ANTV/PlayerViewModel"
 
-class VideoViewModel(application: Application) : AndroidViewModel(application),
+class PlayerViewModel(application: Application) : AndroidViewModel(application),
     DefaultLifecycleObserver, SessionAvailabilityListener, Player.Listener {
 
     private val _player = MutableLiveData<Player>()
@@ -35,11 +35,6 @@ class VideoViewModel(application: Application) : AndroidViewModel(application),
         }
     }
 
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        Log.v(TAG, "onDestroy")
-        super.onDestroy(owner)
-    }
 
     override fun onCleared() {
         Log.v(TAG, "onCleared")

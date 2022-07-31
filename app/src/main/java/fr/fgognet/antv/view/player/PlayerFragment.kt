@@ -55,7 +55,7 @@ class PlayerFragment : Fragment() {
         Log.v(TAG, "onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
-        val videoView = ViewModelProvider(this)[VideoViewModel::class.java]
+        val videoView = ViewModelProvider(this)[PlayerViewModel::class.java]
         this.context?.let { PlayerService.updateCurrentMedia(mediaData!!) }
         val playerView = view.findViewById<StyledPlayerView>(R.id.video_view)
         hideWindow(view)
@@ -139,8 +139,8 @@ class PlayerFragment : Fragment() {
             WindowCompat.setDecorFitsSystemWindows(it, true)
             it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        topBar.visibility = View.VISIBLE
-        bottom.visibility = View.VISIBLE
+        topBar?.visibility = View.VISIBLE
+        bottom?.visibility = View.VISIBLE
     }
 
 }
