@@ -4,57 +4,57 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
-import com.google.android.gms.cast.framework.CastContext
-import fr.fgognet.antv.service.PlayerService
+import fr.fgognet.antv.service.notification.NotificationService
+import fr.fgognet.antv.service.player.PlayerListener
+import fr.fgognet.antv.service.player.PlayerService
 
 
 private const val TAG = "ANTV/PlayerViewModel"
 
 class PlayerViewModel(application: Application) : AndroidViewModel(application),
-    DefaultLifecycleObserver, SessionAvailabilityListener {
+    DefaultLifecycleObserver, PlayerListener {
 
     private val _player = MutableLiveData<Player>()
     val player: LiveData<Player> get() = _player
-    private lateinit var castContext: CastContext
+    private lateinit var observer: Observer<Player>
+    private var listenerKey: Int = 0
 
 
     init {
-        // Alternatively expose this as a dependency
+        Log.v(TAG, "init")
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        // Getting the cast context later than onStart can cause device discovery not to take place.
-        try {
-            Log.v(TAG, "init")
-            castContext = CastContext.getSharedInstance(this.getApplication())
-            val player =
-                PlayerService.getPlayer(castContext, getApplication<Application>().baseContext)
-            PlayerService.setSessionAvailabilityListener(this)
-            this._player.value = player
-        } catch (e: RuntimeException) {
-            Log.e(TAG, e.toString())
+        PlayerService.init(application)
+        this.listenerKey = PlayerService.registerListener(this)
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
+        observer = Observer<Player> {
+            this._player.value = it
         }
+        PlayerService.player.observeForever(observer)
     }
 
 
     override fun onCleared() {
         Log.v(TAG, "onCleared")
         super.onCleared()
+        PlayerService.player.removeObserver(observer)
+        PlayerService.unregisterListener(listenerKey)
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
     }
 
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        NotificationService.showMediaplayerNotification(
+            this.getApplication(),
+            isPlaying
+        )
+    }
 
     override fun onCastSessionAvailable() {
-        Log.v(TAG, "onCastSessionAvailable")
-        PlayerService.cast()
-        this._player.value =
-            PlayerService.getPlayer(castContext, getApplication<Application>().applicationContext)
     }
 
     override fun onCastSessionUnavailable() {
-        Log.v(TAG, "onCastSessionUnavailable")
-        PlayerService.stopCast()
-        this._player.value =
-            PlayerService.getPlayer(castContext, getApplication<Application>().applicationContext)
     }
 
 

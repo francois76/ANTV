@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
@@ -35,6 +36,7 @@ open class MainActivity : FragmentActivity() {
             topMenu,
             R.id.media_route_menu_item
         )
+        CastContext.getSharedInstance(applicationContext)
         val s = linkifyHtml(resources.getString(R.string.credits), Linkify.ALL)
         topMenu.findItem(R.id.info_menu_item).setOnMenuItemClickListener {
             val dialog = MaterialAlertDialogBuilder(
@@ -67,11 +69,6 @@ open class MainActivity : FragmentActivity() {
                 it.isChecked = true
                 true
             }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            val builder = PictureInPictureParams.Builder()
-            builder.setAutoEnterEnabled(true)
-            this.setPictureInPictureParams(builder.build())
-        }
     }
 
 

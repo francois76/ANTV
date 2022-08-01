@@ -46,7 +46,7 @@
         </activity>
 
         <receiver
-            android:name="fr.fgognet.antv.service.PlayerService$MediaReceiver"
+            android:name="fr.fgognet.antv.service.player.PlayerServiceListener"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />

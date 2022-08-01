@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.player
 
+import android.app.PictureInPictureParams
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +17,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
-import fr.fgognet.antv.service.MediaData
-import fr.fgognet.antv.service.PlayerService
+import fr.fgognet.antv.service.player.MediaData
+import fr.fgognet.antv.service.player.PlayerService
 
 
 const val ARG_URL = "url"
@@ -122,20 +123,31 @@ class PlayerFragment : Fragment() {
     private fun hideWindow(view: View) {
         val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
         val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
-        activity?.window?.let {
-            WindowCompat.setDecorFitsSystemWindows(it, false)
-            it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        activity?.let {
+            WindowCompat.setDecorFitsSystemWindows(it.window, false)
+            it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                val builder = PictureInPictureParams.Builder()
+                builder.setAutoEnterEnabled(true)
+                it.setPictureInPictureParams(builder.build())
+            }
         }
         topBar.visibility = View.GONE
         bottom.visibility = View.GONE
+
     }
 
     private fun showWindow(view: View) {
         val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
         val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
-        activity?.window?.let {
-            WindowCompat.setDecorFitsSystemWindows(it, true)
-            it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        activity?.let {
+            WindowCompat.setDecorFitsSystemWindows(it.window, true)
+            it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                val builder = PictureInPictureParams.Builder()
+                builder.setAutoEnterEnabled(false)
+                it.setPictureInPictureParams(builder.build())
+            }
         }
         topBar?.visibility = View.VISIBLE
         bottom?.visibility = View.VISIBLE

@@ -14,7 +14,7 @@ import androidx.navigation.Navigation
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import fr.fgognet.antv.R
-import fr.fgognet.antv.service.PlayerService
+import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.debounce
 import fr.fgognet.antv.view.card.CardFragment
 import kotlinx.coroutines.CoroutineScope
