@@ -2,7 +2,6 @@ package fr.fgognet.antv.activity
 
 import android.app.PictureInPictureParams
 import android.os.Bundle
-import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.Log
@@ -15,6 +14,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.utils.linkifyHtml
 
 
 private const val TAG = "ANTV/MainActivity"
@@ -35,8 +35,7 @@ open class MainActivity : FragmentActivity() {
             topMenu,
             R.id.media_route_menu_item
         )
-        val s = SpannableString(resources.getString(R.string.credits))
-        Linkify.addLinks(s, Linkify.ALL)
+        val s = linkifyHtml(resources.getString(R.string.credits), Linkify.ALL)
         topMenu.findItem(R.id.info_menu_item).setOnMenuItemClickListener {
             val dialog = MaterialAlertDialogBuilder(
                 this,

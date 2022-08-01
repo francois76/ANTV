@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="credits"><![CDATA[
-        ANTV \n
-        ANTV est une application développée par François GOGNET. \n
-        Le code source est disponible sur <a href="https://github.com/francois76/ANTV">github</a>\n
+        ANTV <br/>
+        ANTV est une application développée par François GOGNET. <br/>
+        Le code source est disponible sur <a href="https://github.com/francois76/ANTV">github</a><br/>
         les images d\'illustration ainsi que les différents contenus sont directement affichés
         depuis le site  <a href="https://videos.assemblee-nationale.fr">de l\'assemblée nationale</a>,
          aucune ressource appartenant  à l\'assemblée nationale n\'a été intégrée à cette application
