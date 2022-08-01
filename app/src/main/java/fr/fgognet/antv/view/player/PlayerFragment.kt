@@ -101,17 +101,6 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.v(TAG, "onSaveInstanceState")
-        this.view?.let { showWindow(it) }
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onDestroyView() {
-        Log.v(TAG, "onDestroyView")
-
-        super.onDestroyView()
-    }
 
     override fun onStop() {
         Log.v(TAG, "onStop")
