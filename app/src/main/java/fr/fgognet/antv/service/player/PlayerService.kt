@@ -7,10 +7,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.util.MimeTypes
@@ -69,10 +66,16 @@ object PlayerService {
         if (mediaData.url == currentMediaData?.url) {
             return
         }
+
         currentMediaData = mediaData
         currentMediaItem =
             MediaItem.Builder()
                 .setUri(mediaData.url)
+                .setMediaMetadata(
+                    MediaMetadata.Builder().setTitle(mediaData.title)
+                        .setDescription(mediaData.description)
+                        .build()
+                )
                 .setMimeType(MimeTypes.APPLICATION_M3U8).build()
         player.value?.setMediaItem(currentMediaItem!!)
         player.value?.prepare()
