@@ -27,6 +27,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         Log.d(TAG, "registered $listenerKey")
     }
 
+
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
         observer = Observer<Player> {

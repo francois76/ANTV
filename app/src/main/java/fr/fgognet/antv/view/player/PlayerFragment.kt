@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
@@ -82,6 +83,8 @@ class PlayerFragment : Fragment() {
         model.player.observe(viewLifecycleOwner) {
             Log.i(TAG, "refreshing player with URL ${mediaData?.url}")
             playerView.player = it
+            view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =
+                it.mediaMetadata.title
 
 
             if (it is CastPlayer) {
