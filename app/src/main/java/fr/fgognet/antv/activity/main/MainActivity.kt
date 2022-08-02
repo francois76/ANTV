@@ -32,7 +32,6 @@ open class MainActivity : FragmentActivity() {
         Log.v(TAG, "onResume")
         super.onResume()
         listenerKey = PlayerService.registerListener(ActivityPlayerListener(this))
-        Log.d(TAG, "registered $listenerKey")
     }
 
 
@@ -119,8 +118,13 @@ open class MainActivity : FragmentActivity() {
 
     override fun onPause() {
         Log.v(TAG, "onPause")
-        Log.d(TAG, "de-registered $listenerKey")
         PlayerService.unregisterListener(listenerKey)
+        // if we are in picture in picture mode, we need to navigate to the player
+        if (isInPictureInPictureMode) {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navHostFragment.navController.navigate(R.id.playerFragment)
+        }
         super.onPause()
     }
 
