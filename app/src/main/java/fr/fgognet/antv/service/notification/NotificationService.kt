@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.session.MediaButtonReceiver
 import fr.fgognet.antv.R
-import fr.fgognet.antv.activity.MainActivity
+import fr.fgognet.antv.activity.main.MainActivity
 import fr.fgognet.antv.service.player.PlayerService
 
 object NotificationService {

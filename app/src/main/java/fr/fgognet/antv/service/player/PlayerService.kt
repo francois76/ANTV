@@ -105,7 +105,8 @@ object PlayerService {
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         Log.d(TAG, "updating player")
         _player.value = newPlayer
-        registerListener(servicePlayerListener)
+        val listenerKey = registerListener(servicePlayerListener)
+        Log.d(TAG, "registered $listenerKey")
     }
 
     fun cast() {
@@ -119,17 +120,21 @@ object PlayerService {
     }
 
     fun registerListener(listener: PlayerListener): Int {
-        Log.v(TAG, "registerListener")
+        Log.v(TAG, "registerListener ${listener.javaClass.canonicalName}")
         val key = listener.hashCode()
         listeners = listeners + Pair(key, listener)
         player.value?.addListener(listener)
+        Log.d(TAG, "successfully registered with key $key")
         return key
     }
 
     fun unregisterListener(key: Int) {
-        Log.v(TAG, "unregisterListener")
+        Log.v(TAG, "unregisterListener $key")
         val listener = listeners[key]
-        listener?.let { player.value?.removeListener(it) }
+        listener?.let {
+            player.value?.removeListener(it)
+            Log.d(TAG, "successfully unregistered ${listener.javaClass.canonicalName}")
+        }
         listeners = listeners - key
     }
 

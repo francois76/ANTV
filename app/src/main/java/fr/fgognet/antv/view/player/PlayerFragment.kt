@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.player
 
-import android.app.PictureInPictureParams
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -126,11 +125,6 @@ class PlayerFragment : Fragment() {
         activity?.let {
             WindowCompat.setDecorFitsSystemWindows(it.window, false)
             it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                val builder = PictureInPictureParams.Builder()
-                builder.setAutoEnterEnabled(true)
-                it.setPictureInPictureParams(builder.build())
-            }
         }
         topBar.visibility = View.GONE
         bottom.visibility = View.GONE
@@ -143,11 +137,6 @@ class PlayerFragment : Fragment() {
         activity?.let {
             WindowCompat.setDecorFitsSystemWindows(it.window, true)
             it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                val builder = PictureInPictureParams.Builder()
-                builder.setAutoEnterEnabled(false)
-                it.setPictureInPictureParams(builder.build())
-            }
         }
         topBar?.visibility = View.VISIBLE
         bottom?.visibility = View.VISIBLE

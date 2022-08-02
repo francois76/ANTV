@@ -23,8 +23,8 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
     init {
         Log.v(TAG, "init")
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        PlayerService.init(application)
         this.listenerKey = PlayerService.registerListener(this)
+        Log.d(TAG, "registered $listenerKey")
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -40,6 +40,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         Log.v(TAG, "onCleared")
         super.onCleared()
         PlayerService.player.removeObserver(observer)
+        Log.d(TAG, "de-registered $listenerKey")
         PlayerService.unregisterListener(listenerKey)
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
     }
@@ -49,12 +50,6 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
             this.getApplication(),
             isPlaying
         )
-    }
-
-    override fun onCastSessionAvailable() {
-    }
-
-    override fun onCastSessionUnavailable() {
     }
 
 

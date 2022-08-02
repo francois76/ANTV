@@ -1,4 +1,4 @@
-package fr.fgognet.antv.activity
+package fr.fgognet.antv.activity.main
 
 import android.app.PictureInPictureParams
 import android.os.Bundle
@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.linkifyHtml
 
 
@@ -25,18 +26,28 @@ private const val TAG = "ANTV/MainActivity"
  */
 open class MainActivity : FragmentActivity() {
 
+    private var listenerKey: Int = 0
+
+    override fun onResume() {
+        Log.v(TAG, "onResume")
+        super.onResume()
+        listenerKey = PlayerService.registerListener(ActivityPlayerListener(this))
+        Log.d(TAG, "registered $listenerKey")
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        CastContext.getSharedInstance(applicationContext)
+        PlayerService.init(application)
         val topMenu = findViewById<MaterialToolbar>(R.id.topAppBar).menu
         CastButtonFactory.setUpMediaRouteButton(
             applicationContext,
             topMenu,
             R.id.media_route_menu_item
         )
-        CastContext.getSharedInstance(applicationContext)
         val s = linkifyHtml(resources.getString(R.string.credits), Linkify.ALL)
         topMenu.findItem(R.id.info_menu_item).setOnMenuItemClickListener {
             val dialog = MaterialAlertDialogBuilder(
@@ -108,6 +119,8 @@ open class MainActivity : FragmentActivity() {
 
     override fun onPause() {
         Log.v(TAG, "onPause")
+        Log.d(TAG, "de-registered $listenerKey")
+        PlayerService.unregisterListener(listenerKey)
         super.onPause()
     }
 

@@ -1,4 +1,6 @@
-package fr.fgognet.antv.activity
+package fr.fgognet.antv.activity.tv
+
+import fr.fgognet.antv.activity.main.MainActivity
 
 
 /**
