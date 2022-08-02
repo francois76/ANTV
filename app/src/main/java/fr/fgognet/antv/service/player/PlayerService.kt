@@ -109,6 +109,12 @@ object PlayerService {
         Log.d(TAG, "registered $listenerKey")
     }
 
+    fun resyncOnLiveError() {
+        // Re-initialize player at the current live window default position.
+        player.value?.seekToDefaultPosition()
+        player.value?.prepare()
+    }
+
     fun cast() {
         Log.v(TAG, "cast")
         setCurrentPlayer(castPlayer)

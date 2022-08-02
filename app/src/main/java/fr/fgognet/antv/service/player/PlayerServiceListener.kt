@@ -6,6 +6,7 @@ import android.content.Intent
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.media.session.MediaButtonReceiver
+import com.google.android.exoplayer2.PlaybackException
 
 private const val TAG = "ANTV/PlayerServiceListener"
 
@@ -33,5 +34,17 @@ class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.v(TAG, "onReceive")
         MediaButtonReceiver.handleIntent(PlayerService.mediaSession, intent)
+    }
+
+    override fun onPlayerError(error: PlaybackException) {
+        Log.v(TAG, "onPlayerError")
+        when (error.errorCode) {
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
+            PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
+                PlayerService.resyncOnLiveError()
+            }
+            else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+        }
     }
 }
