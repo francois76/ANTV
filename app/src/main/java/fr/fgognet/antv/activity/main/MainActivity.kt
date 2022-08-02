@@ -23,10 +23,14 @@ private const val TAG = "ANTV/MainActivity"
 
 /**
  * MainActivity activity that hold the navigation
+ *
+ *
+ *
  */
 open class MainActivity : FragmentActivity() {
 
     private var listenerKey: Int = 0
+
 
     override fun onResume() {
         Log.v(TAG, "onResume")
@@ -86,7 +90,6 @@ open class MainActivity : FragmentActivity() {
         Log.v(TAG, "onCreateOptionsMenu")
         val result = super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.browse, menu)
-
         return result
     }
 
@@ -123,7 +126,9 @@ open class MainActivity : FragmentActivity() {
         if (isInPictureInPictureMode) {
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            navHostFragment.navController.navigate(R.id.playerFragment)
+            if (navHostFragment.navController.currentDestination?.id != R.id.playerFragment) {
+                navHostFragment.navController.navigate(R.id.playerFragment)
+            }
         }
         super.onPause()
     }
