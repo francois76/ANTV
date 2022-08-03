@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ANTV" parent="@style/Theme.ANTV.common">
+    <style name="Theme.ANTV.v29" parent="@style/Theme.ANTV">
         <item name="android:enforceNavigationBarContrast">false</item>
         <item name="android:enforceStatusBarContrast">false</item>
     </style>

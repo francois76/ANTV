@@ -7,8 +7,8 @@ object LiveRepository {
 
     private const val TAG = "ANTV/LiveRepository"
 
-    fun getLiveInfos(): Map<Int, String> {
-        Log.v(TAG, "getLiveInfos")
+    fun getLiveInformation(): Map<Int, String> {
+        Log.v(TAG, "getLiveInformation")
         val result = HashMap<Int, String>()
         val url = "https://videos.assemblee-nationale.fr/live/live.txt"
         Log.i(TAG, "Calling $url")

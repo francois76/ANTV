@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.11750599520383694" />
+        <entry key="../../.gradle/caches/transforms-3/7c9e60c936c5dbcd107ea36a52b55f71/transformed/appcompat-1.4.2/res/drawable-v23/abc_control_background_material.xml" value="0.1" />
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout-v23/exo_styled_player_control_rewind_button.xml" value="0.1" />
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout/exo_player_control_view.xml" value="0.10104166666666667" />
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout/exo_player_view.xml" value="0.1" />
@@ -33,18 +34,26 @@
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/menu/browse.xml" value="0.1851218469431381" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/xml/automotive_app_desc.xml" value="0.1885766092475068" />
         <entry key="app/src/main/res/drawable/ic_baseline_cast_connected_400.xml" value="0.185" />
+        <entry key="app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_live_tv_24.xml" value="0.185" />
         <entry key="app/src/main/res/drawable/ic_baseline_ondemand_video_24.xml" value="0.185" />
+        <entry key="app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_replay_24.xml" value="0.1205" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.109375" />
+        <entry key="app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout-land/fragment_card.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="app/src/main/res/layout/custom_exo_styled_player_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/exo_playback_control_view.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/exo_styled_player_view.xml" value="0.15833333333333333" />
         <entry key="app/src/main/res/layout/fragment_card.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_card_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_card_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_live.xml" value="0.10104166666666667" />
         <entry key="app/src/main/res/layout/fragment_player.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/layout/fragment_replay.xml" value="0.10104166666666667" />
+        <entry key="app/src/main/res/layout/fragment_replay_search.xml" value="0.14920906370243694" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/browse.xml" value="0.129115006412997" />
       </map>

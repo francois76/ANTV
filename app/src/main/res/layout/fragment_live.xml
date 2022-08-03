@@ -9,5 +9,5 @@
         layout="@layout/fragment_card_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.live.LiveFragment" />
+        tools:context=".view.cardList.live.LiveFragment" />
 </LinearLayout>
