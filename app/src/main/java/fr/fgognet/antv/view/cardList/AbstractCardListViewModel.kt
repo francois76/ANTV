@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.live
+package fr.fgognet.antv.view.cardList
 
 import android.app.Application
 import android.os.Bundle
@@ -12,6 +12,14 @@ data class CardListViewData(
     var title: String
 )
 
+enum class CardStatus {
+    DISABLED, // when the card is invalid, the card is not displayed
+    REPLAY, // the card is a replay card
+    LIVE, // the card is a current livestream
+    SCHEDULED, // the card is a scheduled livestream
+    PAST_LIVE // the card is a live that is over
+}
+
 data class CardData(
     var title: String,
     var subtitle: String,
@@ -19,7 +27,7 @@ data class CardData(
     var imageCode: String,
     var url: String,
     var buttonLabel: String,
-    var isEnabled: Boolean
+    var cardStatus: CardStatus
 )
 
 abstract class AbstractCardListViewModel(application: Application) : AndroidViewModel(application),

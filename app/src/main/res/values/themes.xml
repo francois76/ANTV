@@ -1,10 +1,9 @@
 <resources>
 
     <!-- base theme-->
-    <style name="Theme.ANTV.base" parent="@style/Theme.Material3.Light" />
+    <style name="Theme.ANTV_base" parent="@style/Theme.Material3.DynamicColors.Light" />
 
-    <!-- common modifications for all configurations-->
-    <style name="Theme.ANTV.common" parent="Theme.ANTV.base">
+    <style name="Theme.ANTV" parent="Theme.ANTV_base">
         <item name="android:navigationBarColor">
             @android:color/transparent
         </item>
@@ -13,7 +12,40 @@
         </item>
     </style>
 
-    <!-- full theme, to be overriden in specific configurations -->
-    <style name="Theme.ANTV" parent="Theme.ANTV.common" />
+    <style name="Theme.ANTV.MainActivity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:weightSum">20</item>
+    </style>
+
+    <style name="Theme.ANTV.TopBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">2</item>
+    </style>
+
+
+    <style name="Theme.ANTV.Content">
+        <item name="android:weightSum">20</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_weight">18</item>
+    </style>
+
+    <style name="Theme.ANTV.FragmentContainerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">18</item>
+    </style>
+
+
+    <style name="Theme.ANTV.AppBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">2</item>
+    </style>
+
 
 </resources>

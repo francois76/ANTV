@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="fr.fgognet.antv.view.live.LiveFragment"
+        android:name="fr.fgognet.antv.view.cardList.live.LiveFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_card_list">
         <action

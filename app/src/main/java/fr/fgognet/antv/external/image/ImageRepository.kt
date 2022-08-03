@@ -1,4 +1,4 @@
-package fr.fgognet.antv.external.Images
+package fr.fgognet.antv.external.image
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
