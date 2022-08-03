@@ -46,6 +46,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
     }
 
+
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         NotificationService.showMediaplayerNotification(
             this.getApplication(),

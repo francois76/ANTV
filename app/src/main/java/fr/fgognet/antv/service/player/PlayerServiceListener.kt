@@ -41,9 +41,12 @@ class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
         when (error.errorCode) {
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
+            PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
+                Log.w(TAG, "error on playback: ${error.errorCode}")
                 PlayerService.resyncOnLiveError()
             }
+
             else -> Log.e(TAG, "error on playback: ${error.errorCode}")
         }
     }
