@@ -114,8 +114,10 @@ object PlayerService {
 
     fun resyncOnLiveError() {
         // Re-initialize player at the current live window default position.
-        player.value?.seekToDefaultPosition()
-        player.value?.prepare()
+        if (player.value?.isCurrentMediaItemLive == true) {
+            player.value?.seekToDefaultPosition()
+            player.value?.prepare()
+        }
     }
 
     fun cast() {
