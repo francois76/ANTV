@@ -138,5 +138,13 @@ open class MainActivity : FragmentActivity() {
         return super.enterPictureInPictureMode(params)
     }
 
+    override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
+        if (this.isFinishing) {
+            PlayerService.release()
+        }
+        super.onDestroy()
+    }
+
 
 }
