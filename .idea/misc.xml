@@ -10,6 +10,12 @@
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout/exo_player_view.xml" value="0.1" />
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout/exo_styled_player_control_view.xml" value="0.1" />
         <entry key="../../.gradle/caches/transforms-3/f1bac54449e9dda033f853e4d07859ba/transformed/exoplayer-ui-2.18.0/res/layout/exo_styled_player_view.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout-v23/exo_styled_player_control_ffwd_button.xml" value="0.1633176571184267" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout-v23/exo_styled_player_control_rewind_button.xml" value="0.1633176571184267" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout/exo_player_control_view.xml" value="0.1633176571184267" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout/exo_player_view.xml" value="0.1633176571184267" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout/exo_styled_player_control_view.xml" value="0.1633176571184267" />
+        <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/23fca8d165a3401656c6ce748c7439fa/transformed/exoplayer-ui-2.18.1/res/layout/exo_styled_player_view.xml" value="0.1633176571184267" />
         <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/52b18c243539432df08c6d8402fce074/transformed/play-services-cast-framework-21.0.1/res/drawable/cast_expanded_controller_actionbar_bg_gradient_light.xml" value="0.189" />
         <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/52b18c243539432df08c6d8402fce074/transformed/play-services-cast-framework-21.0.1/res/drawable/cast_ic_expanded_controller_mute.xml" value="0.189" />
         <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/52b18c243539432df08c6d8402fce074/transformed/play-services-cast-framework-21.0.1/res/drawable/cast_ic_expanded_controller_skip_next.xml" value="0.189" />
@@ -19,9 +25,12 @@
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/default_background.xml" value="0.297" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/ic_baseline_cast_connected_400.xml" value="0.189" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/live.xml" value="0.189" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout-land/activity_main.xml" value="0.1778537836682343" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout-land/fragment_card.xml" value="0.1778537836682343" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/activity_details.xml" value="0.29322916666666665" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/activity_view.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/custom_player_control_view.xml" value="0.25" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_card.xml" value="0.16" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_card_list.xml" value="0.17400598546387344" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_live.xml" value="0.1851218469431381" />
@@ -59,7 +68,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17_PREVIEW" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

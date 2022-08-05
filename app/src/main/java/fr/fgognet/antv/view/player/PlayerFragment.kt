@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
@@ -80,6 +81,7 @@ class PlayerFragment : Fragment() {
                 }
             }
         })
+        view.findViewById<TextView>(R.id.video_description)?.text = mediaData?.description
         model.player.observe(viewLifecycleOwner) {
             Log.i(TAG, "refreshing player with URL ${mediaData?.url}")
             playerView.player = it
