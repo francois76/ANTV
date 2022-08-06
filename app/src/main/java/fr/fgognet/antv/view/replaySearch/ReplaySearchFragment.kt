@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -61,7 +62,7 @@ class ReplaySearchFragment : Fragment() {
                 LocalDateTime.of(date.year, date.month, date.dayOfMonth, 21, 0).toEpochSecond(
                     ZoneOffset.UTC
                 )
-            bundle.putString("time", "$dateMorning-$dateEvening")
+            bundle.putString(EventSearchQueryParams.Date.toString(), "$dateMorning-$dateEvening")
             Log.d(TAG, "search Time: $time")
             Navigation.findNavController(it).navigate(R.id.replayFragment, bundle)
         }

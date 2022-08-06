@@ -7,6 +7,7 @@ import java.net.URL
 
 enum class EventSearchQueryParams {
     Date,
+    TypeVideo,
 }
 
 object EventSearchRepository {
