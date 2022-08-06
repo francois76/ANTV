@@ -20,6 +20,12 @@ enum class CardStatus {
     PAST_LIVE // the card is a live that is over
 }
 
+enum class CardType {
+
+    VIDEO, // the card go to a video or a live
+    PLAYLIST, // the card go to a playlist
+}
+
 data class CardData(
     var title: String,
     var subtitle: String,
@@ -27,7 +33,9 @@ data class CardData(
     var imageCode: String,
     var url: String,
     var buttonLabel: String,
-    var cardStatus: CardStatus
+    var cardStatus: CardStatus,
+    var cardType: CardType,
+    var targetBundle: Bundle?,
 )
 
 abstract class AbstractCardListViewModel(application: Application) : AndroidViewModel(application),

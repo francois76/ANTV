@@ -10,10 +10,7 @@ import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
-import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardStatus
+import fr.fgognet.antv.view.cardList.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,7 +68,9 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             "",
                             diffusion.getFormattedHour(),
-                            CardStatus.SCHEDULED
+                            CardStatus.SCHEDULED,
+                            CardType.VIDEO,
+                            null
                         )
                         if (!liveInformation.containsKey(diffusion.flux)) {
                             result.add(cardData)

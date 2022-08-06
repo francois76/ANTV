@@ -16,6 +16,7 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardStatus
+import fr.fgognet.antv.view.cardList.CardType
 
 private const val TAG = "ANTV/CardFragment"
 private const val ARG_TITLE = "title"
@@ -25,6 +26,8 @@ private const val ARG_IMAGE = "image"
 private const val ARG_LIVE = "live"
 private const val ARG_BUTTON_LABEL = "buttonLabel"
 private const val ARG_STATUS = "status"
+private const val ARG_TYPE = "type"
+private const val ARG_TARGET_BUNDLE = "target_bundle"
 
 /**
  * CardFragment fragment that handle each element representing a card on the homepage
@@ -45,6 +48,8 @@ class CardFragment : Fragment() {
                 it.getString(ARG_LIVE) ?: "",
                 it.getString(ARG_BUTTON_LABEL) ?: "",
                 CardStatus.valueOf(it.getString(ARG_STATUS) ?: CardStatus.DISABLED.toString()),
+                CardType.valueOf(it.getString(ARG_TYPE) ?: CardType.VIDEO.toString()),
+                it.getBundle(ARG_TARGET_BUNDLE)
             )
         }
     }
@@ -82,12 +87,17 @@ class CardFragment : Fragment() {
             button.isEnabled = true
             button.setTextColor(Color.WHITE)
             button.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString(fr.fgognet.antv.view.player.ARG_URL, data.url)
-                bundle.putString(fr.fgognet.antv.view.player.ARG_TITLE, data.title)
-                bundle.putString(fr.fgognet.antv.view.player.ARG_DESCRIPTION, data.description)
-                bundle.putString(fr.fgognet.antv.view.player.ARG_IMAGE_CODE, data.imageCode)
-                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                if (data.cardType == CardType.PLAYLIST) {
+                    Navigation.findNavController(it)
+                        .navigate(R.id.replayFragment, data.targetBundle)
+                } else {
+                    val bundle = Bundle()
+                    bundle.putString(fr.fgognet.antv.view.player.ARG_URL, data.url)
+                    bundle.putString(fr.fgognet.antv.view.player.ARG_TITLE, data.title)
+                    bundle.putString(fr.fgognet.antv.view.player.ARG_DESCRIPTION, data.description)
+                    bundle.putString(fr.fgognet.antv.view.player.ARG_IMAGE_CODE, data.imageCode)
+                    Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                }
             }
         } else {
             button.isEnabled = false
@@ -128,7 +138,9 @@ class CardFragment : Fragment() {
                     putString(ARG_IMAGE, cardData.imageCode)
                     putString(ARG_LIVE, cardData.url)
                     putString(ARG_BUTTON_LABEL, cardData.buttonLabel)
+                    putString(ARG_TYPE, cardData.cardType.toString())
                     putString(ARG_STATUS, cardData.cardStatus.toString())
+                    putBundle(ARG_TARGET_BUNDLE, cardData.targetBundle)
                 }
             }
     }

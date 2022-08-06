@@ -10,10 +10,7 @@ import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
-import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardStatus
+import fr.fgognet.antv.view.cardList.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -76,7 +73,9 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     "",
                     getApplication<Application>().resources.getString(R.string.card_button_label_replay),
-                    CardStatus.DISABLED
+                    CardStatus.DISABLED,
+                    CardType.VIDEO,
+                    null
                 )
                 var urlReplay = ""
                 var subTitle = ""

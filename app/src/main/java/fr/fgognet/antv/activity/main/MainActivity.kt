@@ -85,6 +85,14 @@ open class MainActivity : FragmentActivity() {
                 it.isChecked = true
                 true
             }
+        bottomMenu.findItem(R.id.menu_playlist_id)
+            .setOnMenuItemClickListener {
+                navHostFragment.navController.navigate(R.id.playlistFragment, Bundle())
+                bottomMenu.findItem(R.id.menu_live_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_search_id).isChecked = false
+                it.isChecked = true
+                true
+            }
     }
 
 
