@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearch
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
@@ -16,15 +17,14 @@ import fr.fgognet.antv.view.cardList.CardStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 
 private const val TAG = "ANTV/ReplayViewModel"
 
 class ReplayViewModel(application: Application) : AbstractCardListViewModel(application) {
+
+    var searchQueryFields: HashMap<EventSearchQueryParams, String> = hashMapOf()
+
     override fun loadCardData(params: Bundle?, force: Boolean) {
         Log.v(TAG, "loadCardData: $params")
         if (super.cardListData.value?.title != null && !force) {
@@ -34,14 +34,10 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val eventSearches: List<EventSearch>
-                val date: LocalDateTime =
-                    LocalDateTime.ofInstant(
-                        Instant.ofEpochMilli(params?.getLong("time")!!),
-                        ZoneOffset.UTC
-                    )
+
                 eventSearches = try {
-                    EventSearchRepository.findEventSearchByDate(
-                        date
+                    EventSearchRepository.findEventSearchByParams(
+                        searchQueryFields
                     )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -53,8 +49,8 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     _cardListData.value =
                         CardListViewData(
                             generateCardData(eventSearches),
-                            app.resources.getString(R.string.search_summary) + " " + date.format(
-                                DateTimeFormatter.ofPattern("d/MM/yyyy")
+                            app.resources.getString(R.string.search_summary) + " " + searchQueryFields.keys.joinToString(
+                                ", "
                             )
                         )
                 }

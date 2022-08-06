@@ -29,7 +29,8 @@ abstract class AbstractCardListFragment : Fragment() {
 
     private lateinit var model: AbstractCardListViewModel
 
-    abstract fun initViewModelProvider(): AbstractCardListViewModel
+
+    abstract fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel
     abstract fun getTitle(): String
     abstract fun getResource(): Int
 
@@ -42,7 +43,7 @@ abstract class AbstractCardListFragment : Fragment() {
             view.findViewById<TextView>(R.id.cardListTitle).text =
                 savedInstanceState.getString("title")
         }
-        model = initViewModelProvider()
+        model = initViewModelProvider(savedInstanceState)
         model.loadCardData(savedInstanceState, false)
         if (PlayerService.currentMediaData != null) {
             view.findViewById<MaterialCardView>(R.id.is_playing_card).visibility = View.VISIBLE

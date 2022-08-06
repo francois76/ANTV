@@ -71,15 +71,17 @@ open class MainActivity : FragmentActivity() {
         val bottomMenu = findViewById<NavigationBarView>(R.id.bottom_navigation).menu
         bottomMenu.findItem(R.id.menu_live_id)
             .setOnMenuItemClickListener {
-                navHostFragment.navController.navigate(R.id.mainFragment, Bundle())
-                bottomMenu.findItem(R.id.menu_replay_id).isChecked = false
+                navHostFragment.navController.navigate(R.id.liveFragment, Bundle())
+                bottomMenu.findItem(R.id.menu_search_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_playlist_id).isChecked = false
                 it.isChecked = true
                 true
             }
-        bottomMenu.findItem(R.id.menu_replay_id)
+        bottomMenu.findItem(R.id.menu_search_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.replaySearchFragment, Bundle())
                 bottomMenu.findItem(R.id.menu_live_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_playlist_id).isChecked = false
                 it.isChecked = true
                 true
             }

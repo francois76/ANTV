@@ -24,6 +24,8 @@
         <entry key="..\:/Users/fgogn/.gradle/caches/transforms-3/52b18c243539432df08c6d8402fce074/transformed/play-services-cast-framework-21.0.1/res/drawable/cast_ic_mini_controller_mute.xml" value="0.189" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/default_background.xml" value="0.297" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/ic_baseline_cast_connected_400.xml" value="0.189" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1565" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.1565" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/drawable/live.xml" value="0.189" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout-land/activity_main.xml" value="0.1778537836682343" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout-land/fragment_card.xml" value="0.1778537836682343" />
@@ -36,6 +38,7 @@
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_live.xml" value="0.1851218469431381" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_main.xml" value="0.16259057971014493" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_player.xml" value="0.33242753623188404" />
+        <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_playlist.xml" value="0.14536340852130325" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_replay.xml" value="0.16844805472424113" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/fragment_replay_search.xml" value="0.16502778965369816" />
         <entry key="..\:/Users/fgogn/AndroidStudioProjects/ANTV/app/src/main/res/layout/sample_video_view.xml" value="0.1851218469431381" />

@@ -1,29 +1,19 @@
-package fr.fgognet.antv.view.cardList.replay
+package fr.fgognet.antv.view.cardList.playlist
 
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 
-private const val TAG = "ANTV/ReplayFragment"
+private const val TAG = "ANTV/PlaylistFragment"
 
-class ReplayFragment : AbstractCardListFragment() {
-
-    lateinit var replayViewModel: ReplayViewModel
+class PlaylistFragment : AbstractCardListFragment() {
 
 
     override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel {
-        replayViewModel = ViewModelProvider(this)[ReplayViewModel::class.java]
-        arguments?.let {
-            replayViewModel.searchQueryFields.put(
-                EventSearchQueryParams.Date,
-                "${it.getString("time")}"
-            )
-        }
-        return replayViewModel
+        return ViewModelProvider(this)[PlaylistViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,12 +21,11 @@ class ReplayFragment : AbstractCardListFragment() {
         super.onCreate(savedInstanceState)
     }
 
-
     override fun getTitle(): String {
         return resources.getText(R.string.title_replay).toString()
     }
 
     override fun getResource(): Int {
-        return R.layout.fragment_replay
+        return R.layout.fragment_playlist
     }
 }
