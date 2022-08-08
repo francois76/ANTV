@@ -2,6 +2,7 @@ package fr.fgognet.antv.view.card
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardStatus
 import fr.fgognet.antv.view.cardList.CardType
@@ -21,6 +23,12 @@ import fr.fgognet.antv.view.player.ARG_DESCRIPTION
 import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
 import fr.fgognet.antv.view.player.ARG_TITLE
 import fr.fgognet.antv.view.player.ARG_URL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+private const val TAG = "ANTV/CardAdapter"
 
 class CardAdapter(private val loadRemoteCardData: (CardData) -> CardData) :
     ListAdapter<CardData, CardAdapter.CardViewHolder>(CardDiffCallback) {
@@ -36,13 +44,13 @@ class CardAdapter(private val loadRemoteCardData: (CardData) -> CardData) :
         private val buttonView = itemView.findViewById<Button>(R.id.live_button)
 
         fun bind(data: CardData) {
+            val scope = CoroutineScope(Dispatchers.Main)
             val cardData = loadRemoteCardData(data)
             cardTitleView.text = cardData.title
             cardSubtitleView.text = cardData.subtitle
             cardDescriptionView.text = cardData.description
             cardImageView.contentDescription = cardData.title
 
-            cardImageView.setImageBitmap(cardData.imageBitmap)
             if (cardData.cardStatus == CardStatus.LIVE || cardData.cardStatus == CardStatus.REPLAY) {
                 val background = TypedValue()
                 if (cardData.cardStatus == CardStatus.LIVE) {
@@ -87,8 +95,21 @@ class CardAdapter(private val loadRemoteCardData: (CardData) -> CardData) :
             } else {
                 buttonView.isEnabled = false
             }
+            scope.launch {
+                withContext(Dispatchers.IO) {
+                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
+                    Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
+                    withContext(Dispatchers.Main) {
+                        ImageRepository.imageCodeToBitmap[cardData.imageCode] =
+                            bitmap
+                        cardData.imageBitmap = bitmap
+                        cardImageView.setImageBitmap(bitmap)
+                    }
+                }
+            }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -109,6 +130,6 @@ object CardDiffCallback : DiffUtil.ItemCallback<CardData>() {
     }
 
     override fun areContentsTheSame(oldItem: CardData, newItem: CardData): Boolean {
-        return oldItem.url == newItem.url
+        return oldItem.title == newItem.title
     }
 }

@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
-import fr.fgognet.antv.external.image.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -69,16 +68,7 @@ abstract class AbstractCardListViewModel(application: Application) : AndroidView
 
             withContext(Dispatchers.IO) {
 
-                val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
-                withContext(Dispatchers.Main) {
-                    ImageRepository.imageCodeToBitmap[cardData.imageCode] =
-                        bitmap
-                    cardData.imageBitmap = bitmap
-                }
-                withContext(Dispatchers.Main) {
-                    _cardListData.value = _cardListData.value
-                }
+
             }
         }
         return cardData
