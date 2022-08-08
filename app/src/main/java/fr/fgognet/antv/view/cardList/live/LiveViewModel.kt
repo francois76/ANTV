@@ -9,7 +9,10 @@ import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.cardList.*
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardListViewData
+import fr.fgognet.antv.view.cardList.CardType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,9 +69,10 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             "",
                             diffusion.getFormattedHour(),
-                            CardStatus.SCHEDULED,
+                            0,
                             CardType.VIDEO,
-                            null
+                            null,
+                            false
                         )
                         if (!liveInformation.containsKey(diffusion.flux)) {
                             result.add(cardData)
@@ -82,7 +86,8 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                                     ) {
                                         cardData.buttonLabel =
                                             getApplication<Application>().resources.getString(R.string.card_button_label_live)
-                                        cardData.cardStatus = CardStatus.LIVE
+                                        cardData.buttonBackgroundColorId = android.R.attr.colorError
+                                        cardData.clickable = true
                                         cardData.url =
                                             "https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"
                                     }

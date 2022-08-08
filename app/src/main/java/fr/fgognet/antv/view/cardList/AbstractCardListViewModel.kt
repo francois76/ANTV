@@ -16,13 +16,6 @@ data class CardListViewData(
     var title: String
 )
 
-enum class CardStatus {
-    DISABLED, // when the card is invalid, the card is not displayed
-    REPLAY, // the card is a replay card
-    LIVE, // the card is a current livestream
-    SCHEDULED, // the card is a scheduled livestream
-    PAST_LIVE // the card is a live that is over
-}
 
 enum class CardType {
 
@@ -37,9 +30,10 @@ data class CardData(
     var imageCode: String,
     var url: String,
     var buttonLabel: String,
-    var cardStatus: CardStatus,
+    var buttonBackgroundColorId: Int,
     var cardType: CardType,
     var targetBundle: Bundle?,
+    var clickable: Boolean
 ) {
     var imageBitmap: Bitmap? = null
 }

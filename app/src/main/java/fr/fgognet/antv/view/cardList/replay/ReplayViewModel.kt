@@ -9,7 +9,10 @@ import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.cardList.*
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardListViewData
+import fr.fgognet.antv.view.cardList.CardType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -72,13 +75,14 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     "",
                     getApplication<Application>().resources.getString(R.string.card_button_label_replay),
-                    CardStatus.DISABLED,
+                    0,
                     CardType.VIDEO,
                     null,
+                    true
                 )
                 var urlReplay = ""
                 var subTitle = ""
-                var cardStatus = CardStatus.DISABLED
+                var cardButtonColor = 0
                 withContext(Dispatchers.IO) {
 
                     if (eventSearch.url != null) {
@@ -87,12 +91,12 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                         )
                         urlReplay = nvs.getReplayURL()
                         subTitle = nvs.getSubtitle()
-                        cardStatus =
-                            CardStatus.REPLAY // the status is valorized here to ensure the card actualy has the URL
+                        cardButtonColor =
+                            android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
                     }
                     withContext(Dispatchers.Main) {
                         cardData.url = urlReplay
-                        cardData.cardStatus = cardStatus
+                        cardData.buttonBackgroundColorId = cardButtonColor
                         cardData.subtitle = subTitle
                         result.add(cardData)
                     }

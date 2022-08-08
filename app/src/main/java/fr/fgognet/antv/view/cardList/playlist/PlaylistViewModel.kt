@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.view.cardList.*
+import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.CardData
+import fr.fgognet.antv.view.cardList.CardListViewData
+import fr.fgognet.antv.view.cardList.CardType
 
 
 private const val TAG = "ANTV/PlaylistViewModel"
@@ -31,7 +34,7 @@ class PlaylistViewModel(application: Application) : AbstractCardListViewModel(ap
                 "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                 "",
                 app.resources.getString(R.string.card_button_label_playlist),
-                CardStatus.REPLAY,
+                android.R.attr.colorPrimaryDark,
                 CardType.PLAYLIST,
                 fun(): Bundle {
                     val b = Bundle()
@@ -40,7 +43,8 @@ class PlaylistViewModel(application: Application) : AbstractCardListViewModel(ap
                         "Questions%20au%20gouvernement"
                     )
                     return b
-                }()
+                }(),
+                true
             )
         )
         return result

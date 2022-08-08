@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
-import fr.fgognet.antv.view.cardList.CardStatus
 import fr.fgognet.antv.view.cardList.CardType
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
 import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
@@ -50,50 +49,38 @@ class CardAdapter(private val loadRemoteCardData: (CardData) -> CardData) :
             cardSubtitleView.text = cardData.subtitle
             cardDescriptionView.text = cardData.description
             cardImageView.contentDescription = cardData.title
-
-            if (cardData.cardStatus == CardStatus.LIVE || cardData.cardStatus == CardStatus.REPLAY) {
+            buttonView.isEnabled = cardData.clickable
+            buttonView.text = cardData.buttonLabel
+            if (cardData.buttonBackgroundColorId != 0) {
                 val background = TypedValue()
-                if (cardData.cardStatus == CardStatus.LIVE) {
-
-                    itemView.context?.theme?.resolveAttribute(
-                        android.R.attr.colorError,
-                        background,
-                        true
-                    )
-                } else {
-                    itemView.context?.theme?.resolveAttribute(
-                        android.R.attr.colorPrimaryDark,
-                        background,
-                        true
-                    )
-                }
-                buttonView.text = cardData.buttonLabel
+                itemView.context?.theme?.resolveAttribute(
+                    cardData.buttonBackgroundColorId,
+                    background,
+                    true
+                )
                 buttonView.setBackgroundColor(
                     background.data
                 )
-                buttonView.isEnabled = true
                 buttonView.setTextColor(Color.WHITE)
-                buttonView.setOnClickListener {
-                    if (cardData.cardType == CardType.PLAYLIST) {
-                        Navigation.findNavController(it)
-                            .navigate(R.id.replayFragment, cardData.targetBundle)
-                    } else {
-                        val bundle = Bundle()
-                        bundle.putString(ARG_URL, cardData.url)
-                        bundle.putString(ARG_TITLE, cardData.title)
-                        bundle.putString(
-                            ARG_DESCRIPTION,
-                            cardData.description
-                        )
-                        bundle.putString(
-                            ARG_IMAGE_CODE,
-                            cardData.imageCode
-                        )
-                        Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
-                    }
+            }
+            buttonView.setOnClickListener {
+                if (cardData.cardType == CardType.PLAYLIST) {
+                    Navigation.findNavController(it)
+                        .navigate(R.id.replayFragment, cardData.targetBundle)
+                } else {
+                    val bundle = Bundle()
+                    bundle.putString(ARG_URL, cardData.url)
+                    bundle.putString(ARG_TITLE, cardData.title)
+                    bundle.putString(
+                        ARG_DESCRIPTION,
+                        cardData.description
+                    )
+                    bundle.putString(
+                        ARG_IMAGE_CODE,
+                        cardData.imageCode
+                    )
+                    Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
                 }
-            } else {
-                buttonView.isEnabled = false
             }
             scope.launch {
                 withContext(Dispatchers.IO) {
