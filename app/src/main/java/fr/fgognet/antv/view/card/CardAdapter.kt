@@ -14,16 +14,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardStatus
 import fr.fgognet.antv.view.cardList.CardType
+import fr.fgognet.antv.view.player.ARG_DESCRIPTION
+import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
+import fr.fgognet.antv.view.player.ARG_TITLE
+import fr.fgognet.antv.view.player.ARG_URL
 
-class CardAdapter :
+class CardAdapter(private val loadRemoteCardData: (CardData) -> CardData) :
     ListAdapter<CardData, CardAdapter.CardViewHolder>(CardDiffCallback) {
 
     // Describes an item view and its place within the RecyclerView
-    class CardViewHolder(itemView: View) :
+    class CardViewHolder(itemView: View, private var loadRemoteCardData: (CardData) -> CardData) :
         RecyclerView.ViewHolder(itemView) {
 
         private val cardTitleView: TextView = itemView.findViewById(R.id.card_title)
@@ -31,13 +34,15 @@ class CardAdapter :
         private val cardDescriptionView: TextView = itemView.findViewById(R.id.card_description)
         private val cardImageView: ImageView = itemView.findViewById(R.id.card_image_id)
         private val buttonView = itemView.findViewById<Button>(R.id.live_button)
-        
-        fun bind(cardData: CardData) {
+
+        fun bind(data: CardData) {
+            val cardData = loadRemoteCardData(data)
             cardTitleView.text = cardData.title
             cardSubtitleView.text = cardData.subtitle
             cardDescriptionView.text = cardData.description
             cardImageView.contentDescription = cardData.title
-            cardImageView.setImageBitmap(ImageRepository.imageCodeToBitmap[cardData.imageCode])
+
+            cardImageView.setImageBitmap(cardData.imageBitmap)
             if (cardData.cardStatus == CardStatus.LIVE || cardData.cardStatus == CardStatus.REPLAY) {
                 val background = TypedValue()
                 if (cardData.cardStatus == CardStatus.LIVE) {
@@ -66,14 +71,14 @@ class CardAdapter :
                             .navigate(R.id.replayFragment, cardData.targetBundle)
                     } else {
                         val bundle = Bundle()
-                        bundle.putString(fr.fgognet.antv.view.player.ARG_URL, cardData.url)
-                        bundle.putString(fr.fgognet.antv.view.player.ARG_TITLE, cardData.title)
+                        bundle.putString(ARG_URL, cardData.url)
+                        bundle.putString(ARG_TITLE, cardData.title)
                         bundle.putString(
-                            fr.fgognet.antv.view.player.ARG_DESCRIPTION,
+                            ARG_DESCRIPTION,
                             cardData.description
                         )
                         bundle.putString(
-                            fr.fgognet.antv.view.player.ARG_IMAGE_CODE,
+                            ARG_IMAGE_CODE,
                             cardData.imageCode
                         )
                         Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
@@ -88,7 +93,7 @@ class CardAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_card, parent, false)
-        return CardViewHolder(view)
+        return CardViewHolder(view, loadRemoteCardData)
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {

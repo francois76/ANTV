@@ -56,7 +56,7 @@ abstract class AbstractCardListFragment : Fragment() {
         }
 
         val recyclerView: RecyclerView = view.findViewById(R.id.editos)
-        val cardAdapter = CardAdapter()
+        val cardAdapter = CardAdapter { cardData -> loadRemoteCardData(cardData) }
         recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
@@ -70,6 +70,10 @@ abstract class AbstractCardListFragment : Fragment() {
                 view.dispatchConfigurationChanged(resources.configuration)
                 true
             }
+    }
+
+    private fun loadRemoteCardData(cardData: CardData): CardData {
+        return model.loadRemoteCardData(cardData)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -7,14 +7,12 @@ import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.collections.set
 
 private const val TAG = "ANTV/LiveViewModel"
 
@@ -93,17 +91,6 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             }
                         }
                     }
-                }
-            }
-            withContext(Dispatchers.IO) {
-                for (cardData in result) {
-                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                    withContext(Dispatchers.Main) {
-                        ImageRepository.imageCodeToBitmap[cardData.imageCode] = bitmap
-                    }
-                }
-                withContext(Dispatchers.Main) {
-                    _cardListData.value = _cardListData.value
                 }
             }
         }

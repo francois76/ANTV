@@ -1,9 +1,14 @@
 package fr.fgognet.antv.view.cardList
 
 import android.app.Application
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
+import fr.fgognet.antv.external.image.ImageRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/AbstractCardListViewModel"
 
@@ -36,7 +41,9 @@ data class CardData(
     var cardStatus: CardStatus,
     var cardType: CardType,
     var targetBundle: Bundle?,
-)
+) {
+    var imageBitmap: Bitmap? = null
+}
 
 abstract class AbstractCardListViewModel(application: Application) : AndroidViewModel(application),
     DefaultLifecycleObserver {
@@ -57,5 +64,24 @@ abstract class AbstractCardListViewModel(application: Application) : AndroidView
 
     abstract fun loadCardData(params: Bundle?, force: Boolean)
 
+    fun loadRemoteCardData(cardData: CardData): CardData {
+        viewModelScope.launch {
+
+            withContext(Dispatchers.IO) {
+
+                val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
+                Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
+                withContext(Dispatchers.Main) {
+                    ImageRepository.imageCodeToBitmap[cardData.imageCode] =
+                        bitmap
+                    cardData.imageBitmap = bitmap
+                }
+                withContext(Dispatchers.Main) {
+                    _cardListData.value = _cardListData.value
+                }
+            }
+        }
+        return cardData
+    }
 
 }
