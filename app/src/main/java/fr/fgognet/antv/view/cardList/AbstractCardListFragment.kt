@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.debounce
-import fr.fgognet.antv.view.card.CardFragment
+import fr.fgognet.antv.view.card.CardAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -56,38 +55,14 @@ abstract class AbstractCardListFragment : Fragment() {
                 .setImageBitmap(PlayerService.currentMediaData!!.bitmap)
         }
 
-
+        val recyclerView: RecyclerView = view.findViewById(R.id.editos)
+        val cardAdapter = CardAdapter()
+        recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
                 Log.d(TAG, "updating cardList with following: $it")
-                val fragTransaction: FragmentTransaction =
-                    parentFragmentManager.beginTransaction()
-                var index = 0
-                var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-                while (fragmentToRemove != null) {
-                    Log.d(TAG, "removing fragment cardFragment$index")
-                    fragTransaction.remove(fragmentToRemove)
-                    index++
-                    fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-                }
-                fragTransaction.commit()
-                view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
+                cardAdapter.submitList(it.cards as MutableList<CardData>)
                 view.findViewById<TextView>(R.id.cardListTitle).text = it.title
-                Log.i(TAG, "refreshing cards in view")
-                if (it.cards.isNotEmpty()) {
-                    val transaction: FragmentTransaction =
-                        parentFragmentManager.beginTransaction()
-                    for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
-                        Log.d(TAG, "adding fragment cardFragment$indexOfCard")
-                        val card = CardFragment.newInstance(cardData)
-                        transaction.add(
-                            R.id.editos,
-                            card,
-                            "cardFragment$indexOfCard"
-                        )
-                    }
-                    transaction.commit()
-                }
             }
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
             .setOnMenuItemClickListener {
