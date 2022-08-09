@@ -18,8 +18,11 @@ object ImageRepository {
             return imageCodeToBitmap[image]!!
         }
         Log.i(TAG, "Calling $image")
-        return BitmapFactory.decodeStream(
+        val bitmap = BitmapFactory.decodeStream(
             URL(image).openStream()
         )
+        imageCodeToBitmap[image] =
+            bitmap
+        return bitmap
     }
 }

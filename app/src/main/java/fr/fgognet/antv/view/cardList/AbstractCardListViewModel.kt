@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.cardList
 
 import android.app.Application
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
@@ -31,9 +30,7 @@ data class CardData(
     var cardType: CardType,
     var targetBundle: Bundle?,
     var clickable: Boolean
-) {
-    var imageBitmap: Bitmap? = null
-}
+)
 
 abstract class AbstractCardListViewModel(application: Application) : AndroidViewModel(application),
     DefaultLifecycleObserver {

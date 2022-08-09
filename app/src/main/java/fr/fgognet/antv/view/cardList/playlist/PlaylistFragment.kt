@@ -95,14 +95,7 @@ class PlaylistFragment : AbstractCardListFragment() {
         scope.launch {
             withContext(Dispatchers.IO) {
                 val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                Log.w(
-                    TAG,
-                    "fetched bitmap :" + cardData.imageCode
-                )
                 withContext(Dispatchers.Main) {
-                    ImageRepository.imageCodeToBitmap[cardData.imageCode] =
-                        bitmap
-                    cardData.imageBitmap = bitmap
                     cardImageView.setImageBitmap(bitmap)
                 }
             }

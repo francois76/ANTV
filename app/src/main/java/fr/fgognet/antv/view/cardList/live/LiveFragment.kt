@@ -2,7 +2,6 @@ package fr.fgognet.antv.view.cardList.live
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.widget.Button
 import android.widget.ImageView
@@ -14,7 +13,6 @@ import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardData
-import fr.fgognet.antv.view.cardList.CardType
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
 import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
 import fr.fgognet.antv.view.player.ARG_TITLE
@@ -72,32 +70,23 @@ class LiveFragment : AbstractCardListFragment() {
             buttonView.setTextColor(Color.WHITE)
         }
         buttonView.setOnClickListener {
-            if (cardData.cardType == CardType.PLAYLIST) {
-                Navigation.findNavController(it)
-                    .navigate(R.id.replayFragment, cardData.targetBundle)
-            } else {
-                val bundle = Bundle()
-                bundle.putString(ARG_URL, cardData.url)
-                bundle.putString(ARG_TITLE, cardData.title)
-                bundle.putString(
-                    ARG_DESCRIPTION,
-                    cardData.description
-                )
-                bundle.putString(
-                    ARG_IMAGE_CODE,
-                    cardData.imageCode
-                )
-                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
-            }
+            val bundle = Bundle()
+            bundle.putString(ARG_URL, cardData.url)
+            bundle.putString(ARG_TITLE, cardData.title)
+            bundle.putString(
+                ARG_DESCRIPTION,
+                cardData.description
+            )
+            bundle.putString(
+                ARG_IMAGE_CODE,
+                cardData.imageCode
+            )
+            Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
         }
         scope.launch {
             withContext(Dispatchers.IO) {
                 val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
                 withContext(Dispatchers.Main) {
-                    ImageRepository.imageCodeToBitmap[cardData.imageCode] =
-                        bitmap
-                    cardData.imageBitmap = bitmap
                     cardImageView.setImageBitmap(bitmap)
                 }
             }
