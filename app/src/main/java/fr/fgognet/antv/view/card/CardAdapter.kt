@@ -20,22 +20,20 @@ private const val TAG = "ANTV/CardAdapter"
 
 abstract class CardData {
     abstract var title: String
-    abstract var subtitle: String
     abstract var description: String
     abstract var imageCode: String
     abstract var buttonLabel: String
-    abstract var buttonBackgroundColorId: Int
 
 
 }
 
-class CardAdapter<T : CardData>(private val buildCard: (T, Button) -> Unit) :
+class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> Unit) :
     ListAdapter<T, CardAdapter.CardViewHolder<T>>(CardDiffCallback()) {
 
     // Describes an item view and its place within the RecyclerView
     class CardViewHolder<T : CardData>(
         itemView: View,
-        private var buildCard: (T, Button) -> Unit
+        private var buildCard: (T, TextView, Button) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
 
@@ -47,11 +45,11 @@ class CardAdapter<T : CardData>(private val buildCard: (T, Button) -> Unit) :
 
         fun bind(cardData: T) {
             cardTitleView.text = cardData.title
-            cardSubtitleView.text = cardData.subtitle
             cardDescriptionView.text = cardData.description
             cardImageView.contentDescription = cardData.title
             buildCard(
                 cardData,
+                cardSubtitleView,
                 buttonView
             )
             CoroutineScope(Dispatchers.Main).launch {

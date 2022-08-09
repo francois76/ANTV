@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.card.CardAdapter
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
@@ -25,13 +26,10 @@ private const val TAG = "ANTV/ReplayFragment"
 
 data class ReplayCardData(
     override var title: String,
-    override var subtitle: String,
     override var description: String,
     override var imageCode: String,
-    var url: String,
     override var buttonLabel: String,
-    override var buttonBackgroundColorId: Int,
-    var clickable: Boolean
+    var nvsCode: String?
 
 ) : CardData()
 
@@ -71,40 +69,54 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<ReplayCardData> {
-        return CardAdapter { cardData, buttonView ->
+        return CardAdapter { cardData, subtitleView, buttonView ->
             buttonView.isEnabled = true
             buttonView.text = cardData.buttonLabel
             val background = TypedValue()
-            context?.theme?.resolveAttribute(
-                cardData.buttonBackgroundColorId,
-                background,
-                true
-            )
             buttonView.setBackgroundColor(
                 background.data
             )
             buttonView.setTextColor(Color.WHITE)
 
             CoroutineScope(Dispatchers.Main).launch {
+                var urlReplay = ""
+                var subTitle = ""
+                var cardButtonColor = 0
                 withContext(Dispatchers.IO) {
-
+                    if (cardData.nvsCode != null) {
+                        val nvs = NvsRepository.getNvsByCode(
+                            cardData.nvsCode!!
+                        )
+                        urlReplay = nvs.getReplayURL()
+                        subTitle = nvs.getSubtitle()
+                        cardButtonColor =
+                            android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
+                    }
+                    withContext(Dispatchers.Main) {
+                        buttonView.setOnClickListener {
+                            val bundle = Bundle()
+                            bundle.putString(ARG_URL, urlReplay)
+                            bundle.putString(ARG_TITLE, cardData.title)
+                            bundle.putString(
+                                ARG_DESCRIPTION,
+                                cardData.description
+                            )
+                            bundle.putString(
+                                ARG_IMAGE_CODE,
+                                cardData.imageCode
+                            )
+                            Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                        }
+                        context?.theme?.resolveAttribute(
+                            cardButtonColor,
+                            background,
+                            true
+                        )
+                        subtitleView.text = subTitle
+                    }
                 }
             }
 
-            buttonView.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString(ARG_URL, cardData.url)
-                bundle.putString(ARG_TITLE, cardData.title)
-                bundle.putString(
-                    ARG_DESCRIPTION,
-                    cardData.description
-                )
-                bundle.putString(
-                    ARG_IMAGE_CODE,
-                    cardData.imageCode
-                )
-                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
-            }
         }
     }
 

@@ -68,7 +68,6 @@ class LiveViewModel(application: Application) :
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             "",
                             diffusion.getFormattedHour(),
-                            0,
                             false
                         )
                         if (!liveInformation.containsKey(diffusion.flux)) {
@@ -83,8 +82,7 @@ class LiveViewModel(application: Application) :
                                     ) {
                                         cardData.buttonLabel =
                                             getApplication<Application>().resources.getString(R.string.card_button_label_live)
-                                        cardData.buttonBackgroundColorId = android.R.attr.colorError
-                                        cardData.clickable = true
+                                        cardData.isLive = true
                                         cardData.url =
                                             "https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"
                                     }

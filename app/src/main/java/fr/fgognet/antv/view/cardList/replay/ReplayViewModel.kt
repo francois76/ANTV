@@ -8,7 +8,6 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
-import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import kotlinx.coroutines.Dispatchers
@@ -31,9 +30,8 @@ class ReplayViewModel(application: Application) :
         val app = super.getApplication<Application>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val eventSearches: List<EventSearch>
 
-                eventSearches = try {
+                val eventSearches: List<EventSearch> = try {
                     EventSearchRepository.findEventSearchByParams(
                         searchQueryFields
                     )
@@ -45,8 +43,22 @@ class ReplayViewModel(application: Application) :
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
                     _cardListData.value =
-                        CardListViewData<ReplayCardData>(
-                            generateCardData(eventSearches),
+                        CardListViewData(
+                            eventSearches.map {
+                                ReplayCardData(
+                                    it.title ?: "video sans titre",
+                                    it.description?.replace("<br>", "\n") ?: "",
+                                    if (it.thumbnail != null) it.thumbnail!!.replace(
+                                        "\\",
+                                        ""
+                                    ).replace(
+                                        "http",
+                                        "https"
+                                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
+                                    getApplication<Application>().resources.getString(R.string.card_button_label_replay),
+                                    it.url,
+                                )
+                            },
                             app.resources.getString(R.string.search_summary) + " " + searchQueryFields.keys.joinToString(
                                 ", "
                             )
@@ -56,52 +68,4 @@ class ReplayViewModel(application: Application) :
         }
     }
 
-    private fun generateCardData(eventSearches: List<EventSearch>): List<ReplayCardData> {
-        Log.v(TAG, "generateCardData")
-        val result = arrayListOf<ReplayCardData>()
-        viewModelScope.launch {
-            for (eventSearch in eventSearches) {
-                val cardData = ReplayCardData(
-                    eventSearch.title ?: "video sans titre",
-                    "",
-                    eventSearch.description?.replace("<br>", "\n") ?: "",
-                    if (eventSearch.thumbnail != null) eventSearch.thumbnail!!.replace(
-                        "\\",
-                        ""
-                    ).replace(
-                        "http",
-                        "https"
-                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                    "",
-                    getApplication<Application>().resources.getString(R.string.card_button_label_replay),
-                    0,
-                    true
-                )
-                var urlReplay = ""
-                var subTitle = ""
-                var cardButtonColor = 0
-                withContext(Dispatchers.IO) {
-
-                    if (eventSearch.url != null) {
-                        val nvs = NvsRepository.getNvsByCode(
-                            eventSearch.url!!
-                        )
-                        urlReplay = nvs.getReplayURL()
-                        subTitle = nvs.getSubtitle()
-                        cardButtonColor =
-                            android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
-                    }
-                    withContext(Dispatchers.Main) {
-                        cardData.url = urlReplay
-                        cardData.buttonBackgroundColorId = cardButtonColor
-                        cardData.subtitle = subTitle
-                        result.add(cardData)
-                    }
-                }
-
-            }
-
-        }
-        return result
-    }
 }

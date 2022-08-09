@@ -16,11 +16,10 @@ private const val TAG = "ANTV/PlaylistFragment"
 
 data class PlaylistCardData(
     override var title: String,
-    override var subtitle: String,
+    var subtitle: String,
     override var description: String,
     override var imageCode: String,
     override var buttonLabel: String,
-    override var buttonBackgroundColorId: Int,
     var targetBundle: Bundle?,
 
     ) : CardData()
@@ -46,12 +45,13 @@ class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<PlaylistCardData> {
-        return CardAdapter { cardData, buttonView ->
+        return CardAdapter { cardData, subtitleView, buttonView ->
+            subtitleView.text = cardData.subtitle
             buttonView.isEnabled = true
             buttonView.text = cardData.buttonLabel
             val background = TypedValue()
             context?.theme?.resolveAttribute(
-                cardData.buttonBackgroundColorId,
+                android.R.attr.colorPrimaryDark,
                 background,
                 true
             )

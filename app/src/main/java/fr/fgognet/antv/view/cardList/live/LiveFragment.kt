@@ -14,8 +14,6 @@ import fr.fgognet.antv.view.player.ARG_DESCRIPTION
 import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
 import fr.fgognet.antv.view.player.ARG_TITLE
 import fr.fgognet.antv.view.player.ARG_URL
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 
 /**
@@ -26,13 +24,12 @@ private const val TAG = "ANTV/LiveFragment"
 
 data class LiveCardData(
     override var title: String,
-    override var subtitle: String,
+    var subtitle: String,
     override var description: String,
     override var imageCode: String,
-    var url: String,
+    var url: String?,
     override var buttonLabel: String,
-    override var buttonBackgroundColorId: Int,
-    var clickable: Boolean
+    var isLive: Boolean
 
 ) : CardData()
 
@@ -51,14 +48,14 @@ class LiveFragment : AbstractCardListFragment<LiveCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<LiveCardData> {
-        return CardAdapter { cardData, buttonView ->
-            val scope = CoroutineScope(Dispatchers.Main)
-            buttonView.isEnabled = cardData.clickable
+        return CardAdapter { cardData, subtitleView, buttonView ->
+            subtitleView.text = cardData.subtitle
+            buttonView.isEnabled = cardData.isLive
             buttonView.text = cardData.buttonLabel
-            if (cardData.buttonBackgroundColorId != 0) {
+            if (cardData.isLive) {
                 val background = TypedValue()
                 context?.theme?.resolveAttribute(
-                    cardData.buttonBackgroundColorId,
+                    android.R.attr.colorError,
                     background,
                     true
                 )
@@ -66,20 +63,20 @@ class LiveFragment : AbstractCardListFragment<LiveCardData>() {
                     background.data
                 )
                 buttonView.setTextColor(Color.WHITE)
-            }
-            buttonView.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString(ARG_URL, cardData.url)
-                bundle.putString(ARG_TITLE, cardData.title)
-                bundle.putString(
-                    ARG_DESCRIPTION,
-                    cardData.description
-                )
-                bundle.putString(
-                    ARG_IMAGE_CODE,
-                    cardData.imageCode
-                )
-                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                buttonView.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString(ARG_URL, cardData.url)
+                    bundle.putString(ARG_TITLE, cardData.title)
+                    bundle.putString(
+                        ARG_DESCRIPTION,
+                        cardData.description
+                    )
+                    bundle.putString(
+                        ARG_IMAGE_CODE,
+                        cardData.imageCode
+                    )
+                    Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                }
             }
         }
     }
