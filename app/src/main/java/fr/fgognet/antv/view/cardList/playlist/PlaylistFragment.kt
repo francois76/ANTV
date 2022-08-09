@@ -5,19 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/PlaylistFragment"
 
@@ -43,17 +38,9 @@ class PlaylistFragment : AbstractCardListFragment() {
 
     override fun buildCard(
         cardData: CardData,
-        cardTitleView: TextView,
-        cardSubtitleView: TextView,
-        cardDescriptionView: TextView,
-        cardImageView: ImageView,
         buttonView: Button
     ) {
         val scope = CoroutineScope(Dispatchers.Main)
-        cardTitleView.text = cardData.title
-        cardSubtitleView.text = cardData.subtitle
-        cardDescriptionView.text = cardData.description
-        cardImageView.contentDescription = cardData.title
         buttonView.isEnabled = cardData.clickable
         buttonView.text = cardData.buttonLabel
         val background = TypedValue()
@@ -70,14 +57,6 @@ class PlaylistFragment : AbstractCardListFragment() {
             Navigation.findNavController(it)
                 .navigate(R.id.replayFragment, cardData.targetBundle)
 
-        }
-        scope.launch {
-            withContext(Dispatchers.IO) {
-                val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                withContext(Dispatchers.Main) {
-                    cardImageView.setImageBitmap(bitmap)
-                }
-            }
         }
     }
 }

@@ -58,13 +58,9 @@ abstract class AbstractCardListFragment : Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.editos)
         val cardAdapter =
-            CardAdapter { cardData, cardTitleView, cardSubtitleView, cardDescriptionView, cardImageView, buttonView ->
+            CardAdapter { cardData, buttonView ->
                 buildCard(
                     cardData,
-                    cardTitleView,
-                    cardSubtitleView,
-                    cardDescriptionView,
-                    cardImageView,
                     buttonView
                 )
             }
@@ -85,10 +81,6 @@ abstract class AbstractCardListFragment : Fragment() {
 
     abstract fun buildCard(
         cardData: CardData,
-        cardTitleView: TextView,
-        cardSubtitleView: TextView,
-        cardDescriptionView: TextView,
-        cardImageView: ImageView,
         buttonView: Button
     )
 

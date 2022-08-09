@@ -5,13 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardData
@@ -21,8 +18,6 @@ import fr.fgognet.antv.view.player.ARG_TITLE
 import fr.fgognet.antv.view.player.ARG_URL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/ReplayFragment"
 
@@ -63,17 +58,9 @@ class ReplayFragment : AbstractCardListFragment() {
 
     override fun buildCard(
         cardData: CardData,
-        cardTitleView: TextView,
-        cardSubtitleView: TextView,
-        cardDescriptionView: TextView,
-        cardImageView: ImageView,
         buttonView: Button
     ) {
         val scope = CoroutineScope(Dispatchers.Main)
-        cardTitleView.text = cardData.title
-        cardSubtitleView.text = cardData.subtitle
-        cardDescriptionView.text = cardData.description
-        cardImageView.contentDescription = cardData.title
         buttonView.isEnabled = cardData.clickable
         buttonView.text = cardData.buttonLabel
         val background = TypedValue()
@@ -99,14 +86,6 @@ class ReplayFragment : AbstractCardListFragment() {
                 cardData.imageCode
             )
             Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
-        }
-        scope.launch {
-            withContext(Dispatchers.IO) {
-                val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                withContext(Dispatchers.Main) {
-                    cardImageView.setImageBitmap(bitmap)
-                }
-            }
         }
     }
 }

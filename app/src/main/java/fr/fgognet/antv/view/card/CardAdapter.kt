@@ -10,17 +10,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.view.cardList.CardData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/CardAdapter"
 
-class CardAdapter(private val buildCard: (CardData, TextView, TextView, TextView, ImageView, Button) -> Unit) :
+class CardAdapter(private val buildCard: (CardData, Button) -> Unit) :
     ListAdapter<CardData, CardAdapter.CardViewHolder>(CardDiffCallback) {
 
     // Describes an item view and its place within the RecyclerView
     class CardViewHolder(
         itemView: View,
-        private var buildCard: (CardData, TextView, TextView, TextView, ImageView, Button) -> Unit
+        private var buildCard: (CardData, Button) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
 
@@ -30,15 +35,23 @@ class CardAdapter(private val buildCard: (CardData, TextView, TextView, TextView
         private val cardImageView: ImageView = itemView.findViewById(R.id.card_image_id)
         private val buttonView: Button = itemView.findViewById(R.id.live_button)
 
-        fun bind(data: CardData) {
+        fun bind(cardData: CardData) {
+            cardTitleView.text = cardData.title
+            cardSubtitleView.text = cardData.subtitle
+            cardDescriptionView.text = cardData.description
+            cardImageView.contentDescription = cardData.title
             buildCard(
-                data,
-                cardTitleView,
-                cardSubtitleView,
-                cardDescriptionView,
-                cardImageView,
+                cardData,
                 buttonView
             )
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
+                    withContext(Dispatchers.Main) {
+                        cardImageView.setImageBitmap(bitmap)
+                    }
+                }
+            }
         }
     }
 
