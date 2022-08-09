@@ -10,9 +10,7 @@ import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +18,8 @@ import kotlinx.coroutines.withContext
 private const val TAG = "ANTV/LiveViewModel"
 
 
-class LiveViewModel(application: Application) : AbstractCardListViewModel(application) {
+class LiveViewModel(application: Application) :
+    AbstractCardListViewModel<LiveCardData>(application) {
 
 
     override fun loadCardData(params: Bundle?, force: Boolean) {
@@ -49,9 +48,9 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
         }
     }
 
-    private fun generateCardData(editorial: Editorial): List<CardData> {
+    private fun generateCardData(editorial: Editorial): List<LiveCardData> {
         Log.v(TAG, "generateCardData")
-        val result = arrayListOf<CardData>()
+        val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
             return result
         }
@@ -61,7 +60,7 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                 liveInformation = LiveRepository.getLiveInformation()
                 withContext(Dispatchers.Main) {
                     for (diffusion in editorial.diffusions!!) {
-                        val cardData = CardData(
+                        val cardData = LiveCardData(
                             diffusion.libelle
                                 ?: getApplication<Application>().resources.getString(R.string.no_title_broadcast),
                             diffusion.lieu ?: "",
@@ -70,7 +69,6 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             "",
                             diffusion.getFormattedHour(),
                             0,
-                            CardType.VIDEO,
                             null,
                             false
                         )

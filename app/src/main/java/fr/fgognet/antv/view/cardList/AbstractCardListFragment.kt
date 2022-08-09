@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -17,6 +16,7 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.debounce
 import fr.fgognet.antv.view.card.CardAdapter
+import fr.fgognet.antv.view.card.CardData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -25,12 +25,12 @@ private const val TAG = "ANTV/AbstractCardListFragment"
 /**
  * AbstractCardListFragment is the main fragment handle by navigation
  */
-abstract class AbstractCardListFragment : Fragment() {
+abstract class AbstractCardListFragment<T : CardData> : Fragment() {
 
-    private lateinit var model: AbstractCardListViewModel
+    private lateinit var model: AbstractCardListViewModel<T>
 
 
-    abstract fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel
+    abstract fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<T>
     abstract fun getTitle(): String
     abstract fun getResource(): Int
 
@@ -57,18 +57,12 @@ abstract class AbstractCardListFragment : Fragment() {
         }
 
         val recyclerView: RecyclerView = view.findViewById(R.id.editos)
-        val cardAdapter =
-            CardAdapter { cardData, buttonView ->
-                buildCard(
-                    cardData,
-                    buttonView
-                )
-            }
+        val cardAdapter = buildCardAdapter()
         recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
                 Log.d(TAG, "updating cardList with following: $it")
-                cardAdapter.submitList(it.cards as MutableList<CardData>)
+                cardAdapter.submitList(it.cards as MutableList<T>)
                 view.findViewById<TextView>(R.id.cardListTitle).text = it.title
             }
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
@@ -79,10 +73,7 @@ abstract class AbstractCardListFragment : Fragment() {
             }
     }
 
-    abstract fun buildCard(
-        cardData: CardData,
-        buttonView: Button
-    )
+    abstract fun buildCardAdapter(): CardAdapter<T>
 
     override fun onSaveInstanceState(outState: Bundle) {
         Log.v(TAG, "onSaveInstanceState")

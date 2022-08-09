@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.card
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
-import fr.fgognet.antv.view.cardList.CardData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,11 +19,25 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/CardAdapter"
 
-class CardAdapter(private val buildCard: (CardData, Button) -> Unit) :
-    ListAdapter<CardData, CardAdapter.CardViewHolder>(CardDiffCallback) {
+abstract class CardData {
+    abstract var title: String
+    abstract var subtitle: String
+    abstract var description: String
+    abstract var imageCode: String
+    abstract var url: String
+    abstract var buttonLabel: String
+    abstract var buttonBackgroundColorId: Int
+    abstract var targetBundle: Bundle?
+    abstract var clickable: Boolean
+
+
+}
+
+class CardAdapter<T : CardData>(private val buildCard: (T: CardData, Button) -> Unit) :
+    ListAdapter<T, CardAdapter.CardViewHolder<T>>(CardDiffCallback()) {
 
     // Describes an item view and its place within the RecyclerView
-    class CardViewHolder(
+    class CardViewHolder<T : CardData>(
         itemView: View,
         private var buildCard: (CardData, Button) -> Unit
     ) :
@@ -35,7 +49,7 @@ class CardAdapter(private val buildCard: (CardData, Button) -> Unit) :
         private val cardImageView: ImageView = itemView.findViewById(R.id.card_image_id)
         private val buttonView: Button = itemView.findViewById(R.id.live_button)
 
-        fun bind(cardData: CardData) {
+        fun bind(cardData: T) {
             cardTitleView.text = cardData.title
             cardSubtitleView.text = cardData.subtitle
             cardDescriptionView.text = cardData.description
@@ -56,25 +70,25 @@ class CardAdapter(private val buildCard: (CardData, Button) -> Unit) :
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder<T> {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_card, parent, false)
-        return CardViewHolder(view, buildCard)
+        return CardViewHolder<T>(view, buildCard)
     }
 
-    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CardViewHolder<T>, position: Int) {
         val cardData = getItem(position)
         holder.bind(cardData)
     }
 
 }
 
-object CardDiffCallback : DiffUtil.ItemCallback<CardData>() {
-    override fun areItemsTheSame(oldItem: CardData, newItem: CardData): Boolean {
+class CardDiffCallback<T : CardData> : DiffUtil.ItemCallback<T>() {
+    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: CardData, newItem: CardData): Boolean {
+    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
         return oldItem.title == newItem.title
     }
 }

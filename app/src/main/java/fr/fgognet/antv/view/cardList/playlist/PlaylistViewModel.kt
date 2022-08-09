@@ -6,28 +6,27 @@ import android.util.Log
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardType
 
 
 private const val TAG = "ANTV/PlaylistViewModel"
 
-class PlaylistViewModel(application: Application) : AbstractCardListViewModel(application) {
+class PlaylistViewModel(application: Application) :
+    AbstractCardListViewModel<PlaylistCardData>(application) {
     private val app = application
     override fun loadCardData(params: Bundle?, force: Boolean) {
         Log.v(TAG, "loadCardData: $params")
         _cardListData.value =
-            CardListViewData(
+            CardListViewData<PlaylistCardData>(
                 generateCardData(),
                 app.resources.getString(R.string.playlist_description)
             )
     }
 
-    private fun generateCardData(): List<CardData> {
+    private fun generateCardData(): List<PlaylistCardData> {
         Log.v(TAG, "generateCardData")
         val result = arrayListOf(
-            CardData(
+            PlaylistCardData(
                 "Questions au gouvernement",
                 "",
                 "toute les questions au gouvernement",
@@ -35,7 +34,6 @@ class PlaylistViewModel(application: Application) : AbstractCardListViewModel(ap
                 "",
                 app.resources.getString(R.string.card_button_label_playlist),
                 android.R.attr.colorPrimaryDark,
-                CardType.PLAYLIST,
                 fun(): Bundle {
                     val b = Bundle()
                     b.putString(

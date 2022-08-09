@@ -4,22 +4,35 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
+import fr.fgognet.antv.view.card.CardAdapter
+import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 private const val TAG = "ANTV/PlaylistFragment"
 
-class PlaylistFragment : AbstractCardListFragment() {
+data class PlaylistCardData(
+    override var title: String,
+    override var subtitle: String,
+    override var description: String,
+    override var imageCode: String,
+    override var url: String,
+    override var buttonLabel: String,
+    override var buttonBackgroundColorId: Int,
+    override var targetBundle: Bundle?,
+    override var clickable: Boolean
+
+) : CardData()
+
+class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
 
 
-    override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel {
+    override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<PlaylistCardData> {
         return ViewModelProvider(this)[PlaylistViewModel::class.java]
     }
 
@@ -36,27 +49,26 @@ class PlaylistFragment : AbstractCardListFragment() {
         return R.layout.fragment_playlist
     }
 
-    override fun buildCard(
-        cardData: CardData,
-        buttonView: Button
-    ) {
-        val scope = CoroutineScope(Dispatchers.Main)
-        buttonView.isEnabled = cardData.clickable
-        buttonView.text = cardData.buttonLabel
-        val background = TypedValue()
-        context?.theme?.resolveAttribute(
-            cardData.buttonBackgroundColorId,
-            background,
-            true
-        )
-        buttonView.setBackgroundColor(
-            background.data
-        )
-        buttonView.setTextColor(Color.WHITE)
-        buttonView.setOnClickListener {
-            Navigation.findNavController(it)
-                .navigate(R.id.replayFragment, cardData.targetBundle)
+    override fun buildCardAdapter(): CardAdapter<PlaylistCardData> {
+        return CardAdapter { cardData, buttonView ->
+            val scope = CoroutineScope(Dispatchers.Main)
+            buttonView.isEnabled = cardData.clickable
+            buttonView.text = cardData.buttonLabel
+            val background = TypedValue()
+            context?.theme?.resolveAttribute(
+                cardData.buttonBackgroundColorId,
+                background,
+                true
+            )
+            buttonView.setBackgroundColor(
+                background.data
+            )
+            buttonView.setTextColor(Color.WHITE)
+            buttonView.setOnClickListener {
+                Navigation.findNavController(it)
+                    .navigate(R.id.replayFragment, cardData.targetBundle)
 
+            }
         }
     }
 }

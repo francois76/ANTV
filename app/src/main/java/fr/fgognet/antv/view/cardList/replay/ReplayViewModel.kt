@@ -10,9 +10,7 @@ import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +18,8 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/ReplayViewModel"
 
-class ReplayViewModel(application: Application) : AbstractCardListViewModel(application) {
+class ReplayViewModel(application: Application) :
+    AbstractCardListViewModel<ReplayCardData>(application) {
 
     var searchQueryFields: HashMap<EventSearchQueryParams, String> = hashMapOf()
 
@@ -46,7 +45,7 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                 withContext(Dispatchers.Main) {
                     Log.i(TAG, "dispatching regenerated view")
                     _cardListData.value =
-                        CardListViewData(
+                        CardListViewData<ReplayCardData>(
                             generateCardData(eventSearches),
                             app.resources.getString(R.string.search_summary) + " " + searchQueryFields.keys.joinToString(
                                 ", "
@@ -57,12 +56,12 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
         }
     }
 
-    private fun generateCardData(eventSearches: List<EventSearch>): List<CardData> {
+    private fun generateCardData(eventSearches: List<EventSearch>): List<ReplayCardData> {
         Log.v(TAG, "generateCardData")
-        val result = arrayListOf<CardData>()
+        val result = arrayListOf<ReplayCardData>()
         viewModelScope.launch {
             for (eventSearch in eventSearches) {
-                val cardData = CardData(
+                val cardData = ReplayCardData(
                     eventSearch.title ?: "video sans titre",
                     "",
                     eventSearch.description?.replace("<br>", "\n") ?: "",
@@ -76,7 +75,6 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     "",
                     getApplication<Application>().resources.getString(R.string.card_button_label_replay),
                     0,
-                    CardType.VIDEO,
                     null,
                     true
                 )
