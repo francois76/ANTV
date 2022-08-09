@@ -19,6 +19,14 @@ class PlaylistViewModel(application: Application) :
         _cardListData.value =
             CardListViewData(
                 arrayListOf(
+                    // the last uploads
+                    PlaylistCardData(
+                        "Dernières publications",
+                        "les dernières publications",
+                        "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
+                        Bundle(),
+                    ),
+                    // questions au gouvernement
                     PlaylistCardData(
                         "Questions au gouvernement",
                         "toute les questions au gouvernement",

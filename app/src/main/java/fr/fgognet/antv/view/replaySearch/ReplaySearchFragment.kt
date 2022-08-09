@@ -51,7 +51,7 @@ class ReplaySearchFragment : Fragment() {
             val date: LocalDateTime =
                 LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(currentDate),
-                    ZoneOffset.UTC
+                    ZoneOffset.systemDefault()
                 )
             val bundle = Bundle()
             val dateMorning =
@@ -59,7 +59,7 @@ class ReplaySearchFragment : Fragment() {
                     ZoneOffset.UTC
                 )
             val dateEvening =
-                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 21, 0).toEpochSecond(
+                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 22, 0).toEpochSecond(
                     ZoneOffset.UTC
                 )
             bundle.putString(EventSearchQueryParams.Date.toString(), "$dateMorning-$dateEvening")

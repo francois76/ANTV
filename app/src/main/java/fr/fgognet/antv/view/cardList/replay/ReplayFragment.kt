@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "ANTV/ReplayFragment"
 
@@ -84,7 +85,9 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
                             cardData.nvsCode!!
                         )
                         urlReplay = nvs.getReplayURL()
-                        subTitle = nvs.getSubtitle()
+                        subTitle =
+                            nvs.getTime()?.format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm"))
+                                ?: ""
                         cardButtonColor =
                             android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
                     }

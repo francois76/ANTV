@@ -4,6 +4,9 @@ import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Root(name = "data", strict = false)
 class Nvs(
@@ -34,7 +37,7 @@ class Nvs(
             .first()
     }
 
-    fun getSubtitle(): String {
+    fun getContentType(): String {
 
         val metadatas = this.metadatas.metadatas
             .filter { it.name == "commission" || it.name == "video_type" }
@@ -45,6 +48,18 @@ class Nvs(
             ?: ""
             else -> ""
         }
+    }
+
+    fun getTime(): LocalDateTime? {
+        this.metadatas.metadatas.first { it.name == "date" }.value?.toLong()?.let {
+            return LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(
+                    it
+                ),
+                ZoneOffset.systemDefault()
+            )
+        }
+        return null
     }
 
 }
