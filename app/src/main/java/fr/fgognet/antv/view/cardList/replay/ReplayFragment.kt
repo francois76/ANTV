@@ -28,11 +28,10 @@ data class ReplayCardData(
     override var subtitle: String,
     override var description: String,
     override var imageCode: String,
-    override var url: String,
+    var url: String,
     override var buttonLabel: String,
     override var buttonBackgroundColorId: Int,
-    override var targetBundle: Bundle?,
-    override var clickable: Boolean
+    var clickable: Boolean
 
 ) : CardData()
 
@@ -73,7 +72,7 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
 
     override fun buildCardAdapter(): CardAdapter<ReplayCardData> {
         return CardAdapter { cardData, buttonView ->
-            buttonView.isEnabled = cardData.clickable
+            buttonView.isEnabled = true
             buttonView.text = cardData.buttonLabel
             val background = TypedValue()
             context?.theme?.resolveAttribute(

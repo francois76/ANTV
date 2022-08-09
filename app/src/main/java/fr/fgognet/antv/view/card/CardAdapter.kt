@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.card
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,22 +23,19 @@ abstract class CardData {
     abstract var subtitle: String
     abstract var description: String
     abstract var imageCode: String
-    abstract var url: String
     abstract var buttonLabel: String
     abstract var buttonBackgroundColorId: Int
-    abstract var targetBundle: Bundle?
-    abstract var clickable: Boolean
 
 
 }
 
-class CardAdapter<T : CardData>(private val buildCard: (T: CardData, Button) -> Unit) :
+class CardAdapter<T : CardData>(private val buildCard: (T, Button) -> Unit) :
     ListAdapter<T, CardAdapter.CardViewHolder<T>>(CardDiffCallback()) {
 
     // Describes an item view and its place within the RecyclerView
     class CardViewHolder<T : CardData>(
         itemView: View,
-        private var buildCard: (CardData, Button) -> Unit
+        private var buildCard: (T, Button) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
 

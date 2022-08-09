@@ -29,11 +29,10 @@ data class LiveCardData(
     override var subtitle: String,
     override var description: String,
     override var imageCode: String,
-    override var url: String,
+    var url: String,
     override var buttonLabel: String,
     override var buttonBackgroundColorId: Int,
-    override var targetBundle: Bundle?,
-    override var clickable: Boolean
+    var clickable: Boolean
 
 ) : CardData()
 

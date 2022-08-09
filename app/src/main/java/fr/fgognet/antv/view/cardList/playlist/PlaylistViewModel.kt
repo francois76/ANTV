@@ -31,7 +31,6 @@ class PlaylistViewModel(application: Application) :
                 "",
                 "toute les questions au gouvernement",
                 "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                "",
                 app.resources.getString(R.string.card_button_label_playlist),
                 android.R.attr.colorPrimaryDark,
                 fun(): Bundle {
@@ -42,7 +41,6 @@ class PlaylistViewModel(application: Application) :
                     )
                     return b
                 }(),
-                true
             )
         )
         return result

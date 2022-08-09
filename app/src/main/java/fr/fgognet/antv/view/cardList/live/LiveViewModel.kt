@@ -69,7 +69,6 @@ class LiveViewModel(application: Application) :
                             "",
                             diffusion.getFormattedHour(),
                             0,
-                            null,
                             false
                         )
                         if (!liveInformation.containsKey(diffusion.flux)) {

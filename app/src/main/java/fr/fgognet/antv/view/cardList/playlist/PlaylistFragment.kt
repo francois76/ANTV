@@ -11,8 +11,6 @@ import fr.fgognet.antv.view.card.CardAdapter
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 private const val TAG = "ANTV/PlaylistFragment"
 
@@ -21,13 +19,11 @@ data class PlaylistCardData(
     override var subtitle: String,
     override var description: String,
     override var imageCode: String,
-    override var url: String,
     override var buttonLabel: String,
     override var buttonBackgroundColorId: Int,
-    override var targetBundle: Bundle?,
-    override var clickable: Boolean
+    var targetBundle: Bundle?,
 
-) : CardData()
+    ) : CardData()
 
 class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
 
@@ -51,8 +47,7 @@ class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
 
     override fun buildCardAdapter(): CardAdapter<PlaylistCardData> {
         return CardAdapter { cardData, buttonView ->
-            val scope = CoroutineScope(Dispatchers.Main)
-            buttonView.isEnabled = cardData.clickable
+            buttonView.isEnabled = true
             buttonView.text = cardData.buttonLabel
             val background = TypedValue()
             context?.theme?.resolveAttribute(

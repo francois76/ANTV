@@ -75,7 +75,6 @@ class ReplayViewModel(application: Application) :
                     "",
                     getApplication<Application>().resources.getString(R.string.card_button_label_replay),
                     0,
-                    null,
                     true
                 )
                 var urlReplay = ""
