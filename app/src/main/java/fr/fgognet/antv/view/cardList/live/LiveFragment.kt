@@ -28,7 +28,7 @@ data class LiveCardData(
     override var description: String,
     override var imageCode: String,
     var url: String?,
-    override var buttonLabel: String,
+    var buttonLabel: String,
     var isLive: Boolean
 
 ) : CardData()

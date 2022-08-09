@@ -22,9 +22,6 @@ abstract class CardData {
     abstract var title: String
     abstract var description: String
     abstract var imageCode: String
-    abstract var buttonLabel: String
-
-
 }
 
 class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> Unit) :

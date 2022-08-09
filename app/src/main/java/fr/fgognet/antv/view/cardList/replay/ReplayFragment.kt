@@ -28,7 +28,6 @@ data class ReplayCardData(
     override var title: String,
     override var description: String,
     override var imageCode: String,
-    override var buttonLabel: String,
     var nvsCode: String?
 
 ) : CardData()
@@ -71,13 +70,10 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
     override fun buildCardAdapter(): CardAdapter<ReplayCardData> {
         return CardAdapter { cardData, subtitleView, buttonView ->
             buttonView.isEnabled = true
-            buttonView.text = cardData.buttonLabel
+            buttonView.text =
+                context?.resources?.getString(R.string.card_button_label_replay)
             val background = TypedValue()
-            buttonView.setBackgroundColor(
-                background.data
-            )
             buttonView.setTextColor(Color.WHITE)
-
             CoroutineScope(Dispatchers.Main).launch {
                 var urlReplay = ""
                 var subTitle = ""
@@ -111,6 +107,9 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
                             cardButtonColor,
                             background,
                             true
+                        )
+                        buttonView.setBackgroundColor(
+                            background.data
                         )
                         subtitleView.text = subTitle
                     }

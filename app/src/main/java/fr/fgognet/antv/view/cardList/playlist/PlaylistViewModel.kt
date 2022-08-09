@@ -21,10 +21,8 @@ class PlaylistViewModel(application: Application) :
                 arrayListOf(
                     PlaylistCardData(
                         "Questions au gouvernement",
-                        "",
                         "toute les questions au gouvernement",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                        app.resources.getString(R.string.card_button_label_playlist),
                         fun(): Bundle {
                             val b = Bundle()
                             b.putString(

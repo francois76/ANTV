@@ -55,7 +55,6 @@ class ReplayViewModel(application: Application) :
                                         "http",
                                         "https"
                                     ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                                    getApplication<Application>().resources.getString(R.string.card_button_label_replay),
                                     it.url,
                                 )
                             },
