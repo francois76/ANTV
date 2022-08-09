@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -56,7 +57,17 @@ abstract class AbstractCardListFragment : Fragment() {
         }
 
         val recyclerView: RecyclerView = view.findViewById(R.id.editos)
-        val cardAdapter = CardAdapter { cardData -> loadRemoteCardData(cardData) }
+        val cardAdapter =
+            CardAdapter { cardData, cardTitleView, cardSubtitleView, cardDescriptionView, cardImageView, buttonView ->
+                buildCard(
+                    cardData,
+                    cardTitleView,
+                    cardSubtitleView,
+                    cardDescriptionView,
+                    cardImageView,
+                    buttonView
+                )
+            }
         recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
@@ -72,9 +83,14 @@ abstract class AbstractCardListFragment : Fragment() {
             }
     }
 
-    private fun loadRemoteCardData(cardData: CardData): CardData {
-        return model.loadRemoteCardData(cardData)
-    }
+    abstract fun buildCard(
+        cardData: CardData,
+        cardTitleView: TextView,
+        cardSubtitleView: TextView,
+        cardDescriptionView: TextView,
+        cardImageView: ImageView,
+        buttonView: Button
+    )
 
     override fun onSaveInstanceState(outState: Bundle) {
         Log.v(TAG, "onSaveInstanceState")

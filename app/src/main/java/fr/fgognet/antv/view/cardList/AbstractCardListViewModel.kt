@@ -5,9 +5,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/AbstractCardListViewModel"
 
@@ -57,15 +54,5 @@ abstract class AbstractCardListViewModel(application: Application) : AndroidView
 
     abstract fun loadCardData(params: Bundle?, force: Boolean)
 
-    fun loadRemoteCardData(cardData: CardData): CardData {
-        viewModelScope.launch {
-
-            withContext(Dispatchers.IO) {
-
-
-            }
-        }
-        return cardData
-    }
 
 }
