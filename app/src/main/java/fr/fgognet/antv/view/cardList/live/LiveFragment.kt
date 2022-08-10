@@ -2,6 +2,7 @@ package fr.fgognet.antv.view.cardList.live
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -48,6 +49,7 @@ class LiveFragment : AbstractCardListFragment<LiveCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<LiveCardData> {
+        Log.v(TAG, "buildCardAdapter")
         return CardAdapter { cardData, subtitleView, buttonView ->
             subtitleView.text = cardData.subtitle
             buttonView.isEnabled = cardData.isLive

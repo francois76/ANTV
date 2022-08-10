@@ -43,6 +43,7 @@ class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<PlaylistCardData> {
+        Log.v(TAG, "buildCardAdapter")
         return CardAdapter { cardData, _, buttonView ->
             buttonView.isEnabled = true
             buttonView.text = context?.resources?.getString(R.string.card_button_label_playlist)

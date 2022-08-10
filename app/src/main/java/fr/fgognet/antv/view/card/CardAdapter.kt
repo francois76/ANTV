@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.card
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> 
         private val buttonView: Button = itemView.findViewById(R.id.live_button)
 
         fun bind(cardData: T) {
+            Log.v(TAG, "bind")
             cardTitleView.text = cardData.title
             cardDescriptionView.text = cardData.description
             cardImageView.contentDescription = cardData.title
@@ -62,12 +64,14 @@ class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder<T> {
+        Log.v(TAG, "onCreateViewHolder")
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_card, parent, false)
-        return CardViewHolder<T>(view, buildCard)
+        return CardViewHolder(view, buildCard)
     }
 
     override fun onBindViewHolder(holder: CardViewHolder<T>, position: Int) {
+        Log.v(TAG, "onBindViewHolder")
         val cardData = getItem(position)
         holder.bind(cardData)
     }
@@ -76,10 +80,12 @@ class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> 
 
 class CardDiffCallback<T : CardData> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
+        Log.v(TAG, "areItemsTheSame")
         return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+        Log.v(TAG, "areContentsTheSame")
         return oldItem.title == newItem.title
     }
 }

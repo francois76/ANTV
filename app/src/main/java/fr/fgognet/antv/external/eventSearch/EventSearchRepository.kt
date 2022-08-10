@@ -5,6 +5,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.net.URL
 import java.net.URLEncoder
+import java.util.*
 
 enum class EventSearchQueryParams {
     Date,
@@ -16,12 +17,17 @@ object EventSearchRepository {
     private const val TAG = "ANTV/EventSearchRepository"
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun findEventSearchByParams(params: HashMap<EventSearchQueryParams, String>): List<EventSearch> {
+    fun findEventSearchByParams(params: EnumMap<EventSearchQueryParams, String>): List<EventSearch> {
         Log.v(TAG, "findEventSearchByDate")
 
         val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?" +
                 params.map {
-                    "${URLEncoder.encode(it.key.toString())}=${URLEncoder.encode(it.value)}"
+                    "${
+                        URLEncoder.encode(
+                            it.key.toString(),
+                            "utf-8"
+                        )
+                    }=${URLEncoder.encode(it.value, "utf-8")}"
                 }.joinToString("&")
 
         Log.i(TAG, "Calling $url")

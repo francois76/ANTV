@@ -35,18 +35,13 @@ data class ReplayCardData(
 
 class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
 
-    lateinit var replayViewModel: ReplayViewModel
-
-
     override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<ReplayCardData> {
-        replayViewModel = ViewModelProvider(this)[ReplayViewModel::class.java]
+        val replayViewModel = ViewModelProvider(this)[ReplayViewModel::class.java]
         arguments?.let { bundle ->
             EventSearchQueryParams.values().forEach { queryParam ->
                 bundle.getString(queryParam.toString()).let { value ->
                     if (value != null) {
-                        replayViewModel.searchQueryFields.put(
-                            queryParam, "$value",
-                        )
+                        replayViewModel.searchQueryFields[queryParam] = "$value"
                     }
                 }
             }
@@ -69,6 +64,7 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
     }
 
     override fun buildCardAdapter(): CardAdapter<ReplayCardData> {
+        Log.v(TAG, "buildCardAdapter")
         return CardAdapter { cardData, subtitleView, buttonView ->
             buttonView.isEnabled = true
             buttonView.text =
@@ -86,7 +82,7 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
                         )
                         urlReplay = nvs.getReplayURL()
                         subTitle =
-                            nvs.getTime()?.format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm"))
+                            nvs.getTime()?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                                 ?: ""
                         cardButtonColor =
                             android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
