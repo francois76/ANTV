@@ -22,20 +22,34 @@ class PlaylistViewModel(application: Application) :
                     // the last uploads
                     PlaylistCardData(
                         "Dernières publications",
-                        "les dernières publications",
+                        "Les dernières publications",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         Bundle(),
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
                         "Questions au gouvernement",
-                        "toute les questions au gouvernement",
+                        "Toute les questions au gouvernement",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         fun(): Bundle {
                             val b = Bundle()
                             b.putString(
                                 EventSearchQueryParams.TypeVideo.toString(),
                                 "Questions au gouvernement"
+                            )
+                            return b
+                        }(),
+                    ),
+                    // questions au gouvernement
+                    PlaylistCardData(
+                        "Séance publique",
+                        "Toutes les séances publiques ainsi que les questions au gouvernement non montées",
+                        "https://videos.assemblee-nationale.fr/live/images/14000000.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Séance publique"
                             )
                             return b
                         }(),
