@@ -57,6 +57,24 @@ class PlaylistViewModel(application: Application) :
                             )
                             return b
                         }(),
+                    ),
+                    // commission des affaires européennes
+                    PlaylistCardData(
+                        "Commission des affaires européennes",
+                        "Tous les replays de la commission des affaires européennes",
+                        "https://videos.assemblee-nationale.fr/live/images/415287.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Commission"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Commission.toString(),
+                                "Affaires européennes (commission)"
+                            )
+                            return b
+                        }(),
                     )
                 ),
                 app.resources.getString(R.string.playlist_description)
