@@ -58,6 +58,8 @@ abstract class AbstractCardListFragment<T : CardData> : Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.editos)
         val cardAdapter = buildCardAdapter()
+        cardAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
