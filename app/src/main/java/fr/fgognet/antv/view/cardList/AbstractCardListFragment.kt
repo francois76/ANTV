@@ -56,7 +56,7 @@ abstract class AbstractCardListFragment<T : CardData> : Fragment() {
                 .setImageBitmap(PlayerService.currentMediaData!!.bitmap)
         }
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.editos)
+        val recyclerView: RecyclerView = view.findViewById(R.id.cardListScrollview)
         val cardAdapter = buildCardAdapter()
         cardAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
