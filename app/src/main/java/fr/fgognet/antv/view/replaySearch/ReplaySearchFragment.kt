@@ -63,6 +63,10 @@ class ReplaySearchFragment : Fragment() {
                     ZoneOffset.UTC
                 )
             bundle.putString(EventSearchQueryParams.Date.toString(), "$dateMorning-$dateEvening")
+            bundle.putString(
+                EventSearchQueryParams.Tag.toString(),
+                view.resources.getString(R.string.search_description)
+            )
             Log.d(TAG, "search Time: $time")
             Navigation.findNavController(it).navigate(R.id.replayFragment, bundle)
         }

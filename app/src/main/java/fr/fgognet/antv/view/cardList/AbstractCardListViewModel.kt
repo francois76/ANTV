@@ -10,7 +10,7 @@ private const val TAG = "ANTV/AbstractCardListViewModel"
 
 data class CardListViewData<T : CardData>(
     var cards: List<T>,
-    var title: String
+    var title: String?
 )
 
 

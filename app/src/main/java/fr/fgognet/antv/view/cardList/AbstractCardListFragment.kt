@@ -41,7 +41,7 @@ abstract class AbstractCardListFragment<T : CardData> : Fragment() {
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = getTitle()
         if (savedInstanceState != null) {
             view.findViewById<TextView>(R.id.cardListTitle).text =
-                savedInstanceState.getString("title")
+                savedInstanceState.getString("title") ?: ""
         }
         model = initViewModelProvider(savedInstanceState)
         model.loadCardData(savedInstanceState, false)
@@ -65,7 +65,7 @@ abstract class AbstractCardListFragment<T : CardData> : Fragment() {
             .observe(viewLifecycleOwner) {
                 Log.d(TAG, "updating cardList with following: $it")
                 cardAdapter.submitList(it.cards as MutableList<T>)
-                view.findViewById<TextView>(R.id.cardListTitle).text = it.title
+                view.findViewById<TextView>(R.id.cardListTitle).text = it.title ?: ""
             }
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
             .setOnMenuItemClickListener {
@@ -79,10 +79,12 @@ abstract class AbstractCardListFragment<T : CardData> : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         Log.v(TAG, "onSaveInstanceState")
-        outState.putString(
-            "title",
-            view?.findViewById<TextView>(R.id.cardListTitle)?.text.toString()
-        )
+        if (view?.findViewById<TextView>(R.id.cardListTitle)?.text != null) {
+            outState.putString(
+                "title",
+                view?.findViewById<TextView>(R.id.cardListTitle)?.text.toString()
+            )
+        }
         super.onSaveInstanceState(outState)
     }
 

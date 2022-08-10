@@ -24,5 +24,6 @@
     <string name="is_playing">Contenu en cours de lecture: </string>
     <string name="info">Infos </string>
     <string name="playlist_description">Playlist disponibles</string>
+    <string name="search_description">Recherche personnalisée</string>
 
 </resources>

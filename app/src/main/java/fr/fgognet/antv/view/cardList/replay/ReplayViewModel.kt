@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
@@ -29,7 +28,6 @@ class ReplayViewModel(application: Application) :
         if (super.cardListData.value?.title != null && !force) {
             return
         }
-        val app = super.getApplication<Application>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
@@ -60,9 +58,7 @@ class ReplayViewModel(application: Application) :
                                     it.url,
                                 )
                             },
-                            app.resources.getString(R.string.search_summary) + " " + searchQueryFields.keys.joinToString(
-                                ", "
-                            )
+                            searchQueryFields[EventSearchQueryParams.Tag] ?: ""
                         )
                 }
             }

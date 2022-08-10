@@ -11,6 +11,7 @@ enum class EventSearchQueryParams {
     Date,
     TypeVideo,
     Commission,
+    Tag, // not part of the actual research, but it's the actual label of the search
 }
 
 object EventSearchRepository {
@@ -21,7 +22,7 @@ object EventSearchRepository {
         Log.v(TAG, "findEventSearchByDate")
 
         val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?" +
-                params.map {
+                params.filter { it.key != EventSearchQueryParams.Tag }.map {
                     "${
                         URLEncoder.encode(
                             it.key.toString(),

@@ -24,7 +24,14 @@ class PlaylistViewModel(application: Application) :
                         "Dernières publications",
                         "Les dernières publications",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                        Bundle(),
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Dernières publications"
+                            )
+                            return b
+                        }(),
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
@@ -35,6 +42,10 @@ class PlaylistViewModel(application: Application) :
                             val b = Bundle()
                             b.putString(
                                 EventSearchQueryParams.TypeVideo.toString(),
+                                "Questions au gouvernement"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
                                 "Questions au gouvernement"
                             )
                             return b
@@ -49,6 +60,10 @@ class PlaylistViewModel(application: Application) :
                             val b = Bundle()
                             b.putString(
                                 EventSearchQueryParams.TypeVideo.toString(),
+                                "Séance publique"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
                                 "Séance publique"
                             )
                             return b
@@ -69,6 +84,10 @@ class PlaylistViewModel(application: Application) :
                                 EventSearchQueryParams.Commission.toString(),
                                 "Affaires culturelles et éducation (commission)"
                             )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Commission des affaires culturelles et éducation"
+                            )
                             return b
                         }(),
                     ),
@@ -86,6 +105,10 @@ class PlaylistViewModel(application: Application) :
                             b.putString(
                                 EventSearchQueryParams.Commission.toString(),
                                 "Affaires européennes (commission)"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Commission des affaires européennes"
                             )
                             return b
                         }(),
