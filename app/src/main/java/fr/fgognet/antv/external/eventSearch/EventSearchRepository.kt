@@ -4,10 +4,12 @@ import android.util.Log
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.net.URL
+import java.net.URLEncoder
 
 enum class EventSearchQueryParams {
     Date,
     TypeVideo,
+    Commission,
 }
 
 object EventSearchRepository {
@@ -17,10 +19,10 @@ object EventSearchRepository {
     fun findEventSearchByParams(params: HashMap<EventSearchQueryParams, String>): List<EventSearch> {
         Log.v(TAG, "findEventSearchByDate")
 
-        var url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?"
-        params.forEach {
-            url += "${it.key}=${it.value}"
-        }
+        val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?" +
+                params.map {
+                    "${URLEncoder.encode(it.key.toString())}=${URLEncoder.encode(it.value)}"
+                }.joinToString("&")
 
         Log.i(TAG, "Calling $url")
 

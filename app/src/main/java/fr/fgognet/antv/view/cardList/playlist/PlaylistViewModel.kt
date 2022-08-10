@@ -35,7 +35,25 @@ class PlaylistViewModel(application: Application) :
                             val b = Bundle()
                             b.putString(
                                 EventSearchQueryParams.TypeVideo.toString(),
-                                "Questions%20au%20gouvernement"
+                                "Questions au gouvernement"
+                            )
+                            return b
+                        }(),
+                    ),
+                    // commission des affaires culturelles
+                    PlaylistCardData(
+                        "Commission des affaires culturelles et éducation",
+                        "Tous les replays de la commission des affaires culturelles et éducation",
+                        "https://videos.assemblee-nationale.fr/live/images/419604.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Commission"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Commission.toString(),
+                                "Affaires culturelles et éducation (commission)"
                             )
                             return b
                         }(),
