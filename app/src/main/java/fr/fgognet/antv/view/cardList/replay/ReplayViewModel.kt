@@ -33,7 +33,7 @@ class ReplayViewModel(application: Application) :
 
                 val eventSearches: List<EventSearch> = try {
                     EventSearchRepository.findEventSearchByParams(
-                        searchQueryFields
+                        HashMap(searchQueryFields)
                     )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
