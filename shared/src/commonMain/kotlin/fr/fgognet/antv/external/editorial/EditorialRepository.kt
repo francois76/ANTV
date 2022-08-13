@@ -4,7 +4,8 @@ import fr.fgognet.antv.config.Config
 import fr.fgognet.antv.config.Environment
 import fr.fgognet.antv.config.httpClient
 import io.github.aakira.napier.Napier
-import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -13,7 +14,7 @@ private const val TAG = "ANTV/EditorialRepository"
 
 object EditorialRepository {
 
-    fun getEditorialInformation(): Editorial {
+    suspend fun getEditorialInformation(): Editorial {
         Napier.v("getEditorialInformation")
         when (Config.currentEnvironment) {
             Environment.NOTHING -> return Editorial(
@@ -72,12 +73,8 @@ object EditorialRepository {
             Environment.REAL_TIME -> {
                 val client = httpClient()
                 Napier.i("Calling https://videos.assemblee-nationale.fr/php/getedito.php")
-                client.get("https://videos.assemblee-nationale.fr/php/getedito.php")
-                return serializer.read(
-                    Editorial::class.java, URL(
-
-                    ).openStream()
-                )
+                return client.request("https://videos.assemblee-nationale.fr/php/getedito.php")
+                    .body()
             }
         }
     }

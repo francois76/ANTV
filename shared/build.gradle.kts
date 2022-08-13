@@ -28,7 +28,7 @@ kotlin {
             implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilsVersion")
             implementation("io.github.pdvrieze.xmlutil:serialization:$xmlUtilsVersion")
             // rest
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0-RC")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
             // logger
             implementation("io.github.aakira:napier:$napierVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")

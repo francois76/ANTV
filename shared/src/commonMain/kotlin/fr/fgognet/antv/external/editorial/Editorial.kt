@@ -3,17 +3,15 @@ package fr.fgognet.antv.external.editorial
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlChildrenName
 import nl.adaptivity.xmlutil.serialization.XmlElement
-import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 
 @Serializable
-@XmlSerialName("editorial")
 data class Editorial(
 
     @XmlElement(true)
-    val titre: String = "",
+    var titre: String = "",
     @XmlElement(true)
-    val introduction: String = "",
+    var introduction: String = "",
     @XmlElement(true)
     @XmlChildrenName("diffusion")
     var diffusions: List<Diffusion>? = null
@@ -68,7 +66,7 @@ class Diffusion(
             return ""
         }
 
-        val firstCharacter = heure?.substring(0, 1)
+        var firstCharacter = heure?.substring(0, 1)
         if (firstCharacter == "0") {
             return heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
         } else {
