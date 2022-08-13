@@ -36,7 +36,6 @@ class LiveViewModel(application: Application) :
                         getApplication<Application>().resources.getString(R.string.fail_load_data),
                         "",
                         null,
-                        null,
                     )
                 }
 
