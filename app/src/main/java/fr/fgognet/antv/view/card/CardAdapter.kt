@@ -20,11 +20,6 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/CardAdapter"
 
-abstract class CardData {
-    abstract var title: String
-    abstract var description: String
-    abstract var imageCode: String
-}
 
 class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> Unit) :
     ListAdapter<T, CardAdapter.CardViewHolder<T>>(CardDiffCallback()) {

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.card.CardAdapter
-import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
@@ -22,17 +21,6 @@ import fr.fgognet.antv.view.player.ARG_URL
  */
 
 private const val TAG = "ANTV/LiveFragment"
-
-data class LiveCardData(
-    override var title: String,
-    var subtitle: String,
-    override var description: String,
-    override var imageCode: String,
-    var url: String?,
-    var buttonLabel: String,
-    var isLive: Boolean
-
-) : CardData()
 
 
 class LiveFragment : AbstractCardListFragment<LiveCardData>() {

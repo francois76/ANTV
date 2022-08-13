@@ -10,7 +10,6 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.card.CardAdapter
-import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
@@ -26,13 +25,6 @@ import java.time.format.DateTimeFormatter
 
 private const val TAG = "ANTV/ReplayFragment"
 
-data class ReplayCardData(
-    override var title: String,
-    override var description: String,
-    override var imageCode: String,
-    var nvsCode: String?
-
-) : CardData()
 
 class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
 
