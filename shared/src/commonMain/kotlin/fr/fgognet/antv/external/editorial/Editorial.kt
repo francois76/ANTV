@@ -3,8 +3,9 @@ package fr.fgognet.antv.external.editorial
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlChildrenName
 import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-
+@XmlSerialName("editorial", "", "")
 @Serializable
 data class Editorial(
 
@@ -13,7 +14,7 @@ data class Editorial(
     @XmlElement(true)
     var introduction: String = "",
     @XmlElement(true)
-    @XmlChildrenName("diffusion")
+    @XmlChildrenName("diffusion", "", "")
     var diffusions: List<Diffusion>? = null
 
 )

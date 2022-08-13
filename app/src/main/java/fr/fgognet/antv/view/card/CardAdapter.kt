@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.soywiz.korim.format.toAndroidBitmap
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +56,7 @@ class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> 
                 withContext(Dispatchers.IO) {
                     val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
                     withContext(Dispatchers.Main) {
-                        cardImageView.setImageBitmap(bitmap)
+                        cardImageView.setImageBitmap(bitmap.toAndroidBitmap())
                     }
                 }
             }

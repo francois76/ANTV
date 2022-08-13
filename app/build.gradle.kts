@@ -5,14 +5,14 @@ plugins {
 
 
 android {
-    compileSdk =33
+    compileSdk = 33
 
     defaultConfig {
-        applicationId ="fr.fgognet.antv"
-        minSdk= 26
-        targetSdk= 32
-        versionCode =1
-        versionName ="0.0.3"
+        applicationId = "fr.fgognet.antv"
+        minSdk = 26
+        targetSdk = 32
+        versionCode = 1
+        versionName = "0.0.3"
 
     }
 
@@ -20,28 +20,48 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "$project.rootDir/tools/proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "$project.rootDir/tools/proguard-rules.pro"
+            )
         }
 
         getByName("debug") {
-            applicationIdSuffix= ".debug"
+            applicationIdSuffix = ".debug"
             isDebuggable = true
         }
     }
     packagingOptions {
         resources {
-            excludes.addAll(arrayListOf("META-INF/DEPENDENCIES", "META-INF/LICENSE", "META-INF/LICENSE.txt", "META-INF/license.txt", "META-INF/LICENSE.md", "META-INF/LICENSE-notice.md", "META-INF/NOTICE", "META-INF/NOTICE.md", "META-INF/NOTICE.txt", "META-INF/notice.txt", "META-INF/ASL2.0", "META-INF/mimetypes.default", "META-INF/mailcap.default", "META-INF/*.kotlin_module"))
+            excludes.addAll(
+                arrayListOf(
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/license.txt",
+                    "META-INF/LICENSE.md",
+                    "META-INF/LICENSE-notice.md",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.md",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/notice.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/mimetypes.default",
+                    "META-INF/mailcap.default",
+                    "META-INF/*.kotlin_module"
+                )
+            )
         }
     }
     buildFeatures {
-        viewBinding =  true
+        viewBinding = true
     }
     kotlinOptions {
         jvmTarget = "11"
     }
     compileOptions {
-        sourceCompatibility= JavaVersion.VERSION_11
-        targetCompatibility =JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -66,11 +86,15 @@ dependencies {
     val nav_version = "2.5.1"
     implementation("androidx.navigation:navigation-fragment:$nav_version")
     implementation("androidx.navigation:navigation-ui:$nav_version")
-    implementation ("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    val korVersion = "3.0.0"
+    implementation("com.soywiz.korlibs.korim:korim:$korVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     // Junit
     testImplementation("junit:junit:4.13.2")

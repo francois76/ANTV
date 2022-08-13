@@ -1,6 +1,9 @@
 package fr.fgognet.antv.external.nvs
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlChildrenName
@@ -8,16 +11,16 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@XmlSerialName("data")
+@XmlSerialName("data", "", "")
 class Nvs(
     @XmlElement(true)
     @SerialName("files")
-    @XmlChildrenName("file")
+    @XmlChildrenName("file", "", "")
     var files: List<File>,
 
     @XmlElement(true)
     @SerialName("metadatas")
-    @XmlChildrenName("metadata")
+    @XmlChildrenName("metadata", "", "")
     var metadatas: List<Metadata>
 ) {
     fun getMeetingID(): String {
@@ -55,7 +58,7 @@ class Nvs(
     fun getTime(): LocalDateTime? {
         this.metadatas.first { it.name == "date" }.value?.toLong()?.let {
 
-            return             Instant.fromEpochSeconds(
+            return Instant.fromEpochSeconds(
                 it
             ).toLocalDateTime(TimeZone.currentSystemDefault())
         }
