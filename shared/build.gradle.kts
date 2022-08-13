@@ -19,6 +19,7 @@ kotlin {
     val napierVersion = "2.6.1"
     val xmlUtilsVersion = "0.84.2"
     val ktorVersion = "2.1.0"
+    val korVersion = "3.0.0"
     sourceSets {
         sourceSets["commonMain"].dependencies {
 
@@ -30,7 +31,6 @@ kotlin {
             // logger
             implementation("io.github.aakira:napier:$napierVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-            val korVersion = "3.0.0"
             implementation("com.soywiz.korlibs.korim:korim:$korVersion")
             implementation("com.soywiz.korlibs.korio:korio:$korVersion")
             // ktor
@@ -49,12 +49,18 @@ kotlin {
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
+        iosArm64Main.dependencies {
+        }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(sourceSets["commonMain"])
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+        }
+        iosMain.dependencies {
+            // https://mavenlibs.com/maven/dependency/com.soywiz.korlibs.korio/korio-iosx64
+            implementation("com.soywiz.korlibs.korio:korio-iosx64:$korVersion")
         }
         val iosX64Test by getting
         val iosArm64Test by getting
