@@ -16,13 +16,11 @@ kotlin {
             baseName = "shared"
         }
     }
-
+    val napierVersion = "2.6.1"
+    val xmlUtilsVersion = "0.84.2"
+    val ktorVersion = "2.1.0"
     sourceSets {
         sourceSets["commonMain"].dependencies {
-
-            val napierVersion = "2.6.1"
-            val xmlUtilsVersion = "0.84.2"
-            val ktorVersion = "2.1.0"
 
             // for xml
             implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilsVersion")
@@ -45,7 +43,9 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        sourceSets["androidMain"].dependencies {
+            implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+        }
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
