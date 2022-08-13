@@ -34,10 +34,7 @@ object EventSearchRepository {
         }
         requestBuilder.build()
         val client = httpClient()
-        val url = "https://videos.assemblee-nationale.fr/php/eventsearch.php?" +
-
-
-                Napier.i("Calling ${requestBuilder.build().url}")
+        Napier.i("Calling ${requestBuilder.build().url}")
 
         val content =
             "[" + client.request(requestBuilder).body<String>().split("[")[1].split("]")[0] + "]"
