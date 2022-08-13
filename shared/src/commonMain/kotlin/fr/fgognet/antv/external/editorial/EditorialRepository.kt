@@ -3,12 +3,17 @@ package fr.fgognet.antv.external.editorial
 import fr.fgognet.antv.config.Config
 import fr.fgognet.antv.config.Environment
 import fr.fgognet.antv.config.httpClient
+import fr.fgognet.antv.config.no_handler
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
+import nl.adaptivity.xmlutil.serialization.XML
 
 private const val TAG = "ANTV/EditorialRepository"
 
@@ -45,7 +50,7 @@ object EditorialRepository {
                         "1657711803",
                         "1657711803",
                         "",
-                        2
+                        2,
                     ),
                     Diffusion(
                         "419604",
@@ -66,15 +71,22 @@ object EditorialRepository {
                         "1657711803",
                         "1657711803",
                         "",
-                        2
+                        2,
                     )
                 )
             )
             Environment.REAL_TIME -> {
                 val client = httpClient()
                 Napier.i("Calling https://videos.assemblee-nationale.fr/php/getedito.php")
-                return client.request("https://videos.assemblee-nationale.fr/php/getedito.php")
-                    .body()
+                val resultString =
+                    client.request("https://videos.assemblee-nationale.fr/php/getedito.php")
+                        .body<String>()
+                val format = XML {
+                    xmlVersion = XmlVersion.XML10
+                    xmlDeclMode = XmlDeclMode.Charset
+                    unknownChildHandler = no_handler
+                }
+                return format.decodeFromString(resultString)
             }
         }
     }

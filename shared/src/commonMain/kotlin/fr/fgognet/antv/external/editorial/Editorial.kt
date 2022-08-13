@@ -15,9 +15,9 @@ data class Editorial(
     var introduction: String = "",
     @XmlElement(true)
     @XmlChildrenName("diffusion", "", "")
-    var diffusions: List<Diffusion>? = null
+    var diffusions: List<Diffusion>? = null,
 
-)
+    )
 
 @Serializable
 class Diffusion(
@@ -58,7 +58,7 @@ class Diffusion(
     @XmlElement(false)
     var id: String? = null,
     @XmlElement(false)
-    var utilisateur: Int? = null
+    var utilisateur: Int? = null,
 ) {
 
 

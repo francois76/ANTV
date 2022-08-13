@@ -1,6 +1,7 @@
 package fr.fgognet.antv.config
 
 import io.ktor.client.*
+import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 
 enum class Environment {
     NOTHING, // no current stream
@@ -12,4 +13,12 @@ object Config {
     val currentEnvironment = Environment.REAL_TIME
 }
 
+
 expect fun httpClient(config: HttpClientConfig<*>.() -> Unit = {}): HttpClient
+
+
+val no_handler: UnknownChildHandler =
+    UnknownChildHandler { input, inputKind, descriptor, name, candidates ->
+        emptyList()
+    }
+

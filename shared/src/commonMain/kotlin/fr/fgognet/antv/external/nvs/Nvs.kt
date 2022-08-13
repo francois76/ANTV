@@ -21,8 +21,9 @@ class Nvs(
     @XmlElement(true)
     @SerialName("metadatas")
     @XmlChildrenName("metadata", "", "")
-    var metadatas: List<Metadata>
-) {
+    var metadatas: List<Metadata>,
+
+    ) {
     fun getMeetingID(): String {
 
         return this.metadatas
@@ -73,7 +74,7 @@ data class File(
     @XmlElement(false)
     var title: String?,
     @XmlElement(false)
-    var url: String?
+    var url: String?,
 )
 
 
@@ -84,5 +85,5 @@ data class Metadata(
     @XmlElement(false)
     var value: String?,
     @XmlElement(false)
-    var label: String?
+    var label: String?,
 )

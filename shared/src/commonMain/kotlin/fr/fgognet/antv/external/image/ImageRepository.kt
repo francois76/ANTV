@@ -4,6 +4,7 @@ import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.UrlVfs
 import io.github.aakira.napier.Napier
+import io.ktor.http.*
 
 private const val TAG = "ANTV/ImageRepository"
 
@@ -13,12 +14,12 @@ object ImageRepository {
 
 
     suspend fun getLiveImage(image: String): Bitmap {
-        Napier.v( "getLiveImage")
+        Napier.v("getLiveImage")
         if (imageCodeToBitmap.contains(image)) {
             return imageCodeToBitmap[image]!!
         }
-        Napier.i( "Calling $image")
-        val bitmap = UrlVfs(image).readBitmap()
+        Napier.i("Calling $image")
+        val bitmap = UrlVfs(image.encodeURLPath()).readBitmap()
         imageCodeToBitmap[image] =
             bitmap
         return bitmap
