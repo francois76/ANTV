@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationBarView
+import com.soywiz.korim.format.toAndroidBitmap
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.service.player.MediaData
@@ -51,7 +52,7 @@ class PlayerFragment : Fragment() {
                     requireArguments().getString(ARG_TITLE),
                     requireArguments().getString(ARG_DESCRIPTION),
                     ImageRepository.imageCodeToBitmap[requireArguments().getString(ARG_IMAGE_CODE)
-                        ?: ""],
+                        ?: ""]?.toAndroidBitmap(),
                 )
             }
         }

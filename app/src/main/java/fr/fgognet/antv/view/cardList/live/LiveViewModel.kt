@@ -31,10 +31,11 @@ class LiveViewModel(application: Application) :
                 val editorial: Editorial = try {
                     EditorialRepository.getEditorialInformation()
                 } catch (e: Exception) {
+                    Log.e(TAG, e.toString())
                     Editorial(
                         getApplication<Application>().resources.getString(R.string.fail_load_data),
                         "",
-                        null
+                        null,
                     )
                 }
 

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.soywiz.korim.format.toAndroidBitmap
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.image.ImageRepository
 import kotlinx.coroutines.CoroutineScope
@@ -19,11 +20,6 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/CardAdapter"
 
-abstract class CardData {
-    abstract var title: String
-    abstract var description: String
-    abstract var imageCode: String
-}
 
 class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> Unit) :
     ListAdapter<T, CardAdapter.CardViewHolder<T>>(CardDiffCallback()) {
@@ -55,7 +51,7 @@ class CardAdapter<T : CardData>(private val buildCard: (T, TextView, Button) -> 
                 withContext(Dispatchers.IO) {
                     val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
                     withContext(Dispatchers.Main) {
-                        cardImageView.setImageBitmap(bitmap)
+                        cardImageView.setImageBitmap(bitmap.toAndroidBitmap())
                     }
                 }
             }

@@ -10,7 +10,6 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.card.CardAdapter
-import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
@@ -21,17 +20,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private const val TAG = "ANTV/ReplayFragment"
 
-data class ReplayCardData(
-    override var title: String,
-    override var description: String,
-    override var imageCode: String,
-    var nvsCode: String?
-
-) : CardData()
 
 class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
 
@@ -81,9 +74,14 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
                             cardData.nvsCode!!
                         )
                         urlReplay = nvs.getReplayURL()
-                        subTitle =
-                            nvs.getTime()?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                                ?: ""
+
+                        if (nvs.getTime() != null) {
+                            subTitle =
+                                LocalDateTime.parse(nvs.getTime().toString())
+                                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        } else {
+                            subTitle = ""
+                        }
                         cardButtonColor =
                             android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
                     }

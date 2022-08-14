@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.config.initCommonLogs
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.linkifyHtml
 
@@ -41,6 +42,7 @@ open class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
+        initCommonLogs()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         CastContext.getSharedInstance(applicationContext)

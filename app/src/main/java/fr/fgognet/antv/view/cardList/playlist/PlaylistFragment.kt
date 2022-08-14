@@ -8,19 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.card.CardAdapter
-import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 
 private const val TAG = "ANTV/PlaylistFragment"
 
-data class PlaylistCardData(
-    override var title: String,
-    override var description: String,
-    override var imageCode: String,
-    var targetBundle: Bundle?,
-
-    ) : CardData()
 
 class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
 
@@ -59,7 +51,7 @@ class PlaylistFragment : AbstractCardListFragment<PlaylistCardData>() {
             buttonView.setTextColor(Color.WHITE)
             buttonView.setOnClickListener {
                 Navigation.findNavController(it)
-                    .navigate(R.id.replayFragment, cardData.targetBundle)
+                    .navigate(R.id.replayFragment, cardData.targetBundle as Bundle)
 
             }
         }
