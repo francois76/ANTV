@@ -11,6 +11,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
@@ -19,6 +20,7 @@ private const val TAG = "ANTV/EditorialRepository"
 
 object EditorialRepository {
 
+    @OptIn(ExperimentalXmlUtilApi::class)
     suspend fun getEditorialInformation(): Editorial {
         Napier.v("getEditorialInformation")
         when (Config.currentEnvironment) {

@@ -6,6 +6,7 @@ import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
@@ -13,6 +14,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 object NvsRepository {
     private const val TAG = "ANTV/NvsRepository"
 
+    @OptIn(ExperimentalXmlUtilApi::class)
     suspend fun getNvsByCode(urlCode: String): Nvs {
         Napier.v("getNvsByCode")
         val client = httpClient()
