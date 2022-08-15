@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform").version("1.7.10")
-    id("org.jetbrains.kotlin.plugin.serialization").version("1.7.10")
+    id("org.jetbrains.kotlin.plugin.serialization").version(Versions.kotlin)
     id("com.android.library")
+    id("org.jetbrains.kotlin.multiplatform").version(Versions.kotlin)
 }
 
 kotlin {
@@ -15,27 +15,24 @@ kotlin {
             baseName = "shared"
         }
     }
-    val napierVersion = "2.6.1"
-    val xmlUtilsVersion = "0.84.2"
-    val ktorVersion = "2.1.0"
-    val korVersion = "3.0.0-Beta7"
+
     sourceSets {
         sourceSets["commonMain"].dependencies {
 
             // for xml
-            implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilsVersion")
-            implementation("io.github.pdvrieze.xmlutil:serialization:$xmlUtilsVersion")
+            implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
+            implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
             // rest
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
             // logger
-            implementation("io.github.aakira:napier:$napierVersion")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-            implementation("com.soywiz.korlibs.korim:korim:$korVersion")
-            implementation("com.soywiz.korlibs.korio:korio:$korVersion")
+            implementation("io.github.aakira:napier:${Versions.napier}")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
+            implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
+            implementation("com.soywiz.korlibs.korio:korio:${Versions.kor}")
             // ktor
-            implementation("io.ktor:ktor-client-core:${ktorVersion}")
-            implementation("io.ktor:ktor-client-json:${ktorVersion}")
-            implementation("io.ktor:ktor-client-logging:${ktorVersion}")
+            implementation("io.ktor:ktor-client-core:${Versions.ktor}")
+            implementation("io.ktor:ktor-client-json:${Versions.ktor}")
+            implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
         }
         val commonTest by getting {
             dependencies {
@@ -43,16 +40,16 @@ kotlin {
             }
         }
         sourceSets["androidMain"].dependencies {
-            implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+            implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
         }
         val androidTest by getting
         val macosArm64Main by getting
         macosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-macosarm64:$korVersion")
+            implementation("com.soywiz.korlibs.korio:korio-macosarm64:${Versions.kor}")
         }
         val iosArm64Main by getting
         iosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-iosarm64:$korVersion")
+            implementation("com.soywiz.korlibs.korio:korio-iosarm64:${Versions.kor}")
         }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
@@ -74,10 +71,10 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdk
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = 26
-        targetSdk = 32
+        minSdk = Versions.Android.minSdk
+        targetSdk = Versions.Android.targetSdk
     }
 }

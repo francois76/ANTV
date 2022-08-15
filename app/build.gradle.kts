@@ -1,18 +1,19 @@
+
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android").version("1.7.10")
+    id("org.jetbrains.kotlin.android").version(Versions.kotlin)
 }
 
 
 android {
-    compileSdk = 33
+    compileSdk =  Versions.Android.compileSdk
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
-        minSdk = 26
-        targetSdk = 32
+        minSdk = Versions.Android.minSdk
+        targetSdk = Versions.Android.targetSdk
         versionCode = 1
-        versionName = "0.0.3"
+        versionName = Versions.antv
 
     }
 
@@ -75,26 +76,23 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // exoplayer
-    val exoplayer_version = "2.18.1"
-    implementation("com.google.android.exoplayer:exoplayer-core:$exoplayer_version")
-    implementation("com.google.android.exoplayer:exoplayer-hls:$exoplayer_version")
-    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayer_version")
-    implementation("com.google.android.exoplayer:extension-cast:$exoplayer_version")
-    implementation("com.google.android.exoplayer:extension-mediasession:$exoplayer_version")
+    implementation("com.google.android.exoplayer:exoplayer-core:${Versions.exoplayer}")
+    implementation("com.google.android.exoplayer:exoplayer-hls:${Versions.exoplayer}")
+    implementation("com.google.android.exoplayer:exoplayer-ui:${Versions.exoplayer}")
+    implementation("com.google.android.exoplayer:extension-cast:${Versions.exoplayer}")
+    implementation("com.google.android.exoplayer:extension-mediasession:${Versions.exoplayer}")
 
     // navigation
-    val nav_version = "2.5.1"
-    implementation("androidx.navigation:navigation-fragment:$nav_version")
-    implementation("androidx.navigation:navigation-ui:$nav_version")
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.navigation:navigation-fragment:${Versions.Androidx.nav}")
+    implementation("androidx.navigation:navigation-ui:${Versions.Androidx.nav}")
+    implementation("androidx.navigation:navigation-fragment-ktx:${Versions.Androidx.nav}")
+    implementation("androidx.navigation:navigation-ui-ktx:${Versions.Androidx.nav}")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:${Versions.Androidx.nav}")
+    androidTestImplementation("androidx.navigation:navigation-testing:${Versions.Androidx.nav}")
+    implementation("androidx.navigation:navigation-compose:${Versions.Androidx.nav}")
 
-    val korVersion = "3.0.0"
-    implementation("com.soywiz.korlibs.korim:korim:$korVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
 
     // Junit
     testImplementation("junit:junit:4.13.2")
