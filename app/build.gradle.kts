@@ -73,7 +73,10 @@ dependencies {
 
 
     implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
+
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
+    androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
+    
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
     listOf(
