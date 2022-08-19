@@ -20,10 +20,6 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "$project.rootDir/tools/proguard-rules.pro"
-            )
         }
 
         getByName("debug") {
@@ -76,7 +72,7 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
-    
+
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
     listOf(
