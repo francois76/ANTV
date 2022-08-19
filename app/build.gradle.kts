@@ -68,27 +68,35 @@ android {
 dependencies {
 
     implementation(project(":shared"))
-    implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
     implementation("com.google.android.material:material:${Versions.Android.material}")
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
+
+
+    implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
-    // exoplayer
-    implementation("com.google.android.exoplayer:exoplayer-core:${Versions.Android.exoplayer}")
-    implementation("com.google.android.exoplayer:exoplayer-hls:${Versions.Android.exoplayer}")
-    implementation("com.google.android.exoplayer:exoplayer-ui:${Versions.Android.exoplayer}")
-    implementation("com.google.android.exoplayer:extension-cast:${Versions.Android.exoplayer}")
-    implementation("com.google.android.exoplayer:extension-mediasession:${Versions.Android.exoplayer}")
-
-    // navigation
-    implementation("androidx.navigation:navigation-fragment:${Versions.Androidx.nav}")
-    implementation("androidx.navigation:navigation-ui:${Versions.Androidx.nav}")
-    implementation("androidx.navigation:navigation-fragment-ktx:${Versions.Androidx.nav}")
-    implementation("androidx.navigation:navigation-ui-ktx:${Versions.Androidx.nav}")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:${Versions.Androidx.nav}")
+    listOf(
+        "fragment",
+        "ui",
+        "fragment-ktx",
+        "ui-ktx",
+        "dynamic-features-fragment",
+        "compose"
+    ).forEach {
+        implementation("androidx.navigation", "navigation-$it", Versions.Androidx.nav)
+    }
     androidTestImplementation("androidx.navigation:navigation-testing:${Versions.Androidx.nav}")
-    implementation("androidx.navigation:navigation-compose:${Versions.Androidx.nav}")
+
+    listOf(
+        "exoplayer-core",
+        "exoplayer-hls",
+        "exoplayer-ui",
+        "extension-cast",
+        "extension-mediasession"
+    ).forEach {
+        implementation("com.google.android.exoplayer", it, Versions.Android.exoplayer)
+    }
 
     implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
