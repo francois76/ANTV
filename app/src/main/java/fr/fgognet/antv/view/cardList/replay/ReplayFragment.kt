@@ -1,42 +1,52 @@
 package fr.fgognet.antv.view.cardList.replay
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.util.TypedValue
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.view.card.CardAdapter
 import fr.fgognet.antv.view.cardList.AbstractCardListFragment
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.player.ARG_DESCRIPTION
+import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
+import fr.fgognet.antv.view.player.ARG_TITLE
+import fr.fgognet.antv.view.player.ARG_URL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "ANTV/ReplayFragment"
 
-class ReplayFragment : AbstractCardListFragment() {
 
-    private var time: Long = 0
+class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
 
-    override fun initViewModelProvider(): AbstractCardListViewModel {
-        return ViewModelProvider(this)[ReplayViewModel::class.java]
+    override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<ReplayCardData> {
+        val replayViewModel = ViewModelProvider(this)[ReplayViewModel::class.java]
+        arguments?.let { bundle ->
+            EventSearchQueryParams.allValues().forEach { queryParam ->
+                bundle.getString(queryParam.toString()).let { value ->
+                    if (value != null) {
+                        replayViewModel.searchQueryFields[queryParam] = "$value"
+                    }
+                }
+            }
+        }
+        return replayViewModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            this.time = it.getLong("time")
-        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.v(TAG, "onViewCreated: $savedInstanceState")
-        var enrichedBundle = savedInstanceState
-        if (enrichedBundle == null) {
-            enrichedBundle = Bundle()
-        }
-        enrichedBundle.putLong("time", time)
-        super.onViewCreated(view, enrichedBundle)
-
-
-    }
 
     override fun getTitle(): String {
         return resources.getText(R.string.title_replay).toString()
@@ -45,4 +55,65 @@ class ReplayFragment : AbstractCardListFragment() {
     override fun getResource(): Int {
         return R.layout.fragment_replay
     }
+
+    override fun buildCardAdapter(): CardAdapter<ReplayCardData> {
+        Log.v(TAG, "buildCardAdapter")
+        return CardAdapter { cardData, subtitleView, buttonView ->
+            buttonView.isEnabled = true
+            buttonView.text =
+                context?.resources?.getString(R.string.card_button_label_replay)
+            val background = TypedValue()
+            buttonView.setTextColor(Color.WHITE)
+            CoroutineScope(Dispatchers.Main).launch {
+                var urlReplay = ""
+                var subTitle = ""
+                var cardButtonColor = 0
+                withContext(Dispatchers.IO) {
+                    if (cardData.nvsCode != null) {
+                        val nvs = NvsRepository.getNvsByCode(
+                            cardData.nvsCode!!
+                        )
+                        urlReplay = nvs.getReplayURL()
+
+                        if (nvs.getTime() != null) {
+                            subTitle =
+                                LocalDateTime.parse(nvs.getTime().toString())
+                                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        } else {
+                            subTitle = ""
+                        }
+                        cardButtonColor =
+                            android.R.attr.colorPrimaryDark // the status is valorized here to ensure the card actualy has the URL
+                    }
+                    withContext(Dispatchers.Main) {
+                        buttonView.setOnClickListener {
+                            val bundle = Bundle()
+                            bundle.putString(ARG_URL, urlReplay)
+                            bundle.putString(ARG_TITLE, cardData.title)
+                            bundle.putString(
+                                ARG_DESCRIPTION,
+                                cardData.description
+                            )
+                            bundle.putString(
+                                ARG_IMAGE_CODE,
+                                cardData.imageCode
+                            )
+                            Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)
+                        }
+                        context?.theme?.resolveAttribute(
+                            cardButtonColor,
+                            background,
+                            true
+                        )
+                        buttonView.setBackgroundColor(
+                            background.data
+                        )
+                        subtitleView.text = subTitle
+                    }
+                }
+            }
+
+        }
+    }
+
 }

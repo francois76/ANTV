@@ -112,6 +112,11 @@ object PlayerService {
         Log.d(TAG, "registered $listenerKey")
     }
 
+    fun release() {
+        player.value?.release()
+        mediaSession.release()
+    }
+
     fun resyncOnLiveError() {
         // Re-initialize player at the current live window default position.
         if (player.value?.isCurrentMediaItemLive == true) {

@@ -4,44 +4,36 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearch
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
-import fr.fgognet.antv.external.image.ImageRepository
-import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 
 private const val TAG = "ANTV/ReplayViewModel"
 
-class ReplayViewModel(application: Application) : AbstractCardListViewModel(application) {
+class ReplayViewModel(application: Application) :
+    AbstractCardListViewModel<ReplayCardData>(application) {
+
+    var searchQueryFields: HashMap<EventSearchQueryParams, String> =
+        HashMap<EventSearchQueryParams, String>()
+
+
     override fun loadCardData(params: Bundle?, force: Boolean) {
         Log.v(TAG, "loadCardData: $params")
         if (super.cardListData.value?.title != null && !force) {
             return
         }
-        val app = super.getApplication<Application>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val eventSearches: List<EventSearch>
-                val date: LocalDateTime =
-                    LocalDateTime.ofInstant(
-                        Instant.ofEpochMilli(params?.getLong("time")!!),
-                        ZoneOffset.UTC
-                    )
-                eventSearches = try {
-                    EventSearchRepository.findEventSearchByDate(
-                        date
+
+                val eventSearches: List<EventSearch> = try {
+                    EventSearchRepository.findEventSearchByParams(
+                        searchQueryFields
                     )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -52,73 +44,25 @@ class ReplayViewModel(application: Application) : AbstractCardListViewModel(appl
                     Log.i(TAG, "dispatching regenerated view")
                     _cardListData.value =
                         CardListViewData(
-                            generateCardData(eventSearches),
-                            app.resources.getString(R.string.search_summary) + " " + date.format(
-                                DateTimeFormatter.ofPattern("d/MM/yyyy")
-                            )
+                            eventSearches.map {
+                                ReplayCardData(
+                                    it.title ?: "video sans titre",
+                                    it.description?.replace("<br>", "\n") ?: "",
+                                    if (it.thumbnail != null) it.thumbnail!!.replace(
+                                        "\\",
+                                        ""
+                                    ).replace(
+                                        "http",
+                                        "https"
+                                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
+                                    it.url,
+                                )
+                            },
+                            searchQueryFields[EventSearchQueryParams.Tag] ?: ""
                         )
                 }
             }
         }
     }
 
-    private fun generateCardData(eventSearches: List<EventSearch>): List<CardData> {
-        Log.v(TAG, "generateCardData")
-        val result = arrayListOf<CardData>()
-        viewModelScope.launch {
-            for (eventSearch in eventSearches) {
-                val cardData = CardData(
-                    eventSearch.title ?: "video sans titre",
-                    "",
-                    eventSearch.description?.replace("<br>", "\n") ?: "",
-                    if (eventSearch.thumbnail != null) eventSearch.thumbnail!!.replace(
-                        "\\",
-                        ""
-                    ).replace(
-                        "http",
-                        "https"
-                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                    "",
-                    getApplication<Application>().resources.getString(R.string.card_button_label_replay),
-                    CardStatus.DISABLED
-                )
-                var urlReplay = ""
-                var subTitle = ""
-                var cardStatus = CardStatus.DISABLED
-                withContext(Dispatchers.IO) {
-
-                    if (eventSearch.url != null) {
-                        val nvs = NvsRepository.getNvsByCode(
-                            eventSearch.url!!
-                        )
-                        urlReplay = nvs.getReplayURL()
-                        subTitle = nvs.getSubtitle()
-                        cardStatus =
-                            CardStatus.REPLAY // the status is valorized here to ensure the card actualy has the URL
-                    }
-                    withContext(Dispatchers.Main) {
-                        cardData.url = urlReplay
-                        cardData.cardStatus = cardStatus
-                        cardData.subtitle = subTitle
-                        result.add(cardData)
-                    }
-                }
-
-            }
-
-            withContext(Dispatchers.IO) {
-                for (cardData in result) {
-                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                    Log.w(TAG, "fetched bitmap :" + cardData.imageCode)
-                    withContext(Dispatchers.Main) {
-                        ImageRepository.imageCodeToBitmap[cardData.imageCode] = bitmap
-                    }
-                }
-                withContext(Dispatchers.Main) {
-                    _cardListData.value = _cardListData.value
-                }
-            }
-        }
-        return result
-    }
 }

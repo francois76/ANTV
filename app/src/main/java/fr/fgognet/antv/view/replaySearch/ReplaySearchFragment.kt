@@ -11,6 +11,10 @@ import androidx.navigation.Navigation
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 
@@ -44,9 +48,25 @@ class ReplaySearchFragment : Fragment() {
             }
         val time = view.findViewById<CalendarView>(R.id.calendarView).date
         view.findViewById<MaterialButton>(R.id.search_button).setOnClickListener {
-
+            val date: LocalDateTime =
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(currentDate),
+                    ZoneOffset.systemDefault()
+                )
             val bundle = Bundle()
-            bundle.putLong("time", currentDate)
+            val dateMorning =
+                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 8, 0).toEpochSecond(
+                    ZoneOffset.UTC
+                )
+            val dateEvening =
+                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 22, 0).toEpochSecond(
+                    ZoneOffset.UTC
+                )
+            bundle.putString(EventSearchQueryParams.Date.toString(), "$dateMorning-$dateEvening")
+            bundle.putString(
+                EventSearchQueryParams.Tag.toString(),
+                view.resources.getString(R.string.search_description)
+            )
             Log.d(TAG, "search Time: $time")
             Navigation.findNavController(it).navigate(R.id.replayFragment, bundle)
         }

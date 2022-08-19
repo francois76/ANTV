@@ -4,33 +4,18 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
+import fr.fgognet.antv.view.card.CardData
 
 private const val TAG = "ANTV/AbstractCardListViewModel"
 
-data class CardListViewData(
-    var cards: List<CardData>,
-    var title: String
+data class CardListViewData<T : CardData>(
+    var cards: List<T>,
+    var title: String?
 )
 
-enum class CardStatus {
-    DISABLED, // when the card is invalid, the card is not displayed
-    REPLAY, // the card is a replay card
-    LIVE, // the card is a current livestream
-    SCHEDULED, // the card is a scheduled livestream
-    PAST_LIVE // the card is a live that is over
-}
 
-data class CardData(
-    var title: String,
-    var subtitle: String,
-    var description: String,
-    var imageCode: String,
-    var url: String,
-    var buttonLabel: String,
-    var cardStatus: CardStatus
-)
-
-abstract class AbstractCardListViewModel(application: Application) : AndroidViewModel(application),
+abstract class AbstractCardListViewModel<T : CardData>(application: Application) :
+    AndroidViewModel(application),
     DefaultLifecycleObserver {
     init {
         // Alternatively expose this as a dependency
@@ -38,8 +23,8 @@ abstract class AbstractCardListViewModel(application: Application) : AndroidView
     }
 
 
-    protected val _cardListData = MutableLiveData<CardListViewData>()
-    val cardListData: LiveData<CardListViewData> get() = _cardListData
+    protected val _cardListData = MutableLiveData<CardListViewData<T>>()
+    val cardListData: LiveData<CardListViewData<T>> get() = _cardListData
 
     override fun onStart(owner: LifecycleOwner) {
         Log.v(TAG, "onStart")
