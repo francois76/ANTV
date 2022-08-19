@@ -7,22 +7,19 @@ import androidx.lifecycle.viewModelScope
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
-import fr.fgognet.antv.view.cardList.CardData
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.CardStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.collections.set
 
 private const val TAG = "ANTV/LiveViewModel"
 
 
-class LiveViewModel(application: Application) : AbstractCardListViewModel(application) {
+class LiveViewModel(application: Application) :
+    AbstractCardListViewModel<LiveCardData>(application) {
 
 
     override fun loadCardData(params: Bundle?, force: Boolean) {
@@ -34,10 +31,11 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                 val editorial: Editorial = try {
                     EditorialRepository.getEditorialInformation()
                 } catch (e: Exception) {
+                    Log.e(TAG, e.toString())
                     Editorial(
                         getApplication<Application>().resources.getString(R.string.fail_load_data),
                         "",
-                        null
+                        null,
                     )
                 }
 
@@ -51,9 +49,9 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
         }
     }
 
-    private fun generateCardData(editorial: Editorial): List<CardData> {
+    private fun generateCardData(editorial: Editorial): List<LiveCardData> {
         Log.v(TAG, "generateCardData")
-        val result = arrayListOf<CardData>()
+        val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
             return result
         }
@@ -63,7 +61,7 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                 liveInformation = LiveRepository.getLiveInformation()
                 withContext(Dispatchers.Main) {
                     for (diffusion in editorial.diffusions!!) {
-                        val cardData = CardData(
+                        val cardData = LiveCardData(
                             diffusion.libelle
                                 ?: getApplication<Application>().resources.getString(R.string.no_title_broadcast),
                             diffusion.lieu ?: "",
@@ -71,7 +69,7 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                             "",
                             diffusion.getFormattedHour(),
-                            CardStatus.SCHEDULED
+                            false
                         )
                         if (!liveInformation.containsKey(diffusion.flux)) {
                             result.add(cardData)
@@ -85,7 +83,7 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                                     ) {
                                         cardData.buttonLabel =
                                             getApplication<Application>().resources.getString(R.string.card_button_label_live)
-                                        cardData.cardStatus = CardStatus.LIVE
+                                        cardData.isLive = true
                                         cardData.url =
                                             "https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"
                                     }
@@ -94,17 +92,6 @@ class LiveViewModel(application: Application) : AbstractCardListViewModel(applic
                             }
                         }
                     }
-                }
-            }
-            withContext(Dispatchers.IO) {
-                for (cardData in result) {
-                    val bitmap = ImageRepository.getLiveImage(cardData.imageCode)
-                    withContext(Dispatchers.Main) {
-                        ImageRepository.imageCodeToBitmap[cardData.imageCode] = bitmap
-                    }
-                }
-                withContext(Dispatchers.Main) {
-                    _cardListData.value = _cardListData.value
                 }
             }
         }

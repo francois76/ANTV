@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.debounce
-import fr.fgognet.antv.view.card.CardFragment
+import fr.fgognet.antv.view.card.CardAdapter
+import fr.fgognet.antv.view.card.CardData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -25,11 +25,12 @@ private const val TAG = "ANTV/AbstractCardListFragment"
 /**
  * AbstractCardListFragment is the main fragment handle by navigation
  */
-abstract class AbstractCardListFragment : Fragment() {
+abstract class AbstractCardListFragment<T : CardData> : Fragment() {
 
-    private lateinit var model: AbstractCardListViewModel
+    private lateinit var model: AbstractCardListViewModel<T>
 
-    abstract fun initViewModelProvider(): AbstractCardListViewModel
+
+    abstract fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<T>
     abstract fun getTitle(): String
     abstract fun getResource(): Int
 
@@ -40,9 +41,9 @@ abstract class AbstractCardListFragment : Fragment() {
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title = getTitle()
         if (savedInstanceState != null) {
             view.findViewById<TextView>(R.id.cardListTitle).text =
-                savedInstanceState.getString("title")
+                savedInstanceState.getString("title") ?: ""
         }
-        model = initViewModelProvider()
+        model = initViewModelProvider(savedInstanceState)
         model.loadCardData(savedInstanceState, false)
         if (PlayerService.currentMediaData != null) {
             view.findViewById<MaterialCardView>(R.id.is_playing_card).visibility = View.VISIBLE
@@ -55,38 +56,16 @@ abstract class AbstractCardListFragment : Fragment() {
                 .setImageBitmap(PlayerService.currentMediaData!!.bitmap)
         }
 
-
+        val recyclerView: RecyclerView = view.findViewById(R.id.cardListScrollview)
+        val cardAdapter = buildCardAdapter()
+        cardAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        recyclerView.adapter = cardAdapter
         model.cardListData.debounce(500L, CoroutineScope(Dispatchers.Main))
             .observe(viewLifecycleOwner) {
                 Log.d(TAG, "updating cardList with following: $it")
-                val fragTransaction: FragmentTransaction =
-                    parentFragmentManager.beginTransaction()
-                var index = 0
-                var fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-                while (fragmentToRemove != null) {
-                    Log.d(TAG, "removing fragment cardFragment$index")
-                    fragTransaction.remove(fragmentToRemove)
-                    index++
-                    fragmentToRemove = parentFragmentManager.findFragmentByTag("cardFragment$index")
-                }
-                fragTransaction.commit()
-                view.findViewById<LinearLayout>(R.id.editos).removeAllViews()
-                view.findViewById<TextView>(R.id.cardListTitle).text = it.title
-                Log.i(TAG, "refreshing cards in view")
-                if (it.cards.isNotEmpty()) {
-                    val transaction: FragmentTransaction =
-                        parentFragmentManager.beginTransaction()
-                    for ((indexOfCard, cardData: CardData) in it.cards.withIndex()) {
-                        Log.d(TAG, "adding fragment cardFragment$indexOfCard")
-                        val card = CardFragment.newInstance(cardData)
-                        transaction.add(
-                            R.id.editos,
-                            card,
-                            "cardFragment$indexOfCard"
-                        )
-                    }
-                    transaction.commit()
-                }
+                cardAdapter.submitList(it.cards as MutableList<T>)
+                view.findViewById<TextView>(R.id.cardListTitle).text = it.title ?: ""
             }
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).menu.findItem(R.id.action_reload)
             .setOnMenuItemClickListener {
@@ -96,12 +75,16 @@ abstract class AbstractCardListFragment : Fragment() {
             }
     }
 
+    abstract fun buildCardAdapter(): CardAdapter<T>
+
     override fun onSaveInstanceState(outState: Bundle) {
         Log.v(TAG, "onSaveInstanceState")
-        outState.putString(
-            "title",
-            view?.findViewById<TextView>(R.id.cardListTitle)?.text.toString()
-        )
+        if (view?.findViewById<TextView>(R.id.cardListTitle)?.text != null) {
+            outState.putString(
+                "title",
+                view?.findViewById<TextView>(R.id.cardListTitle)?.text.toString()
+            )
+        }
         super.onSaveInstanceState(outState)
     }
 

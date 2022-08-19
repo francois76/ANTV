@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import fr.fgognet.antv.R
+import fr.fgognet.antv.config.initCommonLogs
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.linkifyHtml
 
@@ -41,6 +42,7 @@ open class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
+        initCommonLogs()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         CastContext.getSharedInstance(applicationContext)
@@ -71,15 +73,25 @@ open class MainActivity : FragmentActivity() {
         val bottomMenu = findViewById<NavigationBarView>(R.id.bottom_navigation).menu
         bottomMenu.findItem(R.id.menu_live_id)
             .setOnMenuItemClickListener {
-                navHostFragment.navController.navigate(R.id.mainFragment, Bundle())
-                bottomMenu.findItem(R.id.menu_replay_id).isChecked = false
+                navHostFragment.navController.navigate(R.id.liveFragment, Bundle())
+                bottomMenu.findItem(R.id.menu_search_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_playlist_id).isChecked = false
                 it.isChecked = true
                 true
             }
-        bottomMenu.findItem(R.id.menu_replay_id)
+        bottomMenu.findItem(R.id.menu_search_id)
             .setOnMenuItemClickListener {
                 navHostFragment.navController.navigate(R.id.replaySearchFragment, Bundle())
                 bottomMenu.findItem(R.id.menu_live_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_playlist_id).isChecked = false
+                it.isChecked = true
+                true
+            }
+        bottomMenu.findItem(R.id.menu_playlist_id)
+            .setOnMenuItemClickListener {
+                navHostFragment.navController.navigate(R.id.playlistFragment, Bundle())
+                bottomMenu.findItem(R.id.menu_live_id).isChecked = false
+                bottomMenu.findItem(R.id.menu_search_id).isChecked = false
                 it.isChecked = true
                 true
             }
@@ -136,6 +148,14 @@ open class MainActivity : FragmentActivity() {
     override fun enterPictureInPictureMode(params: PictureInPictureParams): Boolean {
         Log.v(TAG, "enterPictureInPictureMode")
         return super.enterPictureInPictureMode(params)
+    }
+
+    override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
+        if (this.isFinishing) {
+            PlayerService.release()
+        }
+        super.onDestroy()
     }
 
 

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_browse_fragment"
+        style="@style/Theme.ANTV.MainActivity"
+        tools:deviceIds="tv"
+        tools:ignore="MergeRootFrame">
+
+        <LinearLayout
+            android:id="@id/exo_time"
+            android:layout_width="154dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/exo_black_opacity_60"
+            android:layoutDirection="ltr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@id/exo_position"
+                style="@style/ExoStyledControls.TimeText.Position" />
+
+            <TextView style="@style/ExoStyledControls.TimeText.Separator" />
+
+            <TextView
+                android:id="@id/exo_duration"
+                style="@style/ExoStyledControls.TimeText.Duration" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/exo_basic_controls"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/exo_black_opacity_60"
+            android:layoutDirection="ltr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/exo_time">
+
+            <ImageButton
+                android:id="@id/exo_subtitle"
+                style="@style/ExoStyledControls.Button.Bottom.CC" />
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@id/exo_progress_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom"
+            android:background="@color/exo_black_opacity_60"
+            app:layout_constraintBottom_toTopOf="@+id/exo_basic_controls"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@id/exo_center_controls"
+            android:layout_width="347dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:clipToPadding="false"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@id/exo_prev"
+                style="@style/ExoStyledControls.Button.Center.Previous" />
+
+            <include layout="@layout/exo_styled_player_control_rewind_button" />
+
+            <ImageButton
+                android:id="@id/exo_play_pause"
+                style="@style/ExoStyledControls.Button.Center.PlayPause" />
+
+            <include layout="@layout/exo_styled_player_control_ffwd_button" />
+
+            <ImageButton
+                android:id="@id/exo_next"
+                style="@style/ExoStyledControls.Button.Center.Next" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="70dp"
+            android:background="@color/exo_black_opacity_60"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/video_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

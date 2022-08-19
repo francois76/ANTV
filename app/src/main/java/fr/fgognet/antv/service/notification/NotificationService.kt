@@ -55,7 +55,7 @@ object NotificationService {
                         ), PendingIntent.FLAG_IMMUTABLE
                     )
                 )
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(PlayerService.currentMediaData?.bitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setColor(background.data)
