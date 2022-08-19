@@ -71,10 +71,10 @@ kotlin {
 }
 
 android {
-    compileSdk = Versions.Android.compileSdk
+    compileSdk = Versions.Sdk.compileSdk
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = Versions.Android.minSdk
-        targetSdk = Versions.Android.targetSdk
+        minSdk = Versions.Sdk.minSdk
+        targetSdk = Versions.Sdk.targetSdk
     }
 }

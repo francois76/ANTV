@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android").version(Versions.kotlin)
@@ -6,12 +5,12 @@ plugins {
 
 
 android {
-    compileSdk =  Versions.Android.compileSdk
+    compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
-        minSdk = Versions.Android.minSdk
-        targetSdk = Versions.Android.targetSdk
+        minSdk = Versions.Sdk.minSdk
+        targetSdk = Versions.Sdk.targetSdk
         versionCode = 1
         versionName = Versions.antv
 
@@ -69,18 +68,18 @@ android {
 dependencies {
 
     implementation(project(":shared"))
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("com.google.android.material:material:1.6.1")
-    implementation("com.google.android.gms:play-services-cast-framework:21.1.0")
-    implementation("androidx.lifecycle:lifecycle-process:2.5.1")
-    implementation("androidx.appcompat:appcompat:1.5.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
+    implementation("com.google.android.material:material:${Versions.Android.material}")
+    implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
+    implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
+    implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
+    implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
     // exoplayer
-    implementation("com.google.android.exoplayer:exoplayer-core:${Versions.exoplayer}")
-    implementation("com.google.android.exoplayer:exoplayer-hls:${Versions.exoplayer}")
-    implementation("com.google.android.exoplayer:exoplayer-ui:${Versions.exoplayer}")
-    implementation("com.google.android.exoplayer:extension-cast:${Versions.exoplayer}")
-    implementation("com.google.android.exoplayer:extension-mediasession:${Versions.exoplayer}")
+    implementation("com.google.android.exoplayer:exoplayer-core:${Versions.Android.exoplayer}")
+    implementation("com.google.android.exoplayer:exoplayer-hls:${Versions.Android.exoplayer}")
+    implementation("com.google.android.exoplayer:exoplayer-ui:${Versions.Android.exoplayer}")
+    implementation("com.google.android.exoplayer:extension-cast:${Versions.Android.exoplayer}")
+    implementation("com.google.android.exoplayer:extension-mediasession:${Versions.Android.exoplayer}")
 
     // navigation
     implementation("androidx.navigation:navigation-fragment:${Versions.Androidx.nav}")
@@ -95,5 +94,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
 
     // Junit
-    testImplementation("junit:junit:4.13.2")
+    testImplementation("junit:junit:${Versions.junit}")
 }
