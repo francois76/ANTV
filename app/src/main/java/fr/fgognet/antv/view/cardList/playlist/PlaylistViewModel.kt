@@ -69,6 +69,50 @@ class PlaylistViewModel(application: Application) :
                             return b
                         }(),
                     ),
+                    // commission du développement durable
+                    PlaylistCardData(
+                        "Commission au développement durable",
+                        "Tous les replays de la commission au développement durable",
+                        "https://videos.assemblee-nationale.fr/live/images/419865.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Commission"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Commission.toString(),
+                                "Développement durable (commission)"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Commission du développement durable"
+                            )
+                            return b
+                        }(),
+                    ),
+                    // commission des affaires économiques
+                    PlaylistCardData(
+                        "Commission des affaires économiques",
+                        "Tous les replays de la commission des affaires économiques",
+                        "https://videos.assemblee-nationale.fr/live/images/419610.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Commission"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Commission.toString(),
+                                "Affaires économiques (commission)"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Commission des affaires économiques"
+                            )
+                            return b
+                        }(),
+                    ),
                     // commission des affaires culturelles
                     PlaylistCardData(
                         "Commission des affaires culturelles et éducation",
@@ -112,7 +156,30 @@ class PlaylistViewModel(application: Application) :
                             )
                             return b
                         }(),
+                    ),
+                    // commission des affaires étrangères
+                    PlaylistCardData(
+                        "Commission des affaires étrangères",
+                        "Tous les replays de la commission des affaires étrangères",
+                        "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
+                        fun(): Bundle {
+                            val b = Bundle()
+                            b.putString(
+                                EventSearchQueryParams.TypeVideo.toString(),
+                                "Commission"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Commission.toString(),
+                                "Affaires étrangères (commission)"
+                            )
+                            b.putString(
+                                EventSearchQueryParams.Tag.toString(),
+                                "Commission des affaires étrangères"
+                            )
+                            return b
+                        }(),
                     )
+
                 ),
                 app.resources.getString(R.string.playlist_description)
             )
