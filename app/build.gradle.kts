@@ -15,9 +15,9 @@ android {
         versionName = Versions.antv
 
     }
-
     buildTypes {
         getByName("release") {
+
             isMinifyEnabled = false
             isShrinkResources = false
             proguardFiles(
