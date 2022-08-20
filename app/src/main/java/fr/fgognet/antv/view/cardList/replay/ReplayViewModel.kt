@@ -12,7 +12,6 @@ import fr.fgognet.antv.view.cardList.CardListViewData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 
 private const val TAG = "ANTV/ReplayViewModel"
@@ -20,8 +19,9 @@ private const val TAG = "ANTV/ReplayViewModel"
 class ReplayViewModel(application: Application) :
     AbstractCardListViewModel<ReplayCardData>(application) {
 
-    var searchQueryFields: EnumMap<EventSearchQueryParams, String> =
-        EnumMap(EventSearchQueryParams::class.java)
+    var searchQueryFields: HashMap<EventSearchQueryParams, String> =
+        HashMap<EventSearchQueryParams, String>()
+
 
     override fun loadCardData(params: Bundle?, force: Boolean) {
         Log.v(TAG, "loadCardData: $params")
@@ -33,7 +33,7 @@ class ReplayViewModel(application: Application) :
 
                 val eventSearches: List<EventSearch> = try {
                     EventSearchRepository.findEventSearchByParams(
-                        HashMap(searchQueryFields)
+                        searchQueryFields
                     )
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
