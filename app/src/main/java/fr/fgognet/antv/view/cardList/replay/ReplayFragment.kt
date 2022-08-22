@@ -31,7 +31,7 @@ class ReplayFragment : AbstractCardListFragment<ReplayCardData>() {
     override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<ReplayCardData> {
         val replayViewModel = ViewModelProvider(this)[ReplayViewModel::class.java]
         arguments?.let { bundle ->
-            EventSearchQueryParams.values().forEach { queryParam ->
+            EventSearchQueryParams.allValues().forEach { queryParam ->
                 bundle.getString(queryParam.toString()).let { value ->
                     if (value != null) {
                         replayViewModel.searchQueryFields[queryParam] = "$value"

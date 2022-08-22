@@ -15,14 +15,12 @@ android {
         versionName = Versions.antv
 
     }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "$project.rootDir/tools/proguard-rules.pro"
+                getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             )
         }
 
@@ -76,7 +74,7 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
-    
+
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
     listOf(

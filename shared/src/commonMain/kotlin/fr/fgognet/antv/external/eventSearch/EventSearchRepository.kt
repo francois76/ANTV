@@ -8,11 +8,25 @@ import io.ktor.http.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
+
 enum class EventSearchQueryParams {
     Date,
     TypeVideo,
     Commission,
-    Tag, // not part of the actual research, but it's the actual label of the search
+    Tag; // not part of the actual research, but it's the actual label of the search
+
+
+    companion object {
+        fun allValues(): ArrayList<EventSearchQueryParams> {
+            return arrayListOf(
+                Date,
+                TypeVideo,
+                Commission,
+                Tag
+            )
+        }
+        
+    }
 }
 
 object EventSearchRepository {
