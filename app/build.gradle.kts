@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android").version(Versions.kotlin)
+    id("org.jetbrains.kotlin.android")
 }
 
 
@@ -53,7 +53,12 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.0"
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -64,7 +69,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":shared"))
     implementation("com.google.android.material:material:${Versions.Android.material}")
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
@@ -104,4 +108,23 @@ dependencies {
 
     // Junit
     testImplementation("junit:junit:${Versions.junit}")
+
+    // Compose
+    implementation("androidx.activity:activity-compose:${Versions.Androidx.compose}")
+    implementation("androidx.constraintlayout:constraintlayout-compose:${Versions.Androidx.constraintLayoutCompose}")
+    implementation("androidx.compose.runtime:runtime:${Versions.Androidx.compose}")
+    implementation("androidx.compose.ui:ui:${Versions.Androidx.compose}")
+    implementation("androidx.compose.foundation:foundation:${Versions.Androidx.compose}")
+    implementation("androidx.compose.foundation:foundation-layout:${Versions.Androidx.compose}")
+    implementation("androidx.compose.material:material:${Versions.Androidx.compose}")
+    implementation("androidx.compose.ui:ui-viewbinding:${Versions.Androidx.compose}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.Androidx.compose}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Versions.Androidx.compose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.compose}")
+    implementation("com.google.android.material:compose-theme-adapter:${Versions.Androidx.composeThemeAdapter}")
+    implementation("io.coil-kt:coil-compose:${Versions.coil}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${Versions.Androidx.compose}")
+    implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
+    implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
+
 }

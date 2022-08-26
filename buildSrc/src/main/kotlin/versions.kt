@@ -8,7 +8,7 @@ object Versions {
     const val ktor = "2.1.0"
     const val kor = "3.0.0-Beta7"
     const val junit = "4.13.2"
-
+    const val coil = "2.1.0"
 
     object Sdk {
         // Sdk and tools
@@ -29,6 +29,11 @@ object Versions {
         const val appCompat = "1.5.0"
         const val coreKtx = "1.8.0"
         const val lifecycle = "2.5.1"
+        const val compose = "1.2.1"
+        const val constraintLayoutCompose = "1.1.0-alpha03"
+        const val composeThemeAdapter = "1.1.16"
+        const val material3 = "1.0.0-alpha16"
+
     }
 
     object Kotlinx {
