@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,8 +25,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.composethemeadapter.MdcTheme
 import fr.fgognet.antv.R
+import fr.fgognet.antv.view.buildColors
 
 
 private const val TAG = "ANTV/ReplaySearchFragment"
@@ -39,13 +41,9 @@ class ReplaySearchFragment : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            // Create a Compose MaterialTheme inheriting the existing colors, typography
-            // and shapes of the current View system's theme
-            MdcTheme {
-                ReplaySearchScreen(
-                    model = replaySearchViewModel()
-                )
-            }
+            ReplaySearchScreen(
+                model = replaySearchViewModel()
+            )
         }
     }
 
@@ -53,39 +51,41 @@ class ReplaySearchFragment : Fragment() {
     fun ReplaySearchScreen(
         model: replaySearchViewModel?
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Dp(20F))
-        ) {
-            lateinit var calendarView: CalendarView
-            AndroidView(
-                {
-                    calendarView = CalendarView(it)
-                    calendarView
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
-                update = { views ->
-                    views.setOnDateChangeListener { _, year, month, day ->
-                        val c: Calendar = Calendar.getInstance()
-                        c.set(year, month, day)
-                        currentDate = c.timeInMillis
+        MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dp(20F))
+            ) {
+                lateinit var calendarView: CalendarView
+                AndroidView(
+                    {
+                        calendarView = CalendarView(it)
+                        calendarView
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    update = { views ->
+                        views.setOnDateChangeListener { _, year, month, day ->
+                            val c: Calendar = Calendar.getInstance()
+                            c.set(year, month, day)
+                            currentDate = c.timeInMillis
+                        }
                     }
-                }
-            )
-            Button(
-                onClick = {
-                    findNavController().navigate(
-                        R.id.replayFragment,
-                        model?.makeSearchBundle(currentDate)
-                    )
-                },
-                content = {
-                    Text(text = stringResource(id = R.string.buttom_search))
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
+                )
+                Button(
+                    onClick = {
+                        findNavController().navigate(
+                            R.id.replayFragment,
+                            model?.makeSearchBundle(currentDate)
+                        )
+                    },
+                    content = {
+                        Text(text = stringResource(id = R.string.buttom_search))
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
 
