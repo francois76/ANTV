@@ -10,6 +10,8 @@ import android.widget.CalendarView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -17,9 +19,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.composethemeadapter.MdcTheme
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
@@ -53,8 +54,12 @@ class ReplaySearchFragment : Fragment() {
     fun ReplaySearchScreen(
     ) {
         Column(Modifier.fillMaxWidth()) {
+            lateinit var calendarView: CalendarView
             AndroidView(
-                { CalendarView(it) },
+                {
+                    calendarView = CalendarView(it)
+                    calendarView
+                },
                 modifier = Modifier.wrapContentWidth(),
                 update = { views ->
                     views.setOnDateChangeListener { _, year, month, day ->
@@ -64,6 +69,35 @@ class ReplaySearchFragment : Fragment() {
                     }
                 }
             )
+            Button(onClick = {
+                val date: LocalDateTime =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(currentDate),
+                        ZoneOffset.systemDefault()
+                    )
+                val bundle = Bundle()
+                val dateMorning =
+                    LocalDateTime.of(date.year, date.month, date.dayOfMonth, 8, 0).toEpochSecond(
+                        ZoneOffset.UTC
+                    )
+                val dateEvening =
+                    LocalDateTime.of(date.year, date.month, date.dayOfMonth, 22, 0).toEpochSecond(
+                        ZoneOffset.UTC
+                    )
+                bundle.putString(
+                    EventSearchQueryParams.Date.toString(),
+                    "$dateMorning-$dateEvening"
+                )
+                bundle.putString(
+                    EventSearchQueryParams.Tag.toString(),
+                    resources.getString(R.string.search_description)
+                )
+                Log.d(TAG, "search Time: ${calendarView.date}")
+                findNavController().navigate(R.id.replayFragment, bundle)
+            }, content = {
+                Text(text = resources.getString(R.string.buttom_search))
+            }
+            )
         }
     }
 
@@ -71,33 +105,6 @@ class ReplaySearchFragment : Fragment() {
         Log.v(TAG, "onViewCreated")
         view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =
             resources.getText(R.string.title_search)
-
-        view.findViewById<CalendarView>(R.id.calendarView)
-
-        val time = view.findViewById<CalendarView>(R.id.calendarView).date
-        view.findViewById<MaterialButton>(R.id.search_button).setOnClickListener {
-            val date: LocalDateTime =
-                LocalDateTime.ofInstant(
-                    Instant.ofEpochMilli(currentDate),
-                    ZoneOffset.systemDefault()
-                )
-            val bundle = Bundle()
-            val dateMorning =
-                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 8, 0).toEpochSecond(
-                    ZoneOffset.UTC
-                )
-            val dateEvening =
-                LocalDateTime.of(date.year, date.month, date.dayOfMonth, 22, 0).toEpochSecond(
-                    ZoneOffset.UTC
-                )
-            bundle.putString(EventSearchQueryParams.Date.toString(), "$dateMorning-$dateEvening")
-            bundle.putString(
-                EventSearchQueryParams.Tag.toString(),
-                view.resources.getString(R.string.search_description)
-            )
-            Log.d(TAG, "search Time: $time")
-            Navigation.findNavController(it).navigate(R.id.replayFragment, bundle)
-        }
         super.onViewCreated(view, savedInstanceState)
     }
 }
