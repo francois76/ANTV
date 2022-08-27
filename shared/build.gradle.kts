@@ -16,9 +16,16 @@ kotlin {
         }
     }
 
+
+
+
+
+
     sourceSets {
         sourceSets["commonMain"].dependencies {
-
+            implementation("dev.icerock.moko:mvvm-core:${Versions.Moko.mvvm}") // only ViewModel, EventsDispatcher, Dispatchers.UI
+            implementation("dev.icerock.moko:mvvm-livedata:${Versions.Moko.mvvm}") // api mvvm-core, LiveData and extensions
+            implementation("dev.icerock.moko:mvvm-state:${Versions.Moko.mvvm}") // api mvvm-livedata, ResourceState class and extensions
             // for xml
             implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
             implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")

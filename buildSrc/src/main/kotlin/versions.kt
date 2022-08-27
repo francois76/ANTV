@@ -33,7 +33,10 @@ object Versions {
         const val constraintLayoutCompose = "1.1.0-alpha03"
         const val composeThemeAdapter = "1.1.16"
         const val material3 = "1.0.0-alpha16"
+    }
 
+    object Moko {
+        const val mvvm = "0.13.1"
     }
 
     object Kotlinx {

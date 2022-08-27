@@ -70,6 +70,11 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation("dev.icerock.moko:mvvm-livedata-material:${Versions.Moko.mvvm}") // api mvvm-livedata, Material library android extensions
+    implementation("dev.icerock.moko:mvvm-livedata-glide:${Versions.Moko.mvvm}") // api mvvm-livedata, Glide library android extensions
+    implementation("dev.icerock.moko:mvvm-livedata-swiperefresh:${Versions.Moko.mvvm}") // api mvvm-livedata, SwipeRefreshLayout library android extensions
+    implementation("dev.icerock.moko:mvvm-databinding:${Versions.Moko.mvvm}") // api mvvm-livedata, DataBinding support for Android
+    implementation("dev.icerock.moko:mvvm-viewbinding:${Versions.Moko.mvvm}") // api mvvm-livedata, ViewBinding support for Android
     implementation("com.google.android.material:material:${Versions.Android.material}")
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
 
