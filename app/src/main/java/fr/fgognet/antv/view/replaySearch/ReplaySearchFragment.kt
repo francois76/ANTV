@@ -35,18 +35,6 @@ class ReplaySearchFragment : Fragment() {
 
     private var currentDate: Long = 0L
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(requireContext()).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        setContent {
-            ReplaySearchScreen(
-                model = replaySearchViewModel()
-            )
-        }
-    }
-
     @Composable
     fun ReplaySearchScreen(
         model: replaySearchViewModel?
@@ -95,6 +83,19 @@ class ReplaySearchFragment : Fragment() {
     ) {
         ReplaySearchScreen(model = null)
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            ReplaySearchScreen(
+                model = replaySearchViewModel()
+            )
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.v(TAG, "onViewCreated")
