@@ -11,18 +11,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.soywiz.korim.format.toAndroidBitmap
 import fr.fgognet.antv.view.buildColors
 
 
 @Composable
-fun cardView(data: CardData, bitmap: ImageBitmap) {
+fun cardView(data: CardData, model: CardViewModel?) {
     MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {
         Card {
             Column {
-                Image(bitmap = bitmap, contentDescription = data.description)
+                if (model?.image?.value != null) {
+                    Image(
+                        bitmap = model.image.value!!.toAndroidBitmap().asImageBitmap(),
+                        contentDescription = data.description
+                    )
+                }
                 Column {
                     Button(onClick = { /*TODO*/ }) {
                         Text(text = data.title)
