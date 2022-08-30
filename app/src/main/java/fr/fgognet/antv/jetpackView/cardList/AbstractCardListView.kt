@@ -1,6 +1,5 @@
 package fr.fgognet.antv.jetpackView.cardList
 
-import androidx.cardview.widget.CardView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import fr.fgognet.antv.R
+import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CardViewModel
 
@@ -22,9 +22,8 @@ import fr.fgognet.antv.view.card.CardViewModel
 @Composable
 fun <T : CardData> AbstractCardListView(
     title: String,
-    isCurrentPlaying: Boolean,
     cardDatas: List<T>,
-    cardDataGenerator: (T, CardViewModel) -> CardView,
+    cardDataGenerator: (T, CardViewModel) -> Unit,
     currentPlayingImage: ImageBitmap?
 ) {
     Column {
@@ -38,7 +37,7 @@ fun <T : CardData> AbstractCardListView(
                 cardDataGenerator(cardData, CardViewModel())
             }
         }
-        if (isCurrentPlaying) {
+        if (PlayerService.currentMediaData != null) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,14 +50,16 @@ fun <T : CardData> AbstractCardListView(
                 ) {
                     val (is_playing_thumbnail, is_playing_label, is_playing_title) = createRefs()
 
-                    Text(text = "", modifier = Modifier.constrainAs(is_playing_title) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                        start.linkTo(is_playing_thumbnail.end)
-                        top.linkTo(is_playing_label.bottom)
-                        width = Dimension.fillToConstraints
-                        height = Dimension.fillToConstraints
-                    })
+                    Text(
+                        text = PlayerService.currentMediaData!!.title!!,
+                        modifier = Modifier.constrainAs(is_playing_title) {
+                            bottom.linkTo(parent.bottom)
+                            end.linkTo(parent.end)
+                            start.linkTo(is_playing_thumbnail.end)
+                            top.linkTo(is_playing_label.bottom)
+                            width = Dimension.fillToConstraints
+                            height = Dimension.fillToConstraints
+                        })
                     Image(
                         modifier = Modifier
                             .width(80.dp)

@@ -7,6 +7,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import fr.fgognet.antv.jetpackView.cardList.LiveCardListView
 
 @Composable
 fun ANTVNavHost(
@@ -19,6 +20,7 @@ fun ANTVNavHost(
         modifier = modifier
     ) {
         composable(route = "live") {
+            LiveCardListView()
         }
 
     }

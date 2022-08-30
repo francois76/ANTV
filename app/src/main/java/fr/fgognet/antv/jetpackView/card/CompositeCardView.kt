@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.card
+package fr.fgognet.antv.jetpackView.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
@@ -19,10 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.soywiz.korim.format.toAndroidBitmap
+import fr.fgognet.antv.view.card.CardViewModel
 
 
 @Composable
-fun cardView(
+fun CompositeCardView(
     title: String,
     subTitle: String?,
     description: String,
@@ -76,8 +77,8 @@ fun cardView(
 
 @Preview
 @Composable
-fun cardViewPreview() {
-    cardView(
+fun CompositeCardViewPreview() {
+    CompositeCardView(
         "title", "subtitle", """
         Lorem ipsum dolor sit amet. Et molestiae illo non dolor At ipsa voluptas ex voluptas asperiores ad repudiandae enim eos veritatis eveniet. Aut voluptatum obcaecati At quis maxime ea aliquam consectetur sit error blanditiis.
 
