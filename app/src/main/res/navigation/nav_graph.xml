@@ -37,7 +37,7 @@
         app:destination="@id/liveFragment" />
     <fragment
         android:id="@+id/replaySearchFragment"
-        android:name="fr.fgognet.antv.view.replaySearch.ReplaySearchFragment"
+        android:name="fr.fgognet.antv.jetpackView.replaySearch.ReplaySearchFragment"
         android:label="ReplaySearchFragment">
         <action
             android:id="@+id/action_replaySearchFragment_to_replayFragment"

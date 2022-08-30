@@ -1,5 +1,6 @@
 package fr.fgognet.antv.jetpackView.cardList
 
+import androidx.cardview.widget.CardView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,14 +17,14 @@ import androidx.constraintlayout.compose.Dimension
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CardViewModel
-import fr.fgognet.antv.view.card.cardView
 
 
 @Composable
-fun AbstractCardListView(
+fun <T : CardData> AbstractCardListView(
     title: String,
     isCurrentPlaying: Boolean,
-    cardDatas: List<CardData>,
+    cardDatas: List<T>,
+    cardDataGenerator: (T, CardViewModel) -> CardView,
     currentPlayingImage: ImageBitmap?
 ) {
     Column {
@@ -34,7 +35,7 @@ fun AbstractCardListView(
         )
         LazyRow {
             items(cardDatas) { cardData ->
-                cardView(data = cardData, model = CardViewModel())
+                cardDataGenerator(cardData, CardViewModel())
             }
         }
         if (isCurrentPlaying) {

@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.replaySearch
+package fr.fgognet.antv.jetpackView.replaySearch
 
 import android.icu.util.Calendar
 import android.os.Bundle
