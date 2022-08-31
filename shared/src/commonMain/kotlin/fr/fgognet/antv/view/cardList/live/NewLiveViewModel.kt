@@ -8,7 +8,6 @@ import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.mapping.Bundle
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,12 +18,16 @@ data class CardListViewData(
     var title: String?
 )
 
+private const val TAG = "ANTV/LiveViewModel"
+
 class NewLiveViewModel : ViewModel() {
     private val _cards: MutableLiveData<CardListViewData> =
         MutableLiveData(CardListViewData(cards = arrayListOf(), title = null))
     val cards: LiveData<CardListViewData> = _cards.readOnly()
 
-    fun loadCardData(params: Bundle?, force: Boolean) {
+    fun start() = apply { loadCardData(false) }
+
+    fun loadCardData(force: Boolean) {
         if (_cards.value.title != null && !force) {
             return
         }
@@ -32,7 +35,10 @@ class NewLiveViewModel : ViewModel() {
             val editorial: Editorial = try {
                 EditorialRepository.getEditorialInformation()
             } catch (e: Exception) {
-                Napier.e(e.toString())
+                Napier.e(
+                    e.toString(),
+                    tag = TAG
+                )
                 Editorial(
                     // getApplication<Application>().resources.getString(R.string.fail_load_data),
                     "failed to load data",
@@ -40,7 +46,10 @@ class NewLiveViewModel : ViewModel() {
                     null,
                 )
             }
-            Napier.i("dispatching regenerated view")
+            Napier.i(
+                "dispatching regenerated view",
+                tag = TAG
+            )
             _cards.value =
                 CardListViewData(generateCardData(editorial), editorial.titre)
 
@@ -48,7 +57,10 @@ class NewLiveViewModel : ViewModel() {
     }
 
     private fun generateCardData(editorial: Editorial): List<LiveCardData> {
-        Napier.v("generateCardData")
+        Napier.v(
+            "generateCardData",
+            tag = TAG
+        )
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
             return result

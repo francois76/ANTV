@@ -22,7 +22,8 @@ object EditorialRepository {
 
     @OptIn(ExperimentalXmlUtilApi::class)
     suspend fun getEditorialInformation(): Editorial {
-        Napier.v("getEditorialInformation")
+        Napier.v("getEditorialInformation",
+                    tag = TAG)
         when (Config.currentEnvironment) {
             Environment.NOTHING -> return Editorial(
                 "Titre mock nothing",
@@ -79,7 +80,10 @@ object EditorialRepository {
             )
             Environment.REAL_TIME -> {
                 val client = httpClient()
-                Napier.i("Calling https://videos.assemblee-nationale.fr/php/getedito.php")
+                Napier.i(
+                    "Calling https://videos.assemblee-nationale.fr/php/getedito.php",
+                    tag = TAG
+                )
                 val resultString =
                     client.request("https://videos.assemblee-nationale.fr/php/getedito.php")
                         .body<String>()

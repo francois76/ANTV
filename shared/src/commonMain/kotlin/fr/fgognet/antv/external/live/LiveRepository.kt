@@ -10,11 +10,13 @@ object LiveRepository {
     private const val TAG = "ANTV/LiveRepository"
 
     suspend fun getLiveInformation(): Map<Int, String> {
-        Napier.v("getLiveInformation")
+        Napier.v("getLiveInformation",
+                    tag = TAG)
         val client = httpClient()
         val result = HashMap<Int, String>()
         val url = "https://videos.assemblee-nationale.fr/live/live.txt"
-        Napier.i("Calling $url")
+        Napier.i("Calling $url",
+                    tag = TAG)
         for (line in client.request(url).body<String>().lines()) {
             val k = line.split(" ")[0].toInt()
             result[k] = line.split(" ")[1]

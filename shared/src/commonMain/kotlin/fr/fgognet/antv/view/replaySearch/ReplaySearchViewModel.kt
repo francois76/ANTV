@@ -6,6 +6,8 @@ import fr.fgognet.antv.mapping.Bundle
 import io.github.aakira.napier.Napier
 import kotlinx.datetime.*
 
+private const val TAG = "ANTV/ReplaySearchViewModel"
+
 class ReplaySearchViewModel : ViewModel() {
 
 
@@ -35,7 +37,10 @@ class ReplaySearchViewModel : ViewModel() {
             // resources.getString(R.string.search_description)
             "Recherche personnalisée"
         )
-        Napier.d("search Time: $date")
+        Napier.d(
+            "search Time: $date",
+            tag = TAG
+        )
         return bundle
     }
 

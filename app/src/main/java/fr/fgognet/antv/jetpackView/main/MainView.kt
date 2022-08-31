@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import fr.fgognet.antv.R
+import fr.fgognet.antv.config.initCommonLogs
 import fr.fgognet.antv.view.buildColors
 
 /**
@@ -23,6 +24,7 @@ import fr.fgognet.antv.view.buildColors
 class ANTVActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initCommonLogs()
         setContent {
             ANTVApp()
         }
