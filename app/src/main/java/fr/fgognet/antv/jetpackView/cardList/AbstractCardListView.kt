@@ -23,8 +23,8 @@ import fr.fgognet.antv.view.card.CardViewModel
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
-    cardDataGenerator: (T, CardViewModel) -> Unit,
-    currentPlayingImage: ImageBitmap?
+    currentPlayingImage: ImageBitmap?,
+    cardDataGenerator: @Composable (T, CardViewModel) -> Unit
 ) {
     Column {
         Text(

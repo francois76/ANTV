@@ -14,18 +14,14 @@ fun LiveCardListView(model: NewLiveViewModel) {
     AbstractCardListView(
         title = stringResource(id = R.string.title_live),
         cardDatas = model.cards.value.cards,
-        cardDataGenerator = @Composable
-        fun(
-            cardData: LiveCardData, viewModel
-        ) {
-            CompositeCardView(
-                title = cardData.title,
-                subTitle = cardData.subtitle,
-                description = cardData.description,
-                buttonName = cardData.buttonLabel,
-                model = viewModel
-            )
-        },
         currentPlayingImage = PlayerService.currentMediaData!!.bitmap?.asImageBitmap()
-    )
+    ) { cardData: LiveCardData, viewModel ->
+        CompositeCardView(
+            title = cardData.title,
+            subTitle = cardData.subtitle,
+            description = cardData.description,
+            buttonName = cardData.buttonLabel,
+            model = viewModel
+        )
+    }
 }
