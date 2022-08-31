@@ -14,7 +14,7 @@ fun LiveCardListView(model: NewLiveViewModel) {
     AbstractCardListView(
         title = stringResource(id = R.string.title_live),
         cardDatas = model.cards.value.cards,
-        currentPlayingImage = PlayerService.currentMediaData!!.bitmap?.asImageBitmap()
+        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
     ) { cardData: LiveCardData, viewModel ->
         CompositeCardView(
             title = cardData.title,

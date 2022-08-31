@@ -14,8 +14,8 @@
     <application
         android:banner="@mipmap/ic_launcher"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/Theme.ANTV">
 
         <meta-data
@@ -27,7 +27,7 @@
             android:resource="@mipmap/ic_launcher_adaptive_fore" />
 
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".jetpackView.main.ANTVActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:supportsPictureInPicture="true">
