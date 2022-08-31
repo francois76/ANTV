@@ -8,6 +8,7 @@ import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.external.image.ImageRepository.getLiveImage
 
+
 class CardViewModel : ViewModel() {
     private val _image: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val image: LiveData<Bitmap?> = _image.readOnly()

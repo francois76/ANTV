@@ -6,7 +6,7 @@ import fr.fgognet.antv.mapping.Bundle
 import io.github.aakira.napier.Napier
 import kotlinx.datetime.*
 
-class replaySearchViewModel : ViewModel() {
+class ReplaySearchViewModel : ViewModel() {
 
 
     fun makeSearchBundle(currentDate: Long): Bundle {

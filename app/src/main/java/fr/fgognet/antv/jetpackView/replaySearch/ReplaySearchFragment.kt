@@ -37,7 +37,7 @@ class ReplaySearchFragment : Fragment() {
 
     @Composable
     fun ReplaySearchScreen(
-        model: replaySearchViewModel?
+        model: ReplaySearchViewModel?
     ) {
         MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {
             Column(
@@ -91,7 +91,7 @@ class ReplaySearchFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             ReplaySearchScreen(
-                model = replaySearchViewModel()
+                model = ReplaySearchViewModel()
             )
         }
     }

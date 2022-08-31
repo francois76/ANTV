@@ -7,12 +7,13 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.jetpackView.card.CompositeCardView
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.cardList.live.LiveCardData
+import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 
 @Composable
-fun LiveCardListView() {
+fun LiveCardListView(model: NewLiveViewModel) {
     AbstractCardListView(
         title = stringResource(id = R.string.title_live),
-        cardDatas = arrayListOf(),
+        cardDatas = model.cards.value.cards,
         cardDataGenerator = @Composable
         fun(
             cardData: LiveCardData, viewModel

@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import fr.fgognet.antv.jetpackView.cardList.LiveCardListView
+import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 
 @Composable
 fun ANTVNavHost(
@@ -20,7 +21,7 @@ fun ANTVNavHost(
         modifier = modifier
     ) {
         composable(route = "live") {
-            LiveCardListView()
+            LiveCardListView(NewLiveViewModel())
         }
 
     }
