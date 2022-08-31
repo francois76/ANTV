@@ -12,7 +12,7 @@ import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 @Composable
 fun LiveCardListView(model: NewLiveViewModel) {
     AbstractCardListView(
-        title = stringResource(id = R.string.title_live),
+        title = model.cards.value.title ?: stringResource(id = R.string.title_live),
         cardDatas = model.cards.value.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
     ) { cardData: LiveCardData, viewModel ->

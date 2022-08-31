@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -17,6 +18,7 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CardViewModel
+import fr.fgognet.antv.view.cardList.live.LiveCardData
 
 
 @Composable
@@ -30,7 +32,6 @@ fun <T : CardData> AbstractCardListView(
         Text(
             text = title, modifier = Modifier
                 .fillMaxWidth()
-                .height(0.dp)
         )
         LazyRow {
             items(cardDatas) { cardData ->
@@ -41,7 +42,6 @@ fun <T : CardData> AbstractCardListView(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(0.dp)
             ) {
                 ConstraintLayout(
                     modifier = Modifier
@@ -84,5 +84,28 @@ fun <T : CardData> AbstractCardListView(
                 }
             }
         }
+    }
+}
+
+@Preview(widthDp = 200, heightDp = 400)
+@Composable
+fun CardListViewPreview(
+) {
+    AbstractCardListView(
+        title = "mytitle",
+        cardDatas = arrayListOf(
+            LiveCardData(
+                "card1",
+                "subtitle1",
+                "loremipsum...",
+                "",
+                "",
+                "Live",
+                true
+            )
+        ),
+        currentPlayingImage = null
+    ) { _, _ ->
+
     }
 }
