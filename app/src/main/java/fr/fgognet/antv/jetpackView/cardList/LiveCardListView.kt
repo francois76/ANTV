@@ -1,6 +1,8 @@
 package fr.fgognet.antv.jetpackView.cardList
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -8,6 +10,7 @@ import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.jetpackView.card.CompositeCardView
 import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.view.cardList.live.CardListViewData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 
@@ -19,9 +22,15 @@ fun LiveCardListView(
         }
     )
 ) {
+    val state by model.cards.ld().observeAsState()
+    LiveCardListViewState(state = state)
+}
+
+@Composable
+fun LiveCardListViewState(state: CardListViewData?) {
     AbstractCardListView(
-        title = model.cards.ld().value?.title ?: stringResource(id = R.string.title_live),
-        cardDatas = model.cards.ld().value!!.cards,
+        title = state?.title ?: stringResource(id = R.string.title_live),
+        cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
     ) { cardData: LiveCardData, viewModel ->
         CompositeCardView(
