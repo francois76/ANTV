@@ -38,7 +38,8 @@ fun LiveCardListViewState(state: CardListViewData<LiveCardData>?) {
                 title = cardData.title,
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel
+                buttonName = cardData.buttonLabel,
+                imageCode = cardData.imageCode
             ),
             model = viewModel
         )

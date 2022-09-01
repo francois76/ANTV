@@ -38,7 +38,8 @@ fun PlaylistCardListViewState(state: CardListViewData<PlaylistCardData>?) {
                 title = cardData.title,
                 subTitle = null,
                 description = cardData.description,
-                buttonName = stringResource(id = R.string.card_button_label_playlist)
+                buttonName = stringResource(id = R.string.card_button_label_playlist),
+                imageCode = cardData.imageCode
             ),
             model = viewModel
         )

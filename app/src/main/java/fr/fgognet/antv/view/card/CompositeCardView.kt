@@ -28,6 +28,7 @@ data class GenericCardData(
     var subTitle: String?,
     var description: String,
     var buttonName: String,
+    var imageCode: String,
 )
 
 @Composable
@@ -35,7 +36,7 @@ fun CompositeCardView(
     data: GenericCardData,
     model: CardViewModel
 ) {
-
+    model.loadImage(data.imageCode)
     val state by model.image.ld().observeAsState()
     CompositeCardViewState(
         data = data,
@@ -105,7 +106,7 @@ fun CompositeCardViewPreview() {
 
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
-    """.trimIndent(), "live"
+    """.trimIndent(), "live", ""
         ), null
     )
 }
