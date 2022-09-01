@@ -1,15 +1,13 @@
-package fr.fgognet.antv.view.cardList.live
+package fr.fgognet.antv.view
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.view.card.CardAdapter
-import fr.fgognet.antv.view.cardList.AbstractCardListFragment
-import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
+import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.player.ARG_DESCRIPTION
 import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
 import fr.fgognet.antv.view.player.ARG_TITLE
@@ -23,20 +21,10 @@ import fr.fgognet.antv.view.player.ARG_URL
 private const val TAG = "ANTV/LiveFragment"
 
 
-class LiveFragment : AbstractCardListFragment<LiveCardData>() {
-    override fun initViewModelProvider(savedInstanceState: Bundle?): AbstractCardListViewModel<LiveCardData> {
-        return ViewModelProvider(this)[LiveViewModel::class.java]
-    }
+class LiveFragment {
 
-    override fun getTitle(): String {
-        return resources.getText(R.string.title_live).toString()
-    }
 
-    override fun getResource(): Int {
-        return R.layout.fragment_live
-    }
-
-    override fun buildCardAdapter(): CardAdapter<LiveCardData> {
+    fun buildCardAdapter(context: Context): CardAdapter<LiveCardData> {
         Log.v(TAG, "buildCardAdapter")
         return CardAdapter { cardData, subtitleView, buttonView ->
             subtitleView.text = cardData.subtitle
@@ -44,7 +32,7 @@ class LiveFragment : AbstractCardListFragment<LiveCardData>() {
             buttonView.text = cardData.buttonLabel
             if (cardData.isLive) {
                 val background = TypedValue()
-                context?.theme?.resolveAttribute(
+                context.theme?.resolveAttribute(
                     android.R.attr.colorError,
                     background,
                     true
@@ -70,6 +58,5 @@ class LiveFragment : AbstractCardListFragment<LiveCardData>() {
             }
         }
     }
-
 
 }
