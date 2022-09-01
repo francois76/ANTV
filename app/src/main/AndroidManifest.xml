@@ -27,7 +27,7 @@
             android:resource="@mipmap/ic_launcher_adaptive_fore" />
 
         <activity
-            android:name=".jetpackView.main.ANTVActivity"
+            android:name=".activity.main.MainActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:supportsPictureInPicture="true">

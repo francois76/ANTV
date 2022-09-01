@@ -5,8 +5,9 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.URLSpan
 import android.text.util.Linkify
+import androidx.compose.runtime.Composable
 
-
+@Composable
 fun linkifyHtml(html: String, linkifyMask: Int): Spannable {
     val text = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
     val currentSpans = text.getSpans(0, text.length, URLSpan::class.java)
