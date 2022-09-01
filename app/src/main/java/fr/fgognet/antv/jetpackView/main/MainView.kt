@@ -70,9 +70,12 @@ fun ANTVApp() {
                                     contentDescription = stringResource(id = item.nameID)
                                 )
                             },
-                            label = { stringResource(id = item.nameID) },
+                            label = { Text(stringResource(id = item.nameID)) },
                             selected = selectedItem == index,
-                            onClick = { selectedItem = index }
+                            onClick = {
+                                selectedItem = index
+                                navController.navigateSingleTopTo(item.id)
+                            }
                         )
                     }
                 }

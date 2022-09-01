@@ -32,8 +32,9 @@ fun <T : CardData> AbstractCardListView(
         Text(
             text = title, modifier = Modifier
                 .fillMaxWidth()
+                .weight(1f)
         )
-        LazyRow {
+        LazyRow(modifier = Modifier.weight(8f)) {
             items(cardDatas) { cardData ->
                 cardDataGenerator(cardData, CardViewModel())
             }
@@ -42,6 +43,7 @@ fun <T : CardData> AbstractCardListView(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
             ) {
                 ConstraintLayout(
                     modifier = Modifier
