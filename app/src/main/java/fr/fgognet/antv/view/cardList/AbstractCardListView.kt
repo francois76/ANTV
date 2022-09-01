@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.cardList
+package fr.fgognet.antv.view.cardList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

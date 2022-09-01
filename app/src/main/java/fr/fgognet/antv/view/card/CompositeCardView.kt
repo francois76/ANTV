@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.card
+package fr.fgognet.antv.view.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.soywiz.korim.format.toAndroidBitmap
-import fr.fgognet.antv.view.card.CardViewModel
 
 
 @Composable

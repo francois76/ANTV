@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.main
+package fr.fgognet.antv.view.main
 
 import android.text.util.Linkify
 import androidx.compose.foundation.Image

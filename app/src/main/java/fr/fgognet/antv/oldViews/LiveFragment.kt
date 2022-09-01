@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view
+package fr.fgognet.antv.oldViews
 
 import android.content.Context
 import android.graphics.Color
@@ -7,11 +7,11 @@ import android.util.Log
 import android.util.TypedValue
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
+import fr.fgognet.antv.oldViews.player.ARG_DESCRIPTION
+import fr.fgognet.antv.oldViews.player.ARG_IMAGE_CODE
+import fr.fgognet.antv.oldViews.player.ARG_TITLE
+import fr.fgognet.antv.oldViews.player.ARG_URL
 import fr.fgognet.antv.view.cardList.live.LiveCardData
-import fr.fgognet.antv.view.player.ARG_DESCRIPTION
-import fr.fgognet.antv.view.player.ARG_IMAGE_CODE
-import fr.fgognet.antv.view.player.ARG_TITLE
-import fr.fgognet.antv.view.player.ARG_URL
 
 
 /**

@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.main
+package fr.fgognet.antv.view.main
 
 
 import androidx.compose.runtime.Composable
@@ -7,9 +7,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import fr.fgognet.antv.jetpackView.cardList.LiveCardListView
-import fr.fgognet.antv.jetpackView.cardList.PlaylistCardListView
-import fr.fgognet.antv.jetpackView.replaySearch.ReplaySearchView
+import fr.fgognet.antv.view.cardList.LiveCardListView
+import fr.fgognet.antv.view.cardList.PlaylistCardListView
+import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 
 @Composable
 fun ANTVNavHost(

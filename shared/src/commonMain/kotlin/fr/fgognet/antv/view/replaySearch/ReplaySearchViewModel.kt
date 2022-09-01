@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.replaySearch
+package fr.fgognet.antv.view.replaySearch
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams

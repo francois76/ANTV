@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view
+package fr.fgognet.antv.oldViews
 
 import android.widget.Button
 import android.widget.TextView

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/playerFragment"
-        android:name="fr.fgognet.antv.view.player.PlayerFragment"
+        android:name="fr.fgognet.antv.oldViews.player.PlayerFragment"
         android:label="fragment_player"
         tools:layout="@layout/fragment_player">
         <action
@@ -37,7 +37,7 @@
         app:destination="@id/liveFragment" />
     <fragment
         android:id="@+id/replaySearchFragment"
-        android:name="fr.fgognet.antv.jetpackView.replaySearch.ReplaySearchFragment"
+        android:name="fr.fgognet.antv.view.replaySearch.ReplaySearchFragment"
         android:label="ReplaySearchFragment">
         <action
             android:id="@+id/action_replaySearchFragment_to_replayFragment"

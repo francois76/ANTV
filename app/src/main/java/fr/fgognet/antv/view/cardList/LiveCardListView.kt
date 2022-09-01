@@ -1,4 +1,4 @@
-package fr.fgognet.antv.jetpackView.cardList
+package fr.fgognet.antv.view.cardList
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,36 +8,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
-import fr.fgognet.antv.jetpackView.card.CompositeCardView
 import fr.fgognet.antv.service.player.PlayerService
-import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.playlist.NewPlaylistViewModel
-import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
+import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.cardList.live.LiveCardData
+import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 
 @Composable
-fun PlaylistCardListView(
-    model: NewPlaylistViewModel = viewModel(
+fun LiveCardListView(
+    model: NewLiveViewModel = viewModel(
         factory = createViewModelFactory {
-            NewPlaylistViewModel().start()
+            NewLiveViewModel().start()
         }
     )
 ) {
     val state by model.cards.ld().observeAsState()
-    PlaylistCardListViewState(state = state)
+    LiveCardListViewState(state = state)
 }
 
 @Composable
-fun PlaylistCardListViewState(state: CardListViewData<PlaylistCardData>?) {
+fun LiveCardListViewState(state: CardListViewData<LiveCardData>?) {
     AbstractCardListView(
-        title = state?.title ?: stringResource(id = R.string.title_playlist),
+        title = state?.title ?: stringResource(id = R.string.title_live),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: PlaylistCardData, viewModel ->
+    ) { cardData: LiveCardData, viewModel ->
         CompositeCardView(
             title = cardData.title,
-            subTitle = null,
+            subTitle = cardData.subtitle,
             description = cardData.description,
-            buttonName = stringResource(id = R.string.card_button_label_playlist),
+            buttonName = cardData.buttonLabel,
             model = viewModel
         )
     }

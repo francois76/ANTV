@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
-import fr.fgognet.antv.view.CardAdapter
+import fr.fgognet.antv.oldViews.CardAdapter
 
 private const val TAG = "ANTV/PlaylistFragment"
 

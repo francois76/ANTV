@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.player
+package fr.fgognet.antv.oldViews.player
 
 import android.app.Application
 import android.util.Log
