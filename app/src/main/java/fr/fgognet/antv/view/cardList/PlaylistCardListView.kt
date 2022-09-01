@@ -10,6 +10,7 @@ import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.NewPlaylistViewModel
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 
@@ -33,10 +34,12 @@ fun PlaylistCardListViewState(state: CardListViewData<PlaylistCardData>?) {
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
     ) { cardData: PlaylistCardData, viewModel ->
         CompositeCardView(
-            title = cardData.title,
-            subTitle = null,
-            description = cardData.description,
-            buttonName = stringResource(id = R.string.card_button_label_playlist),
+            GenericCardData(
+                title = cardData.title,
+                subTitle = null,
+                description = cardData.description,
+                buttonName = stringResource(id = R.string.card_button_label_playlist)
+            ),
             model = viewModel
         )
     }
