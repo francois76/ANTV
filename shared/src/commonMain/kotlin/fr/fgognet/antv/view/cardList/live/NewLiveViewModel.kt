@@ -1,9 +1,5 @@
 package fr.fgognet.antv.view.cardList.live
 
-import dev.icerock.moko.mvvm.livedata.LiveData
-import dev.icerock.moko.mvvm.livedata.MutableLiveData
-import dev.icerock.moko.mvvm.livedata.readOnly
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
@@ -13,21 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-data class CardListViewData(
-    var cards: List<LiveCardData>,
-    var title: String?
-)
 
 private const val TAG = "ANTV/LiveViewModel"
 
-class NewLiveViewModel : ViewModel() {
-    private val _cards: MutableLiveData<CardListViewData> =
-        MutableLiveData(CardListViewData(cards = arrayListOf(), title = null))
-    val cards: LiveData<CardListViewData> = _cards.readOnly()
+class NewLiveViewModel : AbstractCardListViewModel<LiveCardData>() {
 
-    fun start() = apply { loadCardData(false) }
-
-    fun loadCardData(force: Boolean) {
+    override fun loadCardData(force: Boolean) {
         if (_cards.value.title != null && !force) {
             return
         }
@@ -66,8 +53,7 @@ class NewLiveViewModel : ViewModel() {
             return result
         }
         viewModelScope.launch {
-            var liveInformation: Map<Int, String>
-            liveInformation = LiveRepository.getLiveInformation()
+            val liveInformation: Map<Int, String> = LiveRepository.getLiveInformation()
             withContext(Dispatchers.Main) {
                 for (diffusion in editorial.diffusions!!) {
                     val cardData = LiveCardData(
