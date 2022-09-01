@@ -18,7 +18,7 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.view.buildColors
 
 
-private const val TAG = "ANTV/ReplaySearchFragment"
+private const val TAG = "ANTV/ReplaySearchView"
 
 
 private var currentDate: Long = 0L
