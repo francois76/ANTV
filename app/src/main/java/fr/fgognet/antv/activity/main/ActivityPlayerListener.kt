@@ -2,11 +2,12 @@ package fr.fgognet.antv.activity.main
 
 import android.app.PictureInPictureParams
 import android.util.Log
+import androidx.activity.ComponentActivity
 import fr.fgognet.antv.service.player.PlayerListener
 
 private const val TAG = "ANTV/MainActivityListener"
 
-class ActivityPlayerListener(activity: MainActivity) : PlayerListener {
+class ActivityPlayerListener(activity: ComponentActivity) : PlayerListener {
     var activity = activity
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
