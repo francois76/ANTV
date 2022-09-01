@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import fr.fgognet.antv.jetpackView.cardList.LiveCardListView
+import fr.fgognet.antv.jetpackView.cardList.PlaylistCardListView
 import fr.fgognet.antv.jetpackView.replaySearch.ReplaySearchView
 
 @Composable
@@ -25,6 +26,9 @@ fun ANTVNavHost(
         }
         composable(route = SearchRoute.id) {
             ReplaySearchView()
+        }
+        composable(route = PlaylistRoute.id) {
+            PlaylistCardListView()
         }
 
     }

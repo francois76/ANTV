@@ -11,33 +11,33 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.jetpackView.card.CompositeCardView
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.cardList.CardListViewData
-import fr.fgognet.antv.view.cardList.live.LiveCardData
-import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
+import fr.fgognet.antv.view.cardList.playlist.NewPlaylistViewModel
+import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 
 @Composable
-fun LiveCardListView(
-    model: NewLiveViewModel = viewModel(
+fun PlaylistCardListView(
+    model: NewPlaylistViewModel = viewModel(
         factory = createViewModelFactory {
-            NewLiveViewModel().start()
+            NewPlaylistViewModel().start()
         }
     )
 ) {
     val state by model.cards.ld().observeAsState()
-    LiveCardListViewState(state = state)
+    PlaylistCardListViewState(state = state)
 }
 
 @Composable
-fun LiveCardListViewState(state: CardListViewData<LiveCardData>?) {
+fun PlaylistCardListViewState(state: CardListViewData<PlaylistCardData>?) {
     AbstractCardListView(
-        title = state?.title ?: stringResource(id = R.string.title_live),
+        title = state?.title ?: stringResource(id = R.string.title_playlist),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: LiveCardData, viewModel ->
+    ) { cardData: PlaylistCardData, viewModel ->
         CompositeCardView(
             title = cardData.title,
-            subTitle = cardData.subtitle,
+            subTitle = null,
             description = cardData.description,
-            buttonName = cardData.buttonLabel,
+            buttonName = stringResource(id = R.string.card_button_label_playlist),
             model = viewModel
         )
     }

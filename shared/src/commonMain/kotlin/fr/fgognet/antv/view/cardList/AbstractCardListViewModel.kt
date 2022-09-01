@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.cardList.live
+package fr.fgognet.antv.view.cardList
 
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
