@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -52,47 +53,48 @@ fun CompositeCardViewState(
     buttonClicked: () -> Unit,
     state: Bitmap?
 ) {
-    Column(modifier = Modifier.padding(2.dp, 0.dp)) {
-        ElevatedCard {
-            Column {
-                if (state != null) {
-                    Image(
-                        modifier = Modifier.weight(3f),
-                        bitmap = state.toAndroidBitmap().asImageBitmap(),
-                        contentDescription = data.title
+    ElevatedCard {
+        Column(modifier = Modifier.padding(8.dp)) {
+            if (state != null) {
+                Image(
+                    modifier = Modifier
+                        .weight(3f)
+                        .fillMaxWidth(),
+                    bitmap = state.toAndroidBitmap().asImageBitmap(),
+                    contentDescription = data.title
+                )
+            }
+            Column(modifier = Modifier.weight(8f)) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = buttonClicked,
+                    colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
+                ) {
+                    Text(text = data.buttonName, color = data.buttonTextColor)
+                }
+                Text(
+                    text = data.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                if (data.subTitle != null) {
+                    Text(
+                        text = data.subTitle!!,
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
-                Column(modifier = Modifier.weight(8f)) {
-                    Button(
-                        onClick = buttonClicked,
-                        colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
-                    ) {
-                        Text(text = data.buttonName, color = data.buttonTextColor)
-                    }
-                    Text(
-                        text = data.title,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    if (data.subTitle != null) {
-                        Text(
-                            text = data.subTitle!!,
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                    Text(
-                        modifier = Modifier.scrollable(
-                            ScrollableState { 0F },
-                            enabled = true,
-                            orientation = Orientation.Vertical,
-                        ),
-                        color = MaterialTheme.colorScheme.secondary,
-                        text = data.description,
-                        fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic
-                    )
-                }
+                Text(
+                    modifier = Modifier.scrollable(
+                        ScrollableState { 0F },
+                        enabled = true,
+                        orientation = Orientation.Vertical,
+                    ),
+                    color = MaterialTheme.colorScheme.secondary,
+                    text = data.description,
+                    fontSize = 12.sp,
+                    fontStyle = FontStyle.Italic
+                )
             }
         }
     }
