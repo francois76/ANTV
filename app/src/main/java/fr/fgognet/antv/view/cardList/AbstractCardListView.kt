@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.cardList
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -121,10 +120,10 @@ fun CardListViewPreview(
 
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
-    """, "imageCode1", Bundle()
+    """, "imageCode1", hashMapOf()
             ),
             PlaylistCardData(
-                "title2", "description2", "imageCode1", Bundle()
+                "title2", "description2", "imageCode1", hashMapOf()
             )
         ),
         currentPlayingImage = null

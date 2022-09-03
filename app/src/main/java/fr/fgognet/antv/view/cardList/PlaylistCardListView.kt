@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.cardList
 
-import android.os.Bundle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
@@ -23,7 +23,7 @@ fun PlaylistCardListView(
         factory = createViewModelFactory {
             NewPlaylistViewModel().start()
         }
-    ), goToVideos: (bundle: Bundle) -> Unit
+    ), goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
     PlaylistCardListViewState(state = state, goToVideos = goToVideos)
@@ -32,7 +32,7 @@ fun PlaylistCardListView(
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
-    goToVideos: (bundle: Bundle) -> Unit
+    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_playlist),

@@ -7,6 +7,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.PlayerView
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
@@ -44,14 +45,12 @@ fun ANTVNavHost(
         }
         composable(route = SearchRoute.id) {
             ReplaySearchView(query = {
-                
+                navigateToReplayList(navController, it)
             })
         }
         composable(route = PlaylistRoute.id) {
             PlaylistCardListView(goToVideos = {
-/*                Navigation.findNavController(it)
-                    .navigate(R.id.replayFragment, cardData.targetBundle as Bundle)*/
-                navController.navigateToChild(ReplayRoute.id)
+                navigateToReplayList(navController, it)
             })
         }
         composable(
@@ -84,6 +83,17 @@ fun ANTVNavHost(
         }
 
     }
+}
+
+fun navigateToReplayList(
+    navController: NavHostController,
+    query: Map<EventSearchQueryParams, String>
+) {
+    navController.navigateToChild(
+        "${PlaylistRoute.id}?${
+            query.map { "${it.key}=${it.value}" }.joinToString("&")
+        }"
+    )
 }
 
 fun NavHostController.navigateToChild(route: String) =
