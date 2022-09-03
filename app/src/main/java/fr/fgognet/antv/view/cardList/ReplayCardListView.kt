@@ -11,12 +11,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.service.player.PlayerService
-import fr.fgognet.antv.utils.convertBundleToMap
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
+
+fun convertBundleToMap(b: Bundle): HashMap<EventSearchQueryParams, String> {
+    val result = hashMapOf<EventSearchQueryParams, String>()
+    EventSearchQueryParams.allValues().forEach {
+        if (b.containsKey(it.toString())) {
+            result[it] = URLDecoder.decode(
+                b.getString(it.toString()).toString(),
+                StandardCharsets.UTF_8.toString()
+            )
+        }
+    }
+    return result
+}
 
 @Composable
 fun ReplayCardListView(

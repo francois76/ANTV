@@ -25,7 +25,7 @@ enum class EventSearchQueryParams {
                 Tag
             )
         }
-        
+
     }
 }
 
@@ -34,28 +34,33 @@ object EventSearchRepository {
     private val json = Json { ignoreUnknownKeys = true }
 
     suspend fun findEventSearchByParams(params: HashMap<EventSearchQueryParams, String>): List<EventSearch> {
-        Napier.v("findEventSearchByDate",
-                    tag = TAG)
+        Napier.v(
+            "findEventSearchByDate",
+            tag = TAG
+        )
 
         val requestBuilder = HttpRequestBuilder()
         requestBuilder.url {
             protocol = URLProtocol.HTTPS
             host = "videos.assemblee-nationale.fr"
             path("php/eventsearch.php")
-            parameters.append("file", "/10/55/file.zip")
-            params.filter { it.key != EventSearchQueryParams.Tag }.forEach {
+            params.filter { it.key != EventSearchQueryParams.Tag && it.value != " " }.forEach {
                 parameters.append(it.key.toString(), it.value)
             }
         }
         requestBuilder.build()
         val client = httpClient()
-        Napier.i("Calling ${requestBuilder.build().url}",
-                    tag = TAG)
+        Napier.i(
+            "Calling ${requestBuilder.build().url}",
+            tag = TAG
+        )
 
         val content =
             "[" + client.request(requestBuilder).body<String>().split("[")[1].split("]")[0] + "]"
-        Napier.i(content,
-                    tag = TAG)
+        Napier.i(
+            content,
+            tag = TAG
+        )
         return json.decodeFromString(
             ListSerializer(EventSearch.serializer()),
             content
