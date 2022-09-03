@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import androidx.navigation.Navigation
 import fr.fgognet.antv.R
 import fr.fgognet.antv.oldViews.player.ARG_DESCRIPTION
@@ -31,15 +30,7 @@ class LiveFragment {
             buttonView.isEnabled = cardData.isLive
             buttonView.text = cardData.buttonLabel
             if (cardData.isLive) {
-                val background = TypedValue()
-                context.theme?.resolveAttribute(
-                    android.R.attr.colorError,
-                    background,
-                    true
-                )
-                buttonView.setBackgroundColor(
-                    background.data
-                )
+
                 buttonView.setTextColor(Color.WHITE)
                 buttonView.setOnClickListener {
                     val bundle = Bundle()

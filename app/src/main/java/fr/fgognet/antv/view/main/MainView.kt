@@ -73,11 +73,11 @@ fun ANTVApp() {
                         NavigationBarItem(
                             icon = {
                                 Image(
-                                    painterResource(id = item.iconID),
-                                    contentDescription = stringResource(id = item.nameID)
+                                    painterResource(id = item.iconID!!),
+                                    contentDescription = stringResource(id = item.nameID!!)
                                 )
                             },
-                            label = { Text(stringResource(id = item.nameID)) },
+                            label = { Text(stringResource(id = item.nameID!!)) },
                             selected = selectedItem == index,
                             onClick = {
                                 selectedItem = index

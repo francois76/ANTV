@@ -13,46 +13,52 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
-import fr.fgognet.antv.view.cardList.live.LiveCardData
-import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
+import fr.fgognet.antv.view.cardList.replay.NewReplayViewModel
+import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 
 @Composable
-fun LiveCardListView(
-    model: NewLiveViewModel = viewModel(
+fun ReplayCardListView(
+    model: NewReplayViewModel = viewModel(
         factory = createViewModelFactory {
-            NewLiveViewModel().start()
+            NewReplayViewModel().start()
         }
-    ),
-    goToVideo: (url: String) -> Unit
+    ), goToVideo: (url: String) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
-    LiveCardListViewState(state = state, goToVideo = goToVideo)
+    ReplayCardListViewState(
+        state = state,
+        goToVideo = goToVideo,
+        loadDestination = { model.loadNvs(it) })
 }
 
 @Composable
-fun LiveCardListViewState(
-    state: CardListViewData<LiveCardData>?,
-    goToVideo: (url: String) -> Unit
+fun ReplayCardListViewState(
+    state: CardListViewData<ReplayCardData>?,
+    goToVideo: (url: String) -> Unit,
+    loadDestination: (code: String) -> Unit
 ) {
     AbstractCardListView(
-        title = state?.title ?: stringResource(id = R.string.title_live),
+        title = state?.title ?: stringResource(id = R.string.title_replay),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: LiveCardData, viewModel ->
+    ) { cardData: ReplayCardData, viewModel ->
+        if (cardData.nvsUrl == null) {
+            loadDestination(cardData.nvsCode)
+        }
         CompositeCardView(
             GenericCardData(
                 title = cardData.title,
-                subTitle = cardData.subtitle,
+                subTitle = null,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel,
+                buttonName = stringResource(id = R.string.card_button_label_replay),
                 imageCode = cardData.imageCode,
-                buttonColor = MaterialTheme.colorScheme.onError,
+                buttonColor = MaterialTheme.colorScheme.inversePrimary,
                 buttonTextColor = Color.White
             ),
+            model = viewModel,
             buttonClicked = {
-                goToVideo(cardData.url ?: "")
-            },
-            model = viewModel
+                goToVideo(cardData.nvsUrl ?: "")
+            }
         )
     }
 }

@@ -6,14 +6,12 @@ import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,17 +27,21 @@ data class GenericCardData(
     var description: String,
     var buttonName: String,
     var imageCode: String,
+    var buttonColor: Color,
+    var buttonTextColor: Color
 )
 
 @Composable
 fun CompositeCardView(
     data: GenericCardData,
+    buttonClicked: () -> Unit,
     model: CardViewModel
 ) {
     model.loadImage(data.imageCode)
     val state by model.image.ld().observeAsState()
     CompositeCardViewState(
         data = data,
+        buttonClicked = buttonClicked,
         state = state
     )
 }
@@ -47,6 +49,7 @@ fun CompositeCardView(
 @Composable
 fun CompositeCardViewState(
     data: GenericCardData,
+    buttonClicked: () -> Unit,
     state: Bitmap?
 ) {
     Column(modifier = Modifier.padding(2.dp, 0.dp)) {
@@ -60,8 +63,11 @@ fun CompositeCardViewState(
                     )
                 }
                 Column(modifier = Modifier.weight(8f)) {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = data.buttonName)
+                    Button(
+                        onClick = buttonClicked,
+                        colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
+                    ) {
+                        Text(text = data.buttonName, color = data.buttonTextColor)
                     }
                     Text(
                         text = data.title,
@@ -106,7 +112,8 @@ fun CompositeCardViewPreview() {
 
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
-    """.trimIndent(), "live", ""
-        ), null
+    """.trimIndent(), "live", "",
+            buttonColor = MaterialTheme.colorScheme.secondary, buttonTextColor = Color.White
+        ), buttonClicked = {}, state = null
     )
 }

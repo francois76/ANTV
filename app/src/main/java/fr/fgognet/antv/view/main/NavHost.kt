@@ -7,8 +7,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import fr.fgognet.antv.view.PlayerView
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
+import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 
 @Composable
@@ -22,13 +24,40 @@ fun ANTVNavHost(
         modifier = modifier
     ) {
         composable(route = LiveRoute.id) {
-            LiveCardListView()
+            LiveCardListView(goToVideo = {
+                navController.navigateSingleTopTo(PlayerRoute.id)
+            })
         }
         composable(route = SearchRoute.id) {
             ReplaySearchView()
         }
         composable(route = PlaylistRoute.id) {
-            PlaylistCardListView()
+            PlaylistCardListView(goToVideos = {
+/*                Navigation.findNavController(it)
+                    .navigate(R.id.replayFragment, cardData.targetBundle as Bundle)*/
+                navController.navigateSingleTopTo(ReplayRoute.id)
+            })
+        }
+        composable(route = PlayerRoute.id) {
+            PlayerView()
+        }
+        composable(route = ReplayRoute.id) {
+            ReplayCardListView(goToVideo = {
+/*                val bundle = Bundle()
+                bundle.putString(ARG_URL, urlReplay)
+                bundle.putString(ARG_TITLE, cardData.title)
+                bundle.putString(
+                    ARG_DESCRIPTION,
+                    cardData.description
+                )
+                bundle.putString(
+                    ARG_IMAGE_CODE,
+                    cardData.imageCode
+                )
+                Navigation.findNavController(it)
+                    .navigate(R.id.playerFragment, bundle)*/
+                navController.navigateSingleTopTo(PlayerRoute.id)
+            })
         }
 
     }
