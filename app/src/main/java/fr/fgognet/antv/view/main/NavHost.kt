@@ -43,7 +43,9 @@ fun ANTVNavHost(
             })
         }
         composable(route = SearchRoute.id) {
-            ReplaySearchView()
+            ReplaySearchView(query = {
+                
+            })
         }
         composable(route = PlaylistRoute.id) {
             PlaylistCardListView(goToVideos = {

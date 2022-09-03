@@ -14,7 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.buildColors
 
 
@@ -25,6 +28,12 @@ private var currentDate: Long = 0L
 
 @Composable
 fun ReplaySearchView(
+    model: ReplaySearchViewModel = viewModel(
+        factory = createViewModelFactory {
+            ReplaySearchViewModel().start()
+        }
+    ),
+    query: (queryParams: Map<EventSearchQueryParams, String>) -> Unit
 ) {
     MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {
         Column(
@@ -50,10 +59,7 @@ fun ReplaySearchView(
             )
             Button(
                 onClick = {
-/*                    findNavController().navigate(
-                        R.id.replayFragment,
-                        model?.makeSearchBundle(currentDate)
-                    )*/
+                    query(model.makeSearchBundle(currentDate))
                 },
                 content = {
                     Text(text = stringResource(id = R.string.buttom_search))

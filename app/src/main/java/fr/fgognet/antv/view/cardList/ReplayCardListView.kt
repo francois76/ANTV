@@ -13,14 +13,14 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
-import fr.fgognet.antv.view.cardList.replay.NewReplayViewModel
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
+import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
 
 @Composable
 fun ReplayCardListView(
-    model: NewReplayViewModel = viewModel(
+    model: ReplayViewModel = viewModel(
         factory = createViewModelFactory {
-            NewReplayViewModel().start()
+            ReplayViewModel().start()
         }
     ), goToVideo: (url: String, imageCode: String) -> Unit
 ) {

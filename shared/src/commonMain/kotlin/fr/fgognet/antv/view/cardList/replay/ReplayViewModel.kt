@@ -14,7 +14,7 @@ import kotlinx.datetime.LocalDateTime
 
 private const val TAG = "ANTV/ReplayViewModel"
 
-class NewReplayViewModel : AbstractCardListViewModel<ReplayCardData>() {
+class ReplayViewModel : AbstractCardListViewModel<ReplayCardData>() {
 
     var searchQueryFields: HashMap<EventSearchQueryParams, String> =
         HashMap<EventSearchQueryParams, String>()
