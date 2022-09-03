@@ -14,12 +14,9 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/LiveViewModel"
 
-class NewLiveViewModel : AbstractCardListViewModel<LiveCardData>() {
+class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
 
-    override fun loadCardData(force: Boolean) {
-        if (_cards.value.title != null && !force) {
-            return
-        }
+    override fun loadCardData(params: Unit) {
         viewModelScope.launch {
             val editorial: Editorial = try {
                 EditorialRepository.getEditorialInformation()

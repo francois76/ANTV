@@ -11,13 +11,13 @@ data class CardListViewData<T : CardData>(
     var title: String?
 )
 
-abstract class AbstractCardListViewModel<T : CardData> : ViewModel() {
+abstract class AbstractCardListViewModel<T : CardData, U> : ViewModel() {
     val _cards: MutableLiveData<CardListViewData<T>> =
         MutableLiveData(CardListViewData(cards = arrayListOf(), title = null))
     val cards: LiveData<CardListViewData<T>> = _cards.readOnly()
 
-    fun start() = apply { loadCardData(false) }
+    fun start(params: U) = apply { loadCardData(params) }
 
-    abstract fun loadCardData(force: Boolean)
+    abstract fun loadCardData(params: U)
 
 }

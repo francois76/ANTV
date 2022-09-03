@@ -14,10 +14,9 @@ import kotlinx.datetime.LocalDateTime
 
 private const val TAG = "ANTV/ReplayViewModel"
 
-class ReplayViewModel : AbstractCardListViewModel<ReplayCardData>() {
+class ReplayViewModel :
+    AbstractCardListViewModel<ReplayCardData, HashMap<EventSearchQueryParams, String>>() {
 
-    var searchQueryFields: HashMap<EventSearchQueryParams, String> =
-        HashMap<EventSearchQueryParams, String>()
 
     fun loadNvs(code: String) {
         _cards.value =
@@ -40,15 +39,12 @@ class ReplayViewModel : AbstractCardListViewModel<ReplayCardData>() {
             })
     }
 
-    override fun loadCardData(force: Boolean) {
+    override fun loadCardData(params: HashMap<EventSearchQueryParams, String>) {
         Napier.v("loadCardData", tag = TAG)
-        if (super.cards.value.title != null && !force) {
-            return
-        }
         viewModelScope.launch {
             val eventSearches: List<EventSearch> = try {
                 EventSearchRepository.findEventSearchByParams(
-                    searchQueryFields
+                    params
                 )
             } catch (e: Exception) {
                 Napier.e(e.toString(), tag = TAG)
@@ -73,7 +69,7 @@ class ReplayViewModel : AbstractCardListViewModel<ReplayCardData>() {
                                 null, subTitle = null
                             )
                         },
-                        searchQueryFields[EventSearchQueryParams.Tag] ?: ""
+                        params[EventSearchQueryParams.Tag] ?: ""
                     )
             }
         }
