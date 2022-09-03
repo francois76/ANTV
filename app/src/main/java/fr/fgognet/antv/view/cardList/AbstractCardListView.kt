@@ -1,13 +1,16 @@
 package fr.fgognet.antv.view.cardList
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,7 +21,9 @@ import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CardViewModel
-import fr.fgognet.antv.view.cardList.live.LiveCardData
+import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.card.GenericCardData
+import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 
 
 @Composable
@@ -96,18 +101,27 @@ fun CardListViewPreview(
     AbstractCardListView(
         title = "mytitle",
         cardDatas = arrayListOf(
-            LiveCardData(
-                "card1",
-                "subtitle1",
-                "loremipsum...",
-                "",
-                "",
-                "Live",
-                true
+            PlaylistCardData(
+                "title1", "description1", "imageCode1", Bundle()
+            ),
+            PlaylistCardData(
+                "title2", "description2", "imageCode1", Bundle()
             )
         ),
         currentPlayingImage = null
-    ) { _, _ ->
-
+    ) { cardData, model ->
+        CompositeCardView(
+            data = GenericCardData(
+                title = cardData.title,
+                subTitle = null,
+                description = cardData.description,
+                buttonName = stringResource(id = R.string.card_button_label_playlist),
+                imageCode = cardData.imageCode,
+                buttonColor = MaterialTheme.colorScheme.primary,
+                buttonTextColor = Color.White
+            ),
+            buttonClicked = {},
+            model = model
+        )
     }
 }
