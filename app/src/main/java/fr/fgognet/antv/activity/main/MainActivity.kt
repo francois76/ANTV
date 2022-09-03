@@ -4,8 +4,8 @@ import android.app.PictureInPictureParams
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.cast.framework.CastContext
 import fr.fgognet.antv.R
 import fr.fgognet.antv.config.initCommonLogs
@@ -18,7 +18,7 @@ import fr.fgognet.antv.view.main.ANTVApp
  */
 private const val TAG = "ANTV/MainActivity"
 
-open class MainActivity : ComponentActivity() {
+open class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
