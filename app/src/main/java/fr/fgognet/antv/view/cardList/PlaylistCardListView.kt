@@ -14,14 +14,14 @@ import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
-import fr.fgognet.antv.view.cardList.playlist.NewPlaylistViewModel
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
+import fr.fgognet.antv.view.cardList.playlist.PlaylistViewModel
 
 @Composable
 fun PlaylistCardListView(
-    model: NewPlaylistViewModel = viewModel(
+    model: PlaylistViewModel = viewModel(
         factory = createViewModelFactory {
-            NewPlaylistViewModel().start()
+            PlaylistViewModel().start(Unit)
         }
     ), goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
 ) {

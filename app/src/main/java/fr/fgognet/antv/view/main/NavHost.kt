@@ -1,6 +1,8 @@
 package fr.fgognet.antv.view.main
 
 
+import android.os.Bundle
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -15,6 +17,8 @@ import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+
+val TAG = "ANTV/ANTVNavHost"
 
 @Composable
 fun ANTVNavHost(
@@ -64,7 +68,12 @@ fun ANTVNavHost(
                 it.arguments?.getString(PlayerRoute.imageCode)
             PlayerView(url, imageCode)
         }
-        composable(route = ReplayRoute.id) {
+        composable(
+            route = ReplayRoute.id,
+            arguments = ReplayRoute.arguments,
+            deepLinks = ReplayRoute.deepLinks
+        ) {
+            val navStackEntry = it
             ReplayCardListView(goToVideo = { url, imageCode ->
                 navController.navigateToChild(
                     "${PlayerRoute.id}/${
@@ -79,7 +88,7 @@ fun ANTVNavHost(
                         )
                     }"
                 )
-            })
+            }, arguments = navStackEntry.arguments ?: Bundle())
         }
 
     }
@@ -98,6 +107,7 @@ fun navigateToReplayList(
 
 fun NavHostController.navigateToChild(route: String) =
     this.navigate(route) {
+        Log.d(TAG, "navigate to $route")
         // Avoid multiple copies of the same destination when
         // reselecting the same item
         launchSingleTop = true
@@ -107,6 +117,7 @@ fun NavHostController.navigateToChild(route: String) =
 
 fun NavHostController.navigateToTop(route: String) =
     this.navigate(route) {
+        Log.d(TAG, "navigate to $route")
         popUpTo(
             this@navigateToTop.graph.findStartDestination().id
         ) {

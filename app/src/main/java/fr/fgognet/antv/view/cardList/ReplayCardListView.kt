@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.cardList
 
+import android.os.Bundle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.utils.convertBundleToMap
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
@@ -18,12 +20,14 @@ import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
 
 @Composable
 fun ReplayCardListView(
-    model: ReplayViewModel = viewModel(
-        factory = createViewModelFactory {
-            ReplayViewModel().start()
-        }
-    ), goToVideo: (url: String, imageCode: String) -> Unit
+    goToVideo: (url: String, imageCode: String) -> Unit,
+    arguments: Bundle
 ) {
+    val model: ReplayViewModel = viewModel(
+        factory = createViewModelFactory {
+            ReplayViewModel().start(convertBundleToMap(arguments))
+        }
+    )
     val state by model.cards.ld().observeAsState()
     ReplayCardListViewState(
         state = state,

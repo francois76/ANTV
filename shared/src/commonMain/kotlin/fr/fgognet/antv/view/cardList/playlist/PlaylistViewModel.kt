@@ -7,7 +7,7 @@ import io.github.aakira.napier.Napier
 
 private const val TAG = "ANTV/LiveViewModel"
 
-class NewPlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
+class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
 
     override fun loadCardData(params: Unit) {
         Napier.v("loadCardData", tag = TAG)

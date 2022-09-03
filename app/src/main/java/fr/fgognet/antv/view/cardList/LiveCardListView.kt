@@ -20,7 +20,7 @@ import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
 fun LiveCardListView(
     model: NewLiveViewModel = viewModel(
         factory = createViewModelFactory {
-            NewLiveViewModel().start()
+            NewLiveViewModel().start(Unit)
         }
     ),
     goToVideo: (url: String, imageCode: String) -> Unit

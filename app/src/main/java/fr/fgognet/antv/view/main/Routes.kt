@@ -5,6 +5,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import fr.fgognet.antv.R
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 
 interface Route {
     val arguments: List<NamedNavArgument>?
@@ -38,7 +39,18 @@ object ReplayRoute : Route {
     override val id = "replay"
     override val nameID = R.string.title_replay
     override val iconID: Nothing? = null
-    override val arguments: Nothing? = null
+    override val arguments: List<NamedNavArgument> = EventSearchQueryParams.allValues().map {
+        navArgument(
+            it.toString()
+        )
+        { type = NavType.StringType }
+    }
+    val deepLinks = listOf(
+        navDeepLink {
+            uriPattern =
+                "antv://$id?Date={Date}&TypeVideo={TypeVideo}&Commission={Commission}&Tag={Tag}}"
+        }
+    )
 }
 
 object PlayerRoute : Route {
