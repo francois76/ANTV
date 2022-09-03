@@ -39,8 +39,9 @@ fun LiveCardListViewState(
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
     ) { cardData: LiveCardData, viewModel ->
-        CompositeCardView(
-            GenericCardData(
+        var genericCardData: GenericCardData
+        if (cardData.isLive) {
+            genericCardData = GenericCardData(
                 title = cardData.title,
                 subTitle = cardData.subtitle,
                 description = cardData.description,
@@ -48,7 +49,21 @@ fun LiveCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.onError,
                 buttonTextColor = Color.White
-            ),
+            )
+        } else {
+            genericCardData = GenericCardData(
+                title = cardData.title,
+                subTitle = cardData.subtitle,
+                description = cardData.description,
+                buttonName = cardData.buttonLabel,
+                imageCode = cardData.imageCode,
+                buttonColor = MaterialTheme.colorScheme.primary,
+                buttonTextColor = Color.Black,
+                enableButton = false
+            )
+        }
+        CompositeCardView(
+            genericCardData,
             buttonClicked = {
                 goToVideo(cardData.url ?: "")
             },

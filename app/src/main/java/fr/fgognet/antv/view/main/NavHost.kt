@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.main
 
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -25,6 +26,18 @@ fun ANTVNavHost(
     ) {
         composable(route = LiveRoute.id) {
             LiveCardListView(goToVideo = {
+                val bundle = Bundle()
+/*                bundle.putString(ARG_URL, cardData.url)
+                bundle.putString(ARG_TITLE, cardData.title)
+                bundle.putString(
+                    ARG_DESCRIPTION,
+                    cardData.description
+                )
+                bundle.putString(
+                    ARG_IMAGE_CODE,
+                    cardData.imageCode
+                )
+                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)*/
                 navController.navigateSingleTopTo(PlayerRoute.id)
             })
         }

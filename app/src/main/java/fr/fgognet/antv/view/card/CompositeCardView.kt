@@ -29,7 +29,8 @@ data class GenericCardData(
     var buttonName: String,
     var imageCode: String,
     var buttonColor: Color,
-    var buttonTextColor: Color
+    var buttonTextColor: Color,
+    var enableButton: Boolean = true
 )
 
 @Composable
@@ -67,6 +68,7 @@ fun CompositeCardViewState(
             Column(modifier = Modifier.weight(8f)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = data.enableButton,
                     onClick = buttonClicked,
                     colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
                 ) {
