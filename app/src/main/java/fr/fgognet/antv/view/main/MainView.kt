@@ -81,7 +81,7 @@ fun ANTVApp() {
                             selected = selectedItem == index,
                             onClick = {
                                 selectedItem = index
-                                navController.navigateSingleTopTo(item.id)
+                                navController.navigateToTop(item.id)
                             }
                         )
                     }

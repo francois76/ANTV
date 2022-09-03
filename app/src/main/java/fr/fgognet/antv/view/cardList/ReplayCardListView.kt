@@ -22,7 +22,7 @@ fun ReplayCardListView(
         factory = createViewModelFactory {
             NewReplayViewModel().start()
         }
-    ), goToVideo: (url: String) -> Unit
+    ), goToVideo: (url: String, imageCode: String) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
     ReplayCardListViewState(
@@ -34,7 +34,7 @@ fun ReplayCardListView(
 @Composable
 fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
-    goToVideo: (url: String) -> Unit,
+    goToVideo: (url: String, imageCode: String) -> Unit,
     loadDestination: (code: String) -> Unit
 ) {
     AbstractCardListView(
@@ -53,11 +53,12 @@ fun ReplayCardListViewState(
                 buttonName = stringResource(id = R.string.card_button_label_replay),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.inversePrimary,
-                buttonTextColor = Color.White
+                buttonTextColor = Color.White,
+                enableButton = true
             ),
             model = viewModel,
             buttonClicked = {
-                goToVideo(cardData.nvsUrl ?: "")
+                goToVideo(cardData.nvsUrl ?: "", cardData.imageCode)
             }
         )
     }

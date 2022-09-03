@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -13,6 +12,8 @@ import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ANTVNavHost(
@@ -25,20 +26,20 @@ fun ANTVNavHost(
         modifier = modifier
     ) {
         composable(route = LiveRoute.id) {
-            LiveCardListView(goToVideo = {
-                val bundle = Bundle()
-/*                bundle.putString(ARG_URL, cardData.url)
-                bundle.putString(ARG_TITLE, cardData.title)
-                bundle.putString(
-                    ARG_DESCRIPTION,
-                    cardData.description
+            LiveCardListView(goToVideo = { url, imageCode ->
+                navController.navigateToChild(
+                    "${PlayerRoute.id}/${
+                        URLEncoder.encode(
+                            url,
+                            StandardCharsets.UTF_8.toString()
+                        )
+                    }/${
+                        URLEncoder.encode(
+                            imageCode,
+                            StandardCharsets.UTF_8.toString()
+                        )
+                    }"
                 )
-                bundle.putString(
-                    ARG_IMAGE_CODE,
-                    cardData.imageCode
-                )
-                Navigation.findNavController(it).navigate(R.id.playerFragment, bundle)*/
-                navController.navigateSingleTopTo(PlayerRoute.id)
             })
         }
         composable(route = SearchRoute.id) {
@@ -48,47 +49,57 @@ fun ANTVNavHost(
             PlaylistCardListView(goToVideos = {
 /*                Navigation.findNavController(it)
                     .navigate(R.id.replayFragment, cardData.targetBundle as Bundle)*/
-                navController.navigateSingleTopTo(ReplayRoute.id)
+                navController.navigateToChild(ReplayRoute.id)
             })
         }
-        composable(route = PlayerRoute.id) {
-            PlayerView()
+        composable(
+            route = "${PlayerRoute.id}/{${PlayerRoute.url}}/{${PlayerRoute.imageCode}}",
+            arguments = PlayerRoute.arguments,
+            deepLinks = PlayerRoute.deepLinks
+        ) {
+            val url =
+                it.arguments?.getString(PlayerRoute.url)
+            val imageCode =
+                it.arguments?.getString(PlayerRoute.imageCode)
+            PlayerView(url, imageCode)
         }
         composable(route = ReplayRoute.id) {
-            ReplayCardListView(goToVideo = {
-/*                val bundle = Bundle()
-                bundle.putString(ARG_URL, urlReplay)
-                bundle.putString(ARG_TITLE, cardData.title)
-                bundle.putString(
-                    ARG_DESCRIPTION,
-                    cardData.description
+            ReplayCardListView(goToVideo = { url, imageCode ->
+                navController.navigateToChild(
+                    "${PlayerRoute.id}/${
+                        URLEncoder.encode(
+                            url,
+                            StandardCharsets.UTF_8.toString()
+                        )
+                    }/${
+                        URLEncoder.encode(
+                            imageCode,
+                            StandardCharsets.UTF_8.toString()
+                        )
+                    }"
                 )
-                bundle.putString(
-                    ARG_IMAGE_CODE,
-                    cardData.imageCode
-                )
-                Navigation.findNavController(it)
-                    .navigate(R.id.playerFragment, bundle)*/
-                navController.navigateSingleTopTo(PlayerRoute.id)
             })
         }
 
     }
 }
 
-fun NavHostController.navigateSingleTopTo(route: String) =
+fun NavHostController.navigateToChild(route: String) =
     this.navigate(route) {
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-        // on the back stack as users select items
-        popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
-        ) {
-            saveState = true
-        }
         // Avoid multiple copies of the same destination when
         // reselecting the same item
         launchSingleTop = true
         // Restore state when reselecting a previously selected item
+        restoreState = true
+    }
+
+fun NavHostController.navigateToTop(route: String) =
+    this.navigate(route) {
+        popUpTo(
+            this@navigateToTop.graph.findStartDestination().id
+        ) {
+            saveState = true
+        }
+        launchSingleTop = true
         restoreState = true
     }

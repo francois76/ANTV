@@ -30,7 +30,7 @@ data class GenericCardData(
     var imageCode: String,
     var buttonColor: Color,
     var buttonTextColor: Color,
-    var enableButton: Boolean = true
+    var enableButton: Boolean
 )
 
 @Composable
@@ -117,7 +117,7 @@ fun CompositeCardViewPreview() {
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
     """.trimIndent(), "live", "",
-            buttonColor = MaterialTheme.colorScheme.secondary, buttonTextColor = Color.White
+            buttonColor = MaterialTheme.colorScheme.secondary, buttonTextColor = Color.White, true
         ), buttonClicked = {}, state = null
     )
 }

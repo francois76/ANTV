@@ -47,7 +47,8 @@ fun PlaylistCardListViewState(
                 buttonName = stringResource(id = R.string.card_button_label_playlist),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
-                buttonTextColor = Color.White
+                buttonTextColor = Color.White,
+                enableButton = true
             ),
             model = viewModel,
             buttonClicked = {

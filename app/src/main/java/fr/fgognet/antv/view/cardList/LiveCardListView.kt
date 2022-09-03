@@ -23,7 +23,7 @@ fun LiveCardListView(
             NewLiveViewModel().start()
         }
     ),
-    goToVideo: (url: String) -> Unit
+    goToVideo: (url: String, imageCode: String) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
     LiveCardListViewState(state = state, goToVideo = goToVideo)
@@ -32,7 +32,7 @@ fun LiveCardListView(
 @Composable
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
-    goToVideo: (url: String) -> Unit
+    goToVideo: (url: String, imageCode: String) -> Unit
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_live),
@@ -48,7 +48,8 @@ fun LiveCardListViewState(
                 buttonName = cardData.buttonLabel,
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.onError,
-                buttonTextColor = Color.White
+                buttonTextColor = Color.White,
+                enableButton = true
             )
         } else {
             genericCardData = GenericCardData(
@@ -65,7 +66,7 @@ fun LiveCardListViewState(
         CompositeCardView(
             genericCardData,
             buttonClicked = {
-                goToVideo(cardData.url ?: "")
+                goToVideo(cardData.url ?: "", cardData.imageCode)
             },
             model = viewModel
         )
