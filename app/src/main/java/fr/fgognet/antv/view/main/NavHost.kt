@@ -69,7 +69,7 @@ fun ANTVNavHost(
             PlayerView(url, imageCode)
         }
         composable(
-            route = ReplayRoute.id,
+            route = "${ReplayRoute.id}/${ReplayRoute.query}",
             arguments = ReplayRoute.arguments,
             deepLinks = ReplayRoute.deepLinks
         ) {
@@ -99,8 +99,19 @@ fun navigateToReplayList(
     query: Map<EventSearchQueryParams, String>
 ) {
     navController.navigateToChild(
-        "${PlaylistRoute.id}?${
-            query.map { "${it.key}=${it.value}" }.joinToString("&")
+        "${ReplayRoute.id}/${
+            EventSearchQueryParams.allValues().joinToString("/") {
+                if (query.containsKey(it)) {
+                    "$it=${
+                        URLEncoder.encode(
+                            query.get(it),
+                            StandardCharsets.UTF_8.toString()
+                        )
+                    }"
+                } else {
+                    "$it= "
+                }
+            }
         }"
     )
 }

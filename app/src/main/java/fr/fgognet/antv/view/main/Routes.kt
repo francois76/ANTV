@@ -45,10 +45,11 @@ object ReplayRoute : Route {
         )
         { type = NavType.StringType }
     }
+    val query = EventSearchQueryParams.allValues().joinToString("/") { "$it={$it}" }
     val deepLinks = listOf(
         navDeepLink {
             uriPattern =
-                "antv://$id?Date={Date}&TypeVideo={TypeVideo}&Commission={Commission}&Tag={Tag}}"
+                "antv://$id/$query"
         }
     )
 }
