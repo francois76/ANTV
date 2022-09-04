@@ -1,8 +1,10 @@
 package fr.fgognet.antv.view.main
 
+import android.os.Bundle
 import androidx.navigation.*
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -86,4 +88,14 @@ fun getArguments(argumentNames: List<Any>): List<NamedNavArgument> {
         )
         { type = NavType.StringType }
     }
+}
+
+fun getEncodedArgument(arguments: Bundle?, key: String): String {
+    if (arguments == null) {
+        return ""
+    }
+    return URLDecoder.decode(
+        arguments.getString(key).toString(),
+        StandardCharsets.UTF_8.toString()
+    )
 }

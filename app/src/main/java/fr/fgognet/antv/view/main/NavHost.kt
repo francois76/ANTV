@@ -58,16 +58,12 @@ fun ANTVNavHost(
             arguments = PlayerRoute.arguments,
             deepLinks = PlayerRoute.deepLinks
         ) {
-            val url =
-                it.arguments?.getString("url")
-            val imageCode =
-                it.arguments?.getString("image_code")
-            val title =
-                it.arguments?.getString("title")
-            val description =
-                it.arguments?.getString("description")
+            val url = getEncodedArgument(it.arguments, "url")
+            val imageCode = getEncodedArgument(it.arguments, "image_code")
+            val title = getEncodedArgument(it.arguments, "title")
+            val description = getEncodedArgument(it.arguments, "description")
             PlayerView(
-                url = url ?: "",
+                url = url,
                 imageCode = imageCode,
                 title = title,
                 description = description,
@@ -79,18 +75,20 @@ fun ANTVNavHost(
             deepLinks = ReplayRoute.deepLinks
         ) {
             val navStackEntry = it
-            ReplayCardListView(goToVideo = { url, imageCode, title, description ->
-                navController.navigateToChild(
-                    callRouteWithArguments(
-                        PlayerRoute.id, hashMapOf(
-                            "url" to url,
-                            "image_code" to imageCode,
-                            "title" to title,
-                            "description" to description
+            ReplayCardListView(
+                arguments = navStackEntry.arguments ?: Bundle(),
+                goToVideo = { url, imageCode, title, description ->
+                    navController.navigateToChild(
+                        callRouteWithArguments(
+                            PlayerRoute.id, hashMapOf(
+                                "url" to url,
+                                "image_code" to imageCode,
+                                "title" to title,
+                                "description" to description
+                            )
                         )
                     )
-                )
-            }, arguments = navStackEntry.arguments ?: Bundle())
+                })
         }
 
     }
