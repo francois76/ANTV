@@ -86,6 +86,8 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanish}")
+
     listOf(
         "fragment",
         "ui",

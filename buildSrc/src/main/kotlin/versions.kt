@@ -9,6 +9,7 @@ object Versions {
     const val kor = "3.0.0-Beta7"
     const val junit = "4.13.2"
     const val coil = "2.1.0"
+    const val accompanish = "0.25.1"
 
     object Sdk {
         // Sdk and tools

@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.fgognet.antv.R
@@ -30,6 +33,10 @@ fun ANTVApp() {
     val appContext = LocalContext.current
     MaterialTheme(colorScheme = buildColors(context = appContext)) {
         val navController = rememberNavController()
+        val systemUiController = rememberSystemUiController()
+        systemUiController.isSystemBarsVisible = false
+        systemUiController.setSystemBarsColor(Color.Transparent)
+        systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         val modalContent = linkifyHtml(stringResource(id = R.string.credits), Linkify.ALL)
         val modalTitle = stringResource(id = R.string.info)
         Scaffold(
