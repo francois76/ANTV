@@ -23,7 +23,7 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
-    goToVideo: (url: String, imageCode: String) -> Unit
+    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
     LiveCardListViewState(state = state, goToVideo = goToVideo)
@@ -32,7 +32,7 @@ fun LiveCardListView(
 @Composable
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
-    goToVideo: (url: String, imageCode: String) -> Unit
+    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_live),
@@ -66,7 +66,12 @@ fun LiveCardListViewState(
         CompositeCardView(
             genericCardData,
             buttonClicked = {
-                goToVideo(cardData.url ?: "", cardData.imageCode)
+                goToVideo(
+                    cardData.url ?: "",
+                    cardData.imageCode,
+                    cardData.title,
+                    cardData.description
+                )
             },
             model = viewModel
         )

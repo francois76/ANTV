@@ -32,19 +32,16 @@ fun ANTVNavHost(
         modifier = modifier
     ) {
         composable(route = LiveRoute.id) {
-            LiveCardListView(goToVideo = { url, imageCode ->
+            LiveCardListView(goToVideo = { url, imageCode, title, description ->
                 navController.navigateToChild(
-                    "${PlayerRoute.id}/${
-                        URLEncoder.encode(
-                            url,
-                            StandardCharsets.UTF_8.toString()
+                    callRouteWithArguments(
+                        PlayerRoute.id, hashMapOf(
+                            "url" to url,
+                            "imageCode" to imageCode,
+                            "title" to title,
+                            "description" to description
                         )
-                    }/${
-                        URLEncoder.encode(
-                            imageCode,
-                            StandardCharsets.UTF_8.toString()
-                        )
-                    }"
+                    )
                 )
             })
         }
@@ -59,7 +56,7 @@ fun ANTVNavHost(
             })
         }
         composable(
-            route = getRoute(PlayerRoute.id, PlayerRoute.arguments),
+            route = getRoute(PlayerRoute.id, PlayerRoute.argumentNames),
             arguments = PlayerRoute.arguments,
             deepLinks = PlayerRoute.deepLinks
         ) {
@@ -79,24 +76,21 @@ fun ANTVNavHost(
                 setVisible = {})
         }
         composable(
-            route = getRoute(ReplayRoute.id, ReplayRoute.arguments),
+            route = getRoute(ReplayRoute.id, EventSearchQueryParams.allValues()),
             arguments = ReplayRoute.arguments,
             deepLinks = ReplayRoute.deepLinks
         ) {
             val navStackEntry = it
-            ReplayCardListView(goToVideo = { url, imageCode ->
+            ReplayCardListView(goToVideo = { url, imageCode, title, description ->
                 navController.navigateToChild(
-                    "${PlayerRoute.id}/${
-                        URLEncoder.encode(
-                            url,
-                            StandardCharsets.UTF_8.toString()
+                    callRouteWithArguments(
+                        PlayerRoute.id, hashMapOf(
+                            "url" to url,
+                            "imageCode" to imageCode,
+                            "title" to title,
+                            "description" to description
                         )
-                    }/${
-                        URLEncoder.encode(
-                            imageCode,
-                            StandardCharsets.UTF_8.toString()
-                        )
-                    }"
+                    )
                 )
             }, arguments = navStackEntry.arguments ?: Bundle())
         }

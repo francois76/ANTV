@@ -3,6 +3,8 @@ package fr.fgognet.antv.view.main
 import androidx.navigation.*
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 interface Route {
     val arguments: List<NamedNavArgument>?
@@ -43,7 +45,7 @@ object ReplayRoute : Route {
 
 object PlayerRoute : Route {
     override val id = "player"
-    private val argumentNames = arrayListOf("url", "image_code", "title", "description")
+    val argumentNames = arrayListOf("url", "image_code", "title", "description")
     val deepLinks = getNavDeepLinks(id, argumentNames)
     override val nameID: Nothing? = null
     override val iconID: Nothing? = null
@@ -58,6 +60,19 @@ fun getNavDeepLinks(id: String, argumentNames: List<Any>): List<NavDeepLink> {
 
 fun getRoute(id: String, argumentNames: List<Any>): String {
     return "$id/${argumentNamesToString(argumentNames)}"
+}
+
+fun callRouteWithArguments(id: String, arguments: Map<String, String>): String {
+    return "$id/${
+        arguments.map {
+            "${it.key}={${
+                URLEncoder.encode(
+                    it.value,
+                    StandardCharsets.UTF_8.toString()
+                )
+            }}"
+        }.joinToString("/")
+    }"
 }
 
 fun argumentNamesToString(argumentNames: List<Any>): String {
