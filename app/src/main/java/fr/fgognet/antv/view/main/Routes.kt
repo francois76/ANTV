@@ -1,9 +1,6 @@
 package fr.fgognet.antv.view.main
 
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import androidx.navigation.navDeepLink
+import androidx.navigation.*
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 
@@ -39,34 +36,39 @@ object ReplayRoute : Route {
     override val id = "replay"
     override val nameID = R.string.title_replay
     override val iconID: Nothing? = null
-    override val arguments: List<NamedNavArgument> = EventSearchQueryParams.allValues().map {
+    override val arguments: List<NamedNavArgument> =
+        getArguments(EventSearchQueryParams.allValues())
+    val deepLinks = getNavDeepLinks(id, EventSearchQueryParams.allValues())
+}
+
+object PlayerRoute : Route {
+    override val id = "player"
+    private val argumentNames = arrayListOf("url", "image_code", "title", "description")
+    val deepLinks = getNavDeepLinks(id, argumentNames)
+    override val nameID: Nothing? = null
+    override val iconID: Nothing? = null
+    override val arguments: List<NamedNavArgument> = getArguments(argumentNames)
+}
+
+fun getNavDeepLinks(id: String, argumentNames: List<Any>): List<NavDeepLink> {
+    return listOf(
+        navDeepLink { uriPattern = "antv://${getRoute(id, argumentNames)}" }
+    )
+}
+
+fun getRoute(id: String, argumentNames: List<Any>): String {
+    return "$id/${argumentNamesToString(argumentNames)}"
+}
+
+fun argumentNamesToString(argumentNames: List<Any>): String {
+    return argumentNames.joinToString("/") { "$it={$it}" }
+}
+
+fun getArguments(argumentNames: List<Any>): List<NamedNavArgument> {
+    return argumentNames.map {
         navArgument(
             it.toString()
         )
         { type = NavType.StringType }
     }
-    val query = EventSearchQueryParams.allValues().joinToString("/") { "$it={$it}" }
-    val deepLinks = listOf(
-        navDeepLink {
-            uriPattern =
-                "antv://$id/$query"
-        }
-    )
-}
-
-object PlayerRoute : Route {
-    override val id = "player"
-    var url = "url"
-    var imageCode = "image_code"
-    val deepLinks = listOf(
-        navDeepLink { uriPattern = "antv://player/{$url}/{$imageCode}" }
-    )
-    override val nameID: Nothing? = null
-    override val iconID: Nothing? = null
-    override val arguments: List<NamedNavArgument> = listOf(
-        navArgument(url)
-        { type = NavType.StringType },
-        navArgument(imageCode)
-        { type = NavType.StringType }
-    )
 }

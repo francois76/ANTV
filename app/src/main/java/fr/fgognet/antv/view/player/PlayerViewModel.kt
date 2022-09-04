@@ -1,9 +1,16 @@
-package fr.fgognet.antv.oldViews.player
+package fr.fgognet.antv.view.player
 
-import android.app.Application
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.exoplayer2.Player
+import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.service.notification.NotificationService
 import fr.fgognet.antv.service.player.PlayerListener
 import fr.fgognet.antv.service.player.PlayerService
@@ -11,17 +18,23 @@ import fr.fgognet.antv.service.player.PlayerService
 
 private const val TAG = "ANTV/PlayerViewModel"
 
-class PlayerViewModel(application: Application) : AndroidViewModel(application),
+@SuppressLint("StaticFieldLeak")
+class PlayerViewModel : ViewModel(),
     DefaultLifecycleObserver, PlayerListener {
 
-    private val _player = MutableLiveData<Player>()
-    val player: LiveData<Player> get() = _player
+
+    fun start(context: Context) = apply { initialize(context) }
+
+    private lateinit var _context: Context
+    private val _player: MutableLiveData<Player?> = MutableLiveData(null)
+    val player: LiveData<Player?> get() = _player
     private lateinit var observer: Observer<Player>
     private var listenerKey: Int = 0
 
 
-    init {
+    fun initialize(context: Context) {
         Log.v(TAG, "init")
+        this._context = context
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         this.listenerKey = PlayerService.registerListener(this)
         Log.d(TAG, "registered $listenerKey")
@@ -49,7 +62,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         NotificationService.showMediaplayerNotification(
-            this.getApplication(),
+            this._context,
             isPlaying
         )
     }

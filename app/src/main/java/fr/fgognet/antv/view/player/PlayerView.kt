@@ -1,10 +1,94 @@
-package fr.fgognet.antv.view
+package fr.fgognet.antv.view.player
 
-import androidx.compose.material3.Text
+import android.content.Context
+import android.util.Log
+import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ext.cast.CastPlayer
+import com.google.android.exoplayer2.ui.StyledPlayerControlView
+import com.google.android.exoplayer2.ui.StyledPlayerView
+import com.soywiz.korim.format.toAndroidBitmap
+import dev.icerock.moko.mvvm.createViewModelFactory
+import fr.fgognet.antv.R
+import fr.fgognet.antv.external.image.ImageRepository
+import fr.fgognet.antv.service.player.MediaData
+import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.view.main.findActivity
+
+private const val TAG = "ANTV/PlayerView"
 
 @Composable
-fun PlayerView(url: String?, imageCode: String?) {
-    Text(text = url ?: "")
-    Text(text = imageCode ?: "")
+fun PlayerView(
+    url: String,
+    title: String?,
+    description: String?,
+    imageCode: String?,
+    setVisible: (visible: Boolean) -> Unit
+) {
+    PlayerService.updateCurrentMedia(
+        MediaData(
+            url, title, description,
+            ImageRepository.imageCodeToBitmap[imageCode
+                ?: ""]?.toAndroidBitmap()
+        )
+    )
+    PlayerView(setVisible = setVisible)
+}
+
+@Composable
+fun PlayerView(setVisible: (visible: Boolean) -> Unit) {
+    val context: Context = LocalContext.current.applicationContext
+    val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
+        PlayerViewModel().start(context)
+    }
+    )
+    val state by model.player.ld().observeAsState()
+    PlayerViewState(player = state, setVisible = setVisible)
+
+}
+
+@Composable
+fun PlayerViewState(player: Player?, setVisible: (visible: Boolean) -> Unit) {
+    LocalContext.current.findActivity()?.window?.decorView?.keepScreenOn = true
+    AndroidView(
+        factory = { context ->
+            // view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =       it.mediaMetadata.title
+            // view.findViewById<TextView>(R.id.video_description)?.text = mediaData?.description
+            val view = StyledPlayerView(context)
+            if (player is CastPlayer) {
+                view.controllerHideOnTouch = false
+                view.controllerShowTimeoutMs = 0
+                view.showController()
+                view.defaultArtwork = ResourcesCompat.getDrawable(
+                    context.resources!!,
+                    R.drawable.ic_baseline_cast_connected_400,
+                    context.theme
+                )
+            } else { // currentPlayer == localPlayer
+                view.controllerHideOnTouch = false
+                view.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+                view.defaultArtwork = null
+            }
+            view.player = player
+            view.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
+                Log.v(TAG, "Player controler visibility Changed: $visibility")
+                when (visibility) {
+                    View.VISIBLE -> {
+                        setVisible(true)
+                    }
+                    View.GONE -> {
+                        setVisible(false)
+                    }
+                }
+            })
+            view
+        }
+    )
 }

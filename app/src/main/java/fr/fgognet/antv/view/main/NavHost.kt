@@ -3,6 +3,7 @@ package fr.fgognet.antv.view.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -10,10 +11,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.view.PlayerView
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
+import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -58,18 +59,27 @@ fun ANTVNavHost(
             })
         }
         composable(
-            route = "${PlayerRoute.id}/{${PlayerRoute.url}}/{${PlayerRoute.imageCode}}",
+            route = getRoute(PlayerRoute.id, PlayerRoute.arguments),
             arguments = PlayerRoute.arguments,
             deepLinks = PlayerRoute.deepLinks
         ) {
             val url =
-                it.arguments?.getString(PlayerRoute.url)
+                it.arguments?.getString("url")
             val imageCode =
-                it.arguments?.getString(PlayerRoute.imageCode)
-            PlayerView(url, imageCode)
+                it.arguments?.getString("imageCode")
+            val title =
+                it.arguments?.getString("title")
+            val description =
+                it.arguments?.getString("description")
+            PlayerView(
+                url = url ?: "",
+                imageCode = imageCode,
+                title = title,
+                description = description,
+                setVisible = {})
         }
         composable(
-            route = "${ReplayRoute.id}/${ReplayRoute.query}",
+            route = getRoute(ReplayRoute.id, ReplayRoute.arguments),
             arguments = ReplayRoute.arguments,
             deepLinks = ReplayRoute.deepLinks
         ) {
@@ -137,3 +147,26 @@ fun NavHostController.navigateToTop(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+
+private fun hideWindow(view: View) {
+/*    val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
+    val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
+    activity?.let {
+        WindowCompat.setDecorFitsSystemWindows(it.window, false)
+        it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
+    topBar.visibility = View.GONE
+    bottom.visibility = View.GONE*/
+
+}
+
+private fun showWindow(view: View) {
+/*    val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
+    val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
+    activity?.let {
+        WindowCompat.setDecorFitsSystemWindows(it.window, true)
+        it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+    }
+    topBar?.visibility = View.VISIBLE
+    bottom?.visibility = View.VISIBLE*/
+}
