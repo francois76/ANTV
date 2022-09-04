@@ -23,7 +23,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             val b = hashMapOf<EventSearchQueryParams, String>()
                             b[EventSearchQueryParams.Tag] = "Dernières publications"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
@@ -35,7 +36,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Tag] = "Questions au gouvernement"
                             b[EventSearchQueryParams.TypeVideo] = "Questions au gouvernement"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
@@ -47,7 +49,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Tag] = "Séance publique"
                             b[EventSearchQueryParams.TypeVideo] = "Séance publique"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // commission du développement durable
                     PlaylistCardData(
@@ -62,6 +65,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                                 "Développement durable (commission)"
                             return b
                         }(),
+                        isLoaded = false,
+                        image = null
                     ),
                     // commission des affaires économiques
                     PlaylistCardData(
@@ -75,7 +80,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Commission] =
                                 "Affaires économiques (commission)"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // commission des affaires culturelles
                     PlaylistCardData(
@@ -90,7 +96,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Commission] =
                                 "Affaires culturelles et éducation (commission)"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // commission des affaires européennes
                     PlaylistCardData(
@@ -104,7 +111,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Commission] =
                                 "Affaires européennes (commission)"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     ),
                     // commission des affaires étrangères
                     PlaylistCardData(
@@ -118,7 +126,8 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             b[EventSearchQueryParams.Commission] =
                                 "Affaires étrangères (commission)"
                             return b
-                        }(),
+                        }(), isLoaded = false,
+                        image = null
                     )
 
                 ),

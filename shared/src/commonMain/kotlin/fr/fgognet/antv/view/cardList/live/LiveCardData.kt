@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.cardList.live
 
+import com.soywiz.korim.bitmap.Bitmap
 import fr.fgognet.antv.view.card.CardData
 
 data class LiveCardData(
@@ -9,6 +10,8 @@ data class LiveCardData(
     override var imageCode: String,
     var url: String?,
     var buttonLabel: String,
-    var isLive: Boolean
+    var isLive: Boolean,
+    override var isLoaded: Boolean,
+    override var image: Bitmap?
 
 ) : CardData()

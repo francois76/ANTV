@@ -14,13 +14,17 @@ object ImageRepository {
 
 
     suspend fun getLiveImage(image: String): Bitmap {
-        Napier.v("getLiveImage",
-                    tag = TAG)
+        Napier.v(
+            "getLiveImage",
+            tag = TAG
+        )
         if (imageCodeToBitmap.contains(image)) {
             return imageCodeToBitmap[image]!!
         }
-        Napier.i("Calling $image",
-                    tag = TAG)
+        Napier.i(
+            "Calling $image",
+            tag = TAG
+        )
         val bitmap = UrlVfs(image.encodeURLPath()).readBitmap()
         imageCodeToBitmap[image] =
             bitmap

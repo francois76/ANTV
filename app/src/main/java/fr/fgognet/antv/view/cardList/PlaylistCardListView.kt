@@ -23,22 +23,26 @@ fun PlaylistCardListView(
         factory = createViewModelFactory {
             PlaylistViewModel().start(Unit)
         }
-    ), goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
+    ),
+    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
-    PlaylistCardListViewState(state = state, goToVideos = goToVideos)
+    PlaylistCardListViewState(state = state, goToVideos = goToVideos, loadCard = {
+        model.loadCard(it)
+    })
 }
 
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
+    loadCard: (title: String) -> Unit,
     goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_playlist),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: PlaylistCardData, viewModel ->
+    ) { cardData: PlaylistCardData ->
         CompositeCardView(
             GenericCardData(
                 title = cardData.title,
@@ -48,9 +52,11 @@ fun PlaylistCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.White,
-                enableButton = true
+                enableButton = true,
+                isLoaded = cardData.isLoaded,
+                image = cardData.image
             ),
-            model = viewModel,
+            loadCard = loadCard,
             buttonClicked = {
                 goToVideos(cardData.targetBundle)
             }

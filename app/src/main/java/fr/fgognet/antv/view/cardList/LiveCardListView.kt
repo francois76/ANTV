@@ -26,20 +26,27 @@ fun LiveCardListView(
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
 ) {
     val state by model.cards.ld().observeAsState()
-    LiveCardListViewState(state = state, goToVideo = goToVideo)
+    LiveCardListViewState(
+        state = state,
+        goToVideo = goToVideo,
+        loadCard = {
+            model.loadCard(it)
+        }
+    )
 }
 
 @Composable
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
+    loadCard: (title: String) -> Unit,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_live),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: LiveCardData, viewModel ->
-        var genericCardData: GenericCardData
+    ) { cardData: LiveCardData ->
+        val genericCardData: GenericCardData
         if (cardData.isLive) {
             genericCardData = GenericCardData(
                 title = cardData.title,
@@ -49,7 +56,9 @@ fun LiveCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.onError,
                 buttonTextColor = Color.White,
-                enableButton = true
+                enableButton = true,
+                image = cardData.image,
+                isLoaded = cardData.isLoaded
             )
         } else {
             genericCardData = GenericCardData(
@@ -60,7 +69,9 @@ fun LiveCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.Black,
-                enableButton = false
+                enableButton = false,
+                image = cardData.image,
+                isLoaded = cardData.isLoaded
             )
         }
         CompositeCardView(
@@ -70,10 +81,11 @@ fun LiveCardListViewState(
                     cardData.url ?: "",
                     cardData.imageCode,
                     cardData.title,
-                    cardData.description
+                    cardData.description,
                 )
             },
-            model = viewModel
+            loadCard = loadCard
         )
+
     }
 }

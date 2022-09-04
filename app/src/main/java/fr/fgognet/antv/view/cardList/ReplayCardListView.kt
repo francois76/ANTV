@@ -47,12 +47,16 @@ fun ReplayCardListView(
     ReplayCardListViewState(
         state = state,
         goToVideo = goToVideo,
+        loadCard = {
+            model.loadCard(it)
+        },
         loadDestination = { model.loadNvs(it) })
 }
 
 @Composable
 fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
+    loadCard: (title: String) -> Unit,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     loadDestination: (code: String) -> Unit
 ) {
@@ -60,7 +64,7 @@ fun ReplayCardListViewState(
         title = state?.title ?: stringResource(id = R.string.title_replay),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
-    ) { cardData: ReplayCardData, viewModel ->
+    ) { cardData: ReplayCardData ->
         if (cardData.nvsUrl == null) {
             loadDestination(cardData.nvsCode)
         }
@@ -73,9 +77,10 @@ fun ReplayCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.inversePrimary,
                 buttonTextColor = Color.White,
-                enableButton = true
+                enableButton = true,
+                isLoaded = cardData.isLoaded,
+                image = cardData.image
             ),
-            model = viewModel,
             buttonClicked = {
                 goToVideo(
                     cardData.nvsUrl ?: "",
@@ -83,7 +88,8 @@ fun ReplayCardListViewState(
                     cardData.title,
                     cardData.description
                 )
-            }
+            },
+            loadCard = loadCard
         )
     }
 }

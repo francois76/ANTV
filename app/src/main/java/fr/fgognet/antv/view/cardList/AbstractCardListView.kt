@@ -19,7 +19,6 @@ import androidx.constraintlayout.compose.Dimension
 import fr.fgognet.antv.R
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CardData
-import fr.fgognet.antv.view.card.CardViewModel
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
@@ -30,7 +29,7 @@ fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
     currentPlayingImage: ImageBitmap?,
-    cardDataGenerator: @Composable (T, CardViewModel) -> Unit
+    cardDataGenerator: @Composable (T) -> Unit
 ) {
     Column {
         Text(
@@ -47,7 +46,7 @@ fun <T : CardData> AbstractCardListView(
                         .width(300.dp)
                         .padding(horizontal = 2.dp)
                 ) {
-                    cardDataGenerator(cardData, CardViewModel())
+                    cardDataGenerator(cardData)
                 }
             }
         }
@@ -120,14 +119,14 @@ fun CardListViewPreview(
 
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
-    """, "imageCode1", hashMapOf()
+    """, "imageCode1", hashMapOf(), isLoaded = false, image = null
             ),
             PlaylistCardData(
-                "title2", "description2", "imageCode1", hashMapOf()
+                "title2", "description2", "imageCode1", hashMapOf(), isLoaded = false, image = null
             )
         ),
         currentPlayingImage = null
-    ) { cardData, model ->
+    ) { cardData ->
         CompositeCardView(
             data = GenericCardData(
                 title = cardData.title,
@@ -137,10 +136,12 @@ fun CardListViewPreview(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.White,
-                enableButton = true
+                enableButton = true,
+                image = cardData.image,
+                isLoaded = true
             ),
             buttonClicked = {},
-            model = model
+            loadCard = {}
         )
     }
 }
