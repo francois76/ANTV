@@ -47,16 +47,12 @@ fun ReplayCardListView(
     ReplayCardListViewState(
         state = state,
         goToVideo = goToVideo,
-        loadCard = {
-            model.loadCard(it)
-        },
         loadDestination = { model.loadNvs(it) })
 }
 
 @Composable
 fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
-    loadCard: (title: String) -> Unit,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     loadDestination: (code: String) -> Unit
 ) {
@@ -78,8 +74,6 @@ fun ReplayCardListViewState(
                 buttonColor = MaterialTheme.colorScheme.inversePrimary,
                 buttonTextColor = Color.White,
                 enableButton = true,
-                isLoaded = cardData.isLoaded,
-                image = cardData.image
             ),
             buttonClicked = {
                 goToVideo(
@@ -89,7 +83,6 @@ fun ReplayCardListViewState(
                     cardData.description
                 )
             },
-            loadCard = loadCard
         )
     }
 }

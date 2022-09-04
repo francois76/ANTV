@@ -64,7 +64,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                         if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         "",
                         diffusion.getFormattedHour(),
-                        false, isLoaded = false, image = null
+                        false,
                     )
                     if (!liveInformation.containsKey(diffusion.flux)) {
                         result.add(cardData)

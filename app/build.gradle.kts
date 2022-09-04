@@ -109,8 +109,7 @@ dependencies {
     ).forEach {
         implementation("com.google.android.exoplayer", it, Versions.Android.exoplayer)
     }
-
-    implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
+    
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
 
     // Junit

@@ -10,16 +10,16 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.request.ImageRequest
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.soywiz.korim.format.toAndroidBitmap
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.databinding.FragmentPlayerBinding
-import fr.fgognet.antv.external.image.ImageRepository
 import fr.fgognet.antv.service.player.MediaData
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.findActivity
@@ -34,13 +34,26 @@ fun PlayerView(
     imageCode: String?,
     setVisible: (visible: Boolean) -> Unit
 ) {
-    PlayerService.updateCurrentMedia(
-        MediaData(
-            url, title, description,
-            ImageRepository.imageCodeToBitmap[imageCode
-                ?: ""]?.toAndroidBitmap()
+    ImageRequest.Builder(LocalContext.current)
+        .data(imageCode)
+        .target(
+            onSuccess = { result ->
+                PlayerService.updateCurrentMedia(
+                    MediaData(
+                        url, title, description, result.toBitmap(200, 200)
+                    )
+                )
+            },
+            onError = { error ->
+                PlayerService.updateCurrentMedia(
+                    MediaData(
+                        url, title, description, null
+                    )
+                )
+            }
         )
-    )
+        .build()
+
     PlayerView(description = description, setVisible = setVisible)
 }
 

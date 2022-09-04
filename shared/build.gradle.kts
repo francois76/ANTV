@@ -34,7 +34,6 @@ kotlin {
             // logger
             implementation("io.github.aakira:napier:${Versions.napier}")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-            implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
             implementation("com.soywiz.korlibs.korio:korio:${Versions.kor}")
             // ktor
             implementation("io.ktor:ktor-client-core:${Versions.ktor}")

@@ -29,16 +29,12 @@ fun LiveCardListView(
     LiveCardListViewState(
         state = state,
         goToVideo = goToVideo,
-        loadCard = {
-            model.loadCard(it)
-        }
     )
 }
 
 @Composable
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
-    loadCard: (title: String) -> Unit,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
 ) {
     AbstractCardListView(
@@ -57,8 +53,6 @@ fun LiveCardListViewState(
                 buttonColor = MaterialTheme.colorScheme.onError,
                 buttonTextColor = Color.White,
                 enableButton = true,
-                image = cardData.image,
-                isLoaded = cardData.isLoaded
             )
         } else {
             genericCardData = GenericCardData(
@@ -70,8 +64,6 @@ fun LiveCardListViewState(
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.Black,
                 enableButton = false,
-                image = cardData.image,
-                isLoaded = cardData.isLoaded
             )
         }
         CompositeCardView(
@@ -84,7 +76,6 @@ fun LiveCardListViewState(
                     cardData.description,
                 )
             },
-            loadCard = loadCard
         )
 
     }

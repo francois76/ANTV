@@ -27,15 +27,12 @@ fun PlaylistCardListView(
     goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
-    PlaylistCardListViewState(state = state, goToVideos = goToVideos, loadCard = {
-        model.loadCard(it)
-    })
+    PlaylistCardListViewState(state = state, goToVideos = goToVideos)
 }
 
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
-    loadCard: (title: String) -> Unit,
     goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
 ) {
     AbstractCardListView(
@@ -52,11 +49,8 @@ fun PlaylistCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.White,
-                enableButton = true,
-                isLoaded = cardData.isLoaded,
-                image = cardData.image
+                enableButton = true
             ),
-            loadCard = loadCard,
             buttonClicked = {
                 goToVideos(cardData.targetBundle)
             }

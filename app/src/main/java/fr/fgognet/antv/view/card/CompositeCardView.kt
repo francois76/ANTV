@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.soywiz.korim.bitmap.Bitmap
 import fr.fgognet.antv.R
 
 data class GenericCardData(
@@ -29,19 +28,13 @@ data class GenericCardData(
     var buttonColor: Color,
     var buttonTextColor: Color,
     var enableButton: Boolean,
-    var image: Bitmap?,
-    var isLoaded: Boolean
 )
 
 @Composable
 fun CompositeCardView(
     data: GenericCardData,
     buttonClicked: () -> Unit,
-    loadCard: (title: String) -> Unit
 ) {
-    if (!data.isLoaded) {
-        loadCard(data.title)
-    }
     ElevatedCard {
         Column(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
@@ -111,8 +104,6 @@ fun CompositeCardViewPreview() {
             buttonColor = MaterialTheme.colorScheme.secondary,
             buttonTextColor = Color.White,
             enableButton = true,
-            image = null,
-            isLoaded = true,
-        ), buttonClicked = {}, loadCard = {}
+        ), buttonClicked = {}
     )
 }

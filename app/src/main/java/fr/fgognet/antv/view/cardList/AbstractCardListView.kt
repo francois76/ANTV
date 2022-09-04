@@ -119,10 +119,10 @@ fun CardListViewPreview(
 
         Eos velit repellendus id saepe voluptatem eum tempore enim. Ea perspiciatis sapiente est voluptate nihil aut aliquid doloremque vel fugiat dignissimos qui laboriosam praesentium id culpa nemo sit distinctio. Quo autem consectetur vel nisi dolor aperiam sapiente.
         
-    """, "imageCode1", hashMapOf(), isLoaded = false, image = null
+    """, "imageCode1", hashMapOf()
             ),
             PlaylistCardData(
-                "title2", "description2", "imageCode1", hashMapOf(), isLoaded = false, image = null
+                "title2", "description2", "imageCode1", hashMapOf()
             )
         ),
         currentPlayingImage = null
@@ -137,11 +137,8 @@ fun CardListViewPreview(
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.White,
                 enableButton = true,
-                image = cardData.image,
-                isLoaded = true
             ),
             buttonClicked = {},
-            loadCard = {}
         )
     }
 }
