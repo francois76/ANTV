@@ -16,8 +16,6 @@ import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 val TAG = "ANTV/ANTVNavHost"
 
@@ -37,7 +35,7 @@ fun ANTVNavHost(
                     callRouteWithArguments(
                         PlayerRoute.id, hashMapOf(
                             "url" to url,
-                            "imageCode" to imageCode,
+                            "image_code" to imageCode,
                             "title" to title,
                             "description" to description
                         )
@@ -63,7 +61,7 @@ fun ANTVNavHost(
             val url =
                 it.arguments?.getString("url")
             val imageCode =
-                it.arguments?.getString("imageCode")
+                it.arguments?.getString("image_code")
             val title =
                 it.arguments?.getString("title")
             val description =
@@ -86,7 +84,7 @@ fun ANTVNavHost(
                     callRouteWithArguments(
                         PlayerRoute.id, hashMapOf(
                             "url" to url,
-                            "imageCode" to imageCode,
+                            "image_code" to imageCode,
                             "title" to title,
                             "description" to description
                         )
@@ -103,20 +101,16 @@ fun navigateToReplayList(
     query: Map<EventSearchQueryParams, String>
 ) {
     navController.navigateToChild(
-        "${ReplayRoute.id}/${
-            EventSearchQueryParams.allValues().joinToString("/") {
+        callRouteWithArguments(
+            ReplayRoute.id, EventSearchQueryParams.allValues().associate {
                 if (query.containsKey(it)) {
-                    "$it=${
-                        URLEncoder.encode(
-                            query.get(it),
-                            StandardCharsets.UTF_8.toString()
-                        )
-                    }"
+                    Pair(it, query[it]!!)
                 } else {
-                    "$it= "
+                    Pair(it, " ")
                 }
-            }
-        }"
+
+            }.mapKeys { it.key.toString() }
+        )
     )
 }
 

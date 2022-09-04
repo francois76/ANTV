@@ -65,18 +65,18 @@ fun getRoute(id: String, argumentNames: List<Any>): String {
 fun callRouteWithArguments(id: String, arguments: Map<String, String>): String {
     return "$id/${
         arguments.map {
-            "${it.key}={${
+            "${it.key}=${
                 URLEncoder.encode(
                     it.value,
                     StandardCharsets.UTF_8.toString()
                 )
-            }}"
-        }.joinToString("/")
+            }"
+        }.sorted().joinToString("/")
     }"
 }
 
 fun argumentNamesToString(argumentNames: List<Any>): String {
-    return argumentNames.joinToString("/") { "$it={$it}" }
+    return argumentNames.map { it.toString() }.sorted().joinToString("/") { "$it={$it}" }
 }
 
 fun getArguments(argumentNames: List<Any>): List<NamedNavArgument> {
