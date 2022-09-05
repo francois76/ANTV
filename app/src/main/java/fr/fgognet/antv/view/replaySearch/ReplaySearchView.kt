@@ -18,7 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.view.buildColors
+import fr.fgognet.antv.view.utils.buildColors
 
 
 private const val TAG = "ANTV/ReplaySearchView"

@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view
+package fr.fgognet.antv.view.utils
 
 import android.content.Context
 import android.os.Build

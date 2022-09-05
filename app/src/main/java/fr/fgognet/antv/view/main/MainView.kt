@@ -20,8 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
 import fr.fgognet.antv.R
-import fr.fgognet.antv.view.buildColors
 import fr.fgognet.antv.view.utils.HtmlText
+import fr.fgognet.antv.view.utils.buildColors
 
 
 @OptIn(ExperimentalMaterial3Api::class)
