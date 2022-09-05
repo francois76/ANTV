@@ -1,13 +1,10 @@
 package fr.fgognet.antv.activity.main
 
-import android.app.PictureInPictureParams
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.cast.framework.CastContext
-import fr.fgognet.antv.R
 import fr.fgognet.antv.config.initCommonLogs
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.ANTVApp
@@ -43,19 +40,9 @@ open class MainActivity : FragmentActivity() {
     override fun onPause() {
         Log.v(TAG, "onPause")
         PlayerService.unregisterListener(listenerKey)
-        // if we are in picture in picture mode, we need to navigate to the player
-        if (isInPictureInPictureMode) {
-/*            if (navHostFragment.navController.currentDestination?.id != R.id.playerFragment) {
-                navigate(R.id.playerFragment)
-            }*/
-        }
         super.onPause()
     }
 
-    override fun enterPictureInPictureMode(params: PictureInPictureParams): Boolean {
-        Log.v(TAG, "enterPictureInPictureMode")
-        return super.enterPictureInPictureMode(params)
-    }
 
     override fun onDestroy() {
         Log.v(TAG, "onDestroy")

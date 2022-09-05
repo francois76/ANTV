@@ -36,7 +36,6 @@ fun ANTVApp() {
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         val openDialog = remember { mutableStateOf(false) }
-
         if (openDialog.value) {
             AlertDialog(
                 onDismissRequest = {

@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,14 +27,35 @@ val TAG = "ANTV/ANTVNavHost"
 
 @Composable
 fun ANTVNavHost(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    if (context.findActivity()?.isInPictureInPictureMode == true) {
+                        navController.navigateToTop(PlayerRoute.id)
+                    }
+                }
+                else -> {}
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
     NavHost(
         navController = navController,
         startDestination = LiveRoute.id,
         modifier = modifier
     ) {
+
         composable(route = LiveRoute.id) {
             LiveCardListView(goToVideo = { url, imageCode, title, description ->
                 navController.navigateToChild(
@@ -67,6 +94,12 @@ fun ANTVNavHost(
                 imageCode = imageCode,
                 title = title,
                 description = description,
+                setVisible = {})
+        }
+        composable(
+            route = PlayerRoute.id,
+        ) {
+            PlayerView(
                 setVisible = {})
         }
         composable(

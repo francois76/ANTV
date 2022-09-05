@@ -27,6 +27,14 @@ import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
 
+
+@Composable
+fun PlayerView(
+    setVisible: (visible: Boolean) -> Unit
+) {
+    PlayerView(description = PlayerService.currentMediaData?.description, setVisible = setVisible)
+}
+
 @Composable
 fun PlayerView(
     url: String,
