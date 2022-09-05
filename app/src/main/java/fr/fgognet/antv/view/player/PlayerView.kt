@@ -12,6 +12,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.cast.CastPlayer
@@ -34,7 +35,7 @@ fun PlayerView(
     imageCode: String?,
     setVisible: (visible: Boolean) -> Unit
 ) {
-    ImageRequest.Builder(LocalContext.current)
+    val request = ImageRequest.Builder(LocalContext.current)
         .data(imageCode)
         .target(
             onSuccess = { result ->
@@ -53,7 +54,10 @@ fun PlayerView(
             }
         )
         .build()
-
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .crossfade(true)
+        .build()
+    imageLoader.enqueue(request)
     PlayerView(description = description, setVisible = setVisible)
 }
 

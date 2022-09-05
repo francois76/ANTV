@@ -3,7 +3,6 @@ package fr.fgognet.antv.view.main
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.text.util.Linkify
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -20,10 +19,9 @@ import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.fgognet.antv.R
-import fr.fgognet.antv.utils.linkifyHtml
 import fr.fgognet.antv.view.buildColors
+import fr.fgognet.antv.view.utils.HtmlText
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,26 +35,37 @@ fun ANTVApp() {
         systemUiController.isSystemBarsVisible = false
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        val modalContent = linkifyHtml(stringResource(id = R.string.credits), Linkify.ALL)
-        val modalTitle = stringResource(id = R.string.info)
+        val openDialog = remember { mutableStateOf(false) }
+
+        if (openDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog.value = false
+                },
+                title = {
+                    Text(stringResource(id = R.string.info))
+                },
+                text = {
+                    HtmlText(html = stringResource(id = R.string.credits))
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                        }
+                    ) {
+                        Text("Close")
+                    }
+                }
+            )
+        }
         Scaffold(
             topBar = {
                 MediumTopAppBar(title = {
                     Text(text = stringResource(id = R.string.app_name))
                 }, actions = {
                     IconButton(onClick = {
-
-                        val dialog = MaterialAlertDialogBuilder(
-                            appContext,
-                            com.google.android.material.R.style.MaterialAlertDialog_Material3
-                        )
-                            .setTitle(modalTitle)
-                            .setMessage(
-                                modalContent
-                            )
-                            .show()
-/*                        (dialog.findViewById<TextView>(android.R.id.message))?.movementMethod =
-                            LinkMovementMethod.getInstance()*/
+                        openDialog.value = true
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_baseline_info_24),

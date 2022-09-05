@@ -35,7 +35,7 @@ fun CompositeCardView(
     data: GenericCardData,
     buttonClicked: () -> Unit,
 ) {
-    Card(shape = CardDefaults.elevatedShape) {
+    ElevatedCard(colors = CardDefaults.cardColors()) {
         Column(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
                 modifier = Modifier
@@ -45,7 +45,9 @@ fun CompositeCardView(
                 model = data.imageCode,
                 contentDescription = data.title
             )
-            Column(modifier = Modifier.weight(8f)) {
+            Column(modifier = Modifier
+                .weight(8f)
+                .padding(16.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = data.enableButton,
