@@ -40,14 +40,6 @@ open class MainActivity : FragmentActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        Log.v(TAG, "onCreateOptionsMenu")
-        val result = super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.browse, menu)
-        return result
-    }
-
-
     override fun onPause() {
         Log.v(TAG, "onPause")
         PlayerService.unregisterListener(listenerKey)
