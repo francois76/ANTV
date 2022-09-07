@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.cardList
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -29,6 +30,7 @@ fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
     currentPlayingImage: ImageBitmap?,
+    goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
     Column {
@@ -55,6 +57,9 @@ fun <T : CardData> AbstractCardListView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .clickable {
+                        goToCurrentPlaying()
+                    }
             ) {
                 ConstraintLayout(
                     modifier = Modifier
@@ -125,7 +130,8 @@ fun CardListViewPreview(
                 "title2", "description2", "imageCode1", hashMapOf()
             )
         ),
-        currentPlayingImage = null
+        currentPlayingImage = null,
+        goToCurrentPlaying = {},
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(

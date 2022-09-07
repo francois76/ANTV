@@ -3,7 +3,6 @@ package fr.fgognet.antv.view.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -69,7 +68,11 @@ fun ANTVNavHost(
                         )
                     )
                 )
-            })
+            },
+                goToCurrentPlaying = {
+                    navController.navigateToChild(PlayerRoute.id)
+                }
+            )
         }
         composable(route = SearchRoute.id) {
             ReplaySearchView(query = {
@@ -79,7 +82,10 @@ fun ANTVNavHost(
         composable(route = PlaylistRoute.id) {
             PlaylistCardListView(goToVideos = {
                 navigateToReplayList(navController, it)
-            })
+            },
+                goToCurrentPlaying = {
+                    navController.navigateToChild(PlayerRoute.id)
+                })
         }
         composable(
             route = getRoute(PlayerRoute.id, PlayerRoute.argumentNames),
@@ -124,6 +130,9 @@ fun ANTVNavHost(
                             )
                         )
                     )
+                },
+                goToCurrentPlaying = {
+                    navController.navigateToChild(PlayerRoute.id)
                 })
         }
 
@@ -170,25 +179,3 @@ fun NavHostController.navigateToTop(route: String) =
         restoreState = true
     }
 
-private fun hideWindow(view: View) {
-/*    val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
-    val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
-    activity?.let {
-        WindowCompat.setDecorFitsSystemWindows(it.window, false)
-        it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
-    topBar.visibility = View.GONE
-    bottom.visibility = View.GONE*/
-
-}
-
-private fun showWindow(view: View) {
-/*    val topBar = view.rootView.findViewById<AppBarLayout>(R.id.appBarLayout)
-    val bottom = view.rootView.findViewById<NavigationBarView>(R.id.bottom_navigation)
-    activity?.let {
-        WindowCompat.setDecorFitsSystemWindows(it.window, true)
-        it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-    }
-    topBar?.visibility = View.VISIBLE
-    bottom?.visibility = View.VISIBLE*/
-}

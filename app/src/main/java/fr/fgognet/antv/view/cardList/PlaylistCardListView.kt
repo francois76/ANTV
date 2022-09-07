@@ -25,20 +25,27 @@ fun PlaylistCardListView(
         }
     ),
     goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
-    PlaylistCardListViewState(state = state, goToVideos = goToVideos)
+    PlaylistCardListViewState(
+        state = state,
+        goToVideos = goToVideos,
+        goToCurrentPlaying = goToCurrentPlaying
+    )
 }
 
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
-    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit
+    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_playlist),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
+        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(
             GenericCardData(

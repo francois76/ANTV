@@ -23,24 +23,28 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
-    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
+    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
     LiveCardListViewState(
         state = state,
         goToVideo = goToVideo,
+        goToCurrentPlaying = goToCurrentPlaying
     )
 }
 
 @Composable
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
-    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit
+    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_live),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
+        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData
         if (cardData.isLive) {

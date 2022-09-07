@@ -36,6 +36,7 @@ fun convertBundleToMap(b: Bundle): HashMap<EventSearchQueryParams, String> {
 @Composable
 fun ReplayCardListView(
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    goToCurrentPlaying: () -> Unit,
     arguments: Bundle
 ) {
     val model: ReplayViewModel = viewModel(
@@ -47,6 +48,7 @@ fun ReplayCardListView(
     ReplayCardListViewState(
         state = state,
         goToVideo = goToVideo,
+        goToCurrentPlaying = goToCurrentPlaying,
         loadDestination = { model.loadNvs(it) })
 }
 
@@ -54,12 +56,14 @@ fun ReplayCardListView(
 fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
-    loadDestination: (code: String) -> Unit
+    loadDestination: (code: String) -> Unit,
+    goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title ?: stringResource(id = R.string.title_replay),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap()
+        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: ReplayCardData ->
         if (cardData.nvsUrl == null) {
             loadDestination(cardData.nvsCode)
