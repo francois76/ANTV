@@ -3,12 +3,15 @@ package fr.fgognet.antv.view.main
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,10 +28,12 @@ import fr.fgognet.antv.view.utils.buildColors
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(widthDp = 941, heightDp = 423)
 @Composable
 fun ANTVApp() {
     val appContext = LocalContext.current
+
+
     MaterialTheme(colorScheme = buildColors(context = appContext)) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
@@ -62,7 +67,7 @@ fun ANTVApp() {
         Scaffold(
             topBar = {
                 if (!isFullScreen.value) {
-                    MediumTopAppBar(title = {
+                    topBar(title = {
                         Text(text = stringResource(id = R.string.app_name))
                     }, actions = {
                         IconButton(onClick = {
@@ -117,6 +122,41 @@ fun ANTVApp() {
                 setFullScreenMode = {
                     isFullScreen.value = it
                 }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun topBar(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    colors: TopAppBarColors? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null
+) {
+    val configuration = LocalConfiguration.current
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            SmallTopAppBar(
+                title,
+                modifier,
+                navigationIcon,
+                actions,
+                colors ?: TopAppBarDefaults.smallTopAppBarColors(),
+                scrollBehavior
+            )
+        }
+        else -> {
+            MediumTopAppBar(
+                title,
+                modifier,
+                navigationIcon,
+                actions,
+                colors ?: TopAppBarDefaults.mediumTopAppBarColors(),
+                scrollBehavior
             )
         }
     }
