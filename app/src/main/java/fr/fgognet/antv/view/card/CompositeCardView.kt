@@ -1,11 +1,10 @@
 package fr.fgognet.antv.view.card
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,9 +44,11 @@ fun CompositeCardView(
                 model = data.imageCode,
                 contentDescription = data.title
             )
-            Column(modifier = Modifier
-                .weight(8f)
-                .padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(8f)
+                    .padding(16.dp)
+            ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = data.enableButton,
@@ -69,10 +70,9 @@ fun CompositeCardView(
                     )
                 }
                 Text(
-                    modifier = Modifier.scrollable(
-                        ScrollableState { 0F },
+                    modifier = Modifier.verticalScroll(
                         enabled = true,
-                        orientation = Orientation.Vertical,
+                        state = ScrollState(0),
                     ),
                     color = MaterialTheme.colorScheme.secondary,
                     text = data.description,
