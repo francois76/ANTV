@@ -1,12 +1,14 @@
 package fr.fgognet.antv.view.player
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
@@ -91,6 +93,7 @@ fun PlayerViewState(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     AndroidViewBinding(factory = FragmentPlayerBinding::inflate) {
         // view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =       it.mediaMetadata.title
@@ -110,16 +113,23 @@ fun PlayerViewState(
             videoView.defaultArtwork = null
         }
         videoView.player = player
-        videoView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
-            Log.v(TAG, "Player controler visibility Changed: $visibility")
-            when (visibility) {
-                View.VISIBLE -> {
-                    setFullScreen(false)
-                }
-                View.GONE -> {
-                    setFullScreen(true)
-                }
+        when (configuration.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                setFullScreen(true)
             }
-        })
+            else -> {
+                videoView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
+                    Log.v(TAG, "Player controler visibility Changed: $visibility")
+                    when (visibility) {
+                        View.VISIBLE -> {
+                            setFullScreen(false)
+                        }
+                        View.GONE -> {
+                            setFullScreen(true)
+                        }
+                    }
+                })
+            }
+        }
     }
 }
