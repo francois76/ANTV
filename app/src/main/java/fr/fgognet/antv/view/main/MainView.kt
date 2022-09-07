@@ -32,6 +32,7 @@ fun ANTVApp() {
     MaterialTheme(colorScheme = buildColors(context = appContext)) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
+        val isFullScreen = remember { mutableStateOf(false) }
         systemUiController.isSystemBarsVisible = false
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -60,55 +61,62 @@ fun ANTVApp() {
         }
         Scaffold(
             topBar = {
-                MediumTopAppBar(title = {
-                    Text(text = stringResource(id = R.string.app_name))
-                }, actions = {
-                    IconButton(onClick = {
-                        openDialog.value = true
-                    }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_info_24),
-                            contentDescription = "about"
-                        )
-                    }
-                    AndroidView(factory = { context ->
-                        val mediaButton = MediaRouteButton(context)
-                        CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
-                        mediaButton
+                if (!isFullScreen.value) {
+                    MediumTopAppBar(title = {
+                        Text(text = stringResource(id = R.string.app_name))
+                    }, actions = {
+                        IconButton(onClick = {
+                            openDialog.value = true
+                        }) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_baseline_info_24),
+                                contentDescription = "about"
+                            )
+                        }
+                        AndroidView(factory = { context ->
+                            val mediaButton = MediaRouteButton(context)
+                            CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
+                            mediaButton
+                        })
+                        IconButton(onClick = { }) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_baseline_replay_24),
+                                contentDescription = "reload"
+                            )
+                        }
                     })
-                    IconButton(onClick = { }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_replay_24),
-                            contentDescription = "reload"
-                        )
-                    }
-                })
+                }
             }, bottomBar = {
-                var selectedItem by remember { mutableStateOf(0) }
-                val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
-                NavigationBar {
-                    items.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            icon = {
-                                Image(
-                                    painterResource(id = item.iconID!!),
-                                    contentDescription = stringResource(id = item.nameID!!)
-                                )
-                            },
-                            label = { Text(stringResource(id = item.nameID!!)) },
-                            selected = selectedItem == index,
-                            onClick = {
-                                selectedItem = index
-                                navController.navigateToTop(item.id)
-                            }
-                        )
+                if (!isFullScreen.value) {
+                    var selectedItem by remember { mutableStateOf(0) }
+                    val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
+                    NavigationBar {
+                        items.forEachIndexed { index, item ->
+                            NavigationBarItem(
+                                icon = {
+                                    Image(
+                                        painterResource(id = item.iconID!!),
+                                        contentDescription = stringResource(id = item.nameID!!)
+                                    )
+                                },
+                                label = { Text(stringResource(id = item.nameID!!)) },
+                                selected = selectedItem == index,
+                                onClick = {
+                                    selectedItem = index
+                                    navController.navigateToTop(item.id)
+                                }
+                            )
+                        }
                     }
                 }
             }
         ) { innerPadding ->
             ANTVNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                setFullScreenMode = {
+                    isFullScreen.value = it
+                }
             )
         }
     }

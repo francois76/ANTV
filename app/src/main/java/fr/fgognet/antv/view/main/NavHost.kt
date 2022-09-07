@@ -29,7 +29,8 @@ val TAG = "ANTV/ANTVNavHost"
 fun ANTVNavHost(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    setFullScreenMode: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     DisposableEffect(lifecycleOwner) {
@@ -94,13 +95,15 @@ fun ANTVNavHost(
                 imageCode = imageCode,
                 title = title,
                 description = description,
-                setVisible = {})
+                setFullScreen = setFullScreenMode
+            )
         }
         composable(
             route = PlayerRoute.id,
         ) {
             PlayerView(
-                setVisible = {})
+                setFullScreen = setFullScreenMode
+            )
         }
         composable(
             route = getRoute(ReplayRoute.id, EventSearchQueryParams.allValues()),

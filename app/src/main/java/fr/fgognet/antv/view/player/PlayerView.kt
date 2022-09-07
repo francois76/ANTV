@@ -30,9 +30,12 @@ private const val TAG = "ANTV/PlayerView"
 
 @Composable
 fun PlayerView(
-    setVisible: (visible: Boolean) -> Unit
+    setFullScreen: (visible: Boolean) -> Unit
 ) {
-    PlayerView(description = PlayerService.currentMediaData?.description, setVisible = setVisible)
+    PlayerView(
+        description = PlayerService.currentMediaData?.description,
+        setFullScreen = setFullScreen
+    )
 }
 
 @Composable
@@ -41,7 +44,7 @@ fun PlayerView(
     title: String?,
     description: String?,
     imageCode: String?,
-    setVisible: (visible: Boolean) -> Unit
+    setFullScreen: (visible: Boolean) -> Unit
 ) {
     val request = ImageRequest.Builder(LocalContext.current)
         .data(imageCode)
@@ -66,23 +69,27 @@ fun PlayerView(
         .crossfade(true)
         .build()
     imageLoader.enqueue(request)
-    PlayerView(description = description, setVisible = setVisible)
+    PlayerView(description = description, setFullScreen = setFullScreen)
 }
 
 @Composable
-fun PlayerView(description: String?, setVisible: (visible: Boolean) -> Unit) {
+fun PlayerView(description: String?, setFullScreen: (visible: Boolean) -> Unit) {
     val context: Context = LocalContext.current.applicationContext
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
         PlayerViewModel().start(context)
     }
     )
     val state by model.player.ld().observeAsState()
-    PlayerViewState(description = description, player = state, setVisible = setVisible)
+    PlayerViewState(description = description, player = state, setFullScreen = setFullScreen)
 
 }
 
 @Composable
-fun PlayerViewState(description: String?, player: Player?, setVisible: (visible: Boolean) -> Unit) {
+fun PlayerViewState(
+    description: String?,
+    player: Player?,
+    setFullScreen: (visible: Boolean) -> Unit
+) {
     val context = LocalContext.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     AndroidViewBinding(factory = FragmentPlayerBinding::inflate) {
@@ -107,10 +114,10 @@ fun PlayerViewState(description: String?, player: Player?, setVisible: (visible:
             Log.v(TAG, "Player controler visibility Changed: $visibility")
             when (visibility) {
                 View.VISIBLE -> {
-                    setVisible(true)
+                    setFullScreen(false)
                 }
                 View.GONE -> {
-                    setVisible(false)
+                    setFullScreen(true)
                 }
             }
         })
