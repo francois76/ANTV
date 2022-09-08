@@ -160,12 +160,15 @@ fun navigateToReplayList(
 fun NavHostController.navigateToChild(route: String) =
     this.navigate(route) {
         Log.d(TAG, "navigate to $route")
-        // Avoid multiple copies of the same destination when
-        // reselecting the same item
+        popUpTo(
+            this@navigateToChild.graph.findStartDestination().id
+        ) {
+            saveState = true
+        }
         launchSingleTop = true
-        // Restore state when reselecting a previously selected item
-        restoreState = true
+        restoreState = false
     }
+
 
 fun NavHostController.navigateToTop(route: String) =
     this.navigate(route) {

@@ -25,5 +25,6 @@
     <string name="info">Infos </string>
     <string name="playlist_description">Playlist disponibles</string>
     <string name="search_description">Recherche personnalisée</string>
+    <string name="close">Fermer</string>
 
 </resources>

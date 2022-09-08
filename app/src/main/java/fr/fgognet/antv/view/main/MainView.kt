@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -41,7 +42,7 @@ fun ANTVApp() {
         systemUiController.isSystemBarsVisible = false
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        val openDialog = remember { mutableStateOf(false) }
+        val openDialog = rememberSaveable { mutableStateOf(false) }
         if (openDialog.value) {
             AlertDialog(
                 onDismissRequest = {
@@ -59,7 +60,7 @@ fun ANTVApp() {
                             openDialog.value = false
                         }
                     ) {
-                        Text("Close")
+                        Text(stringResource(id = R.string.close))
                     }
                 }
             )
@@ -93,7 +94,7 @@ fun ANTVApp() {
                 }
             }, bottomBar = {
                 if (!isFullScreen.value) {
-                    var selectedItem by remember { mutableStateOf(0) }
+                    var selectedItem by rememberSaveable { mutableStateOf(0) }
                     val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
                     NavigationBar {
                         items.forEachIndexed { index, item ->

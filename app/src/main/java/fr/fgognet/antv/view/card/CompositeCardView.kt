@@ -2,9 +2,7 @@ package fr.fgognet.antv.view.card
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import fr.fgognet.antv.R
 
@@ -54,7 +54,23 @@ fun LandscapeCompositeCardView(
     data: GenericCardData,
     buttonClicked: () -> Unit,
 ) {
-
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
+        val (image_constraint, is_playing_label, is_playing_title) = createRefs()
+        AsyncImage(
+            modifier = Modifier
+                .constrainAs(image_constraint) {
+                    height = Dimension.fillToConstraints
+                }
+                .width(284.dp),
+            placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
+            model = data.imageCode,
+            contentDescription = data.title
+        )
+    }
 }
 
 @Composable
