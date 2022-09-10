@@ -21,6 +21,7 @@ import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
+import fr.fgognet.antv.view.utils.BackPressHandler
 
 val TAG = "ANTV/ANTVNavHost"
 
@@ -32,6 +33,9 @@ fun ANTVNavHost(
     setFullScreenMode: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    BackPressHandler(onBackPressed = {
+        setFullScreenMode(false)
+    })
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
 
