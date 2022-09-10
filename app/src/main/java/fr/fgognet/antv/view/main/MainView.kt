@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -29,7 +30,7 @@ import fr.fgognet.antv.view.utils.buildColors
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(widthDp = 941, heightDp = 423)
+@Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 @Composable
 fun ANTVApp() {
     val appContext = LocalContext.current

@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.cardList
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ fun <T : CardData> AbstractCardListView(
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
+    val configuration = LocalConfiguration.current
     Column {
         Text(
             text = title, modifier = Modifier
@@ -42,11 +45,18 @@ fun <T : CardData> AbstractCardListView(
         LazyRow(
             modifier = Modifier.weight(8f)
         ) {
+            var modifier = Modifier.padding(horizontal = 2.dp)
+            when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    modifier = modifier.width(600.dp)
+                }
+                else -> {
+                    modifier = modifier.width(300.dp)
+                }
+            }
             items(cardDatas) { cardData ->
                 Column(
-                    modifier = Modifier
-                        .width(300.dp)
-                        .padding(horizontal = 2.dp)
+                    modifier = modifier
                 ) {
                     cardDataGenerator(cardData)
                 }
