@@ -37,13 +37,11 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                 "dispatching regenerated view",
                 tag = TAG
             )
-            _cards.value =
-                CardListViewData(generateCardData(editorial), editorial.titre)
-
+            generateCardData(editorial)
         }
     }
 
-    private fun generateCardData(editorial: Editorial): List<LiveCardData> {
+    private fun generateCardData(editorial: Editorial) {
         Napier.v(
             "generateCardData",
             tag = TAG
@@ -54,12 +52,12 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
         )
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
-            return result
+            _cards.value = CardListViewData(arrayListOf<LiveCardData>(), editorial.titre)
         }
         viewModelScope.launch {
             val liveInformation: Map<String, String> = LiveRepository.getLiveInformation()
             withContext(Dispatchers.Main) {
-                for (d in editorial.diffusions) {
+                for (d in editorial.diffusions!!) {
                     val diffusion = d as Diffusion
                     val cardData = LiveCardData(
                         diffusion.libelle
@@ -94,8 +92,8 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
 
                     }
                 }
+                _cards.value = CardListViewData(result, editorial.titre)
             }
         }
-        return result
     }
 }
