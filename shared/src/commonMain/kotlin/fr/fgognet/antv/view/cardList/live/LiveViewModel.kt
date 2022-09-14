@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.cardList.live
 
+import fr.fgognet.antv.external.editorial.Diffusion
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
@@ -22,7 +23,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                 EditorialRepository.getEditorialInformation()
             } catch (e: Exception) {
                 Napier.e(
-                    e.toString(),
+                    e.stackTraceToString(),
                     tag = TAG
                 )
                 Editorial(
@@ -47,14 +48,19 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
             "generateCardData",
             tag = TAG
         )
+        Napier.v(
+            "editorial: $editorial",
+            tag = TAG
+        )
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
             return result
         }
         viewModelScope.launch {
-            val liveInformation: Map<Int, String> = LiveRepository.getLiveInformation()
+            val liveInformation: Map<String, String> = LiveRepository.getLiveInformation()
             withContext(Dispatchers.Main) {
-                for (diffusion in editorial.diffusions!!) {
+                for (d in editorial.diffusions) {
+                    val diffusion = d as Diffusion
                     val cardData = LiveCardData(
                         diffusion.libelle
                         // ?: getApplication<Application>().resources.getString(R.string.no_title_broadcast),

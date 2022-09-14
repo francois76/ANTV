@@ -1,8 +1,9 @@
 package fr.fgognet.antv.external.editorial
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
-import nl.adaptivity.xmlutil.serialization.XmlChildrenName
 import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlPolyChildren
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @XmlSerialName("editorial", "", "")
@@ -13,13 +14,17 @@ data class Editorial(
     var titre: String = "",
     @XmlElement(true)
     var introduction: String = "",
-    @XmlElement(true)
-    @XmlChildrenName("diffusion", "", "")
-    var diffusions: List<Diffusion>? = null,
+    @XmlPolyChildren(
+        [".Diffusion"]
+    ) val diffusions: List<@Polymorphic DiffusionBase>? = null
 
-    )
+)
 
 @Serializable
+open class DiffusionBase
+
+@Serializable
+@XmlSerialName("diffusion", "", "")
 class Diffusion(
     @XmlElement(true)
     var id_organe: String? = null,
@@ -30,7 +35,7 @@ class Diffusion(
     @XmlElement(true)
     var heure: String? = null,
     @XmlElement(true)
-    var flux: Int? = null,
+    var flux: String? = null,
     @XmlElement(true)
     var sujet: String? = null,
     @XmlElement(true)
@@ -59,7 +64,7 @@ class Diffusion(
     var id: String? = null,
     @XmlElement(false)
     var utilisateur: Int? = null,
-) {
+) : DiffusionBase() {
 
 
     fun getFormattedHour(): String {
