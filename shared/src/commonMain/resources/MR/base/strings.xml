@@ -1,4 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="credits"><![CDATA[
+        ANTV <br/>
+        ANTV est une application développée par François GOGNET. <br/>
+        Le code source est disponible sur <a href="https://github.com/francois76/ANTV">github</a><br/>
+        les images d\'illustration ainsi que les différents contenus sont directement affichés
+        depuis le site  <a href="https://videos.assemblee-nationale.fr">de l\'assemblée nationale</a>,
+         aucune ressource appartenant  à l\'assemblée nationale n\'a été intégrée à cette application
+        <a href="https://www.assemblee-nationale.fr/dyn/info-site">Crédits du site de l\'assemblée nationale</a>
+]]></string>
     <string name="app_name">ANTV</string>
     <string name="go_to_live">Aller sur le live</string>
     <string name="live_items">Tous les items de live</string>
@@ -15,16 +25,17 @@
     <string name="title_live">Live</string>
     <string name="title_replay">Replay</string>
     <string name="title_playlist">Playlist</string>
-    <string name="search_summary">Paramètre(s) de recherche : </string>
-    <string name="fail_load_data">Impossible de charger les données </string>
+    <string name="search_summary">Paramètre(s) de recherche :</string>
+    <string name="fail_load_data">Impossible de charger les données</string>
     <string name="no_title_broadcast">Diffusion sans titre</string>
     <string name="card_button_label_live">Live</string>
     <string name="card_button_label_playlist">Accéder</string>
     <string name="card_button_label_replay">Voir</string>
-    <string name="is_playing">Contenu en cours de lecture: </string>
-    <string name="info">Infos </string>
+    <string name="is_playing">Contenu en cours de lecture:</string>
+    <string name="info">Infos</string>
     <string name="playlist_description">Playlist disponibles</string>
     <string name="search_description">Recherche personnalisée</string>
     <string name="close">Fermer</string>
-
 </resources>
+
+

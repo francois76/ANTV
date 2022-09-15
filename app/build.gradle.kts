@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 
@@ -77,7 +78,7 @@ dependencies {
     implementation("dev.icerock.moko:mvvm-viewbinding:${Versions.Moko.mvvm}") // api mvvm-livedata, ViewBinding support for Android
     implementation("com.google.android.material:material:${Versions.Android.material}")
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-
+    implementation("dev.icerock.moko:resources-compose:0.20.1")
 
     implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
 

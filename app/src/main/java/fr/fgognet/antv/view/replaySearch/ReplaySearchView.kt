@@ -11,12 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
-import fr.fgognet.antv.R
+import dev.icerock.moko.resources.compose.stringResource
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.utils.buildColors
 
@@ -59,7 +59,7 @@ fun ReplaySearchView(
                     query(model.makeSearchBundle(currentDate))
                 },
                 content = {
-                    Text(text = stringResource(id = R.string.buttom_search))
+                    Text(text = stringResource(resource = MR.strings.buttom_search))
                 },
                 modifier = Modifier.fillMaxWidth(),
             )

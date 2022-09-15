@@ -6,6 +6,18 @@ plugins {
     kotlin("jvm").version(Versions.kotlin).apply(false)
 }
 
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath("dev.icerock.moko:resources-generator:0.20.1")
+    }
+}
+
+
+
 
 
 task<Delete>("clean") {

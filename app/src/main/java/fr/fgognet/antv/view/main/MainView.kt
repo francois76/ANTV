@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,6 +23,8 @@ import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
+import dev.icerock.moko.resources.compose.stringResource
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.utils.HtmlText
 import fr.fgognet.antv.view.utils.buildColors
@@ -50,10 +51,14 @@ fun ANTVApp() {
                     openDialog.value = false
                 },
                 title = {
-                    Text(stringResource(id = R.string.info))
+                    Text(stringResource(resource = MR.strings.info))
                 },
                 text = {
-                    HtmlText(html = stringResource(id = R.string.credits))
+                    HtmlText(
+                        html = stringResource(
+                            resource = MR.strings.credits
+                        )
+                    )
                 },
                 confirmButton = {
                     TextButton(
@@ -61,7 +66,7 @@ fun ANTVApp() {
                             openDialog.value = false
                         }
                     ) {
-                        Text(stringResource(id = R.string.close))
+                        Text(stringResource(resource = MR.strings.close))
                     }
                 }
             )
@@ -70,7 +75,7 @@ fun ANTVApp() {
             topBar = {
                 if (!isFullScreen.value) {
                     TopBar(title = {
-                        Text(text = stringResource(id = R.string.app_name))
+                        Text(text = stringResource(resource = MR.strings.app_name))
                     }, actions = {
                         IconButton(onClick = {
                             openDialog.value = true
@@ -103,10 +108,10 @@ fun ANTVApp() {
                                 icon = {
                                     Image(
                                         painterResource(id = item.iconID!!),
-                                        contentDescription = stringResource(id = item.nameID!!)
+                                        contentDescription = stringResource(resource = item.nameID!!)
                                     )
                                 },
-                                label = { Text(stringResource(id = item.nameID!!)) },
+                                label = { Text(stringResource(resource = item.nameID!!)) },
                                 selected = selectedItem == index,
                                 onClick = {
                                     selectedItem = index

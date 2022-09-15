@@ -2,7 +2,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization").version(Versions.kotlin)
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
+
 
 kotlin {
     android()
@@ -38,6 +40,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:${Versions.ktor}")
             implementation("io.ktor:ktor-client-json:${Versions.ktor}")
             implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
+            implementation("dev.icerock.moko:resources:0.20.1")
         }
         val commonTest by getting {
             dependencies {
@@ -81,3 +84,13 @@ android {
         targetSdk = Versions.Sdk.targetSdk
     }
 }
+
+multiplatformResources {
+    multiplatformResourcesPackage = "fr.fgognet.antv"
+    disableStaticFrameworkWarning = true
+}
+dependencies {
+    commonMainApi("dev.icerock.moko:resources:0.20.1")
+    commonTestImplementation("dev.icerock.moko:resources-test:0.20.1")
+}
+

@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import fr.fgognet.antv.R
+import dev.icerock.moko.resources.compose.stringResource
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
@@ -100,7 +100,7 @@ fun <T : CardData> AbstractCardListView(
                         bitmap = currentPlayingImage!!, contentDescription = ""
                     )
                     Text(
-                        text = stringResource(id = R.string.is_playing),
+                        text = stringResource(resource = MR.strings.is_playing),
                         modifier = Modifier
                             .height(20.dp)
                             .constrainAs(is_playing_label) {
@@ -148,7 +148,7 @@ fun CardListViewPreview(
                 title = cardData.title,
                 subTitle = null,
                 description = cardData.description,
-                buttonName = stringResource(id = R.string.card_button_label_playlist),
+                buttonName = stringResource(resource = MR.strings.card_button_label_playlist),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.White,
