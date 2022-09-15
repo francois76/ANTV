@@ -53,11 +53,12 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
             _cards.value = CardListViewData(arrayListOf<LiveCardData>(), editorial.titre)
+            return
         }
         viewModelScope.launch {
             val liveInformation: Map<String, String> = LiveRepository.getLiveInformation()
             withContext(Dispatchers.Main) {
-                for (d in editorial.diffusions!!) {
+                for (d in editorial.diffusions) {
                     val diffusion = d as Diffusion
                     val cardData = LiveCardData(
                         diffusion.libelle
