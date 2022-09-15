@@ -52,7 +52,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
         )
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
-            _cards.value = CardListViewData(arrayListOf<LiveCardData>(), editorial.titre)
+            _cards.value = CardListViewData(arrayListOf(), editorial.titre)
             return
         }
         viewModelScope.launch {

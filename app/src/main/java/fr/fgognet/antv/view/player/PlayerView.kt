@@ -58,7 +58,7 @@ fun PlayerView(
                     )
                 )
             },
-            onError = { error ->
+            onError = {
                 PlayerService.updateCurrentMedia(
                     MediaData(
                         url, title, description, null

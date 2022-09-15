@@ -32,7 +32,7 @@ class PlayerViewModel : ViewModel(),
     private var listenerKey: Int = 0
 
 
-    fun initialize(context: Context) {
+    private fun initialize(context: Context) {
         Log.v(TAG, "init")
         this._context = context
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)

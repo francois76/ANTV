@@ -21,9 +21,6 @@ import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.utils.buildColors
 
 
-private const val TAG = "ANTV/ReplaySearchView"
-
-
 private var currentDate: Long = 0L
 
 @Composable

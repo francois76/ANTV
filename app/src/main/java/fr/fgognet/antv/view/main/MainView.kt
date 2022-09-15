@@ -69,7 +69,7 @@ fun ANTVApp() {
         Scaffold(
             topBar = {
                 if (!isFullScreen.value) {
-                    topBar(title = {
+                    TopBar(title = {
                         Text(text = stringResource(id = R.string.app_name))
                     }, actions = {
                         IconButton(onClick = {
@@ -131,7 +131,7 @@ fun ANTVApp() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topBar(
+fun TopBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},

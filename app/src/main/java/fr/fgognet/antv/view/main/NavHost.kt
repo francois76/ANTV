@@ -22,13 +22,13 @@ import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 
-val TAG = "ANTV/ANTVNavHost"
+const val TAG = "ANTV/ANTVNavHost"
 
 @Composable
 fun ANTVNavHost(
+    modifier: Modifier = Modifier,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     setFullScreenMode: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current

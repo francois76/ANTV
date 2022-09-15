@@ -7,8 +7,7 @@ import fr.fgognet.antv.service.player.PlayerListener
 
 private const val TAG = "ANTV/MainActivityListener"
 
-class ActivityPlayerListener(activity: ComponentActivity) : PlayerListener {
-    var activity = activity
+class ActivityPlayerListener(var activity: ComponentActivity) : PlayerListener {
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
