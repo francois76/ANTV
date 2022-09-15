@@ -84,8 +84,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
 
-    implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
-    implementation("androidx.constraintlayout:constraintlayout:${Versions.Androidx.constraintLayout}")
+    implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanish}")
 
     listOf(
@@ -109,14 +108,14 @@ dependencies {
     ).forEach {
         implementation("com.google.android.exoplayer", it, Versions.Android.exoplayer)
     }
-    
+
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
 
     // Junit
     testImplementation("junit:junit:${Versions.junit}")
 
     // Compose
-    implementation("androidx.activity:activity-compose:${Versions.Androidx.compose}")
+    implementation("androidx.activity:activity-compose:${Versions.Androidx.composeActivity}")
     implementation("androidx.constraintlayout:constraintlayout-compose:${Versions.Androidx.constraintLayoutCompose}")
     implementation("androidx.compose.runtime:runtime:${Versions.Androidx.compose}")
     implementation("androidx.compose.ui:ui:${Versions.Androidx.compose}")

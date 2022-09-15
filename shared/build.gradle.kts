@@ -34,7 +34,6 @@ kotlin {
             // logger
             implementation("io.github.aakira:napier:${Versions.napier}")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-            implementation("com.soywiz.korlibs.korio:korio:${Versions.kor}")
             // ktor
             implementation("io.ktor:ktor-client-core:${Versions.ktor}")
             implementation("io.ktor:ktor-client-json:${Versions.ktor}")
@@ -51,11 +50,9 @@ kotlin {
         val androidTest by getting
         val macosArm64Main by getting
         macosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-macosarm64:${Versions.kor}")
         }
         val iosArm64Main by getting
         iosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-iosarm64:${Versions.kor}")
         }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {

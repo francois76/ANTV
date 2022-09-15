@@ -142,23 +142,23 @@ fun TopBar(
     val configuration = LocalConfiguration.current
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
-            SmallTopAppBar(
-                title,
-                modifier,
-                navigationIcon,
-                actions,
-                colors ?: TopAppBarDefaults.smallTopAppBarColors(),
-                scrollBehavior
+            TopAppBar(
+                title = title,
+                modifier = modifier,
+                navigationIcon = navigationIcon,
+                actions = actions,
+                colors = colors ?: TopAppBarDefaults.smallTopAppBarColors(),
+                scrollBehavior = scrollBehavior
             )
         }
         else -> {
             MediumTopAppBar(
-                title,
-                modifier,
-                navigationIcon,
-                actions,
-                colors ?: TopAppBarDefaults.mediumTopAppBarColors(),
-                scrollBehavior
+                title = title,
+                modifier = modifier,
+                navigationIcon = navigationIcon,
+                actions = actions,
+                colors = colors ?: TopAppBarDefaults.mediumTopAppBarColors(),
+                scrollBehavior = scrollBehavior
             )
         }
     }
