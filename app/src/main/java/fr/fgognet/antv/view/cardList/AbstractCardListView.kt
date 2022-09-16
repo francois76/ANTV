@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -21,6 +22,7 @@ import androidx.constraintlayout.compose.Dimension
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
@@ -127,7 +129,7 @@ fun CardListViewPreview(
         title = "mytitle",
         cardDatas = arrayListOf(
             PlaylistCardData(
-                "title1", """
+                ResourceOrText("title1"), """
         Lorem ipsum dolor sit amet. Et molestiae illo non dolor At ipsa voluptas ex voluptas asperiores ad repudiandae enim eos veritatis eveniet. Aut voluptatum obcaecati At quis maxime ea aliquam consectetur sit error blanditiis.
 
         Quo repellendus laborum in atque vitae et tempore corporis ut consequatur consectetur quo debitis dignissimos. Cum dicta fugiat ut autem accusantium et ipsa modi. Ea corrupti quidem et magni voluptas est sunt delectus id deleniti dolores! Cum eveniet soluta et rerum repellat ut dolor magni in internos quia.
@@ -137,7 +139,7 @@ fun CardListViewPreview(
     """, "imageCode1", hashMapOf()
             ),
             PlaylistCardData(
-                "title2", "description2", "imageCode1", hashMapOf()
+                ResourceOrText("title2"), "description2", "imageCode1", hashMapOf()
             )
         ),
         currentPlayingImage = null,
@@ -145,7 +147,7 @@ fun CardListViewPreview(
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(
-                title = cardData.title,
+                title = cardData.title.toString(LocalContext.current),
                 subTitle = null,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_playlist),

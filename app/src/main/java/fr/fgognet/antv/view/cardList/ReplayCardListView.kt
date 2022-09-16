@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
@@ -59,8 +60,10 @@ fun ReplayCardListViewState(
     loadDestination: (code: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
+    val context = LocalContext.current
     AbstractCardListView(
-        title = state?.title ?: stringResource(resource = MR.strings.title_replay),
+        title = state?.title?.toString(context)
+            ?: stringResource(resource = MR.strings.title_replay),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
         goToCurrentPlaying = goToCurrentPlaying
@@ -70,7 +73,7 @@ fun ReplayCardListViewState(
         }
         CompositeCardView(
             GenericCardData(
-                title = cardData.title,
+                title = cardData.title.toString(context),
                 subTitle = null,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_replay),
@@ -83,7 +86,7 @@ fun ReplayCardListViewState(
                 goToVideo(
                     cardData.nvsUrl ?: "",
                     cardData.imageCode,
-                    cardData.title,
+                    cardData.title.toString(context),
                     cardData.description
                 )
             },

@@ -1,6 +1,8 @@
 package fr.fgognet.antv.view.cardList.playlist
 
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import io.github.aakira.napier.Napier
@@ -16,7 +18,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                 arrayListOf(
                     // the last uploads
                     PlaylistCardData(
-                        "Dernières publications",
+                        ResourceOrText("Dernières publications"),
                         "Les dernières publications",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -27,7 +29,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
-                        "Questions au gouvernement",
+                        ResourceOrText("Questions au gouvernement"),
                         "Toute les questions au gouvernement",
                         "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -39,7 +41,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
-                        "Séance publique",
+                        ResourceOrText("Séance publique"),
                         "Toutes les séances publiques ainsi que les questions au gouvernement non montées",
                         "https://videos.assemblee-nationale.fr/live/images/14000000.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -51,7 +53,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // commission du développement durable
                     PlaylistCardData(
-                        "Commission au développement durable",
+                        ResourceOrText("Commission au développement durable"),
                         "Tous les replays de la commission au développement durable",
                         "https://videos.assemblee-nationale.fr/live/images/419865.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -65,7 +67,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // commission des affaires économiques
                     PlaylistCardData(
-                        "Commission des affaires économiques",
+                        ResourceOrText("Commission des affaires économiques"),
                         "Tous les replays de la commission des affaires économiques",
                         "https://videos.assemblee-nationale.fr/live/images/419610.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -79,7 +81,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // commission des affaires culturelles
                     PlaylistCardData(
-                        "Commission des affaires culturelles et éducation",
+                        ResourceOrText("Commission des affaires culturelles et éducation"),
                         "Tous les replays de la commission des affaires culturelles et éducation",
                         "https://videos.assemblee-nationale.fr/live/images/419604.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -94,7 +96,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // commission des affaires européennes
                     PlaylistCardData(
-                        "Commission des affaires européennes",
+                        ResourceOrText("Commission des affaires européennes"),
                         "Tous les replays de la commission des affaires européennes",
                         "https://videos.assemblee-nationale.fr/live/images/415287.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -108,7 +110,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     ),
                     // commission des affaires étrangères
                     PlaylistCardData(
-                        "Commission des affaires étrangères",
+                        ResourceOrText("Commission des affaires étrangères"),
                         "Tous les replays de la commission des affaires étrangères",
                         "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
                         fun(): Map<EventSearchQueryParams, String> {
@@ -122,8 +124,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                     )
 
                 ),
-                // app.resources.getString(R.string.playlist_description)
-                "playlist"
+                ResourceOrText(stringResource = MR.strings.playlist_description)
             )
     }
 }

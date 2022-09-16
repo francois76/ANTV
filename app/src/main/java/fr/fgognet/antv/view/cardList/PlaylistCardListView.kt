@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
@@ -42,14 +43,15 @@ fun PlaylistCardListViewState(
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
-        title = state?.title ?: stringResource(resource = MR.strings.title_playlist),
+        title = state?.title?.toString(LocalContext.current)
+            ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(
             GenericCardData(
-                title = cardData.title,
+                title = cardData.title.toString(LocalContext.current),
                 subTitle = null,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_playlist),

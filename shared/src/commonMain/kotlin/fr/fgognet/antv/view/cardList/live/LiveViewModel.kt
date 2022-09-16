@@ -1,10 +1,12 @@
 package fr.fgognet.antv.view.cardList.live
 
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.external.editorial.Diffusion
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import io.github.aakira.napier.Napier
@@ -52,7 +54,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
         )
         val result = arrayListOf<LiveCardData>()
         if (editorial.diffusions == null) {
-            _cards.value = CardListViewData(arrayListOf(), editorial.titre)
+            _cards.value = CardListViewData(arrayListOf(), ResourceOrText(editorial.titre))
             return
         }
         viewModelScope.launch {
@@ -61,15 +63,18 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                 for (d in editorial.diffusions) {
                     val diffusion = d as Diffusion
                     val cardData = LiveCardData(
-                        diffusion.libelle
-                        // ?: getApplication<Application>().resources.getString(R.string.no_title_broadcast),
-                            ?: "no_title",
-                        diffusion.lieu ?: "",
-                        diffusion.sujet?.replace("<br>", "\n") ?: "",
-                        if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                        "",
-                        diffusion.getFormattedHour(),
-                        false,
+                        title = ResourceOrText(
+                            string = diffusion.libelle,
+                            stringResource = MR.strings.no_title_broadcast
+                        ),
+                        subtitle = diffusion.lieu ?: "",
+                        description = diffusion.sujet?.replace("<br>", "\n") ?: "",
+                        imageCode = if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
+                        url = "",
+                        buttonLabel = ResourceOrText(
+                            string = diffusion.getFormattedHour()
+                        ),
+                        isLive = false,
                     )
                     if (!liveInformation.containsKey(diffusion.flux)) {
                         result.add(cardData)
@@ -81,9 +86,9 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                         withContext(Dispatchers.Main) {
                             if (liveInformation.containsKey(diffusion.flux) && diffusion.uid_referentiel == nvs.getMeetingID()
                             ) {
-                                cardData.buttonLabel =
-                                        // getApplication<Application>().resources.getString(R.string.card_button_label_live)
-                                    "card_button_label_live"
+                                cardData.buttonLabel = ResourceOrText(
+                                    stringResource = MR.strings.card_button_label_live
+                                )
                                 cardData.isLive = true
                                 cardData.url =
                                     "https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"
@@ -93,7 +98,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
 
                     }
                 }
-                _cards.value = CardListViewData(result, editorial.titre)
+                _cards.value = CardListViewData(result, ResourceOrText(editorial.titre))
             }
         }
     }

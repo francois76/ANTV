@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
@@ -40,8 +41,10 @@ fun LiveCardListViewState(
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
+    val context = LocalContext.current
     AbstractCardListView(
-        title = state?.title ?: stringResource(resource = MR.strings.title_live),
+        title = state?.title?.toString(LocalContext.current)
+            ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
         currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
         goToCurrentPlaying = goToCurrentPlaying
@@ -49,10 +52,10 @@ fun LiveCardListViewState(
         val genericCardData: GenericCardData
         if (cardData.isLive) {
             genericCardData = GenericCardData(
-                title = cardData.title,
+                title = cardData.title.toString(context = context),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel,
+                buttonName = cardData.buttonLabel.toString(context = context),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.onError,
                 buttonTextColor = Color.White,
@@ -60,10 +63,10 @@ fun LiveCardListViewState(
             )
         } else {
             genericCardData = GenericCardData(
-                title = cardData.title,
+                title = cardData.title.toString(context = context),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel,
+                buttonName = cardData.buttonLabel.toString(context = context),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.Black,
@@ -76,7 +79,7 @@ fun LiveCardListViewState(
                 goToVideo(
                     cardData.url ?: "",
                     cardData.imageCode,
-                    cardData.title,
+                    cardData.title.toString(context = context),
                     cardData.description,
                 )
             },

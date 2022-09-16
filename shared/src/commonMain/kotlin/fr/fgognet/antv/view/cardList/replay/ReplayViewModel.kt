@@ -4,6 +4,7 @@ import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import io.github.aakira.napier.Napier
@@ -56,7 +57,7 @@ class ReplayViewModel :
                     CardListViewData(
                         eventSearches.map {
                             ReplayCardData(
-                                it.title ?: "video sans titre",
+                                ResourceOrText(it.title ?: "video sans titre"),
                                 it.description?.replace("<br>", "\n") ?: "",
                                 if (it.thumbnail != null) it.thumbnail!!.replace(
                                     "\\",
@@ -69,7 +70,7 @@ class ReplayViewModel :
                                 null, subTitle = null
                             )
                         },
-                        params[EventSearchQueryParams.Tag] ?: ""
+                        ResourceOrText(params[EventSearchQueryParams.Tag])
                     )
             }
         }
