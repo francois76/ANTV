@@ -38,7 +38,7 @@ fun ANTVNavHost(
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     if (context.findActivity()?.isInPictureInPictureMode == true) {
-                        navController.navigateToTop(PlayerRoute.id)
+                        navController.navigateToChild(PlayerRoute.id)
                     }
                 }
                 else -> {}
@@ -160,12 +160,7 @@ fun navigateToReplayList(
 fun NavHostController.navigateToChild(route: String) =
     this.navigate(route) {
         Log.d(TAG, "navigate to $route")
-        popUpTo(
-            this@navigateToChild.graph.findStartDestination().id
-        ) {
-            saveState = true
-        }
-        launchSingleTop = true
+        launchSingleTop = false
         restoreState = false
     }
 
