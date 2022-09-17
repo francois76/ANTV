@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 import androidx.mediarouter.app.MediaRouteButton
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -41,6 +42,8 @@ fun ANTVApp() {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
         val isFullScreen = remember { mutableStateOf(false) }
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(PlayerRoute.id)
         systemUiController.isSystemBarsVisible = false
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -73,7 +76,7 @@ fun ANTVApp() {
         }
         Scaffold(
             topBar = {
-                if (!isFullScreen.value) {
+                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
                     TopBar(title = {
                         Text(text = stringResource(resource = MR.strings.app_name))
                     }, actions = {
@@ -99,7 +102,7 @@ fun ANTVApp() {
                     })
                 }
             }, bottomBar = {
-                if (!isFullScreen.value) {
+                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
                     var selectedItem by rememberSaveable { mutableStateOf(0) }
                     val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
                     NavigationBar {
