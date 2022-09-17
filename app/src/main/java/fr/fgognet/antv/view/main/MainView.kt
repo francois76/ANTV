@@ -3,16 +3,13 @@ package fr.fgognet.antv.view.main
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -77,9 +74,7 @@ fun ANTVApp() {
         Scaffold(
             topBar = {
                 if (!(isFullScreen.value && isOnPlayerScreen == true)) {
-                    TopBar(title = {
-                        Text(text = stringResource(resource = MR.strings.app_name))
-                    }, actions = {
+                    TopAppBar(actions = {
                         IconButton(onClick = {
                             openDialog.value = true
                         }) {
@@ -99,7 +94,7 @@ fun ANTVApp() {
                                 contentDescription = "reload"
                             )
                         }
-                    })
+                    }, title = {})
                 }
             }, bottomBar = {
                 if (!(isFullScreen.value && isOnPlayerScreen == true)) {
@@ -137,40 +132,6 @@ fun ANTVApp() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(
-    title: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    navigationIcon: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {},
-    colors: TopAppBarColors? = null,
-    scrollBehavior: TopAppBarScrollBehavior? = null
-) {
-    val configuration = LocalConfiguration.current
-    when (configuration.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            TopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                colors = colors ?: TopAppBarDefaults.smallTopAppBarColors(),
-                scrollBehavior = scrollBehavior
-            )
-        }
-        else -> {
-            MediumTopAppBar(
-                title = title,
-                modifier = modifier,
-                navigationIcon = navigationIcon,
-                actions = actions,
-                colors = colors ?: TopAppBarDefaults.mediumTopAppBarColors(),
-                scrollBehavior = scrollBehavior
-            )
-        }
-    }
-}
 
 fun Context.findActivity(): Activity? {
     var context = this
