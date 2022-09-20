@@ -51,6 +51,20 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             return b
                         }()
                     ),
+                    // commission des lois
+                    PlaylistCardData(
+                        ResourceOrText("Commission des lois"),
+                        "Tous les replays de la commission des lois",
+                        "https://videos.assemblee-nationale.fr/live/images/59051.jpg",
+                        fun(): Map<EventSearchQueryParams, String> {
+                            val b = hashMapOf<EventSearchQueryParams, String>()
+                            b[EventSearchQueryParams.Tag] = "Commission des lois"
+                            b[EventSearchQueryParams.TypeVideo] = "Commission"
+                            b[EventSearchQueryParams.Commission] =
+                                "Lois (commission)"
+                            return b
+                        }()
+                    ),
                     // commission du développement durable
                     PlaylistCardData(
                         ResourceOrText("Commission au développement durable"),
@@ -122,7 +136,6 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                             return b
                         }()
                     )
-
                 ),
                 ResourceOrText(stringResource = MR.strings.playlist_description)
             )
