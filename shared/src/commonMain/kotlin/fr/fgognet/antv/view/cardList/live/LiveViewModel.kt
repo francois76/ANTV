@@ -68,7 +68,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                             stringResource = MR.strings.no_title_broadcast
                         ),
                         subtitle = diffusion.lieu ?: "",
-                        description = diffusion.sujet?.replace("<br>", "\n") ?: "",
+                        description = cleanDescription(diffusion.sujet),
                         imageCode = if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                         url = "",
                         buttonLabel = ResourceOrText(
@@ -101,5 +101,21 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                 _cards.value = CardListViewData(result, ResourceOrText(editorial.titre))
             }
         }
+    }
+
+    private fun cleanDescription(rawDescription: String?): String {
+        // base cleaning of description
+        var result = rawDescription?.replace("<br>", "\n")?.replace("–", "-")?.trim()
+        // replace line separator ;-
+        if ("-" == result?.subSequence(0, 1)) {
+            result = result.replace(";-", "\n-")
+        }
+        // replace end of line separator ;
+        result = result?.replace(";\n", "\n")
+        // if ; is used as line separator, it is replaced
+        if (result?.split("\n-")?.size == 1) {
+            result = result.replace(";", "\n- ")
+        }
+        return result ?: ""
     }
 }
