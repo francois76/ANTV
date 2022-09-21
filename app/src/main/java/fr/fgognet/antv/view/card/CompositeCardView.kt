@@ -73,7 +73,7 @@ fun LandscapeCompositeCardView(
                     .weight(2f),
                 enabled = data.enableButton,
                 onClick = buttonClicked,
-                colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
+                colors = ButtonDefaults.buttonColors(containerColor = data.buttonColor)
             ) {
                 Text(text = data.buttonName, color = data.buttonTextColor)
             }
@@ -129,7 +129,7 @@ fun PortraitCompositeCardView(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = data.enableButton,
                 onClick = buttonClicked,
-                colors = ButtonDefaults.buttonColors(contentColor = data.buttonColor)
+                colors = ButtonDefaults.buttonColors(containerColor = data.buttonColor)
             ) {
                 Text(text = data.buttonName, color = data.buttonTextColor)
             }

@@ -74,7 +74,7 @@ fun ReplayCardListViewState(
         CompositeCardView(
             GenericCardData(
                 title = cardData.title.toString(context),
-                subTitle = null,
+                subTitle = cardData.subTitle,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_replay),
                 imageCode = cardData.imageCode,
