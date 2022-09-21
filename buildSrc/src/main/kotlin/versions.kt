@@ -6,7 +6,6 @@ object Versions {
     const val androidPlugin = "7.2.2"
     const val xmlUtils = "0.84.2"
     const val ktor = "2.1.0"
-    const val kor = "3.0.0-Beta7"
     const val junit = "4.13.2"
     const val coil = "2.2.1"
     const val accompanish = "0.25.1"
@@ -39,6 +38,7 @@ object Versions {
 
     object Moko {
         const val mvvm = "0.14.0"
+        const val resources = "0.20.1"
     }
 
     object Kotlinx {

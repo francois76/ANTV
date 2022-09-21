@@ -12,7 +12,11 @@ buildscript {
     }
 
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.20.1")
+        classpath(
+            group = "dev.icerock.moko",
+            name = "resources-generator",
+            version = Versions.Moko.resources
+        )
     }
 }
 
