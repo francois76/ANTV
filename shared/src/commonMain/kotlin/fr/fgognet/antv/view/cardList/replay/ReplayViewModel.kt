@@ -20,24 +20,26 @@ class ReplayViewModel :
 
 
     fun loadNvs(code: String) {
-        _cards.value =
-            CardListViewData(title = cards.value.title, cards = cards.value.cards.map { cardData ->
-                if (cardData.nvsCode == code) {
-                    viewModelScope.launch {
-                        val nvs = NvsRepository.getNvsByCode(
-                            cardData.nvsCode
-                        )
-                        cardData.nvsUrl = nvs.getReplayURL()
+        viewModelScope.launch {
+            val nvs = NvsRepository.getNvsByCode(
+                code
+            )
+            withContext(Dispatchers.Main) {
+                super._cards.value =
+                    CardListViewData(
+                        title = cards.value.title,
+                        cards = cards.value.cards.map { cardData ->
+                            cardData.nvsUrl = nvs.getReplayURL()
+                            if (nvs.getTime() != null) {
+                                val date = LocalDateTime.parse(nvs.getTime().toString())
+                                cardData.subTitle =
+                                    "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
+                            }
+                            cardData
+                        })
+            }
+        }
 
-                        if (nvs.getTime() != null) {
-                            val date = LocalDateTime.parse(nvs.getTime().toString())
-                            cardData.subTitle =
-                                "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
-                        }
-                    }
-                }
-                cardData
-            })
     }
 
     override fun loadCardData(params: HashMap<EventSearchQueryParams, String>) {
