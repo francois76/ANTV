@@ -1,5 +1,3 @@
-import org.gradle.api.initialization.resolve.RepositoriesMode
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -10,9 +8,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
-        google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io" )}
+        google()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 rootProject.name = "ANTV"

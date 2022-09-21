@@ -11,6 +11,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -22,7 +25,10 @@ object EditorialRepository {
 
     @OptIn(ExperimentalXmlUtilApi::class)
     suspend fun getEditorialInformation(): Editorial {
-        Napier.v("getEditorialInformation")
+        Napier.v(
+            "getEditorialInformation",
+            tag = TAG
+        )
         when (Config.currentEnvironment) {
             Environment.NOTHING -> return Editorial(
                 "Titre mock nothing",
@@ -38,7 +44,7 @@ object EditorialRepository {
                         "Commission des finances, de l'économie générale et du contrôle budgétaire",
                         "CION_FIN",
                         "0930",
-                        26,
+                        "26",
                         "" + Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                         "RUANR5L16S2022IDC445325",
                         "Salle 6350 – Palais Bourbon, 1er étage",
@@ -59,7 +65,7 @@ object EditorialRepository {
                         "Commission des affaires culturelles et de l'éducation",
                         "CION-CEDU",
                         "0935",
-                        26,
+                        "26",
                         "- Table ronde sur la réforme du financement de l’audiovisuel public réunissant les responsables des sociétés et établissement concernés<br>",
                         "RUANR5L16S2022IDC445325",
                         "Salle 6350 – Palais Bourbon, 1er étage",
@@ -79,14 +85,23 @@ object EditorialRepository {
             )
             Environment.REAL_TIME -> {
                 val client = httpClient()
-                Napier.i("Calling https://videos.assemblee-nationale.fr/php/getedito.php")
+                Napier.i(
+                    "Calling https://videos.assemblee-nationale.fr/php/getedito.php",
+                    tag = TAG
+                )
                 val resultString =
                     client.request("https://videos.assemblee-nationale.fr/php/getedito.php")
                         .body<String>()
-                val format = XML {
+                val format = XML(serializersModule = SerializersModule {
+                    polymorphic(DiffusionBase::class) {
+                        subclass(Diffusion::class)
+                    }
+                }) {
                     xmlVersion = XmlVersion.XML10
                     xmlDeclMode = XmlDeclMode.Charset
                     unknownChildHandler = no_handler
+                    autoPolymorphic = true
+
                 }
                 return format.decodeFromString(resultString)
             }
