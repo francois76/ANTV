@@ -1,8 +1,10 @@
 plugins {
     id("org.jetbrains.kotlin.plugin.serialization").version(Versions.kotlin)
     id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform").version(Versions.kotlin)
+    id("org.jetbrains.kotlin.multiplatform")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
+
 
 kotlin {
     android()
@@ -16,9 +18,16 @@ kotlin {
         }
     }
 
+
+
+
+
+
     sourceSets {
         sourceSets["commonMain"].dependencies {
-
+            implementation("dev.icerock.moko:mvvm-core:${Versions.Moko.mvvm}") // only ViewModel, EventsDispatcher, Dispatchers.UI
+            implementation("dev.icerock.moko:mvvm-livedata:${Versions.Moko.mvvm}") // api mvvm-core, LiveData and extensions
+            implementation("dev.icerock.moko:mvvm-state:${Versions.Moko.mvvm}") // api mvvm-livedata, ResourceState class and extensions
             // for xml
             implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
             implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
@@ -27,12 +36,11 @@ kotlin {
             // logger
             implementation("io.github.aakira:napier:${Versions.napier}")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-            implementation("com.soywiz.korlibs.korim:korim:${Versions.kor}")
-            implementation("com.soywiz.korlibs.korio:korio:${Versions.kor}")
             // ktor
             implementation("io.ktor:ktor-client-core:${Versions.ktor}")
             implementation("io.ktor:ktor-client-json:${Versions.ktor}")
             implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
+            implementation("dev.icerock.moko:resources:0.20.1")
         }
         val commonTest by getting {
             dependencies {
@@ -45,11 +53,9 @@ kotlin {
         val androidTest by getting
         val macosArm64Main by getting
         macosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-macosarm64:${Versions.kor}")
         }
         val iosArm64Main by getting
         iosArm64Main.dependencies {
-            implementation("com.soywiz.korlibs.korio:korio-iosarm64:${Versions.kor}")
         }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
@@ -78,3 +84,13 @@ android {
         targetSdk = Versions.Sdk.targetSdk
     }
 }
+
+multiplatformResources {
+    multiplatformResourcesPackage = "fr.fgognet.antv"
+    disableStaticFrameworkWarning = true
+}
+dependencies {
+    commonMainApi("dev.icerock.moko:resources:0.20.1")
+    commonTestImplementation("dev.icerock.moko:resources-test:0.20.1")
+}
+

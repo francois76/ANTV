@@ -16,10 +16,16 @@ object NvsRepository {
 
     @OptIn(ExperimentalXmlUtilApi::class)
     suspend fun getNvsByCode(urlCode: String): Nvs {
-        Napier.v("getNvsByCode")
+        Napier.v(
+            "getNvsByCode",
+            tag = TAG
+        )
         val client = httpClient()
-        val url = "https://videos.assemblee-nationale.fr/Datas/an$urlCode/content/data.nvs"
-        Napier.i("calling URL $url")
+        val url = "https://videos.assemblee-nationale.fr/Datas/an/$urlCode/content/data.nvs"
+        Napier.i(
+            "calling URL $url",
+            tag = TAG
+        )
         val resultString =
             client.request(url)
                 .body<String>()
