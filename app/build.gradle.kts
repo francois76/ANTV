@@ -12,7 +12,7 @@ android {
         applicationId = "fr.fgognet.antv"
         minSdk = Versions.Sdk.minSdk
         targetSdk = Versions.Sdk.targetSdk
-        versionCode = 1
+        versionCode = Versions.antvNumber
         versionName = Versions.antv
 
     }
