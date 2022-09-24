@@ -29,11 +29,13 @@ class ReplayViewModel :
                     CardListViewData(
                         title = cards.value.title,
                         cards = cards.value.cards.map { cardData ->
-                            cardData.nvsUrl = nvs.getReplayURL()
-                            if (nvs.getTime() != null) {
-                                val date = LocalDateTime.parse(nvs.getTime().toString())
-                                cardData.subTitle =
-                                    "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
+                            if (cardData.nvsCode == code) {
+                                cardData.nvsUrl = nvs.getReplayURL()
+                                if (nvs.getTime() != null) {
+                                    val date = LocalDateTime.parse(nvs.getTime().toString())
+                                    cardData.subTitle =
+                                        "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
+                                }
                             }
                             cardData
                         })
