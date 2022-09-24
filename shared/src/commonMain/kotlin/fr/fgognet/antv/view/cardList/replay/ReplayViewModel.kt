@@ -37,7 +37,7 @@ class ReplayViewModel :
                                         "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
                                 }
                             }
-                            cardData
+                            cardData.copy()
                         })
             }
         }
