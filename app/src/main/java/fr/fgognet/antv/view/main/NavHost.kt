@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 
-import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -15,7 +14,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
@@ -59,7 +57,7 @@ fun ANTVNavHost(
         composable(route = LiveRoute.id) {
             LiveCardListView(goToVideo = { title ->
                 navController.navigateToChild(
-                    "${PlayerRoute.id}/title=$title"
+                    "${PlayerRoute.id}/$title"
                 )
             },
                 goToCurrentPlaying = {
@@ -69,19 +67,23 @@ fun ANTVNavHost(
         }
         composable(route = SearchRoute.id) {
             ReplaySearchView(query = {
-                navigateToReplayList(navController, it)
+                navController.navigateToChild(
+                    ReplayRoute.id
+                )
             })
         }
         composable(route = PlaylistRoute.id) {
             PlaylistCardListView(goToVideos = {
-                navigateToReplayList(navController, it)
+                navController.navigateToChild(
+                    ReplayRoute.id
+                )
             },
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
                 })
         }
         composable(
-            route = getRoute(PlayerRoute.id, PlayerRoute.argumentNames),
+            route = "${PlayerRoute.id}/{title}",
             arguments = PlayerRoute.arguments,
             deepLinks = PlayerRoute.deepLinks
         ) {
@@ -99,16 +101,12 @@ fun ANTVNavHost(
             )
         }
         composable(
-            route = getRoute(ReplayRoute.id, EventSearchQueryParams.allValues()),
-            arguments = ReplayRoute.arguments,
-            deepLinks = ReplayRoute.deepLinks
+            route = ReplayRoute.id,
         ) {
-            val navStackEntry = it
             ReplayCardListView(
-                arguments = navStackEntry.arguments ?: Bundle(),
                 goToVideo = { title ->
                     navController.navigateToChild(
-                        "${PlayerRoute.id}/title=$title"
+                        "${PlayerRoute.id}/$title"
                     )
                 },
                 goToCurrentPlaying = {
@@ -117,24 +115,6 @@ fun ANTVNavHost(
         }
 
     }
-}
-
-fun navigateToReplayList(
-    navController: NavHostController,
-    query: Map<EventSearchQueryParams, String>
-) {
-    navController.navigateToChild(
-        callRouteWithArguments(
-            ReplayRoute.id, EventSearchQueryParams.allValues().associate {
-                if (query.containsKey(it)) {
-                    Pair(it, query[it]!!)
-                } else {
-                    Pair(it, " ")
-                }
-
-            }.mapKeys { it.key.toString() }
-        )
-    )
 }
 
 fun NavHostController.navigateToChild(route: String) =

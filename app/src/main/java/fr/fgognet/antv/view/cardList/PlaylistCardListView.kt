@@ -11,7 +11,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
@@ -25,13 +24,16 @@ fun PlaylistCardListView(
             PlaylistViewModel().start(Unit)
         }
     ),
-    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    goToVideos: () -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
     PlaylistCardListViewState(
         state = state,
-        goToVideos = goToVideos,
+        goToVideos = {
+            model.setCurrentSearch(it)
+            goToVideos()
+        },
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -39,7 +41,7 @@ fun PlaylistCardListView(
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
-    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    goToVideos: (id: Int) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
@@ -61,7 +63,7 @@ fun PlaylistCardListViewState(
                 enableButton = true
             ),
             buttonClicked = {
-                goToVideos(cardData.targetBundle)
+                goToVideos(cardData.id)
             }
         )
     }

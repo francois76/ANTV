@@ -1,9 +1,9 @@
 package fr.fgognet.antv.view.cardList.replay
 
 import fr.fgognet.antv.external.eventSearch.EventSearch
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.repository.SearchDao
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
@@ -16,7 +16,7 @@ import kotlinx.datetime.LocalDateTime
 private const val TAG = "ANTV/ReplayViewModel"
 
 class ReplayViewModel :
-    AbstractCardListViewModel<ReplayCardData, HashMap<EventSearchQueryParams, String>>() {
+    AbstractCardListViewModel<ReplayCardData, Unit>() {
 
 
     fun loadNvs(code: String) {
@@ -44,12 +44,13 @@ class ReplayViewModel :
 
     }
 
-    override fun loadCardData(params: HashMap<EventSearchQueryParams, String>) {
+    override fun loadCardData(params: Unit) {
         Napier.v("loadCardData", tag = TAG)
+        val searchParams = SearchDao.get() ?: return
         viewModelScope.launch {
             val eventSearches: List<EventSearch> = try {
                 EventSearchRepository.findEventSearchByParams(
-                    params
+                    searchParams.queryParams
                 )
             } catch (e: Exception) {
                 Napier.e(e.toString(), tag = TAG)
@@ -74,7 +75,7 @@ class ReplayViewModel :
                                 null, subTitle = null
                             )
                         },
-                        ResourceOrText(params[EventSearchQueryParams.Tag])
+                        searchParams.label
                     )
             }
         }

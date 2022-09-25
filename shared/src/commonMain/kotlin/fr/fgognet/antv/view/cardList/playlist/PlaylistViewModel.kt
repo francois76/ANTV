@@ -2,6 +2,8 @@ package fr.fgognet.antv.view.cardList.playlist
 
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.repository.SearchDao
+import fr.fgognet.antv.repository.SearchEntity
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
@@ -18,140 +20,124 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                 arrayListOf(
                     // the last uploads
                     PlaylistCardData(
-                        ResourceOrText("Dernières publications"),
-                        "Les dernières publications",
-                        "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Dernières publications"
-                            return b
-                        }()
+                        id = 1,
+                        title = ResourceOrText("Dernières publications"),
+                        description = "Les dernières publications",
+                        imageCode = "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
-                        ResourceOrText("Questions au gouvernement"),
-                        "Toute les questions au gouvernement",
-                        "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Questions au gouvernement"
-                            b[EventSearchQueryParams.TypeVideo] = "Questions au gouvernement"
-                            return b
-                        }()
+                        id = 2,
+                        title = ResourceOrText("Questions au gouvernement"),
+                        description = "Toute les questions au gouvernement",
+                        imageCode = "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
                     ),
                     // questions au gouvernement
                     PlaylistCardData(
-                        ResourceOrText("Séance publique"),
-                        "Toutes les séances publiques ainsi que les questions au gouvernement non montées",
-                        "https://videos.assemblee-nationale.fr/live/images/14000000.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Séance publique"
-                            b[EventSearchQueryParams.TypeVideo] = "Séance publique"
-                            return b
-                        }()
+                        id = 3,
+                        title = ResourceOrText("Séance publique"),
+                        description = "Toutes les séances publiques ainsi que les questions au gouvernement non montées",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/14000000.jpg",
                     ),
                     // commission des lois
                     PlaylistCardData(
-                        ResourceOrText("Commission des lois"),
-                        "Tous les replays de la commission des lois",
-                        "https://videos.assemblee-nationale.fr/live/images/59051.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission des lois"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Lois (commission)"
-                            return b
-                        }()
+                        id = 4,
+                        title = ResourceOrText("Commission des lois"),
+                        description = "Tous les replays de la commission des lois",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/59051.jpg",
                     ),
                     // commission des finances
                     PlaylistCardData(
-                        ResourceOrText("Commission des finances"),
-                        "Tous les replays de la commission des finances",
-                        "https://videos.assemblee-nationale.fr/live/images/59048.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission des finances"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Finances (commission)"
-                            return b
-                        }()
+                        id = 5,
+                        title = ResourceOrText("Commission des finances"),
+                        description = "Tous les replays de la commission des finances",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/59048.jpg",
                     ),
                     // commission du développement durable
                     PlaylistCardData(
-                        ResourceOrText("Commission au développement durable"),
-                        "Tous les replays de la commission au développement durable",
-                        "https://videos.assemblee-nationale.fr/live/images/419865.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission du développement durable"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Développement durable (commission)"
-                            return b
-                        }()
+                        id = 6,
+                        title = ResourceOrText("Commission au développement durable"),
+                        description = "Tous les replays de la commission au développement durable",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/419865.jpg",
                     ),
                     // commission des affaires économiques
                     PlaylistCardData(
-                        ResourceOrText("Commission des affaires économiques"),
-                        "Tous les replays de la commission des affaires économiques",
-                        "https://videos.assemblee-nationale.fr/live/images/419610.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission des affaires économiques"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Affaires économiques (commission)"
-                            return b
-                        }()
+                        id = 7,
+                        title = ResourceOrText("Commission des affaires économiques"),
+                        description = "Tous les replays de la commission des affaires économiques",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/419610.jpg",
                     ),
                     // commission des affaires culturelles
                     PlaylistCardData(
-                        ResourceOrText("Commission des affaires culturelles et éducation"),
-                        "Tous les replays de la commission des affaires culturelles et éducation",
-                        "https://videos.assemblee-nationale.fr/live/images/419604.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] =
-                                "Commission des affaires culturelles et éducation"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Affaires culturelles et éducation (commission)"
-                            return b
-                        }()
+                        id = 8,
+                        title = ResourceOrText("Commission des affaires culturelles et éducation"),
+                        description = "Tous les replays de la commission des affaires culturelles et éducation",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/419604.jpg",
                     ),
                     // commission des affaires européennes
                     PlaylistCardData(
-                        ResourceOrText("Commission des affaires européennes"),
-                        "Tous les replays de la commission des affaires européennes",
-                        "https://videos.assemblee-nationale.fr/live/images/415287.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission des affaires européennes"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Affaires européennes (commission)"
-                            return b
-                        }()
+                        id = 9,
+                        title = ResourceOrText("Commission des affaires européennes"),
+                        description = "Tous les replays de la commission des affaires européennes",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/415287.jpg",
                     ),
                     // commission des affaires étrangères
                     PlaylistCardData(
-                        ResourceOrText("Commission des affaires étrangères"),
-                        "Tous les replays de la commission des affaires étrangères",
-                        "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
-                        fun(): Map<EventSearchQueryParams, String> {
-                            val b = hashMapOf<EventSearchQueryParams, String>()
-                            b[EventSearchQueryParams.Tag] = "Commission des affaires étrangères"
-                            b[EventSearchQueryParams.TypeVideo] = "Commission"
-                            b[EventSearchQueryParams.Commission] =
-                                "Affaires étrangères (commission)"
-                            return b
-                        }()
+                        id = 10,
+                        title = ResourceOrText("Commission des affaires étrangères"),
+                        description = "Tous les replays de la commission des affaires étrangères",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
                     )
                 ),
                 ResourceOrText(stringResource = MR.strings.playlist_description)
             )
+    }
+
+    fun setCurrentSearch(id: Int) {
+        val queryParams = when (id) {
+
+            1 -> hashMapOf()
+            2 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Questions au gouvernement"
+            )
+            3 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Séance publique"
+            )
+            4 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Lois (commission)"
+            )
+            5 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Finances (commission)"
+            )
+            6 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Développement durable (commission)"
+            )
+            7 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Affaires économiques (commission)"
+            )
+            8 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Affaires culturelles et éducation (commission)"
+            )
+            9 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Affaires européennes (commission)"
+            )
+            10 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Affaires étrangères (commission)"
+            )
+            else -> hashMapOf()
+        }
+        SearchDao.set(
+            SearchEntity(
+                label = cards.value.cards.find { it.id == id }?.title
+                    ?: ResourceOrText("Dernières publications"), queryParams = queryParams
+            )
+        )
     }
 }

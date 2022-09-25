@@ -1,7 +1,11 @@
 package fr.fgognet.antv.view.replaySearch
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.repository.SearchDao
+import fr.fgognet.antv.repository.SearchEntity
+import fr.fgognet.antv.utils.ResourceOrText
 import io.github.aakira.napier.Napier
 import kotlinx.datetime.*
 
@@ -12,12 +16,12 @@ class ReplaySearchViewModel : ViewModel() {
     fun start() = apply { }
 
 
-    fun makeSearchBundle(currentDate: Long): Map<EventSearchQueryParams, String> {
+    fun makeSearchBundle(currentDate: Long) {
         val date: LocalDateTime =
             Instant.fromEpochMilliseconds(
                 currentDate
             ).toLocalDateTime(TimeZone.currentSystemDefault())
-        val result = hashMapOf<EventSearchQueryParams, String>()
+        val queryParams = hashMapOf<EventSearchQueryParams, String>()
 
         val dateMorning = LocalDateTime(
             date.year,
@@ -29,14 +33,18 @@ class ReplaySearchViewModel : ViewModel() {
         val dateEvening = LocalDateTime(
             date.year, date.month, date.dayOfMonth, 22, 0
         ).toInstant(TimeZone.currentSystemDefault()).epochSeconds
-        result[EventSearchQueryParams.Date] = "$dateMorning-$dateEvening"
-        result[EventSearchQueryParams.Tag] =
-            "Recherche personnalisée" // resources.getString(R.string.search_description)
+        queryParams[EventSearchQueryParams.Date] = "$dateMorning-$dateEvening"
+        SearchDao.set(
+            SearchEntity(
+                label = ResourceOrText(stringResource = MR.strings.search_description),
+                queryParams = queryParams
+            )
+        )
+        
         Napier.d(
             "search Time: $date",
             tag = TAG
         )
-        return result
     }
 
 }

@@ -1,13 +1,14 @@
 package fr.fgognet.antv.view.main
 
 import android.os.Bundle
-import androidx.navigation.*
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import dev.icerock.moko.resources.StringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import java.net.URLDecoder
-import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 interface Route {
@@ -42,54 +43,20 @@ object ReplayRoute : Route {
     override val id = "replay"
     override val nameID = MR.strings.title_replay
     override val iconID: Nothing? = null
-    override val arguments: List<NamedNavArgument> =
-        getArguments(EventSearchQueryParams.allValues())
-    val deepLinks = getNavDeepLinks(id, EventSearchQueryParams.allValues())
+    override val arguments: Nothing? = null
 }
 
 object PlayerRoute : Route {
     override val id = "player"
-    val argumentNames = arrayListOf("title")
-    val deepLinks = getNavDeepLinks(id, argumentNames)
+    val deepLinks = listOf(
+        navDeepLink { uriPattern = "antv://player/{title}" }
+    )
     override val nameID: Nothing? = null
     override val iconID: Nothing? = null
-    override val arguments: List<NamedNavArgument> = getArguments(argumentNames)
-}
-
-fun getNavDeepLinks(id: String, argumentNames: List<Any>): List<NavDeepLink> {
-    return listOf(
-        navDeepLink { uriPattern = "antv://${getRoute(id, argumentNames)}" }
+    override val arguments: List<NamedNavArgument> = arrayListOf(navArgument(
+        "title"
     )
-}
-
-fun getRoute(id: String, argumentNames: List<Any>): String {
-    return "$id/${argumentNamesToString(argumentNames)}"
-}
-
-fun callRouteWithArguments(id: String, arguments: Map<String, String>): String {
-    return "$id/${
-        arguments.map {
-            "${it.key}=${
-                URLEncoder.encode(
-                    it.value,
-                    StandardCharsets.UTF_8.toString()
-                )
-            }"
-        }.sorted().joinToString("/")
-    }"
-}
-
-fun argumentNamesToString(argumentNames: List<Any>): String {
-    return argumentNames.map { it.toString() }.sorted().joinToString("/") { "$it={$it}" }
-}
-
-fun getArguments(argumentNames: List<Any>): List<NamedNavArgument> {
-    return argumentNames.map {
-        navArgument(
-            it.toString()
-        )
-        { type = NavType.StringType }
-    }
+    { type = NavType.StringType })
 }
 
 fun getEncodedArgument(arguments: Bundle?, key: String): String {
@@ -101,3 +68,5 @@ fun getEncodedArgument(arguments: Bundle?, key: String): String {
         StandardCharsets.UTF_8.toString()
     )
 }
+
+
