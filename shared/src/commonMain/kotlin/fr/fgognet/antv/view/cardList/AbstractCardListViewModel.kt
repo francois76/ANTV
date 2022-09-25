@@ -4,6 +4,8 @@ import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.repository.VideoDao
+import fr.fgognet.antv.repository.VideoEntity
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CardData
 
@@ -20,6 +22,10 @@ abstract class AbstractCardListViewModel<T : CardData, U> : ViewModel() {
     fun start(params: U) = apply { loadCardData(params) }
 
     abstract fun loadCardData(params: U)
+
+    fun insertVideoState(url: String, imageCode: String, title: String, description: String) {
+        VideoDao.insert(VideoEntity(url, imageCode, title, description))
+    }
 
 
 }

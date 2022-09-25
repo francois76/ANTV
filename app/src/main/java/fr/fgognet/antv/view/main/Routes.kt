@@ -49,7 +49,7 @@ object ReplayRoute : Route {
 
 object PlayerRoute : Route {
     override val id = "player"
-    val argumentNames = arrayListOf("url", "image_code", "title", "description")
+    val argumentNames = arrayListOf("title")
     val deepLinks = getNavDeepLinks(id, argumentNames)
     override val nameID: Nothing? = null
     override val iconID: Nothing? = null

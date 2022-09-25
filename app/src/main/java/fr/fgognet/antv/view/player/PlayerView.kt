@@ -34,57 +34,66 @@ private const val TAG = "ANTV/PlayerView"
 fun PlayerView(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    PlayerView(
-        description = PlayerService.currentMediaData?.description,
+    val context: Context = LocalContext.current.applicationContext
+    val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
+        PlayerViewModel().start(context)
+    }
+    )
+    val state by model.playerData.ld().observeAsState()
+    PlayerViewState(
+        description = state?.description,
+        player = state?.player,
         setFullScreen = setFullScreen
     )
 }
 
 @Composable
 fun PlayerView(
-    url: String,
-    title: String?,
-    description: String?,
-    imageCode: String?,
+    title: String,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val request = ImageRequest.Builder(LocalContext.current)
-        .data(imageCode)
-        .target(
-            onSuccess = { result ->
-                PlayerService.updateCurrentMedia(
-                    MediaData(
-                        url, title, description, result.toBitmap(200, 200)
-                    )
-                )
-            },
-            onError = {
-                PlayerService.updateCurrentMedia(
-                    MediaData(
-                        url, title, description, null
-                    )
-                )
-            }
-        )
-        .build()
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .crossfade(true)
-        .build()
-    imageLoader.enqueue(request)
-    PlayerView(description = description, setFullScreen = setFullScreen)
-}
-
-@Composable
-fun PlayerView(description: String?, setFullScreen: (visible: Boolean) -> Unit) {
     val context: Context = LocalContext.current.applicationContext
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
         PlayerViewModel().start(context)
     }
     )
-    val state by model.player.ld().observeAsState()
-    PlayerViewState(description = description, player = state, setFullScreen = setFullScreen)
+    model.retrievePlayerEntity(title)
+    val state by model.playerData.ld().observeAsState()
+    if (state?.url != null) {
+        val request = ImageRequest.Builder(LocalContext.current)
+            .data(state?.imageCode)
+            .target(
+                onSuccess = { result ->
+                    PlayerService.updateCurrentMedia(
+                        MediaData(
+                            state!!.url, title, state?.description, result.toBitmap(200, 200)
+                        )
+                    )
+                },
+                onError = {
+                    PlayerService.updateCurrentMedia(
+                        MediaData(
+                            state!!.url, title, state?.description, null
+                        )
+                    )
+                }
+            )
+            .build()
+        val imageLoader = ImageLoader.Builder(LocalContext.current)
+            .crossfade(true)
+            .build()
+        imageLoader.enqueue(request)
+
+        PlayerViewState(
+            description = state?.description,
+            player = state?.player,
+            setFullScreen = setFullScreen
+        )
+    }
+
 
 }
+
 
 @Composable
 fun PlayerViewState(

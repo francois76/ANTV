@@ -24,13 +24,16 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
-    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
     LiveCardListViewState(
         state = state,
-        goToVideo = goToVideo,
+        goToVideo = { url, imageCode, title, description ->
+            model.insertVideoState(url, imageCode, title, description)
+            goToVideo(title)
+        },
         goToCurrentPlaying = goToCurrentPlaying
     )
 }

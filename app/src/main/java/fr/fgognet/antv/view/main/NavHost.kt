@@ -57,16 +57,9 @@ fun ANTVNavHost(
     ) {
 
         composable(route = LiveRoute.id) {
-            LiveCardListView(goToVideo = { url, imageCode, title, description ->
+            LiveCardListView(goToVideo = { title ->
                 navController.navigateToChild(
-                    callRouteWithArguments(
-                        PlayerRoute.id, hashMapOf(
-                            "url" to url,
-                            "image_code" to imageCode,
-                            "title" to title,
-                            "description" to description
-                        )
-                    )
+                    "${PlayerRoute.id}/title=$title"
                 )
             },
                 goToCurrentPlaying = {
@@ -92,15 +85,9 @@ fun ANTVNavHost(
             arguments = PlayerRoute.arguments,
             deepLinks = PlayerRoute.deepLinks
         ) {
-            val url = getEncodedArgument(it.arguments, "url")
-            val imageCode = getEncodedArgument(it.arguments, "image_code")
             val title = getEncodedArgument(it.arguments, "title")
-            val description = getEncodedArgument(it.arguments, "description")
             PlayerView(
-                url = url,
-                imageCode = imageCode,
                 title = title,
-                description = description,
                 setFullScreen = setFullScreenMode
             )
         }
@@ -119,16 +106,9 @@ fun ANTVNavHost(
             val navStackEntry = it
             ReplayCardListView(
                 arguments = navStackEntry.arguments ?: Bundle(),
-                goToVideo = { url, imageCode, title, description ->
+                goToVideo = { title ->
                     navController.navigateToChild(
-                        callRouteWithArguments(
-                            PlayerRoute.id, hashMapOf(
-                                "url" to url,
-                                "image_code" to imageCode,
-                                "title" to title,
-                                "description" to description
-                            )
-                        )
+                        "${PlayerRoute.id}/title=$title"
                     )
                 },
                 goToCurrentPlaying = {
