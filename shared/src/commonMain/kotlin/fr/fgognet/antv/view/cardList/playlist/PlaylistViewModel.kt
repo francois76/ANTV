@@ -87,6 +87,13 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                         title = ResourceOrText("Commission des affaires étrangères"),
                         description = "Tous les replays de la commission des affaires étrangères",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
+                    ),
+                    // commission de la défense
+                    PlaylistCardData(
+                        id = 11,
+                        title = ResourceOrText("Commission de la défense"),
+                        description = "Tous les replays de la commission de la défense",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/59046.jpg",
                     )
                 ),
                 ResourceOrText(stringResource = MR.strings.playlist_description)
@@ -130,6 +137,10 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
             10 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Affaires étrangères (commission)"
+            )
+            11 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Défense (commission)"
             )
             else -> hashMapOf()
         }

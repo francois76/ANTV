@@ -66,7 +66,7 @@ fun ReplayCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.inversePrimary,
                 buttonTextColor = Color.White,
-                enableButton = true,
+                enableButton = cardData.buttonEnabled,
             ),
             buttonClicked = {
                 goToVideo(
