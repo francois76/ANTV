@@ -60,7 +60,7 @@ fun LiveCardListViewState(
                 description = cardData.description,
                 buttonName = cardData.buttonLabel.toString(context = context),
                 imageCode = cardData.imageCode,
-                buttonColor = MaterialTheme.colorScheme.onError,
+                buttonColor = MaterialTheme.colorScheme.error,
                 buttonTextColor = Color.White,
                 enableButton = true,
             )
