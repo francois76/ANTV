@@ -9,7 +9,7 @@ object Versions {
     const val ktor = "2.1.0"
     const val junit = "4.13.2"
     const val coil = "2.2.1"
-    const val accompanish = "0.25.1"
+    const val accompanist = "0.25.1"
 
     object Sdk {
         // Sdk and tools
@@ -21,7 +21,6 @@ object Versions {
     object Android {
         const val exoplayer = "2.18.1"
         const val castFramework = "21.1.0"
-        const val material = "1.6.1"
     }
 
     object Androidx {
@@ -30,11 +29,14 @@ object Versions {
         const val appCompat = "1.5.1"
         const val coreKtx = "1.9.0"
         const val lifecycle = "2.5.1"
-        const val compose = "1.2.1"
-        const val composeActivity = "1.5.1"
         const val constraintLayoutCompose = "1.0.1"
-        const val composeThemeAdapter = "1.1.18"
-        const val material3 = "1.0.0-beta02"
+        const val material3 = "1.0.0-beta03"
+
+        object Compose {
+            const val compose = "1.2.1"
+            const val activity = "1.5.1"
+            const val themeAdapter = "1.1.18"
+        }
     }
 
     object Moko {

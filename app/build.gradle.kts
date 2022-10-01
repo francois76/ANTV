@@ -90,13 +90,10 @@ dependencies {
         name = "resources-compose",
         version = Versions.Moko.resources
     )
-    implementation("com.google.android.material:material:${Versions.Android.material}")
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanish}")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
 
     listOf(
-        "fragment",
-        "ui",
         "fragment-ktx",
         "ui-ktx",
         "dynamic-features-fragment",
@@ -129,7 +126,8 @@ dependencies {
     }
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-
+    implementation("com.google.android.material:compose-theme-adapter:${Versions.Androidx.Compose.themeAdapter}")
+    implementation("io.coil-kt:coil-compose:${Versions.coil}")
     // Junit
     testImplementation("junit:junit:${Versions.junit}")
 
@@ -137,21 +135,32 @@ dependencies {
     implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
-    implementation("androidx.activity:activity-compose:${Versions.Androidx.composeActivity}")
+    implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
     implementation("androidx.constraintlayout:constraintlayout-compose:${Versions.Androidx.constraintLayoutCompose}")
-    implementation("androidx.compose.runtime:runtime:${Versions.Androidx.compose}")
-    implementation("androidx.compose.ui:ui:${Versions.Androidx.compose}")
-    implementation("androidx.compose.foundation:foundation:${Versions.Androidx.compose}")
-    implementation("androidx.compose.foundation:foundation-layout:${Versions.Androidx.compose}")
-    implementation("androidx.compose.ui:ui-viewbinding:${Versions.Androidx.compose}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.Androidx.compose}")
-    implementation("androidx.compose.runtime:runtime-livedata:${Versions.Androidx.compose}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.compose}")
-    implementation("com.google.android.material:compose-theme-adapter:${Versions.Androidx.composeThemeAdapter}")
-    debugImplementation("androidx.compose.ui:ui-tooling:${Versions.Androidx.compose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
+    androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
+
+    // compose
+    hashMapOf(
+        "runtime" to arrayListOf("runtime", "runtime-livedata"),
+        "ui" to arrayListOf("ui", "ui-viewbinding", "ui-tooling-preview"),
+        "foundation" to arrayListOf("foundation", "foundation-layout"),
+    ).forEach {
+        it.value.forEach { module ->
+            implementation(
+                group = "androidx.compose.${it.key}",
+                name = module,
+                version = Versions.Androidx.Compose.compose
+            )
+        }
+    }
+
     implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
     implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
-    implementation("io.coil-kt:coil-compose:${Versions.coil}")
-    androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
+    debugImplementation(
+        group = "androidx.compose.ui",
+        name = "ui-tooling",
+        version = Versions.Androidx.Compose.compose
+    )
 
 }
