@@ -72,6 +72,7 @@ android {
 dependencies {
     implementation(project(":shared"))
 
+    // moko
     listOf(
         "livedata-material",
         "livedata-glide",
@@ -90,9 +91,8 @@ dependencies {
         name = "resources-compose",
         version = Versions.Moko.resources
     )
-    implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
 
+    // navigation
     listOf(
         "fragment-ktx",
         "ui-ktx",
@@ -105,12 +105,8 @@ dependencies {
             version = Versions.Androidx.nav
         )
     }
-    androidTestImplementation(
-        group = "androidx.navigation",
-        name = "navigation-testing",
-        version = Versions.Androidx.nav
-    )
 
+    // exoplayer
     listOf(
         "exoplayer-core",
         "exoplayer-hls",
@@ -124,12 +120,6 @@ dependencies {
             version = Versions.Android.exoplayer
         )
     }
-
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-    implementation("com.google.android.material:compose-theme-adapter:${Versions.Androidx.Compose.themeAdapter}")
-    implementation("io.coil-kt:coil-compose:${Versions.coil}")
-    // Junit
-    testImplementation("junit:junit:${Versions.junit}")
 
     // Androidx
     implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
@@ -155,12 +145,32 @@ dependencies {
         }
     }
 
+    // material3
     implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
     implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
+    implementation("com.google.android.material:compose-theme-adapter-3:${Versions.Androidx.Compose.themeAdapter}")
+
+    // misc
+    implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
+    implementation("io.coil-kt:coil-compose:${Versions.coil}")
+
+    // testing
     debugImplementation(
         group = "androidx.compose.ui",
         name = "ui-tooling",
         version = Versions.Androidx.Compose.compose
+    )
+    androidTestImplementation(
+        group = "androidx.navigation",
+        name = "navigation-testing",
+        version = Versions.Androidx.nav
+    )
+    testImplementation(
+        group = "junit",
+        name = "junit",
+        version = Versions.junit
     )
 
 }
