@@ -14,12 +14,12 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.cast.CastPlayer
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ext.cast.CastPlayer
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
-import com.google.android.exoplayer2.ui.StyledPlayerView
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.databinding.FragmentPlayerBinding
@@ -29,7 +29,7 @@ import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
 
-
+@UnstableApi
 @Composable
 fun PlayerView(
     setFullScreen: (visible: Boolean) -> Unit
@@ -47,6 +47,7 @@ fun PlayerView(
     )
 }
 
+@UnstableApi
 @Composable
 fun PlayerView(
     title: String,
@@ -94,7 +95,7 @@ fun PlayerView(
 
 }
 
-
+@UnstableApi
 @Composable
 fun PlayerViewState(
     description: String?,
@@ -118,7 +119,7 @@ fun PlayerViewState(
             )
         } else { // currentPlayer == localPlayer
             videoView.controllerHideOnTouch = false
-            videoView.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+            videoView.controllerShowTimeoutMs = DEFAULT_SHOW_TIMEOUT_MS
             videoView.defaultArtwork = null
         }
         videoView.player = player
@@ -127,7 +128,7 @@ fun PlayerViewState(
                 setFullScreen(true)
             }
             else -> {
-                videoView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
+                videoView.setControllerVisibilityListener(androidx.media3.ui.PlayerView.ControllerVisibilityListener { visibility: Int ->
                     Log.v(TAG, "Player controler visibility Changed: $visibility")
                     when (visibility) {
                         View.VISIBLE -> {

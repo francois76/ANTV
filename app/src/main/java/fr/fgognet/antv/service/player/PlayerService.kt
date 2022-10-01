@@ -2,15 +2,16 @@ package fr.fgognet.antv.service.player
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
+import android.media.session.PlaybackState
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.ext.cast.CastPlayer
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import com.google.android.exoplayer2.util.MimeTypes
+import androidx.media3.cast.CastPlayer
+import androidx.media3.common.*
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 
 data class MediaData(
@@ -34,20 +35,19 @@ object PlayerService {
     private lateinit var application: Application
 
     // mediaSession
-    lateinit var mediaSession: MediaSessionCompat
+    lateinit var mediaSession: MediaSession
         private set
-    val mediaSessionToken: MediaSessionCompat.Token
-        get() = mediaSession.sessionToken
-    private lateinit var mediaSessionConnector: MediaSessionConnector
+    val mediaSessionToken: SessionToken
+        get() = mediaSession.token
     var currentMediaData: MediaData? = null
         private set
     private var currentMediaItem: MediaItem? = null
-    private var mStateBuilder: PlaybackStateCompat.Builder =
-        PlaybackStateCompat.Builder().setActions(
-            PlaybackStateCompat.ACTION_PLAY or
-                    PlaybackStateCompat.ACTION_PAUSE or
-                    PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+    private var mStateBuilder: PlaybackState.Builder =
+        PlaybackState.Builder().setActions(
+            PlaybackState.ACTION_PLAY or
+                    PlaybackState.ACTION_PAUSE or
+                    PlaybackState.ACTION_PLAY_PAUSE or
+                    PlaybackState.ACTION_SKIP_TO_PREVIOUS
         )
     private var listeners: Map<Int, PlayerListener> =
         mapOf()
@@ -58,7 +58,7 @@ object PlayerService {
             state,
             player.value?.currentPosition ?: 0, 1f
         )
-        mediaSession.setPlaybackState(mStateBuilder.build())
+        // mediaSession.setPlaybackState(mStateBuilder.build())
     }
 
     fun updateCurrentMedia(mediaData: MediaData) {
@@ -82,7 +82,7 @@ object PlayerService {
         player.value?.play()
     }
 
-
+    @UnstableApi
     fun init(application: Application) {
         if (PlayerService::application.isInitialized) {
             return
@@ -101,9 +101,9 @@ object PlayerService {
         } else {
             localPlayer
         }
-        mediaSession = initMediaSession()
-        mediaSessionConnector = MediaSessionConnector(mediaSession)
-        mediaSessionConnector.setPlayer(newPlayer)
+
+        mediaSession = MediaSession.Builder(application.baseContext, newPlayer).build()
+        // mediaSession.setPlaybackState(mStateBuilder.build())
         val servicePlayerListener = PlayerServiceListener()
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         Log.d(TAG, "updating player")
@@ -155,15 +155,6 @@ object PlayerService {
     }
 
 
-    private fun initMediaSession(): MediaSessionCompat {
-        val mediaSession = MediaSessionCompat(application, TAG)
-        mediaSession.setMediaButtonReceiver(null)
-        mediaSession.setPlaybackState(mStateBuilder.build())
-        mediaSession.isActive = true
-        return mediaSession
-    }
-
-
     private fun setCurrentPlayer(currentPlayer: Player) {
         Log.v(TAG, "setCurrentPlayer")
         if (player.value == null || currentPlayer === player) {
@@ -189,8 +180,7 @@ object PlayerService {
         currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
-        mediaSessionConnector.setPlayer(currentPlayer)
-        mediaSession.isActive = true
+        mediaSession.player = currentPlayer
         Log.d(TAG, "updating player")
         _player.value = currentPlayer
     }

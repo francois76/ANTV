@@ -1,8 +1,11 @@
 package fr.fgognet.antv.service.player
 
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
+import androidx.media3.cast.SessionAvailabilityListener
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 
+
+@UnstableApi
 interface PlayerListener : Player.Listener, SessionAvailabilityListener {
     override fun onCastSessionAvailable() {
     }

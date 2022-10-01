@@ -5,11 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import androidx.media.session.MediaButtonReceiver
-import com.google.android.exoplayer2.PlaybackException
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.util.UnstableApi
 
 private const val TAG = "ANTV/PlayerServiceListener"
 
+@UnstableApi
 class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -33,7 +34,7 @@ class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.v(TAG, "onReceive")
-        MediaButtonReceiver.handleIntent(PlayerService.mediaSession, intent)
+        // MediaButtonReceiver.handleIntent(PlayerService.mediaSession, intent)
     }
 
     override fun onPlayerError(error: PlaybackException) {

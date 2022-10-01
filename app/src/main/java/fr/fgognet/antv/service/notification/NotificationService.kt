@@ -60,11 +60,6 @@ object NotificationService {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setColor(background.data)
                 .setColorized(true)
-                .setStyle(
-                    androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle()
-                        .setMediaSession(PlayerService.mediaSessionToken)
-                        .setShowActionsInCompactView(0, 1, 2)
-                )
                 .addAction(
                     NotificationCompat.Action(
                         R.drawable.ic_baseline_skip_previous_24,

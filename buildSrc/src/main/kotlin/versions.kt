@@ -19,7 +19,7 @@ object Versions {
     }
 
     object Android {
-        const val exoplayer = "2.18.1"
+        const val exoplayer = "1.0.0-beta02"
         const val castFramework = "21.1.0"
     }
 

@@ -7,7 +7,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.google.android.exoplayer2.Player
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -27,6 +28,7 @@ data class PlayerData(
     val description: String
 )
 
+@UnstableApi
 @SuppressLint("StaticFieldLeak")
 class PlayerViewModel : ViewModel(),
     DefaultLifecycleObserver, PlayerListener {

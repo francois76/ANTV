@@ -108,14 +108,14 @@ dependencies {
 
     // exoplayer
     listOf(
-        "exoplayer-core",
-        "exoplayer-hls",
-        "exoplayer-ui",
-        "extension-cast",
-        "extension-mediasession"
+        "media3-exoplayer",
+        "media3-exoplayer-hls",
+        "media3-ui",
+        "media3-cast",
+        "media3-session"
     ).forEach {
         implementation(
-            group = "com.google.android.exoplayer",
+            group = "androidx.media3",
             name = it,
             version = Versions.Android.exoplayer
         )
