@@ -32,15 +32,18 @@ open class MainActivity : FragmentActivity() {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         initCommonLogs()
-        controllerFuture =
-            MediaController.Builder(
-                this,
-                SessionToken(this, ComponentName(this, PlayerService::class.java))
-            )
-                .buildAsync()
-        controllerFuture.addListener({
-            PlayerService.controller = controller
-        }, MoreExecutors.directExecutor())
+        if (PlayerService.controller == null) {
+            controllerFuture =
+                MediaController.Builder(
+                    this,
+                    SessionToken(this, ComponentName(this, PlayerService::class.java))
+                )
+                    .buildAsync()
+            controllerFuture.addListener({
+                PlayerService.controller = controller
+            }, MoreExecutors.directExecutor())
+        }
+
         setContent {
             ANTVApp()
         }
@@ -50,7 +53,10 @@ open class MainActivity : FragmentActivity() {
 
     override fun onStop() {
         super.onStop()
-        MediaController.releaseFuture(controllerFuture)
+        if (isFinishing) {
+            MediaController.releaseFuture(controllerFuture)
+        }
+
     }
 
 }

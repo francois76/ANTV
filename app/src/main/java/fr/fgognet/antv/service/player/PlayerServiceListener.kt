@@ -51,6 +51,9 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
                 )
                 .setMimeType(MimeTypes.APPLICATION_M3U8).build()
         }
+        if (updatedMediaItems[0].mediaId == mediaSession.player.currentMediaItem?.mediaId) {
+            return super.onAddMediaItems(mediaSession, controller, mediaItems)
+        }
         return Futures.immediateFuture(updatedMediaItems)
     }
 

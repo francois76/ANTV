@@ -47,6 +47,13 @@ class PlayerViewModel : ViewModel(),
 
     private fun initialize() {
         Log.v(TAG, "initialize")
+        this._playerdata.value = PlayerData(
+            url = "",
+            imageCode = "",
+            title = "",
+            description = "",
+            player = PlayerService.controller
+        )
     }
 
 
@@ -72,12 +79,13 @@ class PlayerViewModel : ViewModel(),
                     )
                     .build()
             )
+            PlayerService.controller?.prepare()
             this._playerdata.value = PlayerData(
                 url = entity.url,
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = PlayerService.controller
+                player = this._playerdata.value.player
             )
         }
     }
