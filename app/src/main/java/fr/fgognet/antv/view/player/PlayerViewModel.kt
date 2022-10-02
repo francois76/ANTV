@@ -13,7 +13,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.media.session.MediaButtonReceiver
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -23,10 +22,8 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
-import dev.icerock.moko.mvvm.livedata.setValue
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.R
 import fr.fgognet.antv.activity.main.MainActivity
@@ -65,7 +62,6 @@ class PlayerViewModel : ViewModel(),
             )
         )
     val playerData: LiveData<PlayerData> get() = _playerdata
-    private var listenerKey: Int = 0
 
     private lateinit var controllerFuture: ListenableFuture<MediaController>
     private val controller: MediaController?
@@ -75,8 +71,6 @@ class PlayerViewModel : ViewModel(),
     private fun initialize(context: Context) {
         Log.v(TAG, "initialize")
         this._context = context
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        Log.d(TAG, "registered $listenerKey")
 
         controllerFuture =
             MediaController.Builder(
@@ -87,30 +81,15 @@ class PlayerViewModel : ViewModel(),
                 )
             )
                 .buildAsync()
-        controllerFuture.addListener({
-
-            this._playerdata.setValue(
-                PlayerData(
-                    player = this.controller,
-                    imageCode = this.playerData.value.imageCode,
-                    title = this.playerData.value.title,
-                    description = this.playerData.value.description,
-                    url = this._playerdata.value.url
-                ), async = true
-            )
-
-            this.controller?.addListener(
-                this
-            )
-        }, MoreExecutors.directExecutor())
+        this.controller?.addListener(
+            this
+        )
     }
 
 
     override fun onCleared() {
         Log.v(TAG, "onCleared")
         super.onCleared()
-        Log.d(TAG, "de-registered $listenerKey")
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
     }
 
 
@@ -121,34 +100,32 @@ class PlayerViewModel : ViewModel(),
         )
     }
 
-    fun updateCurrentMedia() {
-        controller?.setMediaItem(
-            MediaItem.Builder()
-                .setUri(this.playerData.value.url)
-                .setMediaMetadata(
-                    MediaMetadata.Builder().setTitle(this.playerData.value.title)
-                        .setDescription(this.playerData.value.description)
-                        .build()
-                )
-                .setMimeType(MimeTypes.APPLICATION_M3U8).build()
-        )
-        controller?.prepare()
-        controller?.play()
-    }
-
-    fun retrievePlayerEntity(title: String) {
+    fun updateCurrentMedia(title: String) {
+        Log.v(TAG, "updateCurrentMedia")
         val entity = VideoDao.get(title)
         if (entity != null) {
-            val updatedData = PlayerData(
+            controller?.setMediaItem(
+                MediaItem.Builder()
+                    .setUri(entity.url)
+                    .setMediaMetadata(
+                        MediaMetadata.Builder().setTitle(entity.title)
+                            .setDescription(entity.description)
+                            .build()
+                    )
+                    .setMimeType(MimeTypes.APPLICATION_M3U8).build()
+            )
+            controller?.prepare()
+            controller?.play()
+            this._playerdata.value = PlayerData(
                 url = entity.url,
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = playerData.value.player
+                player = controller
             )
-            this._playerdata.value = updatedData
         }
     }
+
 
     private fun showMediaplayerNotification(context: Context, isPlaying: Boolean) {
         Log.v(TAG, "showNotification")

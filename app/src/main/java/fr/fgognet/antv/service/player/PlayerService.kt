@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media3.cast.CastPlayer
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -36,7 +35,6 @@ class PlayerService : MediaSessionService() {
         private set
     val mediaSessionToken: SessionToken
         get() = mediaSession.token
-    private var currentMediaItem: MediaItem? = null
     private var mStateBuilder: PlaybackState.Builder =
         PlaybackState.Builder().setActions(
             PlaybackState.ACTION_PLAY or
@@ -53,14 +51,13 @@ class PlayerService : MediaSessionService() {
             state,
             player.value?.currentPosition ?: 0, 1f
         )
-        // mediaSession.setPlaybackState(mStateBuilder.build())
     }
 
 
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
-        Log.v(TAG, "init")
+        Log.v(TAG, "onCreate")
         if (CastContext.getSharedInstance() != null) {
             castPlayer = CastPlayer(CastContext.getSharedInstance()!!)
         } else {
@@ -94,10 +91,12 @@ class PlayerService : MediaSessionService() {
 
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
+        Log.v(TAG, "onGetSession")
         return mediaSession
     }
 
     override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
         player.value?.release()
         mediaSession.release()
         super.onDestroy()
@@ -145,7 +144,6 @@ class PlayerService : MediaSessionService() {
             currentPlayer.addListener(it)
         }
 
-        currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
         mediaSession.player = currentPlayer

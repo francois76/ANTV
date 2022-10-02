@@ -53,19 +53,13 @@ fun PlayerView(
         PlayerViewModel().start(context)
     }
     )
-    model.retrievePlayerEntity(title)
+    model.updateCurrentMedia(title)
     val state by model.playerData.ld().observeAsState()
-    if (state?.url != null) {
-        model.updateCurrentMedia()
-
-        PlayerViewState(
-            description = state?.description,
-            player = state?.player,
-            setFullScreen = setFullScreen
-        )
-    }
-
-
+    PlayerViewState(
+        description = state?.description,
+        player = state?.player,
+        setFullScreen = setFullScreen
+    )
 }
 
 @UnstableApi
