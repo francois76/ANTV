@@ -49,10 +49,15 @@ class MainViewModel : ViewModel(), Player.Listener {
             )
                 .buildAsync()
         controllerFuture.addListener({
-            this.controller?.addListener(
-                this
-            )
+
         }, MoreExecutors.directExecutor())
+    }
+
+    private fun setController() {
+        val controller = this.controller ?: return
+        controller.addListener(
+            this
+        )
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
@@ -68,4 +73,5 @@ class MainViewModel : ViewModel(), Player.Listener {
             this._mainData.value = MainData(piPParams = builder.build())
         }
     }
+
 }

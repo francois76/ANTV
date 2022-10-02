@@ -69,25 +69,20 @@ class PlayerViewModel : ViewModel(),
             )
                 .buildAsync()
         controllerFuture.addListener({
-            Log.d(TAG, "controller present: ${controller != null}")
-            Log.d(
-                TAG,
-                "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
-            )
-            this._playerdata.value = PlayerData(
-                url = "",
-                imageCode = "",
-                title = "",
-                description = "",
-                player = controller
-            )
-            Log.d(TAG, "controller present: ${controller != null}")
-            Log.d(
-                TAG,
-                "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
-            )
+            setController()
         }, MoreExecutors.directExecutor())
 
+    }
+
+    private fun setController() {
+        val controller = this.controller ?: return
+        this._playerdata.value = PlayerData(
+            url = "",
+            imageCode = "",
+            title = "",
+            description = "",
+            player = controller
+        )
     }
 
 
