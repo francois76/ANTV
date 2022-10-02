@@ -13,10 +13,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.session.MediaButtonReceiver
 import androidx.media3.cast.SessionAvailabilityListener
+import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
+import com.google.common.util.concurrent.ListenableFuture
 import fr.fgognet.antv.R
 import fr.fgognet.antv.activity.main.MainActivity
 
@@ -26,6 +28,7 @@ private const val TAG = "ANTV/PlayerServiceListener"
 class PlayerServiceListener(private val service: PlayerService) : Player.Listener,
     SessionAvailabilityListener,
     BroadcastReceiver(), MediaSession.Callback {
+
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
@@ -37,6 +40,15 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         showMediaplayerNotification(
             isPlaying
         )
+    }
+
+    override fun onAddMediaItems(
+        mediaSession: MediaSession,
+        controller: MediaSession.ControllerInfo,
+        mediaItems: MutableList<MediaItem>
+    ): ListenableFuture<MutableList<MediaItem>> {
+        Log.v(TAG, "onAddMediaItems")
+        return super.onAddMediaItems(mediaSession, controller, mediaItems)
     }
 
 
@@ -52,7 +64,6 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.v(TAG, "onReceive")
-        // MediaButtonReceiver.handleIntent(PlayerService.mediaSession, intent)
     }
 
     override fun onPlayerError(error: PlaybackException) {

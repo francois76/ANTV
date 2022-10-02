@@ -13,6 +13,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -38,7 +39,6 @@ class PlayerViewModel : ViewModel(),
 
     fun start(context: Context) = apply { initialize(context) }
 
-    private lateinit var _context: Context
     private val _playerdata: MutableLiveData<PlayerData> =
         MutableLiveData(
             PlayerData(
@@ -58,24 +58,36 @@ class PlayerViewModel : ViewModel(),
 
     private fun initialize(context: Context) {
         Log.v(TAG, "initialize")
-        this._context = context
 
         controllerFuture =
             MediaController.Builder(
-                this._context,
+                context,
                 SessionToken(
-                    this._context,
-                    ComponentName(this._context, PlayerService::class.java)
+                    context,
+                    ComponentName(context, PlayerService::class.java)
                 )
             )
                 .buildAsync()
-        this._playerdata.value = PlayerData(
-            url = "",
-            imageCode = "",
-            title = "",
-            description = "",
-            player = controller
-        )
+        controllerFuture.addListener({
+            Log.d(TAG, "controller present: ${controller != null}")
+            Log.d(
+                TAG,
+                "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
+            )
+            this._playerdata.value = PlayerData(
+                url = "",
+                imageCode = "",
+                title = "",
+                description = "",
+                player = controller
+            )
+            Log.d(TAG, "controller present: ${controller != null}")
+            Log.d(
+                TAG,
+                "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
+            )
+        }, MoreExecutors.directExecutor())
+
     }
 
 
@@ -98,6 +110,11 @@ class PlayerViewModel : ViewModel(),
                             .build()
                     )
                     .setMimeType(MimeTypes.APPLICATION_M3U8).build()
+            )
+            Log.d(TAG, "controller present: ${controller != null}")
+            Log.d(
+                TAG,
+                "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
             )
             controller?.prepare()
             controller?.play()
