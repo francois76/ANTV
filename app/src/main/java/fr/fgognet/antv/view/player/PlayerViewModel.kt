@@ -1,12 +1,10 @@
 package fr.fgognet.antv.view.player
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -32,7 +30,7 @@ class PlayerViewModel : ViewModel(),
     DefaultLifecycleObserver {
 
 
-    fun start(context: Context) = apply { initialize(context) }
+    fun start() = apply { initialize() }
 
     private val _playerdata: MutableLiveData<PlayerData> =
         MutableLiveData(
@@ -47,7 +45,7 @@ class PlayerViewModel : ViewModel(),
     val playerData: LiveData<PlayerData> get() = _playerdata
 
 
-    private fun initialize(context: Context) {
+    private fun initialize() {
         Log.v(TAG, "initialize")
     }
 
@@ -62,15 +60,17 @@ class PlayerViewModel : ViewModel(),
         Log.v(TAG, "updateCurrentMedia")
         val entity = VideoDao.get(title)
         if (entity != null) {
+            Log.d(TAG, "received entity:  $entity")
+            //this is not the full mediaItem here
             PlayerService.controller?.setMediaItem(
                 MediaItem.Builder()
-                    .setUri(entity.url)
+                    .setMediaId(entity.url)
                     .setMediaMetadata(
                         MediaMetadata.Builder().setTitle(entity.title)
                             .setDescription(entity.description)
                             .build()
                     )
-                    .setMimeType(MimeTypes.APPLICATION_M3U8).build()
+                    .build()
             )
             this._playerdata.value = PlayerData(
                 url = entity.url,

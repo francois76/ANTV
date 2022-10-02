@@ -30,7 +30,7 @@ class PlayerService : MediaSessionService() {
     private val TAG = "ANTV/PlayerService"
 
     // players
-    private lateinit var localPlayer: Player
+    private lateinit var localPlayer: ExoPlayer
     private lateinit var castPlayer: CastPlayer
 
     // mediaSession
@@ -66,8 +66,6 @@ class PlayerService : MediaSessionService() {
                 }).setCallback(servicePlayerListener)
                 .build()
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
-        Log.d(TAG, "updating player")
-
     }
 
 
@@ -123,7 +121,6 @@ class PlayerService : MediaSessionService() {
 
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
-        mediaSession.player = currentPlayer
         Log.d(TAG, "updating player")
         mediaSession.player = currentPlayer
     }

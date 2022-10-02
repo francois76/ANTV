@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.media3.cast.SessionAvailabilityListener
-import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
+import androidx.media3.common.*
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import com.google.common.util.concurrent.Futures
@@ -19,6 +17,14 @@ private const val TAG = "ANTV/PlayerServiceListener"
 class PlayerServiceListener(private val service: PlayerService) : Player.Listener,
     SessionAvailabilityListener,
     BroadcastReceiver(), MediaSession.Callback {
+
+    override fun onConnect(
+        session: MediaSession,
+        controller: MediaSession.ControllerInfo
+    ): MediaSession.ConnectionResult {
+        Log.v(TAG, "onConnect")
+        return super.onConnect(session, controller)
+    }
 
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -32,9 +38,20 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo,
         mediaItems: MutableList<MediaItem>
-    ): ListenableFuture<MutableList<MediaItem>> {
+    ): ListenableFuture<List<MediaItem>> {
         Log.v(TAG, "onAddMediaItems")
-        return Futures.immediateFuture(mediaItems)
+        val updatedMediaItems: List<MediaItem> = mediaItems.map { mediaItem ->
+            MediaItem.Builder()
+                .setUri(mediaItem.mediaId)
+                .setMediaId(mediaItem.mediaId)
+                .setMediaMetadata(
+                    MediaMetadata.Builder().setTitle(mediaItem.mediaMetadata.title)
+                        .setDescription(mediaItem.mediaMetadata.description)
+                        .build()
+                )
+                .setMimeType(MimeTypes.APPLICATION_M3U8).build()
+        }
+        return Futures.immediateFuture(updatedMediaItems)
     }
 
 

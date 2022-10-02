@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.player
 
-import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
 import android.view.View
@@ -29,9 +28,8 @@ private const val TAG = "ANTV/PlayerView"
 fun PlayerView(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val context: Context = LocalContext.current.applicationContext
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
-        PlayerViewModel().start(context)
+        PlayerViewModel().start()
     }
     )
     val state by model.playerData.ld().observeAsState()
@@ -48,13 +46,12 @@ fun PlayerView(
     title: String,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val context: Context = LocalContext.current.applicationContext
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
-        PlayerViewModel().start(context)
+        PlayerViewModel().start()
     }
     )
-    model.updateCurrentMedia(title)
     val state by model.playerData.ld().observeAsState()
+    model.updateCurrentMedia(title)
     PlayerViewState(
         description = state?.description,
         player = state?.player,
@@ -69,6 +66,7 @@ fun PlayerViewState(
     player: Player?,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
+    Log.d(TAG, "redrawing state with player ${player?.mediaMetadata?.title ?: "no_player"}")
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
