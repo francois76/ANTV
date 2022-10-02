@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 import android.app.PictureInPictureParams
-import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -9,9 +8,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -42,23 +39,11 @@ class MainViewModel : ViewModel(), Player.Listener {
 
     private fun initialize(context: Context) {
         Log.v(TAG, "initialize")
-        controllerFuture =
-            MediaController.Builder(
-                context,
-                SessionToken(context, ComponentName(context, PlayerService::class.java))
-            )
-                .buildAsync()
-        controllerFuture.addListener({
-
-        }, MoreExecutors.directExecutor())
-    }
-
-    private fun setController() {
-        val controller = this.controller ?: return
-        controller.addListener(
+        PlayerService.controller?.addListener(
             this
         )
     }
+
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         Log.v(TAG, "onMediaItemTransition")
