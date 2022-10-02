@@ -41,11 +41,7 @@ class PlayerService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         Log.v(TAG, "onCreate")
-        if (CastContext.getSharedInstance() != null) {
-            castPlayer = CastPlayer(CastContext.getSharedInstance()!!)
-        } else {
-            Log.e(TAG, "no castcontext instance found")
-        }
+        castPlayer = CastPlayer(CastContext.getSharedInstance(applicationContext))
         localPlayer =
             ExoPlayer.Builder(this).build()
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
@@ -116,8 +112,8 @@ class PlayerService : MediaSessionService() {
             playbackPositionMs = previousPlayer.currentPosition
             playWhenReady = previousPlayer.playWhenReady
         }
-        previousPlayer.stop()
         currentPlayer.setMediaItem(previousPlayer.currentMediaItem!!, playbackPositionMs)
+        previousPlayer.stop()
         previousPlayer.clearMediaItems()
 
         currentPlayer.playWhenReady = playWhenReady
