@@ -47,7 +47,7 @@ class PlayerService : MediaSessionService() {
             Log.e(TAG, "no castcontext instance found")
         }
         localPlayer =
-            ExoPlayer.Builder(application).build()
+            ExoPlayer.Builder(this).build()
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
             castPlayer
         } else {

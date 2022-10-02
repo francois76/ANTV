@@ -10,6 +10,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
+import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
 private const val TAG = "ANTV/PlayerServiceListener"
@@ -33,7 +34,7 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         mediaItems: MutableList<MediaItem>
     ): ListenableFuture<MutableList<MediaItem>> {
         Log.v(TAG, "onAddMediaItems")
-        return super.onAddMediaItems(mediaSession, controller, mediaItems)
+        return Futures.immediateFuture(mediaItems)
     }
 
 

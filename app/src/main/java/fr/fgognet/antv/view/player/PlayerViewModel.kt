@@ -49,8 +49,6 @@ class PlayerViewModel : ViewModel(),
 
     private fun initialize(context: Context) {
         Log.v(TAG, "initialize")
-
-
     }
 
 
