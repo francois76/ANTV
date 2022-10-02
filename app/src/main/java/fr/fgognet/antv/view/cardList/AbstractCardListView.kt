@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.cardList
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,16 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil.compose.AsyncImage
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.R
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
@@ -33,7 +33,6 @@ import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
-    currentPlayingImage: ImageBitmap?,
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
@@ -64,58 +63,54 @@ fun <T : CardData> AbstractCardListView(
                 }
             }
         }
-        if (PlayerService.currentMediaData != null) {
-            Card(
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .clickable {
+                    goToCurrentPlaying()
+                }
+        ) {
+            ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .clickable {
-                        goToCurrentPlaying()
-                    }
+                    .fillMaxHeight()
             ) {
-                ConstraintLayout(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                ) {
-                    val (is_playing_thumbnail, is_playing_label, is_playing_title) = createRefs()
+                val (is_playing_thumbnail, is_playing_label, is_playing_title) = createRefs()
 
-                    Text(
-                        text = PlayerService.currentMediaData!!.title!!,
-                        modifier = Modifier.constrainAs(is_playing_title) {
+                Text(
+                    text = "title",
+                    modifier = Modifier.constrainAs(is_playing_title) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(is_playing_thumbnail.end)
+                        top.linkTo(is_playing_label.bottom)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    })
+                AsyncImage(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .constrainAs(is_playing_thumbnail) {
                             bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            height = Dimension.fillToConstraints
+                        },
+                    model = "",
+                    placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
+                    contentDescription = ""
+                )
+                Text(
+                    text = stringResource(resource = MR.strings.is_playing),
+                    modifier = Modifier
+                        .height(20.dp)
+                        .constrainAs(is_playing_label) {
                             end.linkTo(parent.end)
                             start.linkTo(is_playing_thumbnail.end)
-                            top.linkTo(is_playing_label.bottom)
+                            top.linkTo(parent.top)
                             width = Dimension.fillToConstraints
-                            height = Dimension.fillToConstraints
                         })
-                    Image(
-                        modifier = Modifier
-                            .width(80.dp)
-                            .constrainAs(is_playing_thumbnail) {
-                                bottom.linkTo(parent.bottom)
-                                start.linkTo(parent.start)
-                                top.linkTo(parent.top)
-                                height = Dimension.fillToConstraints
-                            },
-                        bitmap = currentPlayingImage!!, contentDescription = ""
-                    )
-                    Text(
-                        text = stringResource(resource = MR.strings.is_playing),
-                        modifier = Modifier
-                            .height(20.dp)
-                            .constrainAs(is_playing_label) {
-                                end.linkTo(parent.end)
-                                start.linkTo(is_playing_thumbnail.end)
-                                top.linkTo(parent.top)
-                                width = Dimension.fillToConstraints
-                            })
-                }
-            }
-        } else {
-            Row(modifier = Modifier.weight(1f)) {
-
             }
         }
     }
@@ -144,7 +139,6 @@ fun CardListViewPreview(
                 ResourceOrText("title2"), "description2", "imageCode1", 2
             )
         ),
-        currentPlayingImage = null,
         goToCurrentPlaying = {},
     ) { cardData ->
         CompositeCardView(

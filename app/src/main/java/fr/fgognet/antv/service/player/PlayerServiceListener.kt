@@ -11,25 +11,26 @@ import androidx.media3.common.util.UnstableApi
 private const val TAG = "ANTV/PlayerServiceListener"
 
 @UnstableApi
-class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
+class PlayerServiceListener(private val service: PlayerService) : PlayerListener,
+    BroadcastReceiver() {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
         if (isPlaying) {
-            PlayerService.updatePlayingState(PlaybackStateCompat.STATE_PLAYING)
+            service.updatePlayingState(PlaybackStateCompat.STATE_PLAYING)
         } else {
-            PlayerService.updatePlayingState(PlaybackStateCompat.STATE_PAUSED)
+            service.updatePlayingState(PlaybackStateCompat.STATE_PAUSED)
         }
     }
 
     override fun onCastSessionAvailable() {
         Log.v(TAG, "onCastSessionAvailable")
-        PlayerService.cast()
+        service.cast()
     }
 
     override fun onCastSessionUnavailable() {
         Log.v(TAG, "onCastSessionUnavailable")
-        PlayerService.stopCast()
+        service.stopCast()
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -45,7 +46,7 @@ class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
             PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 Log.w(TAG, "error on playback: ${error.errorCode}")
-                PlayerService.resyncOnLiveError()
+                service.resyncOnLiveError()
             }
 
             else -> Log.e(TAG, "error on playback: ${error.errorCode}")

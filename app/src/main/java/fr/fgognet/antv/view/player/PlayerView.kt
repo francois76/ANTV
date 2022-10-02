@@ -12,19 +12,14 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.cast.CastPlayer
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
-import coil.ImageLoader
-import coil.request.ImageRequest
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.databinding.FragmentPlayerBinding
-import fr.fgognet.antv.service.player.MediaData
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
@@ -61,29 +56,7 @@ fun PlayerView(
     model.retrievePlayerEntity(title)
     val state by model.playerData.ld().observeAsState()
     if (state?.url != null) {
-        val request = ImageRequest.Builder(LocalContext.current)
-            .data(state?.imageCode)
-            .target(
-                onSuccess = { result ->
-                    PlayerService.updateCurrentMedia(
-                        MediaData(
-                            state!!.url, title, state?.description, result.toBitmap(200, 200)
-                        )
-                    )
-                },
-                onError = {
-                    PlayerService.updateCurrentMedia(
-                        MediaData(
-                            state!!.url, title, state?.description, null
-                        )
-                    )
-                }
-            )
-            .build()
-        val imageLoader = ImageLoader.Builder(LocalContext.current)
-            .crossfade(true)
-            .build()
-        imageLoader.enqueue(request)
+        model.updateCurrentMedia()
 
         PlayerViewState(
             description = state?.description,

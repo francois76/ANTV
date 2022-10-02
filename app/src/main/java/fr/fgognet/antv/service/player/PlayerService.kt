@@ -1,29 +1,29 @@
 package fr.fgognet.antv.service.player
 
-import android.app.Application
-import android.graphics.Bitmap
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.Intent
 import android.media.session.PlaybackState
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media3.cast.CastPlayer
-import androidx.media3.common.*
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
+import fr.fgognet.antv.activity.main.MainActivity
+import fr.fgognet.antv.activity.tv.TvActivity
 
-data class MediaData(
-    val url: String,
-    val title: String?,
-    val description: String?,
-    val bitmap: Bitmap?
-)
 
-object PlayerService {
+class PlayerService : MediaSessionService() {
     // TAG
-    private const val TAG = "ANTV/PlayerService"
+    private val TAG = "ANTV/PlayerService"
 
     // players
     private lateinit var localPlayer: Player
@@ -31,16 +31,11 @@ object PlayerService {
     private val _player = MutableLiveData<Player>()
     val player: LiveData<Player> get() = _player
 
-    // context
-    private lateinit var application: Application
-
     // mediaSession
     lateinit var mediaSession: MediaSession
         private set
     val mediaSessionToken: SessionToken
         get() = mediaSession.token
-    var currentMediaData: MediaData? = null
-        private set
     private var currentMediaItem: MediaItem? = null
     private var mStateBuilder: PlaybackState.Builder =
         PlaybackState.Builder().setActions(
@@ -61,34 +56,11 @@ object PlayerService {
         // mediaSession.setPlaybackState(mStateBuilder.build())
     }
 
-    fun updateCurrentMedia(mediaData: MediaData) {
-        Log.v(TAG, "updateCurrentMedia")
-        if (mediaData.url == currentMediaData?.url) {
-            return
-        }
-
-        currentMediaData = mediaData
-        currentMediaItem =
-            MediaItem.Builder()
-                .setUri(mediaData.url)
-                .setMediaMetadata(
-                    MediaMetadata.Builder().setTitle(mediaData.title)
-                        .setDescription(mediaData.description)
-                        .build()
-                )
-                .setMimeType(MimeTypes.APPLICATION_M3U8).build()
-        player.value?.setMediaItem(currentMediaItem!!)
-        player.value?.prepare()
-        player.value?.play()
-    }
 
     @UnstableApi
-    fun init(application: Application) {
-        if (PlayerService::application.isInitialized) {
-            return
-        }
+    override fun onCreate() {
+        super.onCreate()
         Log.v(TAG, "init")
-        this.application = application
         if (CastContext.getSharedInstance() != null) {
             castPlayer = CastPlayer(CastContext.getSharedInstance()!!)
         } else {
@@ -102,20 +74,35 @@ object PlayerService {
             localPlayer
         }
 
-        mediaSession = MediaSession.Builder(application.baseContext, newPlayer).build()
-        // mediaSession.setPlaybackState(mStateBuilder.build())
-        val servicePlayerListener = PlayerServiceListener()
+        mediaSession =
+            MediaSession.Builder(this, localPlayer)
+                .setSessionActivity(TaskStackBuilder.create(this).run {
+                    addNextIntent(Intent(this@PlayerService, MainActivity::class.java))
+                    addNextIntent(Intent(this@PlayerService, TvActivity::class.java))
+                    getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                })
+                .build()
+        val servicePlayerListener = PlayerServiceListener(this)
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         Log.d(TAG, "updating player")
         _player.value = newPlayer
-        val listenerKey = registerListener(servicePlayerListener)
-        Log.d(TAG, "registered $listenerKey")
+
     }
 
-    fun release() {
+
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
+        return mediaSession
+    }
+
+    override fun onDestroy() {
         player.value?.release()
         mediaSession.release()
+        super.onDestroy()
     }
+
 
     fun resyncOnLiveError() {
         // Re-initialize player at the current live window default position.
@@ -133,25 +120,6 @@ object PlayerService {
     fun stopCast() {
         Log.v(TAG, "stopCast")
         setCurrentPlayer(localPlayer)
-    }
-
-    fun registerListener(listener: PlayerListener): Int {
-        Log.v(TAG, "registerListener ${listener.javaClass.canonicalName}")
-        val key = listener.hashCode()
-        listeners = listeners + Pair(key, listener)
-        player.value?.addListener(listener)
-        Log.d(TAG, "successfully registered with key $key")
-        return key
-    }
-
-    fun unregisterListener(key: Int) {
-        Log.v(TAG, "unregisterListener $key")
-        val listener = listeners[key]
-        listener?.let {
-            player.value?.removeListener(it)
-            Log.d(TAG, "successfully unregistered ${listener.javaClass.canonicalName}")
-        }
-        listeners = listeners - key
     }
 
 

@@ -5,13 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
@@ -48,7 +46,6 @@ fun PlaylistCardListViewState(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(
