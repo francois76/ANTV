@@ -31,7 +31,6 @@ class PlayerService : MediaSessionService() {
     // players
     private lateinit var localPlayer: Player
     private lateinit var castPlayer: CastPlayer
-    private lateinit var player: Player
 
     // mediaSession
     private lateinit var mediaSession: MediaSession
@@ -55,7 +54,7 @@ class PlayerService : MediaSessionService() {
         }
         val servicePlayerListener = PlayerServiceListener(this)
         mediaSession =
-            MediaSession.Builder(this, localPlayer)
+            MediaSession.Builder(this, newPlayer)
                 .setSessionActivity(TaskStackBuilder.create(this).run {
                     addNextIntent(Intent(this@PlayerService, MainActivity::class.java))
                     addNextIntent(Intent(this@PlayerService, TvActivity::class.java))
@@ -67,7 +66,6 @@ class PlayerService : MediaSessionService() {
                 .build()
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         Log.d(TAG, "updating player")
-        player = newPlayer
 
     }
 
@@ -79,7 +77,7 @@ class PlayerService : MediaSessionService() {
 
     override fun onDestroy() {
         Log.v(TAG, "onDestroy")
-        player.release()
+        mediaSession.player.release()
         mediaSession.release()
         super.onDestroy()
     }
@@ -87,9 +85,9 @@ class PlayerService : MediaSessionService() {
 
     fun resyncOnLiveError() {
         // Re-initialize player at the current live window default position.
-        if (player.isCurrentMediaItemLive) {
-            player.seekToDefaultPosition()
-            player.prepare()
+        if (mediaSession.player.isCurrentMediaItemLive) {
+            mediaSession.player.seekToDefaultPosition()
+            mediaSession.player.prepare()
         }
     }
 
@@ -106,10 +104,10 @@ class PlayerService : MediaSessionService() {
 
     private fun setCurrentPlayer(currentPlayer: Player) {
         Log.v(TAG, "setCurrentPlayer")
-        if (currentPlayer === player) {
+        if (currentPlayer === mediaSession.player) {
             return
         }
-        val previousPlayer: Player = player
+        val previousPlayer: Player = mediaSession.player
         // Player state management.
         var playbackPositionMs = C.TIME_UNSET
         var playWhenReady = false
@@ -126,7 +124,7 @@ class PlayerService : MediaSessionService() {
         currentPlayer.prepare()
         mediaSession.player = currentPlayer
         Log.d(TAG, "updating player")
-        player = currentPlayer
+        mediaSession.player = currentPlayer
     }
 
     fun showMediaplayerNotification(isPlaying: Boolean) {

@@ -116,14 +116,12 @@ class PlayerViewModel : ViewModel(),
                 TAG,
                 "controller ${controller?.currentMediaItem?.mediaMetadata?.title ?: "no_title"}"
             )
-            controller?.prepare()
-            controller?.play()
             this._playerdata.value = PlayerData(
                 url = entity.url,
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = this._playerdata.value.player
+                player = controller
             )
         }
     }
