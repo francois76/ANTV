@@ -42,8 +42,6 @@ class PlayerService : MediaSessionService() {
                     PlaybackState.ACTION_PLAY_PAUSE or
                     PlaybackState.ACTION_SKIP_TO_PREVIOUS
         )
-    private var listeners: Map<Int, PlayerListener> =
-        mapOf()
 
     fun updatePlayingState(state: Int) {
         Log.v(TAG, "updatePlayingState")
@@ -70,7 +68,7 @@ class PlayerService : MediaSessionService() {
         } else {
             localPlayer
         }
-
+        val servicePlayerListener = PlayerServiceListener(this)
         mediaSession =
             MediaSession.Builder(this, localPlayer)
                 .setSessionActivity(TaskStackBuilder.create(this).run {
@@ -80,9 +78,8 @@ class PlayerService : MediaSessionService() {
                         0,
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                })
+                }).setCallback(servicePlayerListener)
                 .build()
-        val servicePlayerListener = PlayerServiceListener(this)
         castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         Log.d(TAG, "updating player")
         _player.value = newPlayer
@@ -139,10 +136,6 @@ class PlayerService : MediaSessionService() {
         }
         previousPlayer.stop()
         previousPlayer.clearMediaItems()
-        listeners.values.forEach {
-            previousPlayer.removeListener(it)
-            currentPlayer.addListener(it)
-        }
 
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()

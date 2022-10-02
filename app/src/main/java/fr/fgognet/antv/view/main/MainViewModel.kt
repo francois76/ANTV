@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -13,7 +14,6 @@ import com.google.common.util.concurrent.ListenableFuture
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import fr.fgognet.antv.service.player.PlayerListener
 import fr.fgognet.antv.service.player.PlayerService
 
 
@@ -22,7 +22,7 @@ data class MainData(
 )
 
 @UnstableApi
-class MainViewModel : ViewModel(), PlayerListener {
+class MainViewModel : ViewModel(), Player.Listener {
     private val TAG = "ANTV/MainViewModel"
 
     private lateinit var controllerFuture: ListenableFuture<MediaController>
