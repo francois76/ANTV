@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -47,9 +48,11 @@ class MainViewModel : ViewModel(), Player.Listener {
                 SessionToken(context, ComponentName(context, PlayerService::class.java))
             )
                 .buildAsync()
-        this.controller?.addListener(
-            this
-        )
+        controllerFuture.addListener({
+            this.controller?.addListener(
+                this
+            )
+        }, MoreExecutors.directExecutor())
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
