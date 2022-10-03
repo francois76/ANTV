@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,14 +16,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
-import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
@@ -38,13 +35,6 @@ import fr.fgognet.antv.view.utils.buildColors
 @UnstableApi
 fun ANTVApp() {
     val appContext = LocalContext.current
-    val model: MainViewModel = viewModel(factory = createViewModelFactory {
-        MainViewModel().start(appContext)
-    })
-    val state by model.mainData.ld().observeAsState()
-    if (state?.piPParams != null) {
-        LocalContext.current.findActivity()?.setPictureInPictureParams(state?.piPParams!!)
-    }
 
 
     MaterialTheme(colorScheme = buildColors(context = appContext)) {

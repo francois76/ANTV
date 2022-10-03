@@ -1,10 +1,13 @@
 package fr.fgognet.antv.activity.main
 
+import android.app.PictureInPictureParams
 import android.content.ComponentName
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -21,7 +24,7 @@ import fr.fgognet.antv.view.main.ANTVApp
  */
 private const val TAG = "ANTV/MainActivity"
 
-open class MainActivity : FragmentActivity() {
+open class MainActivity : FragmentActivity(), Player.Listener {
 
     private lateinit var controllerFuture: ListenableFuture<MediaController>
     private val controller: MediaController?
@@ -41,19 +44,30 @@ open class MainActivity : FragmentActivity() {
                     .buildAsync()
             controllerFuture.addListener({
                 PlayerService.controller = controller
+                controller?.addListener(this)
             }, MoreExecutors.directExecutor())
         }
-
         setContent {
             ANTVApp()
         }
         CastContext.getSharedInstance(applicationContext)
     }
 
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        Log.v(TAG, "onIsPlayingChanged")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val builder = PictureInPictureParams.Builder()
+            builder.setAutoEnterEnabled(isPlaying)
+            this.setPictureInPictureParams(builder.build())
+        }
+    }
+
 
     override fun onStop() {
+        Log.v(TAG, "onStop")
         super.onStop()
         if (isFinishing) {
+            Log.w(TAG, "finishing")
             MediaController.releaseFuture(controllerFuture)
         }
 
