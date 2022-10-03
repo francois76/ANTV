@@ -1,8 +1,5 @@
 package fr.fgognet.antv.service.player
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
@@ -16,16 +13,7 @@ private const val TAG = "ANTV/PlayerServiceListener"
 @UnstableApi
 class PlayerServiceListener(private val service: PlayerService) : Player.Listener,
     SessionAvailabilityListener,
-    BroadcastReceiver(), MediaSession.Callback {
-
-    override fun onConnect(
-        session: MediaSession,
-        controller: MediaSession.ControllerInfo
-    ): MediaSession.ConnectionResult {
-        Log.v(TAG, "onConnect")
-        return super.onConnect(session, controller)
-    }
-
+    MediaSession.Callback {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
@@ -66,10 +54,6 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
     override fun onCastSessionUnavailable() {
         Log.v(TAG, "onCastSessionUnavailable")
         service.stopCast()
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        Log.v(TAG, "onReceive")
     }
 
     override fun onPlayerError(error: PlaybackException) {
