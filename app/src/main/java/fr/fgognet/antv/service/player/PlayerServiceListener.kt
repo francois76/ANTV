@@ -42,6 +42,7 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         if (updatedMediaItems[0].mediaId == mediaSession.player.currentMediaItem?.mediaId) {
             return super.onAddMediaItems(mediaSession, controller, mediaItems)
         }
+        PlayerService.currentMediaItem = updatedMediaItems[0]
         return Futures.immediateFuture(updatedMediaItems)
     }
 

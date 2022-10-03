@@ -19,12 +19,13 @@ object Versions {
     }
 
     object Android {
-        const val exoplayer = "1.0.0-beta02"
+
         const val castFramework = "21.1.0"
     }
 
     object Androidx {
         const val nav = "2.5.2"
+        const val media3 = "1.0.0-beta02"
         const val constraintLayout = "2.1.4"
         const val appCompat = "1.5.1"
         const val coreKtx = "1.9.0"

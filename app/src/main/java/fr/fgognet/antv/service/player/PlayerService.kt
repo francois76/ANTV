@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.media.session.MediaButtonReceiver
 import androidx.media3.cast.CastPlayer
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -112,7 +113,7 @@ class PlayerService : MediaSessionService() {
             playbackPositionMs = previousPlayer.currentPosition
             playWhenReady = previousPlayer.playWhenReady
         }
-        currentPlayer.setMediaItem(previousPlayer.currentMediaItem!!, playbackPositionMs)
+        currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
         previousPlayer.stop()
         previousPlayer.clearMediaItems()
 
@@ -202,6 +203,9 @@ class PlayerService : MediaSessionService() {
 
     companion object {
         var controller: MediaController? = null
+
+        // waiting for next version of media3
+        var currentMediaItem: MediaItem? = null
     }
 
 

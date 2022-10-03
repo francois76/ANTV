@@ -117,7 +117,7 @@ dependencies {
         implementation(
             group = "androidx.media3",
             name = it,
-            version = Versions.Android.exoplayer
+            version = Versions.Androidx.media3
         )
     }
 
