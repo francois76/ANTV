@@ -2,7 +2,6 @@ package fr.fgognet.antv.view.player
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
@@ -26,8 +25,7 @@ data class PlayerData(
 
 @UnstableApi
 @SuppressLint("StaticFieldLeak")
-class PlayerViewModel : ViewModel(),
-    DefaultLifecycleObserver {
+class PlayerViewModel : ViewModel() {
 
 
     fun start() = apply { initialize() }
@@ -65,6 +63,9 @@ class PlayerViewModel : ViewModel(),
 
     fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
+        if (PlayerService.controller?.currentMediaItem?.mediaMetadata?.title == title) {
+            return
+        }
         val entity = VideoDao.get(title)
         if (entity != null) {
             Log.d(TAG, "received entity:  $entity")
@@ -80,6 +81,7 @@ class PlayerViewModel : ViewModel(),
                     .build()
             )
             PlayerService.controller?.prepare()
+            PlayerService.controller?.play()
             this._playerdata.value = PlayerData(
                 url = entity.url,
                 imageCode = entity.imageCode,
