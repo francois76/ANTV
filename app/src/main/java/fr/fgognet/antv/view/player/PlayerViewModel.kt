@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.player
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -97,6 +98,7 @@ class PlayerViewModel : ViewModel() {
                     .setMediaMetadata(
                         MediaMetadata.Builder().setTitle(entity.title)
                             .setDescription(entity.description)
+                            .setArtworkUri(Uri.parse(entity.imageCode))
                             .build()
                     )
                     .build()
@@ -113,6 +115,4 @@ class PlayerViewModel : ViewModel() {
             )
         }
     }
-
-
 }

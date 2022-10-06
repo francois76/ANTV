@@ -1,11 +1,12 @@
 package fr.fgognet.antv.view.cardList
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,23 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import coil.compose.AsyncImage
+import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.R
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
+import fr.fgognet.antv.view.isPlaying.IsPlaying
 
 
 @Composable
+@UnstableApi
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
@@ -47,12 +46,12 @@ fun <T : CardData> AbstractCardListView(
             modifier = Modifier.weight(8f)
         ) {
             var modifier = Modifier.padding(horizontal = 2.dp)
-            when (configuration.orientation) {
+            modifier = when (configuration.orientation) {
                 Configuration.ORIENTATION_LANDSCAPE -> {
-                    modifier = modifier.width(600.dp)
+                    modifier.width(600.dp)
                 }
                 else -> {
-                    modifier = modifier.width(300.dp)
+                    modifier.width(300.dp)
                 }
             }
             items(cardDatas) { cardData ->
@@ -63,61 +62,13 @@ fun <T : CardData> AbstractCardListView(
                 }
             }
         }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .clickable {
-                    goToCurrentPlaying()
-                }
-        ) {
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-            ) {
-                val (is_playing_thumbnail, is_playing_label, is_playing_title) = createRefs()
-
-                Text(
-                    text = "title",
-                    modifier = Modifier.constrainAs(is_playing_title) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                        start.linkTo(is_playing_thumbnail.end)
-                        top.linkTo(is_playing_label.bottom)
-                        width = Dimension.fillToConstraints
-                        height = Dimension.fillToConstraints
-                    })
-                AsyncImage(
-                    modifier = Modifier
-                        .width(80.dp)
-                        .constrainAs(is_playing_thumbnail) {
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
-                            height = Dimension.fillToConstraints
-                        },
-                    model = "",
-                    placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
-                    contentDescription = ""
-                )
-                Text(
-                    text = stringResource(resource = MR.strings.is_playing),
-                    modifier = Modifier
-                        .height(20.dp)
-                        .constrainAs(is_playing_label) {
-                            end.linkTo(parent.end)
-                            start.linkTo(is_playing_thumbnail.end)
-                            top.linkTo(parent.top)
-                            width = Dimension.fillToConstraints
-                        })
-            }
-        }
+        IsPlaying(goToCurrentPlaying = goToCurrentPlaying)
     }
 }
 
 @Preview(widthDp = 200, heightDp = 400)
 @Composable
+@UnstableApi
 fun CardListViewPreview(
 ) {
     AbstractCardListView(
