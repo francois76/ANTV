@@ -1,30 +1,53 @@
 package fr.fgognet.antv.view.cardList
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
+import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
+
+class HasMediaPlaying : ViewModel(), Player.Listener {
+    fun start() = apply { initialize() }
+
+    private val _hasMediaPlaying: MutableLiveData<Boolean> = MutableLiveData(false)
+    val hasPlayingData: LiveData<Boolean> get() = _hasMediaPlaying
+
+
+    private fun initialize() {
+        PlayerService.controller?.addListener(this)
+    }
+
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        _hasMediaPlaying.value = mediaItem == null
+    }
+}
 
 
 @Composable
@@ -34,6 +57,11 @@ fun <T : CardData> AbstractCardListView(
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
+    val model: HasMediaPlaying = viewModel(factory = createViewModelFactory {
+        HasMediaPlaying().start()
+    }
+    )
+    val hasPlayingData by model.hasPlayingData.ld().observeAsState()
     val configuration = LocalConfiguration.current
     Column {
         Text(
@@ -61,7 +89,13 @@ fun <T : CardData> AbstractCardListView(
                 }
             }
         }
-        IsPlaying(goToCurrentPlaying = goToCurrentPlaying)
+        if (hasPlayingData == true) {
+            Row(modifier = Modifier.weight(1f)) {
+                IsPlaying(goToCurrentPlaying = goToCurrentPlaying)
+            }
+
+        }
+
     }
 }
 
