@@ -49,7 +49,6 @@ class HasMediaPlaying : ViewModel(), Player.Listener {
     }
 }
 
-
 @Composable
 fun <T : CardData> AbstractCardListView(
     title: String,
@@ -62,6 +61,25 @@ fun <T : CardData> AbstractCardListView(
     }
     )
     val hasPlayingData by model.hasPlayingData.ld().observeAsState()
+    AbstractCardListViewState(
+        title = title,
+        cardDatas = cardDatas,
+        hasPlayingData = hasPlayingData,
+        goToCurrentPlaying = goToCurrentPlaying,
+        cardDataGenerator = cardDataGenerator
+    )
+}
+
+
+@Composable
+fun <T : CardData> AbstractCardListViewState(
+    title: String,
+    cardDatas: List<T>,
+    hasPlayingData: Boolean?,
+    goToCurrentPlaying: () -> Unit,
+    cardDataGenerator: @Composable (T) -> Unit
+) {
+
     val configuration = LocalConfiguration.current
     Column {
         Text(
@@ -104,7 +122,7 @@ fun <T : CardData> AbstractCardListView(
 @UnstableApi
 fun CardListViewPreview(
 ) {
-    AbstractCardListView(
+    AbstractCardListViewState(
         title = "mytitle",
         cardDatas = arrayListOf(
             PlaylistCardData(
@@ -124,6 +142,7 @@ fun CardListViewPreview(
             )
         ),
         goToCurrentPlaying = {},
+        hasPlayingData = true,
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(
