@@ -44,12 +44,12 @@ class HasMediaPlaying : ViewModel(), Player.Listener {
 
 
     private fun initialize() {
+        Log.v(tag, "initialize")
         PlayerService.controller?.addListener(this)
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         Log.v(tag, "onMediaItemTransition")
-        Log.d(tag, mediaItem.toString())
         this._hasMediaPlaying.value = (mediaItem != null)
     }
 }
