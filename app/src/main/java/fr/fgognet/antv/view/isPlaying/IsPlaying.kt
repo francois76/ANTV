@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.media3.common.util.UnstableApi
 import coil.compose.AsyncImage
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
@@ -22,7 +21,6 @@ import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
 
 @Composable
-@UnstableApi
 fun IsPlaying(
     goToCurrentPlaying: () -> Unit,
 ) {

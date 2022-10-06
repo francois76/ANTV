@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -19,7 +18,6 @@ data class IsPlayingData(
     val description: String,
 )
 
-@UnstableApi
 @SuppressLint("StaticFieldLeak")
 class IsPlayingViewModel : ViewModel(), Player.Listener {
 

@@ -28,7 +28,6 @@ import fr.fgognet.antv.view.isPlaying.IsPlaying
 
 
 @Composable
-@UnstableApi
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
