@@ -12,8 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.media3.cast.CastPlayer
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
 import dev.icerock.moko.mvvm.createViewModelFactory
@@ -34,8 +32,7 @@ fun PlayerView(
     )
     val state by model.playerData.ld().observeAsState()
     PlayerViewState(
-        description = state?.description,
-        player = state?.player,
+        state = state,
         setFullScreen = setFullScreen
     )
 }
@@ -53,8 +50,7 @@ fun PlayerView(
     val state by model.playerData.ld().observeAsState()
     model.updateCurrentMedia(title)
     PlayerViewState(
-        description = state?.description,
-        player = state?.player,
+        state = state,
         setFullScreen = setFullScreen
     )
 }
@@ -62,18 +58,16 @@ fun PlayerView(
 @UnstableApi
 @Composable
 fun PlayerViewState(
-    description: String?,
-    player: Player?,
+    state: PlayerData?,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    Log.d(TAG, "redrawing state with player ${player?.mediaMetadata?.title ?: "no_player"}")
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     AndroidViewBinding(factory = FragmentPlayerBinding::inflate) {
         // view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =       it.mediaMetadata.title
-        videoView.findViewById<TextView>(R.id.video_description)?.text = description
-        if (player is CastPlayer) {
+        videoView.findViewById<TextView>(R.id.video_description)?.text = state?.description
+        if (state?.isCast == true) {
             videoView.controllerHideOnTouch = false
             videoView.controllerShowTimeoutMs = 0
             videoView.showController()
@@ -87,7 +81,7 @@ fun PlayerViewState(
             videoView.controllerShowTimeoutMs = DEFAULT_SHOW_TIMEOUT_MS
             videoView.defaultArtwork = null
         }
-        videoView.player = player
+        videoView.player = state?.player
         when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> {
                 setFullScreen(true)

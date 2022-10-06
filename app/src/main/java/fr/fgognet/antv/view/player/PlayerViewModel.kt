@@ -6,6 +6,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastState
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -20,7 +22,8 @@ data class PlayerData(
     val url: String,
     val imageCode: String,
     val title: String,
-    val description: String
+    val description: String,
+    val isCast: Boolean
 )
 
 @UnstableApi
@@ -37,7 +40,8 @@ class PlayerViewModel : ViewModel() {
                 imageCode = "",
                 title = "",
                 description = "",
-                player = null
+                player = null,
+                isCast = false
             )
         )
     val playerData: LiveData<PlayerData> get() = _playerdata
@@ -50,8 +54,25 @@ class PlayerViewModel : ViewModel() {
             imageCode = "",
             title = "",
             description = "",
-            player = PlayerService.controller
+            player = PlayerService.controller,
+            isCast = false
         )
+        CastContext.getSharedInstance()?.addCastStateListener {
+            this._playerdata.value = PlayerData(
+                url = this.playerData.value.url,
+                imageCode = this.playerData.value.imageCode,
+                title = this.playerData.value.title,
+                description = this.playerData.value.description,
+                player = this.playerData.value.player,
+                isCast = when (it) {
+                    CastState.CONNECTING, CastState.CONNECTED -> true
+                    CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
+                    else -> false
+                }
+            )
+
+            CastState.CONNECTED
+        }
     }
 
 
@@ -87,7 +108,8 @@ class PlayerViewModel : ViewModel() {
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = this._playerdata.value.player
+                player = this._playerdata.value.player,
+                isCast = false
             )
         }
     }
