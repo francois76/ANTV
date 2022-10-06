@@ -1,6 +1,7 @@
 package fr.fgognet.antv.view.cardList
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -34,6 +35,8 @@ import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
 
 class HasMediaPlaying : ViewModel(), Player.Listener {
+    private val tag = "ANTV/HasMediaPlaying"
+
     fun start() = apply { initialize() }
 
     private val _hasMediaPlaying: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -45,7 +48,9 @@ class HasMediaPlaying : ViewModel(), Player.Listener {
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        _hasMediaPlaying.value = mediaItem == null
+        Log.v(tag, "onMediaItemTransition")
+        Log.d(tag, mediaItem.toString())
+        this._hasMediaPlaying.value = (mediaItem != null)
     }
 }
 
