@@ -22,6 +22,7 @@ fun PlaylistCardListView(
             PlaylistViewModel().start(Unit)
         }
     ),
+    hasPlayingData: Boolean?,
     goToVideos: () -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
@@ -32,6 +33,7 @@ fun PlaylistCardListView(
             model.setCurrentSearch(it)
             goToVideos()
         },
+        hasPlayingData = hasPlayingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -40,12 +42,14 @@ fun PlaylistCardListView(
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
     goToVideos: (id: Int) -> Unit,
+    hasPlayingData: Boolean?,
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
+        hasPlayingData = hasPlayingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(

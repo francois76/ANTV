@@ -26,9 +26,9 @@ private const val TAG = "ANTV/MainActivity"
 
 open class MainActivity : FragmentActivity(), Player.Listener {
 
-    private lateinit var controllerFuture: ListenableFuture<MediaController>
+    private var controllerFuture: ListenableFuture<MediaController>? = null
     private val controller: MediaController?
-        get() = if (controllerFuture.isDone) controllerFuture.get() else null
+        get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
 
     @UnstableApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
                     SessionToken(this, ComponentName(this, PlayerService::class.java))
                 )
                     .buildAsync()
-            controllerFuture.addListener({
+            controllerFuture?.addListener({
                 PlayerService.controller = controller
                 controller?.addListener(this)
             }, MoreExecutors.directExecutor())
@@ -65,13 +65,15 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onStop() {
         Log.v(TAG, "onStop")
-        MediaController.releaseFuture(controllerFuture)
-        super.onStop()
         if (isFinishing) {
+            if (controllerFuture != null) {
+                MediaController.releaseFuture(controllerFuture!!)
+                PlayerService.controller = null
+                this.controllerFuture = null
+            }
             Log.w(TAG, "finishing")
-
         }
-
+        super.onStop()
     }
 
 }

@@ -84,10 +84,10 @@ class PlayerViewModel : ViewModel() {
 
 
     fun updateCurrentMedia(title: String) {
-        Log.v(TAG, "updateCurrentMedia")
         if (PlayerService.controller?.currentMediaItem?.mediaMetadata?.title == title) {
             return
         }
+        Log.v(TAG, "updateCurrentMedia")
         val entity = VideoDao.get(title)
         if (entity != null) {
             Log.d(TAG, "received entity:  $entity")

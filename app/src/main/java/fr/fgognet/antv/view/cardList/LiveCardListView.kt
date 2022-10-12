@@ -22,6 +22,7 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
+    hasPlayingData: Boolean?,
     goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
@@ -32,6 +33,7 @@ fun LiveCardListView(
             model.insertVideoState(url, imageCode, title, description)
             goToVideo(title)
         },
+        hasPlayingData = hasPlayingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -40,6 +42,7 @@ fun LiveCardListView(
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    hasPlayingData: Boolean?,
     goToCurrentPlaying: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -47,6 +50,7 @@ fun LiveCardListViewState(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
+        hasPlayingData = hasPlayingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData

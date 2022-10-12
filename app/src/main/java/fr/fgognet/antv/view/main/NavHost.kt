@@ -4,17 +4,27 @@ package fr.fgognet.antv.view.main
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
@@ -22,6 +32,26 @@ import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 
 const val TAG = "ANTV/ANTVNavHost"
+
+class HasMediaPlaying : ViewModel(), Player.Listener {
+    private val tag = "ANTV/HasMediaPlaying"
+
+    fun start() = apply { initialize() }
+
+    private val _hasMediaPlaying: MutableLiveData<Boolean> = MutableLiveData(false)
+    val hasPlayingData: LiveData<Boolean> get() = _hasMediaPlaying
+
+
+    private fun initialize() {
+        Log.v(tag, "initialize")
+        PlayerService.controller?.addListener(this)
+    }
+
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        Log.v(tag, "onMediaItemTransition")
+        this._hasMediaPlaying.value = (mediaItem != null)
+    }
+}
 
 @Composable
 @UnstableApi
@@ -50,6 +80,12 @@ fun ANTVNavHost(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+    val model: HasMediaPlaying = viewModel(factory = createViewModelFactory {
+        HasMediaPlaying().start()
+    }
+    )
+    val hasPlayingData by model.hasPlayingData.ld().observeAsState()
+
     NavHost(
         navController = navController,
         startDestination = LiveRoute.id,
@@ -57,14 +93,16 @@ fun ANTVNavHost(
     ) {
 
         composable(route = LiveRoute.id) {
-            LiveCardListView(goToVideo = { title ->
-                navController.navigateToChild(
-                    "${PlayerRoute.id}/$title"
-                )
-            },
+            LiveCardListView(
+                goToVideo = { title ->
+                    navController.navigateToChild(
+                        "${PlayerRoute.id}/$title"
+                    )
+                },
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
-                }
+                },
+                hasPlayingData = hasPlayingData,
             )
         }
         composable(route = SearchRoute.id) {
@@ -80,9 +118,11 @@ fun ANTVNavHost(
                     ReplayRoute.id
                 )
             },
+                hasPlayingData = hasPlayingData,
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
-                })
+                }
+            )
         }
         composable(
             route = "${PlayerRoute.id}/{title}",
@@ -111,6 +151,7 @@ fun ANTVNavHost(
                         "${PlayerRoute.id}/$title"
                     )
                 },
+                hasPlayingData = hasPlayingData,
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
                 })

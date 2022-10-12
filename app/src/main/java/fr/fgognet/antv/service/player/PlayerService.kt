@@ -113,7 +113,9 @@ class PlayerService : MediaSessionService() {
             playbackPositionMs = previousPlayer.currentPosition
             playWhenReady = previousPlayer.playWhenReady
         }
-        currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
+        if (playbackPositionMs > 0) {
+            currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
+        }
         previousPlayer.stop()
         previousPlayer.clearMediaItems()
 
