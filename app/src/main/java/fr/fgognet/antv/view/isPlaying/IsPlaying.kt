@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
@@ -23,22 +19,9 @@ import fr.fgognet.antv.R
 @Composable
 fun IsPlaying(
     goToCurrentPlaying: () -> Unit,
-) {
-    val model: IsPlayingViewModel = viewModel(factory = createViewModelFactory {
-        IsPlayingViewModel().start()
-    }
-    )
-    val state by model.isPlayingdata.ld().observeAsState()
-    IsPlaying(
-        state = state,
-        goToCurrentPlaying = goToCurrentPlaying
-    )
-}
-
-@Composable
-fun IsPlaying(
-    goToCurrentPlaying: () -> Unit,
-    state: IsPlayingData?
+    imageCode: String,
+    title: String,
+    description: String,
 ) {
     Card(
         modifier = Modifier
@@ -49,13 +32,13 @@ fun IsPlaying(
     ) {
 
         Text(
-            text = state?.title ?: "",
+            text = title,
             modifier = Modifier
         )
         AsyncImage(
             modifier = Modifier
                 .width(80.dp),
-            model = state?.imageCode,
+            model = imageCode,
             placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
             contentDescription = ""
         )
@@ -73,6 +56,6 @@ fun IsPlaying(
 fun IsPlayingPreview() {
     IsPlaying(
         goToCurrentPlaying = {},
-        state = IsPlayingData("", "coucou", "lorem ipsum...")
+        title = "", imageCode = "coucou", description = "lorem ipsum..."
     )
 }

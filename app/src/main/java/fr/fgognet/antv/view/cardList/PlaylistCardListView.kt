@@ -14,6 +14,7 @@ import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistViewModel
+import fr.fgognet.antv.view.main.PlayingData
 
 @Composable
 fun PlaylistCardListView(
@@ -22,7 +23,7 @@ fun PlaylistCardListView(
             PlaylistViewModel().start(Unit)
         }
     ),
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToVideos: () -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
@@ -33,7 +34,7 @@ fun PlaylistCardListView(
             model.setCurrentSearch(it)
             goToVideos()
         },
-        hasPlayingData = hasPlayingData,
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -42,14 +43,14 @@ fun PlaylistCardListView(
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
     goToVideos: (id: Int) -> Unit,
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
-        hasPlayingData = hasPlayingData,
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(

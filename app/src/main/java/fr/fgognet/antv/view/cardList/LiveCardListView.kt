@@ -14,6 +14,7 @@ import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
+import fr.fgognet.antv.view.main.PlayingData
 
 @Composable
 fun LiveCardListView(
@@ -22,7 +23,7 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
@@ -33,7 +34,7 @@ fun LiveCardListView(
             model.insertVideoState(url, imageCode, title, description)
             goToVideo(title)
         },
-        hasPlayingData = hasPlayingData,
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -42,7 +43,7 @@ fun LiveCardListView(
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -50,7 +51,7 @@ fun LiveCardListViewState(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
-        hasPlayingData = hasPlayingData,
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData

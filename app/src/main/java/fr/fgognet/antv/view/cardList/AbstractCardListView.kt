@@ -23,21 +23,21 @@ import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
+import fr.fgognet.antv.view.main.PlayingData
 
 
 @Composable
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
-    Text(text = "hasPlayingData: $hasPlayingData")
     AbstractCardListViewState(
         title = title,
         cardDatas = cardDatas,
-        hasPlayingData = hasPlayingData,
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying,
         cardDataGenerator = cardDataGenerator
     )
@@ -48,7 +48,7 @@ fun <T : CardData> AbstractCardListView(
 fun <T : CardData> AbstractCardListViewState(
     title: String,
     cardDatas: List<T>,
-    hasPlayingData: Boolean?,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
@@ -80,9 +80,14 @@ fun <T : CardData> AbstractCardListViewState(
                 }
             }
         }
-        if (hasPlayingData == true) {
+        if (playingData?.hasPlayingData == true) {
             Row(modifier = Modifier.weight(1f)) {
-                IsPlaying(goToCurrentPlaying = goToCurrentPlaying)
+                IsPlaying(
+                    goToCurrentPlaying = goToCurrentPlaying,
+                    description = playingData.description,
+                    title = playingData.title,
+                    imageCode = playingData.imageCode
+                )
             }
 
         }
@@ -115,7 +120,7 @@ fun CardListViewPreview(
             )
         ),
         goToCurrentPlaying = {},
-        hasPlayingData = true,
+        playingData = PlayingData(hasPlayingData = true, imageCode = "", "coucou", "lorem ipsum.."),
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(

@@ -33,13 +33,30 @@ import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 
 const val TAG = "ANTV/ANTVNavHost"
 
+
+data class PlayingData(
+    val hasPlayingData: Boolean,
+    val imageCode: String,
+    val title: String,
+    val description: String,
+)
+
+
 class HasMediaPlaying : ViewModel(), Player.Listener {
     private val tag = "ANTV/HasMediaPlaying"
 
     fun start() = apply { initialize() }
 
-    private val _hasMediaPlaying: MutableLiveData<Boolean> = MutableLiveData(false)
-    val hasPlayingData: LiveData<Boolean> get() = _hasMediaPlaying
+    private val _playingData: MutableLiveData<PlayingData> =
+        MutableLiveData(
+            PlayingData(
+                hasPlayingData = false,
+                imageCode = "",
+                title = "",
+                description = ""
+            )
+        )
+    val playingData: LiveData<PlayingData> get() = _playingData
 
 
     private fun initialize() {
@@ -49,7 +66,21 @@ class HasMediaPlaying : ViewModel(), Player.Listener {
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         Log.v(tag, "onMediaItemTransition")
-        this._hasMediaPlaying.value = (mediaItem != null)
+        if (mediaItem != null) {
+            this._playingData.value = PlayingData(
+                hasPlayingData = true,
+                imageCode = mediaItem.mediaMetadata.artworkUri.toString(),
+                title = mediaItem.mediaMetadata.title.toString(),
+                description = mediaItem.mediaMetadata.description.toString(),
+            )
+        } else {
+            this._playingData.value = PlayingData(
+                hasPlayingData = false,
+                imageCode = "",
+                title = "",
+                description = ""
+            )
+        }
     }
 }
 
@@ -85,7 +116,7 @@ fun ANTVNavHost(
         HasMediaPlaying().start()
     }
     )
-    val hasPlayingData by model.hasPlayingData.ld().observeAsState()
+    val playingData by model.playingData.ld().observeAsState()
 
     NavHost(
         navController = navController,
@@ -103,7 +134,7 @@ fun ANTVNavHost(
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
                 },
-                hasPlayingData = hasPlayingData,
+                playingData = playingData,
             )
         }
         composable(route = SearchRoute.id) {
@@ -119,7 +150,7 @@ fun ANTVNavHost(
                     ReplayRoute.id
                 )
             },
-                hasPlayingData = hasPlayingData,
+                playingData = playingData,
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
                 }
@@ -152,7 +183,7 @@ fun ANTVNavHost(
                         "${PlayerRoute.id}/$title"
                     )
                 },
-                hasPlayingData = hasPlayingData,
+                playingData = playingData,
                 goToCurrentPlaying = {
                     navController.navigateToChild(PlayerRoute.id)
                 })
