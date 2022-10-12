@@ -33,7 +33,7 @@ fun <T : CardData> AbstractCardListView(
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
-
+    Text(text = "hasPlayingData: $hasPlayingData")
     AbstractCardListViewState(
         title = title,
         cardDatas = cardDatas,

@@ -45,11 +45,12 @@ open class MainActivity : FragmentActivity(), Player.Listener {
             controllerFuture?.addListener({
                 PlayerService.controller = controller
                 controller?.addListener(this)
+                setContent {
+                    ANTVApp()
+                }
             }, MoreExecutors.directExecutor())
         }
-        setContent {
-            ANTVApp()
-        }
+
         CastContext.getSharedInstance(applicationContext)
     }
 

@@ -80,6 +80,7 @@ fun ANTVNavHost(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
     val model: HasMediaPlaying = viewModel(factory = createViewModelFactory {
         HasMediaPlaying().start()
     }

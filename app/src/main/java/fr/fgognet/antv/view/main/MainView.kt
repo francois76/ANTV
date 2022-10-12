@@ -36,7 +36,6 @@ import fr.fgognet.antv.view.utils.buildColors
 fun ANTVApp() {
     val appContext = LocalContext.current
 
-
     MaterialTheme(colorScheme = buildColors(context = appContext)) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
@@ -143,3 +142,4 @@ fun Context.findActivity(): Activity? {
     }
     return null
 }
+
