@@ -35,6 +35,7 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
                 .setMediaMetadata(
                     MediaMetadata.Builder().setTitle(mediaItem.mediaMetadata.title)
                         .setDescription(mediaItem.mediaMetadata.description)
+                        .setArtworkUri(mediaItem.mediaMetadata.artworkUri)
                         .build()
                 )
                 .setMimeType(MimeTypes.APPLICATION_M3U8).build()
