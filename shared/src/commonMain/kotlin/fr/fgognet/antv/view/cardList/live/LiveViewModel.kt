@@ -98,6 +98,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                                 }
                             }
                         } catch (e: Exception) {
+                            Napier.e(tag = TAG, message = e.stackTraceToString())
                             result.add(
                                 LiveCardData(
                                     title = ResourceOrText(stringResource = MR.strings.live_error),
@@ -115,6 +116,7 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                     _cards.value = CardListViewData(result, ResourceOrText(editorial.titre))
                 }
             } catch (e: Exception) {
+                Napier.e(tag = TAG, message = e.stackTraceToString())
                 _cards.value = CardListViewData(
                     arrayListOf(),
                     ResourceOrText(stringResource = MR.strings.live_error)
