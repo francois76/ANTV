@@ -16,6 +16,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="image_base_description">Image</string>
     <string name="no_live">Aucun live aujourd\'hui</string>
+    <string name="live_error">Impossible de charger les éléments de live</string>
     <string name="reload">Actualiser</string>
     <string name="menu_live">Live</string>
     <string name="menu_playlist">Playlist</string>

@@ -65,10 +65,11 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onStop() {
         Log.v(TAG, "onStop")
+        MediaController.releaseFuture(controllerFuture)
         super.onStop()
         if (isFinishing) {
             Log.w(TAG, "finishing")
-            MediaController.releaseFuture(controllerFuture)
+
         }
 
     }

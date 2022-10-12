@@ -24,11 +24,11 @@ class Nvs(
     var metadatas: List<Metadata>,
 
     ) {
-    fun getMeetingID(): String {
+    fun getMeetingID(): String? {
 
         return this.metadatas
             .filter { it.name == "meeting_id" }.mapNotNull { it.value }
-            .first()
+            .firstOrNull()
     }
 
     fun getReplayURL(): String? {
