@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.player
 
-import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
 import android.view.View
@@ -12,84 +11,54 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.ImageLoader
-import coil.request.ImageRequest
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ext.cast.CastPlayer
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.R
 import fr.fgognet.antv.databinding.FragmentPlayerBinding
-import fr.fgognet.antv.service.player.MediaData
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
 
-
+@UnstableApi
 @Composable
 fun PlayerView(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    PlayerView(
-        description = PlayerService.currentMediaData?.description,
+    val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
+        PlayerViewModel().start()
+    }
+    )
+    val state by model.playerData.ld().observeAsState()
+    PlayerViewState(
+        state = state,
         setFullScreen = setFullScreen
     )
 }
 
+@UnstableApi
 @Composable
 fun PlayerView(
-    url: String,
-    title: String?,
-    description: String?,
-    imageCode: String?,
+    title: String,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val request = ImageRequest.Builder(LocalContext.current)
-        .data(imageCode)
-        .target(
-            onSuccess = { result ->
-                PlayerService.updateCurrentMedia(
-                    MediaData(
-                        url, title, description, result.toBitmap(200, 200)
-                    )
-                )
-            },
-            onError = {
-                PlayerService.updateCurrentMedia(
-                    MediaData(
-                        url, title, description, null
-                    )
-                )
-            }
-        )
-        .build()
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .crossfade(true)
-        .build()
-    imageLoader.enqueue(request)
-    PlayerView(description = description, setFullScreen = setFullScreen)
-}
-
-@Composable
-fun PlayerView(description: String?, setFullScreen: (visible: Boolean) -> Unit) {
-    val context: Context = LocalContext.current.applicationContext
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
-        PlayerViewModel().start(context)
+        PlayerViewModel().start()
     }
     )
-    val state by model.player.ld().observeAsState()
-    PlayerViewState(description = description, player = state, setFullScreen = setFullScreen)
-
+    val state by model.playerData.ld().observeAsState()
+    model.updateCurrentMedia(title)
+    PlayerViewState(
+        state = state,
+        setFullScreen = setFullScreen
+    )
 }
 
+@UnstableApi
 @Composable
 fun PlayerViewState(
-    description: String?,
-    player: Player?,
+    state: PlayerData?,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -97,8 +66,8 @@ fun PlayerViewState(
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     AndroidViewBinding(factory = FragmentPlayerBinding::inflate) {
         // view.rootView.findViewById<MaterialToolbar>(R.id.topAppBar).title =       it.mediaMetadata.title
-        videoView.findViewById<TextView>(R.id.video_description)?.text = description
-        if (player is CastPlayer) {
+        videoView.findViewById<TextView>(R.id.video_description)?.text = state?.description
+        if (state?.isCast == true) {
             videoView.controllerHideOnTouch = false
             videoView.controllerShowTimeoutMs = 0
             videoView.showController()
@@ -109,16 +78,16 @@ fun PlayerViewState(
             )
         } else { // currentPlayer == localPlayer
             videoView.controllerHideOnTouch = false
-            videoView.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+            videoView.controllerShowTimeoutMs = DEFAULT_SHOW_TIMEOUT_MS
             videoView.defaultArtwork = null
         }
-        videoView.player = player
+        videoView.player = state?.player
         when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> {
                 setFullScreen(true)
             }
             else -> {
-                videoView.setControllerVisibilityListener(StyledPlayerView.ControllerVisibilityListener { visibility: Int ->
+                videoView.setControllerVisibilityListener(androidx.media3.ui.PlayerView.ControllerVisibilityListener { visibility: Int ->
                     Log.v(TAG, "Player controler visibility Changed: $visibility")
                     when (visibility) {
                         View.VISIBLE -> {

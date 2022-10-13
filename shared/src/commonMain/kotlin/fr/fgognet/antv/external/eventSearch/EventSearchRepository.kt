@@ -12,21 +12,8 @@ import kotlinx.serialization.json.Json
 enum class EventSearchQueryParams {
     Date,
     TypeVideo,
-    Commission,
-    Tag; // not part of the actual research, but it's the actual label of the search
+    Commission;
 
-
-    companion object {
-        fun allValues(): ArrayList<EventSearchQueryParams> {
-            return arrayListOf(
-                Date,
-                TypeVideo,
-                Commission,
-                Tag
-            )
-        }
-
-    }
 }
 
 object EventSearchRepository {
@@ -44,7 +31,7 @@ object EventSearchRepository {
             protocol = URLProtocol.HTTPS
             host = "videos.assemblee-nationale.fr"
             path("php/eventsearch.php")
-            params.filter { it.key != EventSearchQueryParams.Tag && it.value != " " }.forEach {
+            params.forEach {
                 parameters.append(it.key.toString(), it.value)
             }
         }

@@ -1,9 +1,9 @@
 package fr.fgognet.antv.view.cardList.replay
 
 import fr.fgognet.antv.external.eventSearch.EventSearch
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
+import fr.fgognet.antv.repository.SearchDao
 import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
@@ -16,7 +16,7 @@ import kotlinx.datetime.LocalDateTime
 private const val TAG = "ANTV/ReplayViewModel"
 
 class ReplayViewModel :
-    AbstractCardListViewModel<ReplayCardData, HashMap<EventSearchQueryParams, String>>() {
+    AbstractCardListViewModel<ReplayCardData, Unit>() {
 
 
     fun loadNvs(code: String) {
@@ -31,25 +31,27 @@ class ReplayViewModel :
                         cards = cards.value.cards.map { cardData ->
                             if (cardData.nvsCode == code) {
                                 cardData.nvsUrl = nvs.getReplayURL()
+                                cardData.buttonEnabled = nvs.getReplayURL() != null
                                 if (nvs.getTime() != null) {
                                     val date = LocalDateTime.parse(nvs.getTime().toString())
                                     cardData.subTitle =
                                         "${date.dayOfMonth}/${date.monthNumber}/${date.year} ${date.hour}:${date.minute}"
                                 }
                             }
-                            cardData
+                            cardData.copy()
                         })
             }
         }
 
     }
 
-    override fun loadCardData(params: HashMap<EventSearchQueryParams, String>) {
+    override fun loadCardData(params: Unit) {
         Napier.v("loadCardData", tag = TAG)
+        val searchParams = SearchDao.get() ?: return
         viewModelScope.launch {
             val eventSearches: List<EventSearch> = try {
                 EventSearchRepository.findEventSearchByParams(
-                    params
+                    searchParams.queryParams
                 )
             } catch (e: Exception) {
                 Napier.e(e.toString(), tag = TAG)
@@ -61,20 +63,22 @@ class ReplayViewModel :
                     CardListViewData(
                         eventSearches.map {
                             ReplayCardData(
-                                ResourceOrText(it.title ?: "video sans titre"),
-                                it.description?.replace("<br>", "\n") ?: "",
-                                if (it.thumbnail != null) it.thumbnail!!.replace(
+                                title = ResourceOrText(it.title ?: "video sans titre"),
+                                description = it.description?.replace("<br>", "\n") ?: "",
+                                imageCode = if (it.thumbnail != null) it.thumbnail!!.replace(
                                     "\\",
                                     ""
                                 ).replace(
                                     "http",
                                     "https"
                                 ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                                it.url ?: "",
-                                null, subTitle = null
+                                nvsCode = it.url ?: "",
+                                nvsUrl = null,
+                                subTitle = null,
+                                buttonEnabled = false
                             )
                         },
-                        ResourceOrText(params[EventSearchQueryParams.Tag])
+                        searchParams.label
                     )
             }
         }

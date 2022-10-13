@@ -1,39 +1,58 @@
 package fr.fgognet.antv.service.player
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import androidx.media.session.MediaButtonReceiver
-import com.google.android.exoplayer2.PlaybackException
+import androidx.media3.cast.SessionAvailabilityListener
+import androidx.media3.common.*
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaSession
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 
 private const val TAG = "ANTV/PlayerServiceListener"
 
-class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
+@UnstableApi
+class PlayerServiceListener(private val service: PlayerService) : Player.Listener,
+    SessionAvailabilityListener,
+    MediaSession.Callback {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
-        if (isPlaying) {
-            PlayerService.updatePlayingState(PlaybackStateCompat.STATE_PLAYING)
-        } else {
-            PlayerService.updatePlayingState(PlaybackStateCompat.STATE_PAUSED)
-        }
     }
+
+    override fun onAddMediaItems(
+        mediaSession: MediaSession,
+        controller: MediaSession.ControllerInfo,
+        mediaItems: MutableList<MediaItem>
+    ): ListenableFuture<List<MediaItem>> {
+        Log.v(TAG, "onAddMediaItems")
+        val updatedMediaItems: List<MediaItem> = mediaItems.map { mediaItem ->
+            MediaItem.Builder()
+                .setUri(mediaItem.mediaId)
+                .setMediaId(mediaItem.mediaId)
+                .setMediaMetadata(
+                    MediaMetadata.Builder().setTitle(mediaItem.mediaMetadata.title)
+                        .setDescription(mediaItem.mediaMetadata.description)
+                        .setArtworkUri(mediaItem.mediaMetadata.artworkUri)
+                        .build()
+                )
+                .setMimeType(MimeTypes.APPLICATION_M3U8).build()
+        }
+        if (updatedMediaItems[0].mediaId == mediaSession.player.currentMediaItem?.mediaId) {
+            return super.onAddMediaItems(mediaSession, controller, mediaItems)
+        }
+        PlayerService.currentMediaItem = updatedMediaItems[0]
+        return Futures.immediateFuture(updatedMediaItems)
+    }
+
 
     override fun onCastSessionAvailable() {
         Log.v(TAG, "onCastSessionAvailable")
-        PlayerService.cast()
+        service.cast()
     }
 
     override fun onCastSessionUnavailable() {
         Log.v(TAG, "onCastSessionUnavailable")
-        PlayerService.stopCast()
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        Log.v(TAG, "onReceive")
-        MediaButtonReceiver.handleIntent(PlayerService.mediaSession, intent)
+        service.stopCast()
     }
 
     override fun onPlayerError(error: PlaybackException) {
@@ -44,10 +63,12 @@ class PlayerServiceListener : PlayerListener, BroadcastReceiver() {
             PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 Log.w(TAG, "error on playback: ${error.errorCode}")
-                PlayerService.resyncOnLiveError()
+                service.resyncOnLiveError()
             }
 
             else -> Log.e(TAG, "error on playback: ${error.errorCode}")
         }
     }
+
+
 }

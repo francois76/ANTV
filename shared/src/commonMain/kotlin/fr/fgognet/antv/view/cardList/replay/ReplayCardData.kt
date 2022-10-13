@@ -9,6 +9,7 @@ data class ReplayCardData(
     override var imageCode: String,
     var nvsCode: String,
     var nvsUrl: String?,
+    var buttonEnabled: Boolean,
     var subTitle: String?
 
 ) : CardData()

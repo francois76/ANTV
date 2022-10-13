@@ -5,18 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistViewModel
+import fr.fgognet.antv.view.main.PlayingData
 
 @Composable
 fun PlaylistCardListView(
@@ -25,13 +23,18 @@ fun PlaylistCardListView(
             PlaylistViewModel().start(Unit)
         }
     ),
-    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    playingData: PlayingData?,
+    goToVideos: () -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
     PlaylistCardListViewState(
         state = state,
-        goToVideos = goToVideos,
+        goToVideos = {
+            model.setCurrentSearch(it)
+            goToVideos()
+        },
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -39,14 +42,15 @@ fun PlaylistCardListView(
 @Composable
 fun PlaylistCardListViewState(
     state: CardListViewData<PlaylistCardData>?,
-    goToVideos: (bundle: Map<EventSearchQueryParams, String>) -> Unit,
+    goToVideos: (id: Int) -> Unit,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
         CompositeCardView(
@@ -61,7 +65,7 @@ fun PlaylistCardListViewState(
                 enableButton = true
             ),
             buttonClicked = {
-                goToVideos(cardData.targetBundle)
+                goToVideos(cardData.id)
             }
         )
     }
