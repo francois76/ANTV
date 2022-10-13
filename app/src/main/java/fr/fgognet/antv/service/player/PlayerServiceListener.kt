@@ -17,9 +17,6 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
-        service.showMediaplayerNotification(
-            isPlaying
-        )
     }
 
     override fun onAddMediaItems(
