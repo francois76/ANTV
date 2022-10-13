@@ -1,6 +1,6 @@
 object Versions {
-    const val antv = "0.0.5"
-    const val antvNumber = 3
+    const val antv = "0.0.6"
+    const val antvNumber = 4
 
     const val kotlin = "1.7.10"
     const val napier = "2.6.1"
