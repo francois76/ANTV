@@ -35,20 +35,31 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         initCommonLogs()
-        if (PlayerService.controller == null) {
-            controllerFuture =
-                MediaController.Builder(
-                    this,
-                    SessionToken(this, ComponentName(this, PlayerService::class.java))
-                )
-                    .buildAsync()
-            controllerFuture?.addListener({
-                PlayerService.controller = controller
-                controller?.addListener(this)
+        if (controllerFuture == null) {
+            if (PlayerService.controller == null) {
+                controllerFuture =
+                    MediaController.Builder(
+                        this,
+                        SessionToken(this, ComponentName(this, PlayerService::class.java))
+                    )
+                        .buildAsync()
+                controllerFuture?.addListener({
+                    PlayerService.controller = controller
+                    PlayerService.controller?.addListener(this)
+                    setContent {
+                        Log.d(TAG, "recomposing + init")
+                        ANTVApp()
+                    }
+                }, MoreExecutors.directExecutor())
+            } else {
+                PlayerService.controller?.addListener(this)
                 setContent {
+                    Log.d(TAG, "recomposing")
                     ANTVApp()
+
                 }
-            }, MoreExecutors.directExecutor())
+
+            }
         }
 
         CastContext.getSharedInstance(applicationContext)
@@ -66,6 +77,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onStop() {
         Log.v(TAG, "onStop")
+        PlayerService.controller?.removeListener(this)
         if (isFinishing) {
             if (controllerFuture != null) {
                 MediaController.releaseFuture(controllerFuture!!)
