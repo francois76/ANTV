@@ -5,17 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
+import fr.fgognet.antv.view.main.PlayingData
 
 @Composable
 fun LiveCardListView(
@@ -24,13 +23,18 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
-    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    playingData: PlayingData?,
+    goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
     LiveCardListViewState(
         state = state,
-        goToVideo = goToVideo,
+        goToVideo = { url, imageCode, title, description ->
+            model.insertVideoState(url, imageCode, title, description)
+            goToVideo(title)
+        },
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     )
 }
@@ -39,6 +43,7 @@ fun LiveCardListView(
 fun LiveCardListViewState(
     state: CardListViewData<LiveCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -46,7 +51,7 @@ fun LiveCardListViewState(
         title = state?.title?.toString(LocalContext.current)
             ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData
@@ -57,7 +62,7 @@ fun LiveCardListViewState(
                 description = cardData.description,
                 buttonName = cardData.buttonLabel.toString(context = context),
                 imageCode = cardData.imageCode,
-                buttonColor = MaterialTheme.colorScheme.onError,
+                buttonColor = MaterialTheme.colorScheme.error,
                 buttonTextColor = Color.White,
                 enableButton = true,
             )

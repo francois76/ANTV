@@ -24,14 +24,14 @@ class Nvs(
     var metadatas: List<Metadata>,
 
     ) {
-    fun getMeetingID(): String {
+    fun getMeetingID(): String? {
 
         return this.metadatas
             .filter { it.name == "meeting_id" }.mapNotNull { it.value }
-            .first()
+            .firstOrNull()
     }
 
-    fun getReplayURL(): String {
+    fun getReplayURL(): String? {
 
         return this.files
             .asSequence()
@@ -40,7 +40,7 @@ class Nvs(
             .filterNotNull()
             .map { it.split("domain1")[1].split("_1.mp4")[0] }
             .map { "https://anorigin.vodalys.com/videos/definst/mp4/ida/domain1/$it.smil/master.m3u8" }
-            .first()
+            .firstOrNull()
     }
 
     fun getContentType(): String {

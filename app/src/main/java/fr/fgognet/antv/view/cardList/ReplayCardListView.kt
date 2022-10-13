@@ -1,54 +1,41 @@
 package fr.fgognet.antv.view.cardList
 
-import android.os.Bundle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
+import fr.fgognet.antv.view.main.PlayingData
 
-fun convertBundleToMap(b: Bundle): HashMap<EventSearchQueryParams, String> {
-    val result = hashMapOf<EventSearchQueryParams, String>()
-    EventSearchQueryParams.allValues().forEach {
-        if (b.containsKey(it.toString())) {
-            result[it] = URLDecoder.decode(
-                b.getString(it.toString()).toString(),
-                StandardCharsets.UTF_8.toString()
-            )
-        }
-    }
-    return result
-}
 
 @Composable
 fun ReplayCardListView(
-    goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
-    goToCurrentPlaying: () -> Unit,
-    arguments: Bundle
+    goToVideo: (title: String) -> Unit,
+    playingData: PlayingData?,
+    goToCurrentPlaying: () -> Unit
 ) {
     val model: ReplayViewModel = viewModel(
         factory = createViewModelFactory {
-            ReplayViewModel().start(convertBundleToMap(arguments))
+            ReplayViewModel().start(Unit)
         }
     )
     val state by model.cards.ld().observeAsState()
     ReplayCardListViewState(
         state = state,
-        goToVideo = goToVideo,
+        goToVideo = { url, imageCode, title, description ->
+            model.insertVideoState(url, imageCode, title, description)
+            goToVideo(title)
+        },
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying,
         loadDestination = { model.loadNvs(it) })
 }
@@ -58,6 +45,7 @@ fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     loadDestination: (code: String) -> Unit,
+    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -65,7 +53,7 @@ fun ReplayCardListViewState(
         title = state?.title?.toString(context)
             ?: stringResource(resource = MR.strings.title_replay),
         cardDatas = state!!.cards,
-        currentPlayingImage = PlayerService.currentMediaData?.bitmap?.asImageBitmap(),
+        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: ReplayCardData ->
         if (cardData.nvsUrl == null) {
@@ -80,7 +68,7 @@ fun ReplayCardListViewState(
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.inversePrimary,
                 buttonTextColor = Color.White,
-                enableButton = true,
+                enableButton = cardData.buttonEnabled,
             ),
             buttonClicked = {
                 goToVideo(

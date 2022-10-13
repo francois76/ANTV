@@ -17,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.view.utils.buildColors
 
 
@@ -30,7 +29,7 @@ fun ReplaySearchView(
             ReplaySearchViewModel().start()
         }
     ),
-    query: (queryParams: Map<EventSearchQueryParams, String>) -> Unit
+    query: (queryParams: Unit) -> Unit
 ) {
     MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {
         Column(
