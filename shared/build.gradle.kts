@@ -24,45 +24,48 @@ kotlin {
 
 
     sourceSets {
-        sourceSets["commonMain"].dependencies {
-            implementation(libs.bundles.moko.mvvm.core)
-            // for xml
-            implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
-            implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
-            // rest
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
-            // logger
-            implementation("io.github.aakira:napier:${Versions.napier}")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-            // ktor
-            implementation("io.ktor:ktor-client-core:${Versions.ktor}")
-            implementation("io.ktor:ktor-client-json:${Versions.ktor}")
-            implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
-            implementation("dev.icerock.moko:resources:0.20.1")
-        }
-        val commonTest by getting {
+        val commonMain by getting {
             dependencies {
-                implementation(kotlin("test"))
+                implementation(libs.bundles.moko.mvvm.core)
+                // for xml
+                implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
+                implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
+                // rest
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
+                // logger
+                implementation(libs.napier)
+                // ktor
+                implementation(libs.bundles.ktor.common)
+                implementation("dev.icerock.moko:resources:0.20.1")
             }
         }
-        sourceSets["androidMain"].dependencies {
-            implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
         }
-        val androidTest by getting
-        val macosArm64Main by getting
-        macosArm64Main.dependencies {
+        val macosArm64Main by getting {
+            dependencies {
+            }
         }
-        val iosArm64Main by getting
-        iosArm64Main.dependencies {
+        val iosArm64Main by getting {
+            dependencies {
+            }
         }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
-            dependsOn(sourceSets["commonMain"])
+            dependsOn(commonMain)
             macosArm64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
         val macosArm64Test by getting
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
         val iosTest by creating {
@@ -71,6 +74,12 @@ kotlin {
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
         }
+        val androidTest by getting {
+            dependencies {
+
+            }
+        }
+
     }
 }
 
