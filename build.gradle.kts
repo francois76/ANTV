@@ -15,7 +15,7 @@ buildscript {
         classpath(
             group = "dev.icerock.moko",
             name = "resources-generator",
-            version = Versions.Moko.resources
+            version = libs.versions.moko.resource.get()
         )
     }
 }

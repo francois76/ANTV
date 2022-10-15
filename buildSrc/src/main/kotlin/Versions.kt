@@ -39,11 +39,7 @@ object Versions {
             const val themeAdapter = "1.0.19"
         }
     }
-
-    object Moko {
-        const val mvvm = "0.14.0"
-        const val resources = "0.20.1"
-    }
+    
 
     object Kotlinx {
         const val serialization = "1.3.3"

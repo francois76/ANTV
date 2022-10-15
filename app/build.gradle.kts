@@ -74,23 +74,11 @@ dependencies {
     implementation(project(":shared"))
 
     // moko
-    listOf(
-        "livedata-material",
-        "livedata-glide",
-        "livedata-swiperefresh",
-        "databinding",
-        "viewbinding"
-    ).forEach {
-        implementation(
-            group = "dev.icerock.moko",
-            name = "mvvm-$it",
-            version = Versions.Moko.mvvm
-        )
-    }
+    implementation(libs.bundles.moko.mvvm.android)
     implementation(
         group = "dev.icerock.moko",
         name = "resources-compose",
-        version = Versions.Moko.resources
+        version = libs.versions.moko.resource.get()
     )
 
     // navigation
