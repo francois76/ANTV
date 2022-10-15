@@ -77,6 +77,7 @@ kotlin {
 }
 
 android {
+    namespace = "fr.fgognet.antv"
     compileSdk = Versions.Sdk.compileSdk
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {

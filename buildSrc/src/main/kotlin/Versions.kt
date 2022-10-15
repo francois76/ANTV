@@ -3,7 +3,7 @@ object Versions {
     const val antvNumber = 4
 
     const val kotlin = "1.7.10"
-    const val napier = "2.6.1"
+    const val napier = "2.6.1" // https://github.com/AAkira/Napier
     const val androidPlugin = "7.2.2"
     const val xmlUtils = "0.84.2"
     const val ktor = "2.1.0"
@@ -49,5 +49,4 @@ object Versions {
         const val serialization = "1.3.3"
         const val datetime = "0.4.0"
     }
-
 }

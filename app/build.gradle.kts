@@ -7,6 +7,7 @@ plugins {
 
 android {
     compileSdk = Versions.Sdk.compileSdk
+    namespace = "fr.fgognet.antv"
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
