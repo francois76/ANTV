@@ -48,7 +48,14 @@ dependencyResolutionManagement {
                 "accompanist-systemuicontroller",
                 "0.25.1"
             ) // https://github.com/google/accompanist/releases
-            version("play-services-cast-framework", "21.1.0")
+            version(
+                "play-services-cast-framework",
+                "21.2.0"
+            ) // https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
+            version(
+                "core-ktx",
+                "1.9.0"
+            ) // https://developer.android.com/jetpack/androidx/releases/core
             /*
             monoline repos
              */
@@ -57,7 +64,8 @@ dependencyResolutionManagement {
                 "coil-compose" to "io.coil-kt",
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
-                "play-services-cast-framework" to "com.google.android.gms"
+                "play-services-cast-framework" to "com.google.android.gms",
+                "core-ktx" to "androidx.core"
             ).forEach {
                 library(it.key, it.value, it.key).versionRef(it.key)
             }

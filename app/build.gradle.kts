@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.play.services.cast.framework)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.core.ktx)
 
     // navigation
     listOf(
@@ -111,7 +112,6 @@ dependencies {
     }
 
     // Androidx
-    implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
