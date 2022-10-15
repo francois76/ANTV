@@ -56,6 +56,10 @@ dependencyResolutionManagement {
                 "core-ktx",
                 "1.9.0"
             ) // https://developer.android.com/jetpack/androidx/releases/core
+            version(
+                "media3",
+                "1.0.0-beta02"
+            ) // https://developer.android.com/jetpack/androidx/releases/media3
             /*
             monoline repos
              */
@@ -133,6 +137,25 @@ dependencyResolutionManagement {
                     "kotlinx-$it"
                 ).versionRef("kotlinx-$it")
             }
+
+            /*
+            media3
+             */
+            val media3Dependencies = listOf(
+                "media3-exoplayer",
+                "media3-exoplayer-hls",
+                "media3-ui",
+                "media3-cast",
+                "media3-session"
+            )
+            media3Dependencies.forEach {
+                library(
+                    it,
+                    "androidx.media3",
+                    it,
+                ).versionRef("media3")
+            }
+            bundle("media3", media3Dependencies)
         }
     }
 }

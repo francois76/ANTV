@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":shared"))
     // bundles
     implementation(libs.bundles.moko.mvvm.android)
+    implementation(libs.bundles.media3)
     // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
@@ -81,6 +82,9 @@ dependencies {
     implementation(libs.play.services.cast.framework)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.core.ktx)
+
+    // testing
+    testImplementation(libs.junit)
 
     // navigation
     listOf(
@@ -96,20 +100,6 @@ dependencies {
         )
     }
 
-    // exoplayer
-    listOf(
-        "media3-exoplayer",
-        "media3-exoplayer-hls",
-        "media3-ui",
-        "media3-cast",
-        "media3-session"
-    ).forEach {
-        implementation(
-            group = "androidx.media3",
-            name = it,
-            version = Versions.Androidx.media3
-        )
-    }
 
     // Androidx
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
@@ -148,6 +138,5 @@ dependencies {
         name = "navigation-testing",
         version = Versions.Androidx.nav
     )
-    testImplementation(libs.junit)
 
 }
