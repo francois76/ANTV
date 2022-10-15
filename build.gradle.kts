@@ -5,8 +5,8 @@ plugins {
     kotlin("jvm").version("1.7.10").apply(false)
 
     // android plugins
-    id("com.android.application").version("7.2.2").apply(false)
-    id("com.android.library").version("7.2.2").apply(false)
+    id("com.android.application").version("7.3.1").apply(false)
+    id("com.android.library").version("7.3.1").apply(false)
 }
 
 buildscript {
