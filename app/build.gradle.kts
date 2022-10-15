@@ -74,6 +74,8 @@ dependencies {
     implementation(project(":shared"))
     implementation(libs.bundles.moko.mvvm.android)
     implementation(libs.moko.resources.compose)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.coil)
 
     // navigation
     listOf(
@@ -135,8 +137,6 @@ dependencies {
     // misc
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-    implementation(libs.coil)
 
     // testing
     debugImplementation(

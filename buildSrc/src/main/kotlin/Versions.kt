@@ -1,5 +1,5 @@
 object Versions {
-    
+
     const val junit = "4.13.2"
     const val accompanist = "0.25.1"
 
@@ -23,10 +23,5 @@ object Versions {
             const val themeAdapter = "1.0.19"
         }
     }
-
-
-    object Kotlinx {
-        const val serialization = "1.3.3"
-        const val datetime = "0.4.0"
-    }
+    
 }

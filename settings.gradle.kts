@@ -1,7 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
 pluginManagement {
-    val kotlin = "1.7.10"
     repositories {
         gradlePluginPortal()
         google()
@@ -36,6 +35,14 @@ dependencyResolutionManagement {
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
             version("ktor", "2.1.2") // https://ktor.io/docs/http-client-engines.html
             version("xmlutil", "0.84.3") // https://github.com/pdvrieze/xmlutil/releases
+            version(
+                "kotlinx-datetime",
+                "0.4.0"
+            ) // https://github.com/Kotlin/kotlinx-datetime/releases
+            version(
+                "kotlinx-serialization-json",
+                "1.4.0"
+            ) // https://github.com/Kotlin/kotlinx.serialization/releases
 
             /*
             monoline repos
@@ -101,6 +108,16 @@ dependencyResolutionManagement {
                 library(it, "io.github.pdvrieze.xmlutil", it).versionRef("xmlutil")
             }
             bundle("xmlutil", xmlUtilsDependencies)
+            /*
+            Kotlinx
+             */
+            listOf("datetime", "serialization-json").forEach {
+                library(
+                    "kotlinx-$it",
+                    "org.jetbrains.kotlinx",
+                    "kotlinx-$it"
+                ).versionRef("kotlinx-$it")
+            }
         }
     }
 }

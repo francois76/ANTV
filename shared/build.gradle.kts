@@ -26,10 +26,9 @@ kotlin {
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
                 implementation(libs.bundles.xmlutil)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.serialization.json)
                 api(libs.moko.resources)
-                // rest
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
             }
         }
         val androidMain by getting {
