@@ -1,11 +1,6 @@
 object Versions {
 
-
-    object Android {
-
-        const val castFramework = "21.1.0"
-    }
-
+    
     object Androidx {
         const val nav = "2.5.2"
         const val media3 = "1.0.0-beta02"

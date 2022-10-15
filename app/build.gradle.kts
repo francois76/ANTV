@@ -72,10 +72,14 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    // bundles
     implementation(libs.bundles.moko.mvvm.android)
+    // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.coil.compose)
+    implementation(libs.play.services.cast.framework)
+    implementation(libs.accompanist.systemuicontroller)
 
     // navigation
     listOf(
@@ -133,10 +137,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
     implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
     implementation("com.google.android.material:compose-theme-adapter-3:${Versions.Androidx.Compose.themeAdapter}")
-
-    // misc
-    implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-    implementation(libs.accompanist.systemuicontroller)
 
     // testing
     debugImplementation(

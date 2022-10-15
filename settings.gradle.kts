@@ -48,7 +48,7 @@ dependencyResolutionManagement {
                 "accompanist-systemuicontroller",
                 "0.25.1"
             ) // https://github.com/google/accompanist/releases
-
+            version("play-services-cast-framework", "21.1.0")
             /*
             monoline repos
              */
@@ -57,6 +57,7 @@ dependencyResolutionManagement {
                 "coil-compose" to "io.coil-kt",
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
+                "play-services-cast-framework" to "com.google.android.gms"
             ).forEach {
                 library(it.key, it.value, it.key).versionRef(it.key)
             }
