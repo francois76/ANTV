@@ -79,7 +79,11 @@ kotlin {
 android {
     namespace = "fr.fgognet.antv"
     compileSdk = antv.versions.sdk.compile.get().toInt()
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].apply {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
+        res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
+    }
     defaultConfig {
         minSdk = antv.versions.sdk.min.get().toInt()
         targetSdk = antv.versions.sdk.target.get().toInt()
