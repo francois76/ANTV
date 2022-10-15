@@ -1,9 +1,6 @@
 object Versions {
-
-    const val kotlin = "1.7.10"
-    const val androidPlugin = "7.2.2"
+    
     const val xmlUtils = "0.84.2"
-    const val ktor = "2.1.0"
     const val junit = "4.13.2"
     const val accompanist = "0.25.1"
 

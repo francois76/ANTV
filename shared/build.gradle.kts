@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization").version(Versions.kotlin)
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
