@@ -75,7 +75,7 @@ dependencies {
     implementation(libs.bundles.moko.mvvm.android)
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // navigation
     listOf(
@@ -136,7 +136,7 @@ dependencies {
 
     // misc
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
+    implementation(libs.accompanist.systemuicontroller)
 
     // testing
     debugImplementation(
@@ -149,10 +149,6 @@ dependencies {
         name = "navigation-testing",
         version = Versions.Androidx.nav
     )
-    testImplementation(
-        group = "junit",
-        name = "junit",
-        version = Versions.junit
-    )
+    testImplementation(libs.junit)
 
 }

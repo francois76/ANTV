@@ -31,7 +31,7 @@ dependencyResolutionManagement {
              */
             version("moko-resource", "0.20.1") // https://github.com/icerockdev/moko-resources
             version("moko-mvvm", "0.14.0") // https://github.com/icerockdev/moko-mvvm/releases
-            version("coil", "2.2.2") // https://coil-kt.github.io/coil/
+            version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
             version("ktor", "2.1.2") // https://ktor.io/docs/http-client-engines.html
             version("xmlutil", "0.84.3") // https://github.com/pdvrieze/xmlutil/releases
@@ -43,17 +43,23 @@ dependencyResolutionManagement {
                 "kotlinx-serialization-json",
                 "1.4.0"
             ) // https://github.com/Kotlin/kotlinx.serialization/releases
+            version("junit", "4.13.2") // depend on intellij
+            version(
+                "accompanist-systemuicontroller",
+                "0.25.1"
+            ) // https://github.com/google/accompanist/releases
 
             /*
             monoline repos
              */
-            library("coil", "io.coil-kt", "coil-compose").versionRef("coil")
-            library(
-                "napier",
-                "io.github.aakira",
-                "napier"
-            ).versionRef("napier")
-
+            hashMapOf(
+                "napier" to "io.github.aakira",
+                "coil-compose" to "io.coil-kt",
+                "accompanist-systemuicontroller" to "com.google.accompanist",
+                "junit" to "junit",
+            ).forEach {
+                library(it.key, it.value, it.key).versionRef(it.key)
+            }
 
             /*
             Moko resource

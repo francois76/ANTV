@@ -1,8 +1,5 @@
 object Versions {
 
-    const val junit = "4.13.2"
-    const val accompanist = "0.25.1"
-
 
     object Android {
 
@@ -23,5 +20,5 @@ object Versions {
             const val themeAdapter = "1.0.19"
         }
     }
-    
+
 }
