@@ -113,7 +113,6 @@ dependencies {
     // Androidx
     implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
-    implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
     androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
