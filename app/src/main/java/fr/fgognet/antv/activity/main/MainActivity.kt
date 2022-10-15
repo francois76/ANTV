@@ -18,10 +18,6 @@ import fr.fgognet.antv.config.initCommonLogs
 import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.ANTVApp
 
-/**
- * This Activity recreates part of the Rally Material Study from
- * https://material.io/design/material-studies/rally.html
- */
 private const val TAG = "ANTV/MainActivity"
 
 open class MainActivity : FragmentActivity(), Player.Listener {

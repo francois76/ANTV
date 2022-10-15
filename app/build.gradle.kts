@@ -75,6 +75,7 @@ dependencies {
     // bundles
     implementation(libs.bundles.moko.mvvm.android)
     implementation(libs.bundles.media3)
+    implementation(libs.bundles.navigation)
     // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
@@ -85,20 +86,7 @@ dependencies {
 
     // testing
     testImplementation(libs.junit)
-
-    // navigation
-    listOf(
-        "fragment-ktx",
-        "ui-ktx",
-        "dynamic-features-fragment",
-        "compose"
-    ).forEach {
-        implementation(
-            group = "androidx.navigation",
-            name = "navigation-$it",
-            version = Versions.Androidx.nav
-        )
-    }
+    testImplementation(libs.navigation.testing)
 
 
     // Androidx
@@ -132,11 +120,6 @@ dependencies {
         group = "androidx.compose.ui",
         name = "ui-tooling",
         version = Versions.Androidx.Compose.compose
-    )
-    androidTestImplementation(
-        group = "androidx.navigation",
-        name = "navigation-testing",
-        version = Versions.Androidx.nav
     )
 
 }

@@ -60,6 +60,10 @@ dependencyResolutionManagement {
                 "media3",
                 "1.0.0-beta02"
             ) // https://developer.android.com/jetpack/androidx/releases/media3
+            version(
+                "navigation",
+                "2.5.2"
+            ) // https://developer.android.com/jetpack/androidx/releases/navigation
             /*
             monoline repos
              */
@@ -149,13 +153,22 @@ dependencyResolutionManagement {
                 "media3-session"
             )
             media3Dependencies.forEach {
-                library(
-                    it,
-                    "androidx.media3",
-                    it,
-                ).versionRef("media3")
+                library(it, "androidx.media3", it).versionRef("media3")
             }
             bundle("media3", media3Dependencies)
+
+            // navigation
+            val navigationDependencies = arrayOf(
+                "navigation-fragment-ktx",
+                "navigation-ui-ktx",
+                "navigation-dynamic-features-fragment",
+                "navigation-compose"
+            )
+            listOf(*navigationDependencies, "navigation-testing").forEach {
+                library(it, "androidx.navigation", it).versionRef("navigation")
+            }
+            bundle("navigation", navigationDependencies.asList())
+
         }
     }
 }
