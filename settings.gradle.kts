@@ -30,10 +30,9 @@ dependencyResolutionManagement {
             /*
             version definition
              */
-            version("moko-resource", "0.20.1")
-            version("moko-mvvm", "0.14.0")
-            version("kotlin", "1.7.10")
-            version("coil", "2.2.1")
+            version("moko-resource", "0.20.1") // https://github.com/icerockdev/moko-resources
+            version("moko-mvvm", "0.14.0") // https://github.com/icerockdev/moko-mvvm/releases
+            version("coil", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
             version("ktor", "2.1.2") // https://ktor.io/docs/http-client-engines.html
 
@@ -49,38 +48,45 @@ dependencyResolutionManagement {
 
 
             /*
+            Moko resource
+             */
+            listOf("resources-generator", "resources-compose", "resources").forEach {
+                library("moko-$it", "dev.icerock.moko", it).versionRef("moko-resource")
+            }
+
+            /*
             Moko MVVM
              */
-            val mokoMvvmAndroidDependencies = listOf(
+            val mokoMvvmAndroidDependencies = arrayOf(
                 "mvvm-livedata-material",
                 "mvvm-livedata-glide",
                 "mvvm-livedata-swiperefresh",
                 "mvvm-databinding",
                 "mvvm-viewbinding"
             )
-            val mokoMvvmCoreDependencies = listOf(
+            val mokoMvvmCoreDependencies = arrayOf(
                 "mvvm-core",
                 "mvvm-livedata",
                 "mvvm-state",
             )
-            listOf(mokoMvvmAndroidDependencies, mokoMvvmCoreDependencies).flatten().forEach {
+            listOf(*mokoMvvmAndroidDependencies, *mokoMvvmCoreDependencies).forEach {
                 library(it, "dev.icerock.moko", it).versionRef("moko-mvvm")
             }
-            bundle("moko-mvvm-android", mokoMvvmAndroidDependencies)
-            bundle("moko-mvvm-core", mokoMvvmCoreDependencies)
+            bundle("moko-mvvm-android", mokoMvvmAndroidDependencies.asList())
+            bundle("moko-mvvm-core", mokoMvvmCoreDependencies.asList())
 
             /*
             Ktor
              */
-            val ktorCoreDependancies = listOf(
+            val ktorCoreDependancies = arrayOf(
                 "ktor-client-core",
                 "ktor-client-json",
                 "ktor-client-logging"
             )
-            listOf(ktorCoreDependancies, listOf("ktor-client-okhttp")).flatten().forEach {
+            listOf(*ktorCoreDependancies, "ktor-client-okhttp").forEach {
                 library(it, "io.ktor", it).versionRef("ktor")
             }
-            bundle("ktor-common", ktorCoreDependancies)
+            bundle("ktor-common", ktorCoreDependancies.asList())
 
         }
     }

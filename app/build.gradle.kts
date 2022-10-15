@@ -72,14 +72,8 @@ android {
 
 dependencies {
     implementation(project(":shared"))
-
-    // moko
     implementation(libs.bundles.moko.mvvm.android)
-    implementation(
-        group = "dev.icerock.moko",
-        name = "resources-compose",
-        version = libs.versions.moko.resource.get()
-    )
+    implementation(libs.moko.resources.compose)
 
     // navigation
     listOf(

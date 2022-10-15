@@ -27,17 +27,15 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.bundles.moko.mvvm.core)
+                implementation(libs.napier)
+                implementation(libs.bundles.ktor.common)
+                implementation(libs.moko.resources)
                 // for xml
                 implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
                 implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
                 // rest
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-                // logger
-                implementation(libs.napier)
-                // ktor
-                implementation(libs.bundles.ktor.common)
-                implementation("dev.icerock.moko:resources:0.20.1")
             }
         }
         val androidMain by getting {
