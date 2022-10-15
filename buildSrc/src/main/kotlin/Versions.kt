@@ -1,6 +1,5 @@
 object Versions {
     
-    const val xmlUtils = "0.84.2"
     const val junit = "4.13.2"
     const val accompanist = "0.25.1"
 

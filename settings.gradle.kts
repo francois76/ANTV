@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         // application dependancies
-        create("antv") {
+        create("antvLibs") {
             version("version", "0.0.6")
             version("versionNumber", "4")
             version("sdk-compile", "33")
@@ -35,6 +35,7 @@ dependencyResolutionManagement {
             version("coil", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
             version("ktor", "2.1.2") // https://ktor.io/docs/http-client-engines.html
+            version("xmlutil", "0.84.3") // https://github.com/pdvrieze/xmlutil/releases
 
             /*
             monoline repos
@@ -83,16 +84,23 @@ dependencyResolutionManagement {
             /*
             Ktor
              */
-            val ktorCoreDependancies = arrayOf(
+            val torCoreDependencies = arrayOf(
                 "ktor-client-core",
                 "ktor-client-json",
                 "ktor-client-logging"
             )
-            listOf(*ktorCoreDependancies, "ktor-client-okhttp").forEach {
+            listOf(*torCoreDependencies, "ktor-client-okhttp").forEach {
                 library(it, "io.ktor", it).versionRef("ktor")
             }
-            bundle("ktor-common", ktorCoreDependancies.asList())
-
+            bundle("ktor-common", torCoreDependencies.asList())
+            /*
+            xml util
+             */
+            val xmlUtilsDependencies = listOf("core", "serialization")
+            xmlUtilsDependencies.forEach {
+                library(it, "io.github.pdvrieze.xmlutil", it).versionRef("xmlutil")
+            }
+            bundle("xmlutil", xmlUtilsDependencies)
         }
     }
 }

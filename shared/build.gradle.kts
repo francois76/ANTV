@@ -25,9 +25,8 @@ kotlin {
                 implementation(libs.napier)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
-                // for xml
-                implementation("io.github.pdvrieze.xmlutil:core:${Versions.xmlUtils}")
-                implementation("io.github.pdvrieze.xmlutil:serialization:${Versions.xmlUtils}")
+                implementation(libs.bundles.xmlutil)
+                api(libs.moko.resources)
                 // rest
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
@@ -38,14 +37,8 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
             }
         }
-        val macosArm64Main by getting {
-            dependencies {
-            }
-        }
-        val iosArm64Main by getting {
-            dependencies {
-            }
-        }
+        val macosArm64Main by getting
+        val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
@@ -53,39 +46,19 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
-        val macosArm64Test by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            macosArm64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
-        val androidTest by getting {
-            dependencies {
-
-            }
-        }
-
     }
 }
 
 android {
     namespace = "fr.fgognet.antv"
-    compileSdk = antv.versions.sdk.compile.get().toInt()
+    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
     sourceSets["main"].apply {
         assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
         res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
     }
     defaultConfig {
-        minSdk = antv.versions.sdk.min.get().toInt()
-        targetSdk = antv.versions.sdk.target.get().toInt()
+        minSdk = antvLibs.versions.sdk.min.get().toInt()
+        targetSdk = antvLibs.versions.sdk.target.get().toInt()
     }
 }
 
@@ -93,8 +66,5 @@ multiplatformResources {
     multiplatformResourcesPackage = "fr.fgognet.antv"
     disableStaticFrameworkWarning = true
 }
-dependencies {
-    commonMainApi(libs.moko.resources)
-    commonTestImplementation(libs.moko.resources.test)
-}
+
 

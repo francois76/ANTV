@@ -6,15 +6,15 @@ plugins {
 
 
 android {
-    compileSdk = antv.versions.sdk.compile.get().toInt()
+    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
     namespace = "fr.fgognet.antv"
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
-        minSdk = antv.versions.sdk.min.get().toInt()
-        targetSdk = antv.versions.sdk.target.get().toInt()
-        versionCode = antv.versions.versionNumber.get().toInt()
-        versionName = antv.versions.version.get()
+        minSdk = antvLibs.versions.sdk.min.get().toInt()
+        targetSdk = antvLibs.versions.sdk.target.get().toInt()
+        versionCode = antvLibs.versions.versionNumber.get().toInt()
+        versionName = antvLibs.versions.version.get()
 
     }
     buildTypes {
