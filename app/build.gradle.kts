@@ -6,15 +6,15 @@ plugins {
 
 
 android {
-    compileSdk = Versions.Sdk.compileSdk
+    compileSdk = antv.versions.sdk.compile.get().toInt()
     namespace = "fr.fgognet.antv"
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
-        minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
-        versionCode = Versions.antvNumber
-        versionName = Versions.antv
+        minSdk = antv.versions.sdk.min.get().toInt()
+        targetSdk = antv.versions.sdk.target.get().toInt()
+        versionCode = antv.versions.versionNumber.get().toInt()
+        versionName = antv.versions.version.get()
 
     }
     buildTypes {
@@ -115,7 +115,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
     implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
-    implementation("androidx.constraintlayout:constraintlayout-compose:${Versions.Androidx.constraintLayoutCompose}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
     androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
 
@@ -143,7 +142,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-    implementation("io.coil-kt:coil-compose:${Versions.coil}")
+    implementation(libs.coil)
 
     // testing
     debugImplementation(

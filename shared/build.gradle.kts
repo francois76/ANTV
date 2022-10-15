@@ -76,11 +76,11 @@ kotlin {
 
 android {
     namespace = "fr.fgognet.antv"
-    compileSdk = Versions.Sdk.compileSdk
+    compileSdk = antv.versions.sdk.compile.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
+        minSdk = antv.versions.sdk.min.get().toInt()
+        targetSdk = antv.versions.sdk.target.get().toInt()
     }
 }
 

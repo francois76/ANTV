@@ -1,4 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
+    val kotlin = "1.7.10"
     repositories {
         gradlePluginPortal()
         google()
@@ -12,9 +15,25 @@ dependencyResolutionManagement {
         maven { url = uri("https://jitpack.io") }
     }
     versionCatalogs {
+        // application dependancies
+        create("antv") {
+            version("version", "0.0.6")
+            version("versionNumber", "4")
+            version("sdk-compile", "33")
+            version("sdk-min", "26")
+            version("sdk-target", "32")
+        }
+
+        // libraries dependencies
         create("libs") {
+            // version definition
             version("moko-resource", "0.20.1")
             version("moko-mvvm", "0.14.0")
+            version("kotlin", "1.7.10")
+
+            // monoline repo with version
+            library("coil", "io.coil-kt", "coil-compose").version("2.2.1")
+
 
             val mokoMvvmAndroidDependencies = listOf(
                 "mvvm-livedata-material",
