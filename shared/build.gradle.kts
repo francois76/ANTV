@@ -18,11 +18,6 @@ kotlin {
         }
     }
 
-
-
-
-
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -96,7 +91,7 @@ multiplatformResources {
     disableStaticFrameworkWarning = true
 }
 dependencies {
-    commonMainApi("dev.icerock.moko:resources:0.20.1")
-    commonTestImplementation("dev.icerock.moko:resources-test:0.20.1")
+    commonMainApi(libs.moko.resources)
+    commonTestImplementation(libs.moko.resources.test)
 }
 

@@ -50,7 +50,12 @@ dependencyResolutionManagement {
             /*
             Moko resource
              */
-            listOf("resources-generator", "resources-compose", "resources").forEach {
+            listOf(
+                "resources-generator",
+                "resources-compose",
+                "resources",
+                "resources-test"
+            ).forEach {
                 library("moko-$it", "dev.icerock.moko", it).versionRef("moko-resource")
             }
 
