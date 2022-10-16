@@ -94,7 +94,7 @@ dependencies {
 
 
     // Androidx
-    implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
+    implementation(libs.activity.compose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
 
 

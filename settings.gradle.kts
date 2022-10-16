@@ -76,6 +76,10 @@ dependencyResolutionManagement {
                 "compose-theme-adapter-3",
                 "1.0.20"
             ) // https://github.com/material-components/material-components-android-compose-theme-adapter/releases
+            version(
+                "activity-compose",
+                "1.6.0"
+            ) // https://developer.android.com/jetpack/androidx/releases/activity
             /*
             monoline repos
              */
@@ -86,6 +90,7 @@ dependencyResolutionManagement {
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
                 "compose-theme-adapter-3" to "com.google.android.material",
+                "activity-compose" to "androidx.activity",
                 "core-ktx" to "androidx.core"
             ).forEach {
                 library(it.key, it.value, it.key).versionRef(it.key)
