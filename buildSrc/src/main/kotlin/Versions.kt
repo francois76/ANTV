@@ -2,7 +2,6 @@ object Versions {
 
 
     object Androidx {
-        const val lifecycle = "2.5.1"
         const val material3 = "1.0.0-beta03"
 
         object Compose {

@@ -83,17 +83,18 @@ dependencies {
     implementation(libs.play.services.cast.framework)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.core.ktx)
+    implementation(libs.lifecycle.process)
 
     // testing
     testImplementation(libs.junit)
     testImplementation(libs.navigation.testing)
+    testImplementation(libs.lifecycle.runtime)
 
 
     // Androidx
-    implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
     implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
-    androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
+
 
     // compose
     hashMapOf(

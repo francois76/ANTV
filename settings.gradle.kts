@@ -64,6 +64,10 @@ dependencyResolutionManagement {
                 "navigation",
                 "2.5.2"
             ) // https://developer.android.com/jetpack/androidx/releases/navigation
+            version(
+                "lifecycle",
+                "2.5.1"
+            ) // https://developer.android.com/jetpack/androidx/releases/lifecycle
             /*
             monoline repos
              */
@@ -143,7 +147,7 @@ dependencyResolutionManagement {
             }
 
             /*
-            media3
+            androidx media3
              */
             val media3Dependencies = listOf(
                 "media3-exoplayer",
@@ -157,7 +161,7 @@ dependencyResolutionManagement {
             }
             bundle("media3", media3Dependencies)
 
-            // navigation
+            // androidx navigation
             val navigationDependencies = arrayOf(
                 "navigation-fragment-ktx",
                 "navigation-ui-ktx",
@@ -169,6 +173,10 @@ dependencyResolutionManagement {
             }
             bundle("navigation", navigationDependencies.asList())
 
+            // androidx lifecycle
+            listOf("lifecycle-process", "lifecycle-runtime").forEach {
+                library(it, "androidx.lifecycle", it).versionRef("lifecycle")
+            }
         }
     }
 }
