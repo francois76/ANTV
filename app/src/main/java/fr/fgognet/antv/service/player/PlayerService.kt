@@ -73,7 +73,7 @@ class PlayerService : MediaSessionService() {
 
 
     fun resyncOnLiveError() {
-        // Re-initialize player at the current live window default position.
+        Log.v(TAG, "resyncOnLiveError")
         if (mediaSession?.player?.isCurrentMediaItemLive == true) {
             mediaSession?.player?.seekToDefaultPosition()
             mediaSession?.player?.prepare()
@@ -86,7 +86,6 @@ class PlayerService : MediaSessionService() {
     }
 
     fun stopCast() {
-
         Log.v(TAG, "stopCast")
         setCurrentPlayer(localPlayer)
     }
