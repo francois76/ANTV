@@ -58,7 +58,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
             }
         }
 
-        CastContext.getSharedInstance(applicationContext)
+        CastContext.getSharedInstance(applicationContext, MoreExecutors.directExecutor())
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {

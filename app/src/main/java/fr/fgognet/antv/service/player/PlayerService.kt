@@ -14,6 +14,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
+import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.activity.main.MainActivity
 import fr.fgognet.antv.activity.tv.TvActivity
 
@@ -34,7 +35,13 @@ class PlayerService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         Log.v(TAG, "onCreate")
-        castPlayer = CastPlayer(CastContext.getSharedInstance(applicationContext))
+        val castContext = CastContext.getSharedInstance(
+            applicationContext,
+            MoreExecutors.directExecutor()
+        )
+        castPlayer = CastPlayer(
+            castContext.result
+        )
         localPlayer =
             ExoPlayer.Builder(this).build()
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
