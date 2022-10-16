@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.bundles.moko.mvvm.android)
     implementation(libs.bundles.media3)
     implementation(libs.bundles.navigation)
+    implementation(libs.bundles.material3)
     // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
@@ -112,8 +113,7 @@ dependencies {
     }
 
     // material3
-    implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
-    implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
+
     implementation("com.google.android.material:compose-theme-adapter-3:${Versions.Androidx.Compose.themeAdapter}")
 
     // testing

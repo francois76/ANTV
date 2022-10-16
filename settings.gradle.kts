@@ -68,6 +68,10 @@ dependencyResolutionManagement {
                 "lifecycle",
                 "2.5.1"
             ) // https://developer.android.com/jetpack/androidx/releases/lifecycle
+            version(
+                "material3",
+                "1.0.0-rc01"
+            ) // https://developer.android.com/jetpack/androidx/releases/compose-material3
             /*
             monoline repos
              */
@@ -177,6 +181,19 @@ dependencyResolutionManagement {
             listOf("lifecycle-process", "lifecycle-runtime").forEach {
                 library(it, "androidx.lifecycle", it).versionRef("lifecycle")
             }
+
+            // material3
+            library(
+                "material3-core",
+                "androidx.compose.material3",
+                "material3"
+            ).versionRef("material3")
+            library(
+                "material3-window-size",
+                "androidx.compose.material3",
+                "material3-window-size-class"
+            ).versionRef("material3")
+            bundle("material3", listOf("material3-core", "material3-window-size"))
         }
     }
 }
