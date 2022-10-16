@@ -72,6 +72,10 @@ dependencyResolutionManagement {
                 "material3",
                 "1.0.0-rc01"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-material3
+            version(
+                "compose-theme-adapter-3",
+                "1.0.20"
+            ) // https://github.com/material-components/material-components-android-compose-theme-adapter/releases
             /*
             monoline repos
              */
@@ -81,6 +85,7 @@ dependencyResolutionManagement {
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
+                "compose-theme-adapter-3" to "com.google.android.material",
                 "core-ktx" to "androidx.core"
             ).forEach {
                 library(it.key, it.value, it.key).versionRef(it.key)

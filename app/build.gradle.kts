@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.process)
+    implementation(libs.compose.theme.adapter.get3())
 
     // testing
     testImplementation(libs.junit)
@@ -111,10 +112,6 @@ dependencies {
             )
         }
     }
-
-    // material3
-
-    implementation("com.google.android.material:compose-theme-adapter-3:${Versions.Androidx.Compose.themeAdapter}")
 
     // testing
     debugImplementation(
