@@ -5,7 +5,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_browse_fragment"
-        style="@style/Theme.ANTV.MainActivity"
         tools:deviceIds="tv"
         tools:ignore="MergeRootFrame">
 
@@ -80,7 +79,7 @@
             <ImageButton
                 android:id="@id/exo_play_pause"
                 style="@style/ExoStyledControls.Button.Center.PlayPause" />
-            
+
 
             <ImageButton
                 android:id="@id/exo_next"
