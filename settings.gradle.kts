@@ -80,6 +80,7 @@ dependencyResolutionManagement {
                 "activity-compose",
                 "1.6.0"
             ) // https://developer.android.com/jetpack/androidx/releases/activity
+            version("compose", "1.2.1")
             /*
             monoline repos
              */
@@ -204,6 +205,28 @@ dependencyResolutionManagement {
                 "material3-window-size-class"
             ).versionRef("material3")
             bundle("material3", listOf("material3-core", "material3-window-size"))
+
+            // androidx compose
+            val composeDependencies = hashMapOf(
+                "runtime" to arrayListOf("runtime", "runtime-livedata"),
+                "ui" to arrayListOf("ui", "ui-viewbinding", "ui-tooling-preview"),
+                "foundation" to arrayListOf("foundation", "foundation-layout"),
+            )
+            composeDependencies.forEach {
+                it.value.forEach { module ->
+                    library(
+                        module,
+                        "androidx.compose.${it.key}",
+                        module
+                    ).versionRef("material3")
+                }
+            }
+            library(
+                "compose-ui-tooling",
+                "androidx.compose.ui",
+                "ui-tooling"
+            ).versionRef("material3")
+            bundle("compose", composeDependencies.values.flatten())
         }
     }
 }

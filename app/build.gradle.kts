@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.bundles.media3)
     implementation(libs.bundles.navigation)
     implementation(libs.bundles.material3)
+    implementation(libs.bundles.compose)
     // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
@@ -86,38 +87,13 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.process)
     implementation(libs.compose.theme.adapter.get3())
+    implementation(libs.activity.compose)
 
     // testing
     testImplementation(libs.junit)
     testImplementation(libs.navigation.testing)
     testImplementation(libs.lifecycle.runtime)
+    debugImplementation(libs.compose.ui.tooling)
 
-
-    // Androidx
-    implementation(libs.activity.compose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
-
-
-    // compose
-    hashMapOf(
-        "runtime" to arrayListOf("runtime", "runtime-livedata"),
-        "ui" to arrayListOf("ui", "ui-viewbinding", "ui-tooling-preview"),
-        "foundation" to arrayListOf("foundation", "foundation-layout"),
-    ).forEach {
-        it.value.forEach { module ->
-            implementation(
-                group = "androidx.compose.${it.key}",
-                name = module,
-                version = Versions.Androidx.Compose.compose
-            )
-        }
-    }
-
-    // testing
-    debugImplementation(
-        group = "androidx.compose.ui",
-        name = "ui-tooling",
-        version = Versions.Androidx.Compose.compose
-    )
 
 }
