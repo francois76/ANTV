@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
 import fr.fgognet.antv.R
@@ -240,3 +242,21 @@ fun Long.formatMinSec(): String {
 
 private const val PLAYER_SEEK_BACK_INCREMENT = 5 * 1000L // 5 seconds
 private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
+
+@Composable
+@Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
+fun PlayerControl() {
+    PlayerControls(
+        isVisible = { true },
+        isPlaying = { true },
+        title = { "lorem ipsum" },
+        onReplayClick = { },
+        onForwardClick = { },
+        onPauseToggle = { /*TODO*/ },
+        totalDuration = { 0 },
+        currentTime = { 0 },
+        bufferedPercentage = { 0 },
+        playbackState = { 0 },
+        onSeekChanged = {}
+    )
+}

@@ -171,7 +171,7 @@ fun ANTVNavHost(
             route = PlayerRoute.id,
         ) {
             PlayerView(
-                setFullScreen = setFullScreenMode
+                setFullScreen = setFullScreenMode, title = null,
             )
         }
         composable(
