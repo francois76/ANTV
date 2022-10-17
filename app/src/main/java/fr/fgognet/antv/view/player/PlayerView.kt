@@ -52,8 +52,6 @@ fun PlayerViewState(
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
-    val totalDuration by remember { mutableStateOf(0L) }
-    val currentTime by remember { mutableStateOf(0L) }
     val bufferedPercentage by remember { mutableStateOf(0) }
     val playbackState by remember { mutableStateOf(PlayerService.controller?.playbackState) }
     AndroidView(
