@@ -36,6 +36,7 @@ fun PlayerView(
     }
     PlayerViewState(
         state = state,
+        model = model,
         setFullScreen = setFullScreen
     )
 }
@@ -44,17 +45,17 @@ fun PlayerView(
 @Composable
 fun PlayerViewState(
     state: PlayerData?,
+    model: PlayerViewModel,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
-    val isPlaying by remember { mutableStateOf(state?.player?.isPlaying) }
     val totalDuration by remember { mutableStateOf(0L) }
     val currentTime by remember { mutableStateOf(0L) }
     val bufferedPercentage by remember { mutableStateOf(0) }
-    val playbackState by remember { mutableStateOf(state?.player?.playbackState) }
+    val playbackState by remember { mutableStateOf(PlayerService.controller?.playbackState) }
     AndroidView(
         modifier =
         Modifier.clickable {
@@ -72,24 +73,30 @@ fun PlayerViewState(
             }
         })
 
-    PlayerControls(
-        modifier = Modifier.fillMaxSize(),
-        isVisible = { shouldShowControls },
-        isPlaying = { isPlaying == true },
-        title = { state?.title ?: "" },
-        playbackState = { playbackState ?: 0 },
-        onReplayClick = { PlayerService.controller?.seekBack() },
-        onForwardClick = { PlayerService.controller?.seekForward() },
-        onPauseToggle = {
-            PlayerService.controller?.pause()
-        },
-        totalDuration = { totalDuration },
-        currentTime = { currentTime },
-        bufferedPercentage = { bufferedPercentage },
-        onSeekChanged = { timeMs: Float ->
-            state?.player?.seekTo(timeMs.toLong())
-        }
-    )
+    if (state != null) {
+        PlayerControls(
+            modifier = Modifier.fillMaxSize(),
+            isVisible = { shouldShowControls },
+            state = state,
+            title = { state.title },
+            playbackState = { playbackState ?: 0 },
+            onReplayClick = { PlayerService.controller?.seekBack() },
+            onForwardClick = { PlayerService.controller?.seekForward() },
+            onPauseToggle = {
+                if (state.isPlaying) {
+                    model.pause()
+                } else {
+                    model.play()
+                }
+            },
+            bufferedPercentage = { bufferedPercentage },
+            onSeekChanged = { timeMs: Float ->
+                model.seekTo(timeMs)
+            },
+            model = model,
+        )
+    }
+
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
             setFullScreen(true)

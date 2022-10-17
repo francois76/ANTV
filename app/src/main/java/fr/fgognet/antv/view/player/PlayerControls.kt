@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
+import androidx.media3.common.util.UnstableApi
 import fr.fgognet.antv.R
 import java.util.concurrent.TimeUnit
 
@@ -24,13 +25,11 @@ import java.util.concurrent.TimeUnit
 fun PlayerControls(
     modifier: Modifier = Modifier,
     isVisible: () -> Boolean,
-    isPlaying: () -> Boolean,
+    state: PlayerData,
     title: () -> String,
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
     bufferedPercentage: () -> Int,
     playbackState: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit
@@ -56,7 +55,7 @@ fun PlayerControls(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth(),
-                isPlaying = isPlaying,
+                state = state,
                 onReplayClick = onReplayClick,
                 onForwardClick = onForwardClick,
                 onPauseToggle = onPauseToggle,
@@ -82,8 +81,7 @@ fun PlayerControls(
                             }
                         )
                     ),
-                totalDuration = totalDuration,
-                currentTime = currentTime,
+                state = state,
                 bufferedPercentage = bufferedPercentage,
                 onSeekChanged = onSeekChanged
             )
@@ -106,13 +104,12 @@ private fun TopControl(modifier: Modifier = Modifier, title: () -> String) {
 @Composable
 private fun CenterControls(
     modifier: Modifier = Modifier,
-    isPlaying: () -> Boolean,
+    state: PlayerData,
     playbackState: () -> Int,
     onReplayClick: () -> Unit,
     onPauseToggle: () -> Unit,
     onForwardClick: () -> Unit
 ) {
-    val isVideoPlaying = remember(isPlaying()) { isPlaying() }
 
     val playerState = remember(playbackState()) { playbackState() }
 
@@ -132,10 +129,10 @@ private fun CenterControls(
                 contentScale = ContentScale.Crop,
                 painter =
                 when {
-                    isVideoPlaying -> {
+                    state.isPlaying -> {
                         painterResource(id = R.drawable.ic_baseline_pause_24)
                     }
-                    isVideoPlaying.not() && playerState == STATE_ENDED -> {
+                    playerState == STATE_ENDED -> {
                         painterResource(id = R.drawable.ic_baseline_replay_24)
                     }
                     else -> {
@@ -160,15 +157,11 @@ private fun CenterControls(
 @Composable
 private fun BottomControls(
     modifier: Modifier = Modifier,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
+    state: PlayerData,
     bufferedPercentage: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit
 ) {
 
-    val duration = remember(totalDuration()) { totalDuration() }
-
-    val videoTime = remember(currentTime()) { currentTime() }
 
     val buffer = remember(bufferedPercentage()) { bufferedPercentage() }
 
@@ -188,9 +181,9 @@ private fun BottomControls(
 
             Slider(
                 modifier = Modifier.fillMaxWidth(),
-                value = videoTime.toFloat(),
+                value = state.currentTime.toFloat(),
                 onValueChange = onSeekChanged,
-                valueRange = 0f..duration.toFloat(),
+                valueRange = 0f..state.totalDuration.toFloat(),
                 colors =
                 SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
@@ -207,7 +200,7 @@ private fun BottomControls(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = duration.formatMinSec(),
+                text = state.totalDuration.formatMinSec(),
                 color = MaterialTheme.colorScheme.primary
             )
 
@@ -243,20 +236,31 @@ fun Long.formatMinSec(): String {
 private const val PLAYER_SEEK_BACK_INCREMENT = 5 * 1000L // 5 seconds
 private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
 
+@UnstableApi
 @Composable
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 fun PlayerControl() {
     PlayerControls(
         isVisible = { true },
-        isPlaying = { true },
+        state = PlayerData(
+            player = null,
+            url = "",
+            imageCode = "",
+            title = "lorem ipsum",
+            description = "dolor est",
+            isPlaying = false,
+            isCast = false,
+            playbackState = 0,
+            bufferedPercentage = 100,
+            currentTime = 20,
+            totalDuration = 200,
+        ),
         title = { "lorem ipsum" },
         onReplayClick = { },
         onForwardClick = { },
         onPauseToggle = { /*TODO*/ },
-        totalDuration = { 0 },
-        currentTime = { 0 },
         bufferedPercentage = { 0 },
         playbackState = { 0 },
-        onSeekChanged = {}
+        onSeekChanged = {},
     )
 }
