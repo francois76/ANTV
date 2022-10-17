@@ -193,5 +193,39 @@ class PlayerViewModel : ViewModel() {
         )
     }
 
+    fun seekBack() {
+        PlayerService.controller?.seekBack()
+        this._playerdata.value = PlayerData(
+            url = this.playerData.value.url,
+            imageCode = this.playerData.value.imageCode,
+            title = this.playerData.value.title,
+            description = this.playerData.value.description,
+            player = this.playerData.value.player,
+            totalDuration = this.playerData.value.totalDuration,
+            currentTime = this.playerData.value.currentTime - PlayerService.controller?.seekBackIncrement!!,
+            bufferedPercentage = this.playerData.value.bufferedPercentage,
+            playbackState = this.playerData.value.playbackState,
+            isPlaying = this.playerData.value.isPlaying,
+            isCast = this.playerData.value.isCast
+        )
+    }
+
+    fun seekForward() {
+        PlayerService.controller?.seekForward()
+        this._playerdata.value = PlayerData(
+            url = this.playerData.value.url,
+            imageCode = this.playerData.value.imageCode,
+            title = this.playerData.value.title,
+            description = this.playerData.value.description,
+            player = this.playerData.value.player,
+            totalDuration = this.playerData.value.totalDuration,
+            currentTime = this.playerData.value.currentTime + PlayerService.controller?.seekForwardIncrement!!,
+            bufferedPercentage = this.playerData.value.bufferedPercentage,
+            playbackState = this.playerData.value.playbackState,
+            isPlaying = this.playerData.value.isPlaying,
+            isCast = this.playerData.value.isCast
+        )
+    }
+
 
 }

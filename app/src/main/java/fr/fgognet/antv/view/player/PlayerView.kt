@@ -52,7 +52,6 @@ fun PlayerViewState(
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
-    val bufferedPercentage by remember { mutableStateOf(0) }
     val playbackState by remember { mutableStateOf(PlayerService.controller?.playbackState) }
     AndroidView(
         modifier =
@@ -78,8 +77,8 @@ fun PlayerViewState(
             state = state,
             title = { state.title },
             playbackState = { playbackState ?: 0 },
-            onReplayClick = { PlayerService.controller?.seekBack() },
-            onForwardClick = { PlayerService.controller?.seekForward() },
+            onReplayClick = { model.seekBack() },
+            onForwardClick = { model.seekForward() },
             onPauseToggle = {
                 if (state.isPlaying) {
                     model.pause()
@@ -87,7 +86,6 @@ fun PlayerViewState(
                     model.play()
                 }
             },
-            bufferedPercentage = { bufferedPercentage },
             onSeekChanged = { timeMs: Float ->
                 model.seekTo(timeMs)
             },

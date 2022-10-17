@@ -30,7 +30,6 @@ fun PlayerControls(
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
-    bufferedPercentage: () -> Int,
     playbackState: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit
 ) {
@@ -82,7 +81,6 @@ fun PlayerControls(
                         )
                     ),
                 state = state,
-                bufferedPercentage = bufferedPercentage,
                 onSeekChanged = onSeekChanged
             )
         }
@@ -158,17 +156,13 @@ private fun CenterControls(
 private fun BottomControls(
     modifier: Modifier = Modifier,
     state: PlayerData,
-    bufferedPercentage: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit
 ) {
-
-
-    val buffer = remember(bufferedPercentage()) { bufferedPercentage() }
 
     Column(modifier = modifier.padding(bottom = 32.dp)) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Slider(
-                value = buffer.toFloat(),
+                value = state.bufferedPercentage.toFloat(),
                 enabled = false,
                 onValueChange = { /*do nothing*/ },
                 valueRange = 0f..100f,
@@ -259,7 +253,6 @@ fun PlayerControl() {
         onReplayClick = { },
         onForwardClick = { },
         onPauseToggle = { /*TODO*/ },
-        bufferedPercentage = { 0 },
         playbackState = { 0 },
         onSeekChanged = {},
     )
