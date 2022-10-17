@@ -93,7 +93,6 @@ fun PlayerViewState(
             onSeekChanged = { timeMs: Float ->
                 model.seekTo(timeMs)
             },
-            model = model,
         )
     }
 
