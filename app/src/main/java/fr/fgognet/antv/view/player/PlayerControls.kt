@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import fr.fgognet.antv.R
-import java.util.concurrent.TimeUnit
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.toJavaLocalTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -194,41 +196,23 @@ private fun BottomControls(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = state.totalDuration.formatMinSec(),
+                text = "${state.currentTime.toHour()}/${state.totalDuration.toHour()}",
                 color = MaterialTheme.colorScheme.primary
             )
 
-            IconButton(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = {}
-            ) {
-                Image(
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(id = androidx.media3.ui.R.drawable.exo_ic_fullscreen_enter),
-                    contentDescription = "Enter/Exit fullscreen"
-                )
-            }
         }
     }
 }
 
-fun Long.formatMinSec(): String {
+fun Long.toHour(): String {
     return if (this == 0L) {
         "..."
     } else {
-        String.format(
-            "%02d:%02d",
-            TimeUnit.MILLISECONDS.toMinutes(this),
-            TimeUnit.MILLISECONDS.toSeconds(this) -
-                    TimeUnit.MINUTES.toSeconds(
-                        TimeUnit.MILLISECONDS.toMinutes(this)
-                    )
-        )
+        val current = LocalTime.fromMillisecondOfDay(this.toInt()).toJavaLocalTime()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        current.format(formatter)
     }
 }
-
-private const val PLAYER_SEEK_BACK_INCREMENT = 5 * 1000L // 5 seconds
-private const val PLAYER_SEEK_FORWARD_INCREMENT = 10 * 1000L // 10 seconds
 
 @UnstableApi
 @Composable
@@ -246,8 +230,8 @@ fun PlayerControl() {
             isCast = false,
             playbackState = 0,
             bufferedPercentage = 100,
-            currentTime = 20,
-            totalDuration = 200,
+            currentTime = 200000,
+            totalDuration = 2000000,
         ),
         title = { "lorem ipsum" },
         onReplayClick = { },
