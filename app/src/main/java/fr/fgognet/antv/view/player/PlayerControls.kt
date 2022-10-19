@@ -198,7 +198,7 @@ private fun BottomControls(
 }
 
 fun Long.toHour(): String {
-    return if (this == 0L) {
+    return if (this <= 0L) {
         "..."
     } else {
         val current = LocalTime.fromMillisecondOfDay(this.toInt()).toJavaLocalTime()

@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.player
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import androidx.media3.common.MediaItem
@@ -40,8 +39,7 @@ data class PlayerData(
 
 
 @UnstableApi
-@SuppressLint("StaticFieldLeak")
-class PlayerViewModel : ViewModel(), Player.Listener {
+class PlayerViewModel : ViewModel() {
 
 
     fun start() = apply { initialize() }
@@ -59,7 +57,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 totalDuration = 0,
                 currentTime = 0,
                 bufferedPercentage = 0,
-                playbackState = 0
+                playbackState = 0,
             )
         )
     val playerData: LiveData<PlayerData> get() = _playerdata
@@ -78,7 +76,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             isPlaying = PlayerService.controller?.isPlaying == true,
             isCast = false,
             bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
-            playbackState = PlayerService.controller?.playbackState ?: 0
+            playbackState = PlayerService.controller?.playbackState ?: 0,
         )
         CastContext.getSharedInstance()?.addCastStateListener {
             this._playerdata.value = this.playerData.value.copy(
@@ -97,14 +95,12 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                     if (isPlaying) {
                         Log.d(TAG, "tick")
                         t._playerdata.value = t.playerData.value.copy(
-                            totalDuration = PlayerService.controller?.duration?.coerceAtLeast(0L)
-                                ?: 0,
                             currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(
                                 0L
                             )
                                 ?: 0,
-                            bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
-                            isPlaying = PlayerService.controller?.isPlaying ?: false,
+                            bufferedPercentage = PlayerService.controller?.bufferedPercentage
+                                ?: 0,
                             playbackState = PlayerService.controller?.playbackState ?: 0,
                         )
                     }
@@ -112,8 +108,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             }
         }
 
-
-        PlayerService.controller?.addListener(this)
     }
 
 
@@ -191,7 +185,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
-    fun ticker(): Flow<Boolean> = flow {
+    private fun ticker(): Flow<Boolean> = flow {
         while (true) {
             delay(1000)
             emit(PlayerService.controller?.isPlaying == true)
