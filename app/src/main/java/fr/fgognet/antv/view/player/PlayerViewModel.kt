@@ -35,7 +35,7 @@ data class PlayerData(
 
 @UnstableApi
 @SuppressLint("StaticFieldLeak")
-class PlayerViewModel : ViewModel() {
+class PlayerViewModel : ViewModel(), Player.Listener {
 
 
     fun start() = apply { initialize() }
@@ -75,17 +75,7 @@ class PlayerViewModel : ViewModel() {
             playbackState = PlayerService.controller?.playbackState ?: 0
         )
         CastContext.getSharedInstance()?.addCastStateListener {
-            this._playerdata.value = PlayerData(
-                url = this.playerData.value.url,
-                imageCode = this.playerData.value.imageCode,
-                title = this.playerData.value.title,
-                description = this.playerData.value.description,
-                player = this.playerData.value.player,
-                totalDuration = this.playerData.value.totalDuration,
-                currentTime = this.playerData.value.currentTime,
-                isPlaying = PlayerService.controller?.isPlaying == true,
-                bufferedPercentage = this.playerData.value.bufferedPercentage,
-                playbackState = this.playerData.value.playbackState,
+            this._playerdata.value = this.playerData.value.copy(
                 isCast = when (it) {
                     CastState.CONNECTING, CastState.CONNECTED -> true
                     CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
@@ -95,6 +85,7 @@ class PlayerViewModel : ViewModel() {
 
             CastState.CONNECTED
         }
+        PlayerService.controller?.addListener(this)
     }
 
 
@@ -103,6 +94,18 @@ class PlayerViewModel : ViewModel() {
         super.onCleared()
     }
 
+    override fun onEvents(player: Player, events: Player.Events) {
+        Log.v(TAG, "onEvents")
+        super.onEvents(player, events)
+        this._playerdata.value = this.playerData.value.copy(
+            totalDuration = player.duration.coerceAtLeast(0L),
+            currentTime = player.currentPosition.coerceAtLeast(0L),
+            bufferedPercentage = player.bufferedPercentage,
+            isPlaying = player.isPlaying,
+            playbackState = player.playbackState,
+        )
+
+    }
 
     fun updateCurrentMedia(title: String) {
         if (PlayerService.controller?.currentMediaItem?.mediaMetadata?.title == title) {
@@ -126,16 +129,12 @@ class PlayerViewModel : ViewModel() {
             )
             PlayerService.controller?.prepare()
             PlayerService.controller?.play()
-            this._playerdata.value = PlayerData(
+
+            this._playerdata.value = this.playerData.value.copy(
                 url = entity.url,
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = this._playerdata.value.player,
-                totalDuration = this.playerData.value.totalDuration,
-                currentTime = this.playerData.value.currentTime,
-                bufferedPercentage = this.playerData.value.bufferedPercentage,
-                playbackState = this.playerData.value.playbackState,
                 isPlaying = this._playerdata.value.player?.isPlaying == true,
                 isCast = false
             )
@@ -144,86 +143,36 @@ class PlayerViewModel : ViewModel() {
 
     fun pause() {
         PlayerService.controller?.pause()
-        this._playerdata.value = PlayerData(
-            url = this.playerData.value.url,
-            imageCode = this.playerData.value.imageCode,
-            title = this.playerData.value.title,
-            description = this.playerData.value.description,
-            player = this.playerData.value.player,
-            totalDuration = this.playerData.value.totalDuration,
-            currentTime = this.playerData.value.currentTime,
-            bufferedPercentage = this.playerData.value.bufferedPercentage,
-            playbackState = this.playerData.value.playbackState,
+        this._playerdata.value = this.playerData.value.copy(
             isPlaying = false,
-            isCast = this.playerData.value.isCast
         )
     }
 
     fun play() {
         PlayerService.controller?.play()
-        this._playerdata.value = PlayerData(
-            url = this.playerData.value.url,
-            imageCode = this.playerData.value.imageCode,
-            title = this.playerData.value.title,
-            description = this.playerData.value.description,
-            player = this.playerData.value.player,
-            totalDuration = this.playerData.value.totalDuration,
-            currentTime = this.playerData.value.currentTime,
-            bufferedPercentage = this.playerData.value.bufferedPercentage,
-            playbackState = this.playerData.value.playbackState,
-            isPlaying = true,
-            isCast = this.playerData.value.isCast
+        this._playerdata.value = this.playerData.value.copy(
+            isPlaying = true
         )
     }
 
     fun seekTo(timestamp: Float) {
         PlayerService.controller?.seekTo(timestamp.toLong())
-        this._playerdata.value = PlayerData(
-            url = this.playerData.value.url,
-            imageCode = this.playerData.value.imageCode,
-            title = this.playerData.value.title,
-            description = this.playerData.value.description,
-            player = this.playerData.value.player,
-            totalDuration = this.playerData.value.totalDuration,
+        this._playerdata.value = this.playerData.value.copy(
             currentTime = timestamp.toLong(),
-            bufferedPercentage = this.playerData.value.bufferedPercentage,
-            playbackState = this.playerData.value.playbackState,
-            isPlaying = this.playerData.value.isPlaying,
-            isCast = this.playerData.value.isCast
         )
     }
 
     fun seekBack() {
         PlayerService.controller?.seekBack()
-        this._playerdata.value = PlayerData(
-            url = this.playerData.value.url,
-            imageCode = this.playerData.value.imageCode,
-            title = this.playerData.value.title,
-            description = this.playerData.value.description,
-            player = this.playerData.value.player,
-            totalDuration = this.playerData.value.totalDuration,
+        this._playerdata.value = this.playerData.value.copy(
             currentTime = this.playerData.value.currentTime - PlayerService.controller?.seekBackIncrement!!,
-            bufferedPercentage = this.playerData.value.bufferedPercentage,
-            playbackState = this.playerData.value.playbackState,
-            isPlaying = this.playerData.value.isPlaying,
-            isCast = this.playerData.value.isCast
         )
     }
 
     fun seekForward() {
         PlayerService.controller?.seekForward()
-        this._playerdata.value = PlayerData(
-            url = this.playerData.value.url,
-            imageCode = this.playerData.value.imageCode,
-            title = this.playerData.value.title,
-            description = this.playerData.value.description,
-            player = this.playerData.value.player,
-            totalDuration = this.playerData.value.totalDuration,
+        this._playerdata.value = this.playerData.value.copy(
             currentTime = this.playerData.value.currentTime + PlayerService.controller?.seekForwardIncrement!!,
-            bufferedPercentage = this.playerData.value.bufferedPercentage,
-            playbackState = this.playerData.value.playbackState,
-            isPlaying = this.playerData.value.isPlaying,
-            isCast = this.playerData.value.isCast
         )
     }
 

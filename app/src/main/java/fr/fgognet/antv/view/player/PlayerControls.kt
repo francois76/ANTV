@@ -32,7 +32,6 @@ fun PlayerControls(
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
-    playbackState: () -> Int,
     onSeekChanged: (timeMs: Float) -> Unit
 ) {
 
@@ -60,7 +59,6 @@ fun PlayerControls(
                 onReplayClick = onReplayClick,
                 onForwardClick = onForwardClick,
                 onPauseToggle = onPauseToggle,
-                playbackState = playbackState
             )
 
             BottomControls(
@@ -105,13 +103,10 @@ private fun TopControl(modifier: Modifier = Modifier, title: () -> String) {
 private fun CenterControls(
     modifier: Modifier = Modifier,
     state: PlayerData,
-    playbackState: () -> Int,
     onReplayClick: () -> Unit,
     onPauseToggle: () -> Unit,
     onForwardClick: () -> Unit
 ) {
-
-    val playerState = remember(playbackState()) { playbackState() }
 
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         IconButton(modifier = Modifier.size(40.dp), onClick = onReplayClick) {
@@ -132,7 +127,7 @@ private fun CenterControls(
                     state.isPlaying -> {
                         painterResource(id = R.drawable.ic_baseline_pause_24)
                     }
-                    playerState == STATE_ENDED -> {
+                    state.playbackState == STATE_ENDED -> {
                         painterResource(id = R.drawable.ic_baseline_replay_24)
                     }
                     else -> {
@@ -237,7 +232,6 @@ fun PlayerControl() {
         onReplayClick = { },
         onForwardClick = { },
         onPauseToggle = { /*TODO*/ },
-        playbackState = { 0 },
         onSeekChanged = {},
     )
 }

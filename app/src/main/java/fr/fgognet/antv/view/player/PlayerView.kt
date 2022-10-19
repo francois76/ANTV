@@ -14,7 +14,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.mvvm.createViewModelFactory
-import fr.fgognet.antv.service.player.PlayerService
 import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
@@ -52,7 +51,6 @@ fun PlayerViewState(
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
-    val playbackState by remember { mutableStateOf(PlayerService.controller?.playbackState) }
     AndroidView(
         modifier =
         Modifier.clickable {
@@ -76,7 +74,6 @@ fun PlayerViewState(
             isVisible = { shouldShowControls },
             state = state,
             title = { state.title },
-            playbackState = { playbackState ?: 0 },
             onReplayClick = { model.seekBack() },
             onForwardClick = { model.seekForward() },
             onPauseToggle = {
