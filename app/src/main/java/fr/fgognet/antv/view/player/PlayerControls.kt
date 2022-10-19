@@ -28,7 +28,6 @@ fun PlayerControls(
     modifier: Modifier = Modifier,
     isVisible: () -> Boolean,
     state: PlayerData,
-    title: () -> String,
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
@@ -48,7 +47,7 @@ fun PlayerControls(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .fillMaxWidth(),
-                title = title
+                state = state,
             )
 
             CenterControls(
@@ -88,12 +87,11 @@ fun PlayerControls(
 }
 
 @Composable
-private fun TopControl(modifier: Modifier = Modifier, title: () -> String) {
-    val videoTitle = remember(title()) { title() }
+private fun TopControl(modifier: Modifier = Modifier, state: PlayerData) {
 
     Text(
         modifier = modifier.padding(16.dp),
-        text = videoTitle,
+        text = state.title,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary
     )
@@ -228,7 +226,6 @@ fun PlayerControl() {
             currentTime = 200000,
             totalDuration = 2000000,
         ),
-        title = { "lorem ipsum" },
         onReplayClick = { },
         onForwardClick = { },
         onPauseToggle = { /*TODO*/ },

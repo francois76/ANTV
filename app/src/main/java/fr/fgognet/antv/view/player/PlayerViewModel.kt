@@ -14,6 +14,12 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.repository.VideoDao
 import fr.fgognet.antv.service.player.PlayerService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 private const val TAG = "ANTV/PlayerViewModel"
@@ -82,9 +88,31 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                     else -> false
                 }
             )
-
             CastState.CONNECTED
         }
+        val t = this
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                ticker().collect { isPlaying ->
+                    if (isPlaying) {
+                        Log.d(TAG, "tick")
+                        t._playerdata.value = t.playerData.value.copy(
+                            totalDuration = PlayerService.controller?.duration?.coerceAtLeast(0L)
+                                ?: 0,
+                            currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(
+                                0L
+                            )
+                                ?: 0,
+                            bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
+                            isPlaying = PlayerService.controller?.isPlaying ?: false,
+                            playbackState = PlayerService.controller?.playbackState ?: 0,
+                        )
+                    }
+                }
+            }
+        }
+
+
         PlayerService.controller?.addListener(this)
     }
 
@@ -92,19 +120,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     override fun onCleared() {
         Log.v(TAG, "onCleared")
         super.onCleared()
-    }
-
-    override fun onEvents(player: Player, events: Player.Events) {
-        Log.v(TAG, "onEvents")
-        super.onEvents(player, events)
-        this._playerdata.value = this.playerData.value.copy(
-            totalDuration = player.duration.coerceAtLeast(0L),
-            currentTime = player.currentPosition.coerceAtLeast(0L),
-            bufferedPercentage = player.bufferedPercentage,
-            isPlaying = player.isPlaying,
-            playbackState = player.playbackState,
-        )
-
     }
 
     fun updateCurrentMedia(title: String) {
@@ -174,6 +189,13 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         this._playerdata.value = this.playerData.value.copy(
             currentTime = this.playerData.value.currentTime + PlayerService.controller?.seekForwardIncrement!!,
         )
+    }
+
+    fun ticker(): Flow<Boolean> = flow {
+        while (true) {
+            delay(1000)
+            emit(PlayerService.controller?.isPlaying == true)
+        }
     }
 
 

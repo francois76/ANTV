@@ -73,7 +73,6 @@ fun PlayerViewState(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
             state = state,
-            title = { state.title },
             onReplayClick = { model.seekBack() },
             onForwardClick = { model.seekForward() },
             onPauseToggle = {
