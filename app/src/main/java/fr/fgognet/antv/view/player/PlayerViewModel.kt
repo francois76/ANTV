@@ -39,7 +39,7 @@ data class PlayerData(
 
 
 @UnstableApi
-class PlayerViewModel : ViewModel() {
+class PlayerViewModel : ViewModel(), Player.Listener {
 
 
     fun start() = apply { initialize() }
@@ -51,7 +51,7 @@ class PlayerViewModel : ViewModel() {
                 imageCode = "",
                 title = "",
                 description = "",
-                player = null,
+                player = PlayerService.controller,
                 isCast = false,
                 isPlaying = false,
                 totalDuration = 0,
@@ -65,19 +65,7 @@ class PlayerViewModel : ViewModel() {
 
     private fun initialize() {
         Log.v(TAG, "initialize")
-        this._playerdata.value = PlayerData(
-            url = "",
-            imageCode = "",
-            title = "",
-            description = "",
-            player = PlayerService.controller,
-            totalDuration = PlayerService.controller?.duration?.coerceAtLeast(0L) ?: 0,
-            currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(0L) ?: 0,
-            isPlaying = PlayerService.controller?.isPlaying == true,
-            isCast = false,
-            bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
-            playbackState = PlayerService.controller?.playbackState ?: 0,
-        )
+        PlayerService.controller?.addListener(this)
         CastContext.getSharedInstance()?.addCastStateListener {
             this._playerdata.value = this.playerData.value.copy(
                 isCast = when (it) {
@@ -108,6 +96,13 @@ class PlayerViewModel : ViewModel() {
             }
         }
 
+    }
+
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        this._playerdata.value = this.playerData.value.copy(
+            isPlaying = isPlaying,
+            totalDuration = PlayerService.controller?.duration ?: 0
+        )
     }
 
 
@@ -144,25 +139,17 @@ class PlayerViewModel : ViewModel() {
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                isPlaying = this._playerdata.value.player?.isPlaying == true,
+                player = PlayerService.controller,
+                totalDuration = PlayerService.controller?.duration?.coerceAtLeast(0) ?: 0,
+                currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(0) ?: 0,
+                isPlaying = PlayerService.controller?.isPlaying == true,
+                bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
+                playbackState = PlayerService.controller?.playbackState ?: 0,
                 isCast = false
             )
         }
     }
 
-    fun pause() {
-        PlayerService.controller?.pause()
-        this._playerdata.value = this.playerData.value.copy(
-            isPlaying = false,
-        )
-    }
-
-    fun play() {
-        PlayerService.controller?.play()
-        this._playerdata.value = this.playerData.value.copy(
-            isPlaying = true
-        )
-    }
 
     fun seekTo(timestamp: Float) {
         PlayerService.controller?.seekTo(timestamp.toLong())

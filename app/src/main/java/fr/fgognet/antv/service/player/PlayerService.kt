@@ -14,6 +14,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
+import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.activity.main.MainActivity
 import fr.fgognet.antv.activity.tv.TvActivity
@@ -72,6 +73,10 @@ class PlayerService : MediaSessionService() {
             release()
             mediaSession = null
         }
+        if (controllerFuture != null) {
+            MediaController.releaseFuture(controllerFuture!!)
+            controllerFuture = null
+        }
         super.onDestroy()
     }
 
@@ -127,7 +132,9 @@ class PlayerService : MediaSessionService() {
 
 
     companion object {
-        var controller: MediaController? = null
+        var controllerFuture: ListenableFuture<MediaController>? = null
+        val controller: MediaController?
+            get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
 
         // waiting for next version of media3
         var currentMediaItem: MediaItem? = null

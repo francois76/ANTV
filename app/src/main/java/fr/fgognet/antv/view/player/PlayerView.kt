@@ -77,9 +77,9 @@ fun PlayerViewState(
             onForwardClick = { model.seekForward() },
             onPauseToggle = {
                 if (state.isPlaying) {
-                    model.pause()
+                    state.player?.pause()
                 } else {
-                    model.play()
+                    state.player?.play()
                 }
             },
             onSeekChanged = { timeMs: Float ->

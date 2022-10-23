@@ -50,6 +50,7 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         service.cast()
     }
 
+
     override fun onCastSessionUnavailable() {
         Log.v(TAG, "onCastSessionUnavailable")
         service.stopCast()
