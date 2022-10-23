@@ -20,7 +20,7 @@ dependencyResolutionManagement {
             version("versionNumber", "4")
             version("sdk-compile", "33")
             version("sdk-min", "26")
-            version("sdk-target", "32")
+            version("sdk-target", "33")
         }
 
         // libraries dependencies
