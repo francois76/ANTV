@@ -73,8 +73,8 @@ fun PlayerViewState(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
             state = state,
-            onReplayClick = { model.seekBack() },
-            onForwardClick = { model.seekForward() },
+            onReplayClick = { state.player?.seekBack() },
+            onForwardClick = { state.player?.seekForward() },
             onPauseToggle = {
                 if (state.isPlaying) {
                     state.player?.pause()
@@ -83,7 +83,7 @@ fun PlayerViewState(
                 }
             },
             onSeekChanged = { timeMs: Float ->
-                model.seekTo(timeMs)
+                state.player?.seekTo(timeMs.toLong())
             },
         )
     }

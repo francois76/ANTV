@@ -150,27 +150,17 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         }
     }
 
-
-    fun seekTo(timestamp: Float) {
-        PlayerService.controller?.seekTo(timestamp.toLong())
+    override fun onPositionDiscontinuity(
+        oldPosition: Player.PositionInfo,
+        newPosition: Player.PositionInfo,
+        reason: Int
+    ) {
+        Log.v(TAG, "onPositionDiscontinuity")
         this._playerdata.value = this.playerData.value.copy(
-            currentTime = timestamp.toLong(),
+            currentTime = newPosition.positionMs,
         )
     }
 
-    fun seekBack() {
-        PlayerService.controller?.seekBack()
-        this._playerdata.value = this.playerData.value.copy(
-            currentTime = this.playerData.value.currentTime - PlayerService.controller?.seekBackIncrement!!,
-        )
-    }
-
-    fun seekForward() {
-        PlayerService.controller?.seekForward()
-        this._playerdata.value = this.playerData.value.copy(
-            currentTime = this.playerData.value.currentTime + PlayerService.controller?.seekForwardIncrement!!,
-        )
-    }
 
     private fun ticker(): Flow<Boolean> = flow {
         while (true) {
