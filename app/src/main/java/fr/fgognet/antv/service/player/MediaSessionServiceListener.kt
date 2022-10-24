@@ -2,22 +2,20 @@ package fr.fgognet.antv.service.player
 
 import android.util.Log
 import androidx.media3.cast.SessionAvailabilityListener
-import androidx.media3.common.*
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
-private const val TAG = "ANTV/PlayerServiceListener"
+private const val TAG = "ANTV/MediaSessionServiceListener"
 
 @UnstableApi
-class PlayerServiceListener(private val service: PlayerService) : Player.Listener,
+class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) :
     SessionAvailabilityListener,
     MediaSession.Callback {
-
-    override fun onIsPlayingChanged(isPlaying: Boolean) {
-        Log.v(TAG, "onIsPlayingChanged")
-    }
 
     override fun onAddMediaItems(
         mediaSession: MediaSession,
@@ -40,7 +38,7 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
         if (updatedMediaItems[0].mediaId == mediaSession.player.currentMediaItem?.mediaId) {
             return super.onAddMediaItems(mediaSession, controller, mediaItems)
         }
-        PlayerService.currentMediaItem = updatedMediaItems[0]
+        MediaSessionServiceImpl.currentMediaItem = updatedMediaItems[0]
         return Futures.immediateFuture(updatedMediaItems)
     }
 
@@ -54,21 +52,6 @@ class PlayerServiceListener(private val service: PlayerService) : Player.Listene
     override fun onCastSessionUnavailable() {
         Log.v(TAG, "onCastSessionUnavailable")
         service.stopCast()
-    }
-
-    override fun onPlayerError(error: PlaybackException) {
-        Log.v(TAG, "onPlayerError")
-        when (error.errorCode) {
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
-            PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
-            PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
-                Log.w(TAG, "error on playback: ${error.errorCode}")
-                service.resyncOnLiveError()
-            }
-
-            else -> Log.e(TAG, "error on playback: ${error.errorCode}")
-        }
     }
 
 

@@ -20,9 +20,9 @@ import fr.fgognet.antv.activity.main.MainActivity
 import fr.fgognet.antv.activity.tv.TvActivity
 
 
-class PlayerService : MediaSessionService() {
+class MediaSessionServiceImpl : MediaSessionService() {
     // TAG
-    private val TAG = "ANTV/PlayerService"
+    private val TAG = "ANTV/MediaSessionServiceImpl"
 
     // players
     private lateinit var localPlayer: ExoPlayer
@@ -50,12 +50,12 @@ class PlayerService : MediaSessionService() {
         } else {
             localPlayer
         }
-        val servicePlayerListener = PlayerServiceListener(this)
+        val servicePlayerListener = MediaSessionServiceListener(this)
         mediaSession =
             MediaSession.Builder(this, newPlayer)
                 .setSessionActivity(TaskStackBuilder.create(this).run {
-                    addNextIntent(Intent(this@PlayerService, MainActivity::class.java))
-                    addNextIntent(Intent(this@PlayerService, TvActivity::class.java))
+                    addNextIntent(Intent(this@MediaSessionServiceImpl, MainActivity::class.java))
+                    addNextIntent(Intent(this@MediaSessionServiceImpl, TvActivity::class.java))
                     getPendingIntent(
                         0,
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -83,14 +83,6 @@ class PlayerService : MediaSessionService() {
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
         mediaSession
 
-
-    fun resyncOnLiveError() {
-        Log.v(TAG, "resyncOnLiveError")
-        if (mediaSession?.player?.isCurrentMediaItemLive == true) {
-            mediaSession?.player?.seekToDefaultPosition()
-            mediaSession?.player?.prepare()
-        }
-    }
 
     fun cast() {
         Log.v(TAG, "cast")

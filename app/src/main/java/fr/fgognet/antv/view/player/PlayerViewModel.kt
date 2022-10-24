@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.framework.CastContext
@@ -12,7 +13,7 @@ import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.repository.VideoDao
-import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -40,8 +41,7 @@ data class PlayerData(
 
 @UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
-
-
+    
     fun start() = apply { initialize() }
 
     private val _playerdata: MutableLiveData<PlayerData> =
@@ -51,7 +51,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 imageCode = "",
                 title = "",
                 description = "",
-                player = PlayerService.controller,
+                player = MediaSessionServiceImpl.controller,
                 isCast = false,
                 isPlaying = false,
                 totalDuration = 0,
@@ -65,7 +65,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
 
     private fun initialize() {
         Log.v(TAG, "initialize")
-        PlayerService.controller?.addListener(this)
+        MediaSessionServiceImpl.controller?.addListener(this)
         CastContext.getSharedInstance()?.addCastStateListener {
             this._playerdata.value = this.playerData.value.copy(
                 isCast = when (it) {
@@ -83,13 +83,13 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                     if (isPlaying) {
                         Log.d(TAG, "tick")
                         t._playerdata.value = t.playerData.value.copy(
-                            currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(
+                            currentTime = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
                                 0L
                             )
                                 ?: 0,
-                            bufferedPercentage = PlayerService.controller?.bufferedPercentage
+                            bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
                                 ?: 0,
-                            playbackState = PlayerService.controller?.playbackState ?: 0,
+                            playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
                         )
                     }
                 }
@@ -101,7 +101,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         this._playerdata.value = this.playerData.value.copy(
             isPlaying = isPlaying,
-            totalDuration = PlayerService.controller?.duration ?: 0
+            totalDuration = MediaSessionServiceImpl.controller?.duration ?: 0
         )
     }
 
@@ -112,15 +112,14 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     }
 
     fun updateCurrentMedia(title: String) {
-        if (PlayerService.controller?.currentMediaItem?.mediaMetadata?.title == title) {
+        if (MediaSessionServiceImpl.controller?.currentMediaItem?.mediaMetadata?.title == title) {
             return
         }
         Log.v(TAG, "updateCurrentMedia")
         val entity = VideoDao.get(title)
         if (entity != null) {
-            Log.d(TAG, "received entity:  $entity")
             //this is not the full mediaItem here
-            PlayerService.controller?.setMediaItem(
+            MediaSessionServiceImpl.controller?.setMediaItem(
                 MediaItem.Builder()
                     .setMediaId(entity.url)
                     .setMediaMetadata(
@@ -131,20 +130,21 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                     )
                     .build()
             )
-            PlayerService.controller?.prepare()
-            PlayerService.controller?.play()
+            MediaSessionServiceImpl.controller?.prepare()
+            MediaSessionServiceImpl.controller?.play()
 
             this._playerdata.value = this.playerData.value.copy(
                 url = entity.url,
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = PlayerService.controller,
-                totalDuration = PlayerService.controller?.duration?.coerceAtLeast(0) ?: 0,
-                currentTime = PlayerService.controller?.currentPosition?.coerceAtLeast(0) ?: 0,
-                isPlaying = PlayerService.controller?.isPlaying == true,
-                bufferedPercentage = PlayerService.controller?.bufferedPercentage ?: 0,
-                playbackState = PlayerService.controller?.playbackState ?: 0,
+                player = MediaSessionServiceImpl.controller,
+                totalDuration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
+                currentTime = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(0)
+                    ?: 0,
+                isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
+                bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
+                playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
                 isCast = false
             )
         }
@@ -161,11 +161,29 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
+    override fun onPlayerError(error: PlaybackException) {
+        Log.v(TAG, "onPlayerError")
+        when (error.errorCode) {
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
+            PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
+            PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
+                Log.w(TAG, "error on playback: ${error.errorCode}")
+                if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {
+                    MediaSessionServiceImpl.controller?.seekToDefaultPosition()
+                    MediaSessionServiceImpl.controller?.prepare()
+                }
+            }
+
+            else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+        }
+    }
+
 
     private fun ticker(): Flow<Boolean> = flow {
         while (true) {
             delay(1000)
-            emit(PlayerService.controller?.isPlaying == true)
+            emit(MediaSessionServiceImpl.controller?.isPlaying == true)
         }
     }
 

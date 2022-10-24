@@ -24,7 +24,7 @@ import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.cardList.LiveCardListView
 import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
@@ -61,7 +61,7 @@ class HasMediaPlaying : ViewModel(), Player.Listener {
 
     private fun initialize() {
         Log.v(tag, "initialize")
-        PlayerService.controller?.addListener(this)
+        MediaSessionServiceImpl.controller?.addListener(this)
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {

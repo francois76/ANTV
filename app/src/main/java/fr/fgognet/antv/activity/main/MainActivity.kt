@@ -14,7 +14,7 @@ import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.config.initCommonLogs
-import fr.fgognet.antv.service.player.PlayerService
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.ANTVApp
 
 private const val TAG = "ANTV/MainActivity"
@@ -26,19 +26,19 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         initCommonLogs()
-        if (PlayerService.controllerFuture == null) {
-            PlayerService.controllerFuture =
+        if (MediaSessionServiceImpl.controllerFuture == null) {
+            MediaSessionServiceImpl.controllerFuture =
                 MediaController.Builder(
                     this,
-                    SessionToken(this, ComponentName(this, PlayerService::class.java))
+                    SessionToken(this, ComponentName(this, MediaSessionServiceImpl::class.java))
                 )
                     .buildAsync()
-            PlayerService.controllerFuture?.addListener({
+            MediaSessionServiceImpl.controllerFuture?.addListener({
                 Log.d(TAG, "Media service built!")
-                PlayerService.controller?.addListener(this)
+                MediaSessionServiceImpl.controller?.addListener(this)
             }, MoreExecutors.directExecutor())
         } else {
-            PlayerService.controller?.addListener(this)
+            MediaSessionServiceImpl.controller?.addListener(this)
         }
         setContent {
             Log.d(TAG, "recomposing")
@@ -60,7 +60,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onStop() {
         Log.v(TAG, "onStop")
-        PlayerService.controller?.removeListener(this)
+        MediaSessionServiceImpl.controller?.removeListener(this)
         if (isFinishing) {
             Log.w(TAG, "finishing")
         }
