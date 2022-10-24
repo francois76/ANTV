@@ -170,9 +170,9 @@ private fun BottomControls(
 
             Slider(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.currentTime.toFloat(),
+                value = state.currentPosition.toFloat(),
                 onValueChange = onSeekChanged,
-                valueRange = 0f..state.totalDuration.toFloat(),
+                valueRange = 0f..state.duration.toFloat(),
                 colors =
                 SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
@@ -189,7 +189,7 @@ private fun BottomControls(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = "${state.currentTime.toHour()}/${state.totalDuration.toHour()}",
+                text = "${state.currentPosition.toHour()}/${state.duration.toHour()}",
                 color = MaterialTheme.colorScheme.primary
             )
 
@@ -214,17 +214,17 @@ fun PlayerControl() {
     PlayerControls(
         isVisible = { true },
         state = PlayerData(
-            player = null,
+            controller = null,
             url = "",
             imageCode = "",
             title = "lorem ipsum",
             description = "dolor est",
             isPlaying = false,
-            isCast = false,
+            isCasting = false,
             playbackState = 0,
             bufferedPercentage = 100,
-            currentTime = 200000,
-            totalDuration = 2000000,
+            currentPosition = 200000,
+            duration = 2000000,
         ),
         onReplayClick = { },
         onForwardClick = { },

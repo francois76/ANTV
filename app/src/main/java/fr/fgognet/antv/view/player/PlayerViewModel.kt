@@ -7,6 +7,7 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaController
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -25,15 +26,15 @@ import kotlinx.coroutines.withContext
 private const val TAG = "ANTV/PlayerViewModel"
 
 data class PlayerData(
-    val player: Player?,
+    val controller: MediaController?,
     val url: String,
     val imageCode: String,
     val title: String,
     val description: String,
     val isPlaying: Boolean,
-    val totalDuration: Long,
-    val currentTime: Long,
-    val isCast: Boolean,
+    val duration: Long,
+    val currentPosition: Long,
+    val isCasting: Boolean,
     val bufferedPercentage: Int,
     val playbackState: Int,
 )
@@ -41,7 +42,7 @@ data class PlayerData(
 
 @UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
-    
+
     fun start() = apply { initialize() }
 
     private val _playerdata: MutableLiveData<PlayerData> =
@@ -51,11 +52,11 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 imageCode = "",
                 title = "",
                 description = "",
-                player = MediaSessionServiceImpl.controller,
-                isCast = false,
+                controller = MediaSessionServiceImpl.controller,
+                isCasting = false,
                 isPlaying = false,
-                totalDuration = 0,
-                currentTime = 0,
+                duration = 0,
+                currentPosition = 0,
                 bufferedPercentage = 0,
                 playbackState = 0,
             )
@@ -68,7 +69,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         MediaSessionServiceImpl.controller?.addListener(this)
         CastContext.getSharedInstance()?.addCastStateListener {
             this._playerdata.value = this.playerData.value.copy(
-                isCast = when (it) {
+                isCasting = when (it) {
                     CastState.CONNECTING, CastState.CONNECTED -> true
                     CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
                     else -> false
@@ -83,7 +84,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                     if (isPlaying) {
                         Log.d(TAG, "tick")
                         t._playerdata.value = t.playerData.value.copy(
-                            currentTime = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                            currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
                                 0L
                             )
                                 ?: 0,
@@ -101,15 +102,10 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         this._playerdata.value = this.playerData.value.copy(
             isPlaying = isPlaying,
-            totalDuration = MediaSessionServiceImpl.controller?.duration ?: 0
+            duration = MediaSessionServiceImpl.controller?.duration ?: 0
         )
     }
 
-
-    override fun onCleared() {
-        Log.v(TAG, "onCleared")
-        super.onCleared()
-    }
 
     fun updateCurrentMedia(title: String) {
         if (MediaSessionServiceImpl.controller?.currentMediaItem?.mediaMetadata?.title == title) {
@@ -138,14 +134,16 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
-                player = MediaSessionServiceImpl.controller,
-                totalDuration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
-                currentTime = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(0)
+                controller = MediaSessionServiceImpl.controller,
+                duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
+                currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                    0
+                )
                     ?: 0,
                 isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
                 bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
                 playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
-                isCast = false
+                isCasting = false
             )
         }
     }
@@ -157,7 +155,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     ) {
         Log.v(TAG, "onPositionDiscontinuity")
         this._playerdata.value = this.playerData.value.copy(
-            currentTime = newPosition.positionMs,
+            currentPosition = newPosition.positionMs,
         )
     }
 

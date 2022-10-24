@@ -58,7 +58,7 @@ fun PlayerViewState(
         },
         factory = {
             androidx.media3.ui.PlayerView(context).apply {
-                player = state?.player
+                player = state?.controller
                 useController = false
                 layoutParams =
                     FrameLayout.LayoutParams(
@@ -73,17 +73,17 @@ fun PlayerViewState(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
             state = state,
-            onReplayClick = { state.player?.seekBack() },
-            onForwardClick = { state.player?.seekForward() },
+            onReplayClick = { state.controller?.seekBack() },
+            onForwardClick = { state.controller?.seekForward() },
             onPauseToggle = {
                 if (state.isPlaying) {
-                    state.player?.pause()
+                    state.controller?.pause()
                 } else {
-                    state.player?.play()
+                    state.controller?.play()
                 }
             },
             onSeekChanged = { timeMs: Float ->
-                state.player?.seekTo(timeMs.toLong())
+                state.controller?.seekTo(timeMs.toLong())
             },
         )
     }
