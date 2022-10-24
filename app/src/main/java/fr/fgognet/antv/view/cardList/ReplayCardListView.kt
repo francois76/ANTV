@@ -14,13 +14,11 @@ import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
-import fr.fgognet.antv.view.main.PlayingData
 
 
 @Composable
 fun ReplayCardListView(
     goToVideo: (title: String) -> Unit,
-    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit
 ) {
     val model: ReplayViewModel = viewModel(
@@ -35,7 +33,6 @@ fun ReplayCardListView(
             model.insertVideoState(url, imageCode, title, description)
             goToVideo(title)
         },
-        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying,
         loadDestination = { model.loadNvs(it) })
 }
@@ -45,7 +42,6 @@ fun ReplayCardListViewState(
     state: CardListViewData<ReplayCardData>?,
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     loadDestination: (code: String) -> Unit,
-    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -53,7 +49,6 @@ fun ReplayCardListViewState(
         title = state?.title?.toString(context)
             ?: stringResource(resource = MR.strings.title_replay),
         cardDatas = state!!.cards,
-        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: ReplayCardData ->
         if (cardData.nvsUrl == null) {

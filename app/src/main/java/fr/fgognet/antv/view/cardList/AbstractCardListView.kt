@@ -23,21 +23,18 @@ import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.isPlaying.isPlaying
-import fr.fgognet.antv.view.main.PlayingData
 
 
 @Composable
 fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
-    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
     AbstractCardListViewState(
         title = title,
         cardDatas = cardDatas,
-        playingData = playingData,
         goToCurrentPlaying = goToCurrentPlaying,
         cardDataGenerator = cardDataGenerator
     )
@@ -48,7 +45,6 @@ fun <T : CardData> AbstractCardListView(
 fun <T : CardData> AbstractCardListViewState(
     title: String,
     cardDatas: List<T>,
-    playingData: PlayingData?,
     goToCurrentPlaying: () -> Unit,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
@@ -113,7 +109,6 @@ fun CardListViewPreview(
             )
         ),
         goToCurrentPlaying = {},
-        playingData = PlayingData(hasPlayingData = true, imageCode = "", "coucou", "lorem ipsum.."),
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(
