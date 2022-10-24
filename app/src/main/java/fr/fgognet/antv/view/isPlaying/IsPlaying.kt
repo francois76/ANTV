@@ -5,19 +5,42 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.UnstableApi
 import coil.compose.AsyncImage
+import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
 
+@UnstableApi
 @Composable
-fun IsPlaying(
+fun isPlaying(goToCurrentPlaying: () -> Unit) {
+    val model: IsPlayingViewModel = viewModel(factory = createViewModelFactory {
+        IsPlayingViewModel().start()
+    }
+    )
+    val state by model.isPlayingData.ld().observeAsState()
+    if (state != null && state?.hasPlayingData == true) {
+        IsPlayingState(
+            goToCurrentPlaying = goToCurrentPlaying,
+            imageCode = state!!.imageCode,
+            title = state!!.title,
+            description = state!!.description
+        )
+    }
+}
+
+@Composable
+fun IsPlayingState(
     goToCurrentPlaying: () -> Unit,
     imageCode: String,
     title: String,
@@ -64,7 +87,7 @@ fun IsPlaying(
 @Preview(widthDp = 300, heightDp = 100)
 @Composable
 fun IsPlayingPreview() {
-    IsPlaying(
+    IsPlayingState(
         goToCurrentPlaying = {},
         title = "montitre", imageCode = "coucou", description = """
         Lorem ipsum dolor sit amet. Et molestiae illo non dolor At ipsa voluptas ex voluptas asperiores ad repudiandae enim eos veritatis eveniet. Aut voluptatum obcaecati At quis maxime ea aliquam consectetur sit error blanditiis.

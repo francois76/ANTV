@@ -22,7 +22,7 @@ import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
-import fr.fgognet.antv.view.isPlaying.IsPlaying
+import fr.fgognet.antv.view.isPlaying.isPlaying
 import fr.fgognet.antv.view.main.PlayingData
 
 
@@ -43,7 +43,7 @@ fun <T : CardData> AbstractCardListView(
     )
 }
 
-
+@UnstableApi
 @Composable
 fun <T : CardData> AbstractCardListViewState(
     title: String,
@@ -80,17 +80,10 @@ fun <T : CardData> AbstractCardListViewState(
                 }
             }
         }
-        if (playingData?.hasPlayingData == true) {
-            Row(modifier = Modifier.weight(1f)) {
-                IsPlaying(
-                    goToCurrentPlaying = goToCurrentPlaying,
-                    description = playingData.description,
-                    title = playingData.title,
-                    imageCode = playingData.imageCode
-                )
-            }
-
+        Row(modifier = Modifier.weight(1f)) {
+            isPlaying(goToCurrentPlaying = goToCurrentPlaying)
         }
+
 
     }
 }
