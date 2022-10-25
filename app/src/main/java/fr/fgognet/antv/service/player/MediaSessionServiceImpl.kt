@@ -110,7 +110,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
             playbackPositionMs = previousPlayer.currentPosition
             playWhenReady = previousPlayer.playWhenReady
         }
-        if (playbackPositionMs > 0) {
+        if (playbackPositionMs > 0 && currentMediaItem != null) {
             currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
         }
         previousPlayer.stop()

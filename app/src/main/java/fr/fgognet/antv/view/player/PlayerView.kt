@@ -1,6 +1,8 @@
 package fr.fgognet.antv.view.player
 
+import android.content.ComponentName
 import android.content.res.Configuration
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.foundation.clickable
@@ -13,7 +15,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.createViewModelFactory
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.findActivity
 
 private const val TAG = "ANTV/PlayerView"
@@ -25,26 +31,43 @@ fun PlayerView(
     title: String?,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
+    val context = LocalContext.current
     val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
-        PlayerViewModel().start()
+        PlayerViewModel().start(MediaSessionServiceImpl.controller)
     }
     )
-    val state by model.playerData.ld().observeAsState()
+    if (MediaSessionServiceImpl.controllerFuture == null) {
+        MediaSessionServiceImpl.controllerFuture =
+            MediaController.Builder(
+                context,
+                SessionToken(
+                    context,
+                    ComponentName(context, MediaSessionServiceImpl::class.java)
+                )
+            )
+                .buildAsync()
+        MediaSessionServiceImpl.controllerFuture?.addListener({
+            Log.d(TAG, "Media service built!")
+            model.initialize(MediaSessionServiceImpl.controller)
+        }, MoreExecutors.directExecutor())
+    }
     if (title != null) {
         model.updateCurrentMedia(title)
     }
-    PlayerViewState(
-        state = state,
-        model = model,
-        setFullScreen = setFullScreen
-    )
+    val state by model.playerData.ld().observeAsState()
+    if (state?.controller != null) {
+        PlayerViewState(
+            state = state,
+            setFullScreen = setFullScreen
+        )
+    }
+
 }
 
 @UnstableApi
 @Composable
 fun PlayerViewState(
     state: PlayerData?,
-    model: PlayerViewModel,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current

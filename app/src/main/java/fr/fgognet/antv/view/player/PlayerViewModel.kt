@@ -43,7 +43,7 @@ data class PlayerData(
 @UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
 
-    fun start() = apply { initialize() }
+    fun start(controller: MediaController?) = apply { initialize(controller = controller) }
 
     private val _playerdata: MutableLiveData<PlayerData> =
         MutableLiveData(
@@ -52,7 +52,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 imageCode = "",
                 title = "",
                 description = "",
-                controller = MediaSessionServiceImpl.controller,
+                controller = null,
                 isCasting = false,
                 isPlaying = false,
                 duration = 0,
@@ -64,8 +64,16 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     val playerData: LiveData<PlayerData> get() = _playerdata
 
 
-    private fun initialize() {
+    fun initialize(controller: MediaController?) {
         Log.v(TAG, "initialize")
+        if (controller != null) {
+            this._playerdata.value = this.playerData.value.copy(
+                controller = controller
+            )
+        }
+        if (playerData.value.controller == null) {
+            return
+        }
         MediaSessionServiceImpl.controller?.addListener(this)
         CastContext.getSharedInstance()?.addCastStateListener {
             this._playerdata.value = this.playerData.value.copy(
@@ -155,7 +163,14 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     ) {
         Log.v(TAG, "onPositionDiscontinuity")
         this._playerdata.value = this.playerData.value.copy(
-            currentPosition = newPosition.positionMs,
+            currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                0
+            )
+                ?: 0,
+            duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(
+                0
+            )
+                ?: 0,
         )
     }
 
