@@ -52,9 +52,7 @@ fun PlayerView(
             model.initialize(MediaSessionServiceImpl.controller)
         }, MoreExecutors.directExecutor())
     }
-    if (title != null) {
-        model.updateCurrentMedia(title)
-    }
+    model.loadMedia(title)
     val state by model.playerData.ld().observeAsState()
     if (state?.controller != null) {
         PlayerViewState(

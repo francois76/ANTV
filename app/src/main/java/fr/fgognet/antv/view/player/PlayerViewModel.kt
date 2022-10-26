@@ -27,8 +27,6 @@ private const val TAG = "ANTV/PlayerViewModel"
 
 data class PlayerData(
     val controller: MediaController?,
-    val url: String,
-    val imageCode: String,
     val title: String,
     val description: String,
     val isPlaying: Boolean,
@@ -48,8 +46,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     private val _playerdata: MutableLiveData<PlayerData> =
         MutableLiveData(
             PlayerData(
-                url = "",
-                imageCode = "",
                 title = "",
                 description = "",
                 controller = null,
@@ -114,11 +110,35 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
-
-    fun updateCurrentMedia(title: String) {
-        if (MediaSessionServiceImpl.controller?.currentMediaItem?.mediaMetadata?.title == title) {
-            return
+    fun loadMedia(title: String?) {
+        Log.v(TAG, "loadMedia")
+        if (title == null) {
+            loadCurrentMedia()
+        } else {
+            updateCurrentMedia(title)
         }
+    }
+
+    private fun loadCurrentMedia() {
+        Log.v(TAG, "loadCurrentMedia")
+        this._playerdata.value = this.playerData.value.copy(
+            title = MediaSessionServiceImpl.controller?.mediaMetadata?.title.toString(),
+            description = MediaSessionServiceImpl.controller?.mediaMetadata?.description?.toString()
+                ?: "",
+            controller = MediaSessionServiceImpl.controller,
+            duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
+            currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                0
+            )
+                ?: 0,
+            isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
+            bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
+            playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+            isCasting = false
+        )
+    }
+
+    private fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
         val entity = VideoDao.get(title)
         if (entity != null) {
@@ -138,8 +158,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             MediaSessionServiceImpl.controller?.play()
 
             this._playerdata.value = this.playerData.value.copy(
-                url = entity.url,
-                imageCode = entity.imageCode,
                 title = entity.title,
                 description = entity.description,
                 controller = MediaSessionServiceImpl.controller,
@@ -154,6 +172,8 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 isCasting = false
             )
         }
+
+
     }
 
     override fun onPositionDiscontinuity(
