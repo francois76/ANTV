@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.config.initCommonLogs
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.ANTVApp
 
 private const val TAG = "ANTV/MainActivity"
@@ -22,6 +23,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         initCommonLogs()
+        MediaSessionServiceImpl.addListener(this)
         setContent {
             Log.d(TAG, "recomposing")
             ANTVApp()

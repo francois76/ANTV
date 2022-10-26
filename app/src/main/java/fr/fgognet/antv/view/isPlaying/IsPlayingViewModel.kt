@@ -38,7 +38,7 @@ class IsPlayingViewModel : ViewModel(), Player.Listener {
 
     private fun initialize() {
         Log.v(TAG, "initialize")
-        MediaSessionServiceImpl.controller?.addListener(this)
+        MediaSessionServiceImpl.addListener(this)
 
     }
 

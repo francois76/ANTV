@@ -48,6 +48,7 @@ fun PlayerView(
                 .buildAsync()
         MediaSessionServiceImpl.controllerFuture?.addListener({
             Log.d(TAG, "Media service built!")
+            MediaSessionServiceImpl.addFutureListener()
             model.initialize(MediaSessionServiceImpl.controller)
         }, MoreExecutors.directExecutor())
     }

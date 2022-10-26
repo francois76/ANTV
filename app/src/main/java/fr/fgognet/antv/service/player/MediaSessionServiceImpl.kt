@@ -76,6 +76,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
         if (controllerFuture != null) {
             MediaController.releaseFuture(controllerFuture!!)
             controllerFuture = null
+            listenersFuture = arrayListOf()
         }
         super.onDestroy()
     }
@@ -125,11 +126,26 @@ class MediaSessionServiceImpl : MediaSessionService() {
 
     companion object {
         var controllerFuture: ListenableFuture<MediaController>? = null
+        private var listenersFuture: ArrayList<Player.Listener> = arrayListOf()
         val controller: MediaController?
             get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
 
         // waiting for next version of media3
         var currentMediaItem: MediaItem? = null
+
+        fun addFutureListener() {
+            listenersFuture.forEach {
+                controller?.addListener(it)
+            }
+        }
+
+        fun addListener(listener: Player.Listener) {
+            if (controller == null) {
+                listenersFuture.add(listener)
+            } else {
+                controller?.addListener(listener)
+            }
+        }
     }
 
 
