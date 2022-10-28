@@ -41,5 +41,11 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         }
     }
 
+    override fun onDestroy() {
+        Log.v(TAG, "onDestroy")
+        MediaSessionServiceImpl.controller?.removeListener(this)
+        super.onDestroy()
+    }
+
 
 }
