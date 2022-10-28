@@ -159,6 +159,9 @@ class PlayerViewModel : ViewModel(), Player.Listener {
 
     private fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
+        if (title == playerData.value.title) {
+            return
+        }
         val entity = VideoDao.get(title)
         if (entity != null) {
             //this is not the full mediaItem here
