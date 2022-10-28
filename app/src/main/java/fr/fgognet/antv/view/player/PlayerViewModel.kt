@@ -1,5 +1,7 @@
 package fr.fgognet.antv.view.player
 
+import android.content.ComponentName
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.media3.common.MediaItem
@@ -8,8 +10,10 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
+import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -26,7 +30,6 @@ import kotlinx.coroutines.withContext
 private const val TAG = "ANTV/PlayerViewModel"
 
 data class PlayerData(
-    val controller: MediaController?,
     val title: String,
     val description: String,
     val isPlaying: Boolean,
@@ -41,14 +44,13 @@ data class PlayerData(
 @UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
 
-    fun start(controller: MediaController?) = apply { initialize(controller = controller) }
+    fun start(controller: MediaController?) = apply { initialize(c = controller) }
 
     private val _playerdata: MutableLiveData<PlayerData> =
         MutableLiveData(
             PlayerData(
                 title = "",
                 description = "",
-                controller = null,
                 isCasting = false,
                 isPlaying = false,
                 duration = 0,
@@ -58,16 +60,16 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             )
         )
     val playerData: LiveData<PlayerData> get() = _playerdata
+    val _controller: MutableLiveData<MediaController?> = MutableLiveData(null)
+    val controller: LiveData<MediaController?> get() = _controller
 
 
-    fun initialize(controller: MediaController?) {
+    fun initialize(c: MediaController?) {
         Log.v(TAG, "initialize")
-        if (controller != null) {
-            this._playerdata.value = this.playerData.value.copy(
-                controller = controller
-            )
+        if (c != null) {
+            this._controller.value = c
         }
-        if (playerData.value.controller == null) {
+        if (controller.value == null) {
             return
         }
         MediaSessionServiceImpl.controller?.addListener(this)
@@ -103,10 +105,28 @@ class PlayerViewModel : ViewModel(), Player.Listener {
 
     }
 
+    fun loadPlayer(context: Context) {
+        if (MediaSessionServiceImpl.controllerFuture == null) {
+            MediaSessionServiceImpl.controllerFuture =
+                MediaController.Builder(
+                    context,
+                    SessionToken(
+                        context,
+                        ComponentName(context, MediaSessionServiceImpl::class.java)
+                    )
+                )
+                    .buildAsync()
+            MediaSessionServiceImpl.controllerFuture?.addListener({
+                Log.d(TAG, "Media service built!")
+                MediaSessionServiceImpl.addFutureListener()
+                initialize(MediaSessionServiceImpl.controller)
+            }, MoreExecutors.directExecutor())
+        }
+    }
+
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         this._playerdata.value = this.playerData.value.copy(
             isPlaying = isPlaying,
-            duration = MediaSessionServiceImpl.controller?.duration ?: 0
         )
     }
 
@@ -125,7 +145,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             title = MediaSessionServiceImpl.controller?.mediaMetadata?.title.toString(),
             description = MediaSessionServiceImpl.controller?.mediaMetadata?.description?.toString()
                 ?: "",
-            controller = MediaSessionServiceImpl.controller,
             duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
             currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
                 0
@@ -160,7 +179,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             this._playerdata.value = this.playerData.value.copy(
                 title = entity.title,
                 description = entity.description,
-                controller = MediaSessionServiceImpl.controller,
                 duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
                 currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
                     0

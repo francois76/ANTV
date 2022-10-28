@@ -214,9 +214,6 @@ fun PlayerControl() {
     PlayerControls(
         isVisible = { true },
         state = PlayerData(
-            controller = null,
-            url = "",
-            imageCode = "",
             title = "lorem ipsum",
             description = "dolor est",
             isPlaying = false,

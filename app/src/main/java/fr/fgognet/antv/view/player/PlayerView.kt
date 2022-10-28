@@ -1,8 +1,6 @@
 package fr.fgognet.antv.view.player
 
-import android.content.ComponentName
 import android.content.res.Configuration
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.foundation.clickable
@@ -16,8 +14,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
-import com.google.common.util.concurrent.MoreExecutors
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.findActivity
@@ -36,27 +32,14 @@ fun PlayerView(
         PlayerViewModel().start(MediaSessionServiceImpl.controller)
     }
     )
-    if (MediaSessionServiceImpl.controllerFuture == null) {
-        MediaSessionServiceImpl.controllerFuture =
-            MediaController.Builder(
-                context,
-                SessionToken(
-                    context,
-                    ComponentName(context, MediaSessionServiceImpl::class.java)
-                )
-            )
-                .buildAsync()
-        MediaSessionServiceImpl.controllerFuture?.addListener({
-            Log.d(TAG, "Media service built!")
-            MediaSessionServiceImpl.addFutureListener()
-            model.initialize(MediaSessionServiceImpl.controller)
-        }, MoreExecutors.directExecutor())
-    }
-    model.loadMedia(title)
-    val state by model.playerData.ld().observeAsState()
-    if (state?.controller != null) {
+    val controller by model.controller.ld().observeAsState()
+    if (controller == null) {
+        model.loadPlayer(context = context)
+    } else {
+        model.loadMedia(title)
         PlayerViewState(
-            state = state,
+            model = model,
+            controller = controller!!,
             setFullScreen = setFullScreen
         )
     }
@@ -66,9 +49,11 @@ fun PlayerView(
 @UnstableApi
 @Composable
 fun PlayerViewState(
-    state: PlayerData?,
+    model: PlayerViewModel,
+    controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
+    val state by model.playerData.ld().observeAsState()
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
@@ -80,7 +65,7 @@ fun PlayerViewState(
         },
         factory = {
             androidx.media3.ui.PlayerView(context).apply {
-                player = state?.controller
+                player = controller
                 useController = false
                 layoutParams =
                     FrameLayout.LayoutParams(
@@ -94,18 +79,18 @@ fun PlayerViewState(
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
-            state = state,
-            onReplayClick = { state.controller?.seekBack() },
-            onForwardClick = { state.controller?.seekForward() },
+            state = state!!,
+            onReplayClick = { controller.seekBack() },
+            onForwardClick = { controller.seekForward() },
             onPauseToggle = {
-                if (state.isPlaying) {
-                    state.controller?.pause()
+                if (state!!.isPlaying) {
+                    controller.pause()
                 } else {
-                    state.controller?.play()
+                    controller.play()
                 }
             },
             onSeekChanged = { timeMs: Float ->
-                state.controller?.seekTo(timeMs.toLong())
+                controller.seekTo(timeMs.toLong())
             },
         )
     }
