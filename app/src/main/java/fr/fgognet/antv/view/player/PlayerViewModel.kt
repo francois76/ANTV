@@ -53,7 +53,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 description = "",
                 isCasting = false,
                 isPlaying = false,
-                duration = 0,
+                duration = 1,
                 currentPosition = 0,
                 bufferedPercentage = 0,
                 playbackState = 0,
@@ -88,12 +88,13 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             withContext(Dispatchers.Main) {
                 ticker().collect { isPlaying ->
                     if (isPlaying) {
-                        Log.d(TAG, "tick")
                         t._playerdata.value = t.playerData.value.copy(
                             currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
                                 0L
                             )
                                 ?: 0,
+                            duration = MediaSessionServiceImpl.controller?.duration
+                                ?: 1,
                             bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
                                 ?: 0,
                             playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
