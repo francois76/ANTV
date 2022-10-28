@@ -167,18 +167,19 @@ private fun BottomControls(
                     disabledActiveTrackColor = Color.Gray
                 )
             )
-
-            Slider(
-                modifier = Modifier.fillMaxWidth(),
-                value = state.currentPosition.toFloat(),
-                onValueChange = onSeekChanged,
-                valueRange = 0f..state.duration.toFloat(),
-                colors =
-                SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colorScheme.primary,
-                    activeTickColor = MaterialTheme.colorScheme.primary
+            if (state.duration > 0) {
+                Slider(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.currentPosition.toFloat(),
+                    onValueChange = onSeekChanged,
+                    valueRange = 0f..state.duration.toFloat(),
+                    colors =
+                    SliderDefaults.colors(
+                        thumbColor = MaterialTheme.colorScheme.primary,
+                        activeTickColor = MaterialTheme.colorScheme.primary
+                    )
                 )
-            )
+            }
         }
 
         Row(
