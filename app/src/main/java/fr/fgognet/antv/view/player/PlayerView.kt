@@ -17,6 +17,9 @@ import androidx.media3.session.MediaController
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.findActivity
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 private const val TAG = "ANTV/PlayerView"
 
@@ -46,6 +49,7 @@ fun PlayerView(
 
 }
 
+@OptIn(ExperimentalTime::class)
 @UnstableApi
 @Composable
 fun PlayerViewState(
@@ -58,6 +62,14 @@ fun PlayerViewState(
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
+    if (shouldShowControls) {
+        LaunchedEffect(Unit) {
+            val duration = 5
+            delay(duration.seconds)
+            shouldShowControls = shouldShowControls.not()
+        }
+    }
+
     AndroidView(
         modifier =
         Modifier.clickable {
@@ -74,7 +86,6 @@ fun PlayerViewState(
                     )
             }
         })
-
     if (state != null) {
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
