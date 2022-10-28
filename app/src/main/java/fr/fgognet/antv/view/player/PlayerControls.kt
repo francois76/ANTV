@@ -53,7 +53,7 @@ fun PlayerControls(
             CenterControls(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .fillMaxWidth(),
+                    .fillMaxWidth(0.6f),
                 state = state,
                 onReplayClick = onReplayClick,
                 onForwardClick = onForwardClick,
@@ -107,18 +107,18 @@ private fun CenterControls(
 ) {
 
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
-        IconButton(modifier = Modifier.size(40.dp), onClick = onReplayClick) {
+        IconButton(modifier = Modifier.size(80.dp), onClick = onReplayClick) {
             Image(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = R.drawable.ic_baseline_replay_5_24),
                 contentDescription = "Replay 5 seconds"
             )
         }
 
-        IconButton(modifier = Modifier.size(40.dp), onClick = onPauseToggle) {
+        IconButton(modifier = Modifier.size(80.dp), onClick = onPauseToggle) {
             Image(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
                 painter =
                 when {
@@ -136,9 +136,9 @@ private fun CenterControls(
             )
         }
 
-        IconButton(modifier = Modifier.size(40.dp), onClick = onForwardClick) {
+        IconButton(modifier = Modifier.size(80.dp), onClick = onForwardClick) {
             Image(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = R.drawable.ic_baseline_forward_5_24),
                 contentDescription = "Forward 5 seconds"
