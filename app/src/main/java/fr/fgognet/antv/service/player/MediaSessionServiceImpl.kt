@@ -5,6 +5,7 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.util.Log
 import androidx.media3.cast.CastPlayer
+import androidx.media3.cast.DefaultMediaItemConverter
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -41,10 +42,11 @@ class MediaSessionServiceImpl : MediaSessionService() {
             MoreExecutors.directExecutor()
         )
         castPlayer = CastPlayer(
-            castContext.result
+            castContext.result, DefaultMediaItemConverter(), 5000, 5000
         )
         localPlayer =
-            ExoPlayer.Builder(this).build()
+            ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
+                .build()
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
             castPlayer
         } else {
