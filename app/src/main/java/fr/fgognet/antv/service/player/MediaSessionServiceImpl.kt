@@ -118,7 +118,6 @@ class MediaSessionServiceImpl : MediaSessionService() {
         }
         previousPlayer.stop()
         previousPlayer.clearMediaItems()
-
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
         Log.d(TAG, "updating player")
