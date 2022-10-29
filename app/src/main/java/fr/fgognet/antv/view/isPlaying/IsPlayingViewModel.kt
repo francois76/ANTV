@@ -1,0 +1,65 @@
+package fr.fgognet.antv.view.isPlaying
+
+import android.util.Log
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
+
+private const val TAG = "ANTV/IsPlayingViewModel"
+
+data class IsPlayingData(
+    val hasPlayingData: Boolean,
+    val imageCode: String,
+    val title: String,
+    val description: String,
+)
+
+
+@UnstableApi
+class IsPlayingViewModel : ViewModel(), Player.Listener {
+
+    fun start() = apply { initialize() }
+
+    private val _isPlayingData: MutableLiveData<IsPlayingData> =
+        MutableLiveData(
+            IsPlayingData(
+                hasPlayingData = false,
+                imageCode = "",
+                title = "",
+                description = ""
+            )
+        )
+    val isPlayingData: LiveData<IsPlayingData> get() = _isPlayingData
+
+
+    private fun initialize() {
+        Log.v(TAG, "initialize")
+        MediaSessionServiceImpl.addListener(this)
+
+    }
+
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        Log.v(TAG, "onMediaItemTransition")
+        if (mediaItem != null) {
+            this._isPlayingData.value = IsPlayingData(
+                hasPlayingData = true,
+                imageCode = mediaItem.mediaMetadata.artworkUri.toString(),
+                title = mediaItem.mediaMetadata.title.toString(),
+                description = mediaItem.mediaMetadata.description.toString(),
+            )
+        } else {
+            this._isPlayingData.value = IsPlayingData(
+                hasPlayingData = false,
+                imageCode = "",
+                title = "",
+                description = ""
+            )
+        }
+    }
+
+
+}

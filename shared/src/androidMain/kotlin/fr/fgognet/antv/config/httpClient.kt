@@ -11,6 +11,10 @@ fun initCommonLogs() {
     Napier.base(DebugAntilog())
 }
 
+fun resetLogs() {
+    Napier.takeLogarithm()
+}
+
 actual fun httpClient(config: HttpClientConfig<*>.() -> Unit) = HttpClient(OkHttp) {
     config(this)
 
