@@ -33,7 +33,7 @@ dependencyResolutionManagement {
             version("moko-mvvm", "0.14.0") // https://github.com/icerockdev/moko-mvvm/releases
             version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
-            version("ktor", "2.1.2") // https://ktor.io/docs/http-client-engines.html
+            version("ktor", "2.1.3") // https://github.com/ktorio/ktor/releases
             version("xmlutil", "0.84.3") // https://github.com/pdvrieze/xmlutil/releases
             version(
                 "kotlinx-datetime",
@@ -41,13 +41,9 @@ dependencyResolutionManagement {
             ) // https://github.com/Kotlin/kotlinx-datetime/releases
             version(
                 "kotlinx-serialization-json",
-                "1.4.0"
+                "1.4.1"
             ) // https://github.com/Kotlin/kotlinx.serialization/releases
             version("junit", "4.13.2") // depend on intellij
-            version(
-                "accompanist-systemuicontroller",
-                "0.25.1"
-            ) // https://github.com/google/accompanist/releases
             version(
                 "play-services-cast-framework",
                 "21.2.0"
@@ -62,7 +58,7 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/media3
             version(
                 "navigation",
-                "2.5.2"
+                "2.5.3"
             ) // https://developer.android.com/jetpack/androidx/releases/navigation
             version(
                 "lifecycle",
@@ -70,17 +66,23 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/lifecycle
             version(
                 "material3",
-                "1.0.0-rc01"
+                "1.0.0"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-material3
             version(
                 "compose-theme-adapter-3",
-                "1.0.20"
+                "1.0.21"
             ) // https://github.com/material-components/material-components-android-compose-theme-adapter/releases
             version(
                 "activity-compose",
-                "1.6.0"
+                "1.6.1"
             ) // https://developer.android.com/jetpack/androidx/releases/activity
-            version("compose", "1.2.1")
+
+            // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
+            version("compose", "1.3.0")
+            version(
+                "accompanist-systemuicontroller",
+                "0.27.0" // WARNING! depend on version of compose
+            ) // https://github.com/google/accompanist/releases
             /*
             monoline repos
              */
