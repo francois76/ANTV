@@ -1,19 +1,9 @@
 package fr.fgognet.antv.config
 
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import java.util.concurrent.TimeUnit
 
-
-fun initCommonLogs() {
-    Napier.base(DebugAntilog())
-}
-
-fun resetLogs() {
-    Napier.takeLogarithm()
-}
 
 actual fun httpClient(config: HttpClientConfig<*>.() -> Unit) = HttpClient(OkHttp) {
     config(this)
