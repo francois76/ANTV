@@ -23,9 +23,9 @@ dependencyResolutionManagement {
             version("sdk-target", "33")
         }
 
+
         // libraries dependencies
         create("libs") {
-
             /*
             version definition
              */
@@ -80,9 +80,37 @@ dependencyResolutionManagement {
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
             version("compose", "1.3.0")
             version(
+                "compose-compiler",
+                "1.3.2"
+            ) // https://developer.android.com/jetpack/androidx/releases/compose-compiler
+            version(
                 "accompanist-systemuicontroller",
                 "0.27.0" // WARNING! depend on version of compose
             ) // https://github.com/google/accompanist/releases
+            version("kotlin", "1.7.20")
+            version(
+                "android-gradle-plugin",
+                "7.3.1"
+            ) // https://developer.android.com/studio/releases/gradle-plugin
+
+
+            /*
+            * plugins
+             */
+
+            plugin(
+                "serialization",
+                "org.jetbrains.kotlin.plugin.serialization"
+            ).versionRef("kotlin")
+            plugin(
+                "com.android.application",
+                "com.android.application"
+            ).versionRef("android-gradle-plugin")
+            plugin(
+                "com.android.library",
+                "com.android.library"
+            ).versionRef("android-gradle-plugin")
+
             /*
             monoline repos
              */

@@ -1,6 +1,7 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("com.android.library")
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.com.android.library)
     id("org.jetbrains.kotlin.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
 }
