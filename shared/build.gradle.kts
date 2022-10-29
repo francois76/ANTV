@@ -35,6 +35,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.bundles.media3)
+                implementation(libs.play.services.cast.framework)
             }
         }
         val macosArm64Main by getting

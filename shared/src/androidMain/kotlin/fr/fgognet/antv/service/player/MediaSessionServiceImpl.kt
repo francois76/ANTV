@@ -3,6 +3,7 @@ package fr.fgognet.antv.service.player
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.DefaultMediaItemConverter
@@ -17,8 +18,6 @@ import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
-import fr.fgognet.antv.activity.main.MainActivity
-import fr.fgognet.antv.activity.tv.TvActivity
 
 
 class MediaSessionServiceImpl : MediaSessionService() {
@@ -56,8 +55,12 @@ class MediaSessionServiceImpl : MediaSessionService() {
         mediaSession =
             MediaSession.Builder(this, newPlayer)
                 .setSessionActivity(TaskStackBuilder.create(this).run {
-                    addNextIntent(Intent(this@MediaSessionServiceImpl, MainActivity::class.java))
-                    addNextIntent(Intent(this@MediaSessionServiceImpl, TvActivity::class.java))
+                    addNextIntentWithParentStack(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("antv://player/" + newPlayer.mediaMetadata.title)
+                        )
+                    )
                     getPendingIntent(
                         0,
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
