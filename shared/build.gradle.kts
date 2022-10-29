@@ -37,6 +37,7 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.bundles.media3)
                 implementation(libs.play.services.cast.framework)
+                implementation(libs.bundles.navigation)
             }
         }
         val macosArm64Main by getting
