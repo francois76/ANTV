@@ -6,14 +6,15 @@ plugins {
 
 
 android {
-    compileSdk = Versions.Sdk.compileSdk
+    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
+    namespace = "fr.fgognet.antv"
 
     defaultConfig {
         applicationId = "fr.fgognet.antv"
-        minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
-        versionCode = Versions.antvNumber
-        versionName = Versions.antv
+        minSdk = antvLibs.versions.sdk.min.get().toInt()
+        targetSdk = antvLibs.versions.sdk.target.get().toInt()
+        versionCode = antvLibs.versions.versionNumber.get().toInt()
+        versionName = antvLibs.versions.version.get()
 
     }
     buildTypes {
@@ -53,7 +54,6 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     composeOptions {
@@ -71,106 +71,28 @@ android {
 
 dependencies {
     implementation(project(":shared"))
-
-    // moko
-    listOf(
-        "livedata-material",
-        "livedata-glide",
-        "livedata-swiperefresh",
-        "databinding",
-        "viewbinding"
-    ).forEach {
-        implementation(
-            group = "dev.icerock.moko",
-            name = "mvvm-$it",
-            version = Versions.Moko.mvvm
-        )
-    }
-    implementation(
-        group = "dev.icerock.moko",
-        name = "resources-compose",
-        version = Versions.Moko.resources
-    )
-
-    // navigation
-    listOf(
-        "fragment-ktx",
-        "ui-ktx",
-        "dynamic-features-fragment",
-        "compose"
-    ).forEach {
-        implementation(
-            group = "androidx.navigation",
-            name = "navigation-$it",
-            version = Versions.Androidx.nav
-        )
-    }
-
-    // exoplayer
-    listOf(
-        "media3-exoplayer",
-        "media3-exoplayer-hls",
-        "media3-ui",
-        "media3-cast",
-        "media3-session"
-    ).forEach {
-        implementation(
-            group = "androidx.media3",
-            name = it,
-            version = Versions.Androidx.media3
-        )
-    }
-
-    // Androidx
-    implementation("androidx.core:core-ktx:${Versions.Androidx.coreKtx}")
-    implementation("androidx.lifecycle:lifecycle-process:${Versions.Androidx.lifecycle}")
-    implementation("androidx.appcompat:appcompat:${Versions.Androidx.appCompat}")
-    implementation("androidx.activity:activity-compose:${Versions.Androidx.Compose.activity}")
-    implementation("androidx.constraintlayout:constraintlayout-compose:${Versions.Androidx.constraintLayoutCompose}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Androidx.Compose.compose}")
-    androidTestImplementation("androidx.lifecycle:lifecycle-runtime:${Versions.Androidx.lifecycle}")
-
-    // compose
-    hashMapOf(
-        "runtime" to arrayListOf("runtime", "runtime-livedata"),
-        "ui" to arrayListOf("ui", "ui-viewbinding", "ui-tooling-preview"),
-        "foundation" to arrayListOf("foundation", "foundation-layout"),
-    ).forEach {
-        it.value.forEach { module ->
-            implementation(
-                group = "androidx.compose.${it.key}",
-                name = module,
-                version = Versions.Androidx.Compose.compose
-            )
-        }
-    }
-
-    // material3
-    implementation("androidx.compose.material3:material3:${Versions.Androidx.material3}")
-    implementation("androidx.compose.material3:material3-window-size-class:${Versions.Androidx.material3}")
-    implementation("com.google.android.material:compose-theme-adapter-3:${Versions.Androidx.Compose.themeAdapter}")
-
-    // misc
-    implementation("com.google.android.gms:play-services-cast-framework:${Versions.Android.castFramework}")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.datetime}")
-    implementation("io.coil-kt:coil-compose:${Versions.coil}")
+    // bundles
+    implementation(libs.bundles.moko.mvvm.android)
+    implementation(libs.bundles.media3)
+    implementation(libs.bundles.navigation)
+    implementation(libs.bundles.material3)
+    implementation(libs.bundles.compose)
+    // libs
+    implementation(libs.moko.resources.compose)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.coil.compose)
+    implementation(libs.play.services.cast.framework)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.process)
+    implementation(libs.compose.theme.adapter.get3())
+    implementation(libs.activity.compose)
 
     // testing
-    debugImplementation(
-        group = "androidx.compose.ui",
-        name = "ui-tooling",
-        version = Versions.Androidx.Compose.compose
-    )
-    androidTestImplementation(
-        group = "androidx.navigation",
-        name = "navigation-testing",
-        version = Versions.Androidx.nav
-    )
-    testImplementation(
-        group = "junit",
-        name = "junit",
-        version = Versions.junit
-    )
+    testImplementation(libs.junit)
+    testImplementation(libs.navigation.testing)
+    testImplementation(libs.lifecycle.runtime)
+    debugImplementation(libs.compose.ui.tooling)
+
 
 }

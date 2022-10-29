@@ -11,18 +11,19 @@ data class VideoEntity(
     val description: String
 )
 
-private val data = hashMapOf<String, VideoEntity>()
 
 object VideoDao {
+    private val data = hashMapOf<String, VideoEntity>()
+
     fun insert(entity: VideoEntity): String {
-        Napier.v("insert", tag = TAG)
-        Napier.d("insert $entity", tag = TAG)
+        Napier.v(tag = TAG, message = "insert")
+        Napier.d(tag = TAG, message = "insert $entity")
         data[entity.title] = entity
         return entity.title
     }
 
     fun get(key: String): VideoEntity? {
-        Napier.v("get key = $key return ${data[key]}", tag = TAG)
+        Napier.v(tag = TAG, message = "get key = $key return ${data[key]}")
         return data[key]
     }
 }

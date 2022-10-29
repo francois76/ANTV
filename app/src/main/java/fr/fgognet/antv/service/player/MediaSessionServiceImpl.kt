@@ -5,6 +5,7 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.util.Log
 import androidx.media3.cast.CastPlayer
+import androidx.media3.cast.DefaultMediaItemConverter
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -14,13 +15,15 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.activity.main.MainActivity
 import fr.fgognet.antv.activity.tv.TvActivity
 
 
-class PlayerService : MediaSessionService() {
+class MediaSessionServiceImpl : MediaSessionService() {
     // TAG
-    private val TAG = "ANTV/PlayerService"
+    private val TAG = "ANTV/MediaSessionServiceImpl"
 
     // players
     private lateinit var localPlayer: ExoPlayer
@@ -34,20 +37,27 @@ class PlayerService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         Log.v(TAG, "onCreate")
-        castPlayer = CastPlayer(CastContext.getSharedInstance(applicationContext))
+        val castContext = CastContext.getSharedInstance(
+            applicationContext,
+            MoreExecutors.directExecutor()
+        )
+        castPlayer = CastPlayer(
+            castContext.result, DefaultMediaItemConverter(), 5000, 5000
+        )
         localPlayer =
-            ExoPlayer.Builder(this).build()
+            ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
+                .build()
         val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
             castPlayer
         } else {
             localPlayer
         }
-        val servicePlayerListener = PlayerServiceListener(this)
+        val servicePlayerListener = MediaSessionServiceListener(this)
         mediaSession =
             MediaSession.Builder(this, newPlayer)
                 .setSessionActivity(TaskStackBuilder.create(this).run {
-                    addNextIntent(Intent(this@PlayerService, MainActivity::class.java))
-                    addNextIntent(Intent(this@PlayerService, TvActivity::class.java))
+                    addNextIntent(Intent(this@MediaSessionServiceImpl, MainActivity::class.java))
+                    addNextIntent(Intent(this@MediaSessionServiceImpl, TvActivity::class.java))
                     getPendingIntent(
                         0,
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -65,6 +75,11 @@ class PlayerService : MediaSessionService() {
             release()
             mediaSession = null
         }
+        if (controllerFuture != null) {
+            MediaController.releaseFuture(controllerFuture!!)
+            controllerFuture = null
+            listenersFuture = arrayListOf()
+        }
         super.onDestroy()
     }
 
@@ -72,21 +87,12 @@ class PlayerService : MediaSessionService() {
         mediaSession
 
 
-    fun resyncOnLiveError() {
-        // Re-initialize player at the current live window default position.
-        if (mediaSession?.player?.isCurrentMediaItemLive == true) {
-            mediaSession?.player?.seekToDefaultPosition()
-            mediaSession?.player?.prepare()
-        }
-    }
-
     fun cast() {
         Log.v(TAG, "cast")
         setCurrentPlayer(castPlayer)
     }
 
     fun stopCast() {
-
         Log.v(TAG, "stopCast")
         setCurrentPlayer(localPlayer)
     }
@@ -107,12 +113,11 @@ class PlayerService : MediaSessionService() {
             playbackPositionMs = previousPlayer.currentPosition
             playWhenReady = previousPlayer.playWhenReady
         }
-        if (playbackPositionMs > 0) {
+        if (playbackPositionMs > 0 && currentMediaItem != null) {
             currentPlayer.setMediaItem(currentMediaItem!!, playbackPositionMs)
         }
         previousPlayer.stop()
         previousPlayer.clearMediaItems()
-
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
         Log.d(TAG, "updating player")
@@ -121,10 +126,27 @@ class PlayerService : MediaSessionService() {
 
 
     companion object {
-        var controller: MediaController? = null
+        var controllerFuture: ListenableFuture<MediaController>? = null
+        private var listenersFuture: ArrayList<Player.Listener> = arrayListOf()
+        val controller: MediaController?
+            get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
 
         // waiting for next version of media3
         var currentMediaItem: MediaItem? = null
+
+        fun addFutureListener() {
+            listenersFuture.forEach {
+                controller?.addListener(it)
+            }
+        }
+
+        fun addListener(listener: Player.Listener) {
+            if (controller == null) {
+                listenersFuture.add(listener)
+            } else {
+                controller?.addListener(listener)
+            }
+        }
     }
 
 
