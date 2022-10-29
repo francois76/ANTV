@@ -14,7 +14,7 @@ data class VideoEntity(
 
 object VideoDao {
     private val data = hashMapOf<String, VideoEntity>()
-    
+
     fun insert(entity: VideoEntity): String {
         Napier.v(tag = TAG, message = "insert")
         Napier.d(tag = TAG, message = "insert $entity")
@@ -24,7 +24,6 @@ object VideoDao {
 
     fun get(key: String): VideoEntity? {
         Napier.v(tag = TAG, message = "get key = $key return ${data[key]}")
-        Napier.v(tag = TAG, message = "object id: $this")
         return data[key]
     }
 }

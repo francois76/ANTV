@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.config.initCommonLogs
+import fr.fgognet.antv.config.resetLogs
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.ANTVApp
 
@@ -44,6 +45,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
     override fun onDestroy() {
         Log.v(TAG, "onDestroy")
         MediaSessionServiceImpl.controller?.removeListener(this)
+        resetLogs()
         super.onDestroy()
     }
 
