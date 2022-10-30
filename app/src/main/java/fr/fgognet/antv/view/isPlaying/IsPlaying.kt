@@ -59,7 +59,7 @@ fun IsPlayingState(
                     modifier = Modifier
                         .width(80.dp),
                     model = imageCode,
-                    placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
+                    placeholder = painterResource(R.drawable.ic_baseline_image_24),
                     contentDescription = ""
                 )
             }

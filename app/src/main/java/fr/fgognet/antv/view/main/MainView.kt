@@ -41,7 +41,7 @@ fun ANTVApp() {
         val systemUiController = rememberSystemUiController()
         val isFullScreen = remember { mutableStateOf(false) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(PlayerRoute.id)
+        val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(Routes.PLAYER.value)
         systemUiController.isSystemBarsVisible = false
         systemUiController.setSystemBarsColor(Color.Transparent)
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -100,21 +100,30 @@ fun ANTVApp() {
             }, bottomBar = {
                 if (!(isFullScreen.value && isOnPlayerScreen == true)) {
                     var selectedItem by rememberSaveable { mutableStateOf(0) }
-                    val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
+                    val items = listOf(
+                        getRoute(Routes.LIVE),
+                        getRoute(Routes.PLAYLIST),
+                        getRoute(Routes.SEARCH)
+                    )
                     NavigationBar {
                         items.forEachIndexed { index, item ->
                             NavigationBarItem(
                                 icon = {
                                     Image(
-                                        painterResource(id = item.iconID!!),
-                                        contentDescription = stringResource(resource = item.nameID!!)
+                                        painterResource(
+                                            id = appContext.resources.getIdentifier(
+                                                item?.iconName ?: "ic_baseline_image_24",
+                                                "drawable", appContext.packageName
+                                            )
+                                        ),
+                                        contentDescription = stringResource(resource = item?.nameID!!)
                                     )
                                 },
-                                label = { Text(stringResource(resource = item.nameID!!)) },
+                                label = { Text(stringResource(resource = item?.nameID!!)) },
                                 selected = selectedItem == index,
                                 onClick = {
                                     selectedItem = index
-                                    navController.navigateToTop(item.id)
+                                    navController.navigateToTop(item?.id!!)
                                 }
                             )
                         }
