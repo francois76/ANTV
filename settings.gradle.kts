@@ -43,6 +43,10 @@ dependencyResolutionManagement {
                 "kotlinx-serialization-json",
                 "1.4.1"
             ) // https://github.com/Kotlin/kotlinx.serialization/releases
+            version(
+                "kotlinx-coroutines-guava",
+                "1.6.4"
+            ) // https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
             version("junit", "4.13.2") // depend on intellij
             version(
                 "play-services-cast-framework",
@@ -120,6 +124,7 @@ dependencyResolutionManagement {
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
+                "kotlinx-coroutines-guava" to "org.jetbrains.kotlinx",
                 "compose-theme-adapter-3" to "com.google.android.material",
                 "activity-compose" to "androidx.activity",
                 "core-ktx" to "androidx.core"
