@@ -12,19 +12,16 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import dev.icerock.moko.mvvm.createViewModelFactory
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.findActivity
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 private const val TAG = "ANTV/PlayerView"
 
 
-@UnstableApi
 @Composable
 fun PlayerView(
     title: String?,
@@ -49,8 +46,6 @@ fun PlayerView(
 
 }
 
-@OptIn(ExperimentalTime::class)
-@UnstableApi
 @Composable
 fun PlayerViewState(
     model: PlayerViewModel,

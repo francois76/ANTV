@@ -8,7 +8,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
@@ -41,7 +40,6 @@ data class PlayerData(
 )
 
 
-@UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
 
     fun start(controller: MediaController?) = apply { initialize(c = controller) }
