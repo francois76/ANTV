@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.utils.ResourceOrText
@@ -40,7 +39,6 @@ fun <T : CardData> AbstractCardListView(
     )
 }
 
-@UnstableApi
 @Composable
 fun <T : CardData> AbstractCardListViewState(
     title: String,
@@ -86,7 +84,6 @@ fun <T : CardData> AbstractCardListViewState(
 
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 @Composable
-@UnstableApi
 fun CardListViewPreview(
 ) {
     AbstractCardListViewState(
