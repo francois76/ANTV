@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -35,15 +35,17 @@ import fr.fgognet.antv.view.utils.buildColors
 @UnstableApi
 fun ANTVApp() {
     val appContext = LocalContext.current
-
-    MaterialTheme(colorScheme = buildColors(context = appContext)) {
+    val colorScheme = buildColors(context = appContext)
+    MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
         val isFullScreen = remember { mutableStateOf(false) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(Routes.PLAYER.value)
-        systemUiController.isSystemBarsVisible = false
-        systemUiController.setSystemBarsColor(Color.Transparent)
+        systemUiController.setStatusBarColor(colorScheme.background)
+        // TODO: find why the color is not the same as the navigationBar
+        systemUiController.setNavigationBarColor(colorScheme.surface)
+        systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         val openDialog = rememberSaveable { mutableStateOf(false) }
         if (openDialog.value) {
@@ -135,6 +137,7 @@ fun ANTVApp() {
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
                 setFullScreenMode = {
+                    systemUiController.isSystemBarsVisible = !it
                     isFullScreen.value = it
                 }
             )
