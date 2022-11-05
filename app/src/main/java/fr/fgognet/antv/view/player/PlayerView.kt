@@ -3,11 +3,13 @@ package fr.fgognet.antv.view.player
 import android.content.res.Configuration
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -67,9 +69,11 @@ fun PlayerViewState(
 
     AndroidView(
         modifier =
-        Modifier.clickable {
-            shouldShowControls = shouldShowControls.not()
-        },
+        Modifier
+            .background(color = Color.Black)
+            .clickable {
+                shouldShowControls = shouldShowControls.not()
+            },
         factory = {
             androidx.media3.ui.PlayerView(context).apply {
                 player = controller

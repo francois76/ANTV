@@ -92,8 +92,8 @@ private fun TopControl(modifier: Modifier = Modifier, state: PlayerData) {
     Text(
         modifier = modifier.padding(16.dp),
         text = state.title,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary
+        style = MaterialTheme.typography.titleMedium,
+        color = Color.White
     )
 }
 
@@ -191,7 +191,8 @@ private fun BottomControls(
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = "${state.currentPosition.toHour()}/${state.duration.toHour()}",
-                color = MaterialTheme.colorScheme.primary
+                color = Color.White,
+                style = MaterialTheme.typography.titleSmall,
             )
 
         }
