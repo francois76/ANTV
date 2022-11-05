@@ -7,6 +7,7 @@ import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.utils.ResourceOrText
+import fr.fgognet.antv.utils.cleanDescription
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import io.github.aakira.napier.Napier
@@ -116,24 +117,4 @@ class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
     }
 
 
-    companion object {
-        fun cleanDescription(rawDescription: String?): String? {
-            if (rawDescription == null) {
-                return null
-            }
-            // base cleaning of description
-            var result = rawDescription.replace("<br>", "\n").replace("–", "-").trim()
-            // replace line separator ;-
-            if (result != "" && "-" == result.subSequence(0, 1)) {
-                result = result.replace(";-", "\n-")
-            }
-            // replace end of line separator ;
-            result = result.replace(";\n", "\n")
-            // if ; is used as line separator, it is replaced
-            if (result.split("\n-").size == 1) {
-                result = result.replace(";", "\n- ")
-            }
-            return result
-        }
-    }
 }

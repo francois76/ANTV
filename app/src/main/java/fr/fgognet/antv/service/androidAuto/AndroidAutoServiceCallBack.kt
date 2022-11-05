@@ -19,7 +19,7 @@ import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
-import fr.fgognet.antv.view.cardList.live.NewLiveViewModel.Companion.cleanDescription
+import fr.fgognet.antv.utils.cleanDescription
 import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.asListenableFuture
 
@@ -89,7 +89,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
     @OptIn(ExperimentalCoroutinesApi::class)
     @UnstableApi
     private fun handleLive(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        
+
         return MainScope().async {
             val itemResult: ArrayList<MediaItem> = arrayListOf()
             supervisorScope {
