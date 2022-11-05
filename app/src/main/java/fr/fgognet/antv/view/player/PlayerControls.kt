@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
-import androidx.media3.common.util.UnstableApi
 import fr.fgognet.antv.R
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
@@ -209,7 +208,6 @@ fun Long.toHour(): String {
     }
 }
 
-@UnstableApi
 @Composable
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 fun PlayerControl() {
