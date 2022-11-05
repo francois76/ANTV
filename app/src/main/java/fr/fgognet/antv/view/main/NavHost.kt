@@ -28,6 +28,7 @@ fun ANTVNavHost(
     modifier: Modifier = Modifier,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavHostController,
+    updateContextualRefreshFunction: (() -> Unit) -> Unit,
     setFullScreenMode: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -64,6 +65,7 @@ fun ANTVNavHost(
                         "${Routes.PLAYER.value}/$title"
                     )
                 },
+                updateContextualRefreshFunction = updateContextualRefreshFunction,
                 goToCurrentPlaying = {
                     navController.navigateToChild(Routes.PLAYER.value)
                 },

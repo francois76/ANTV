@@ -37,19 +37,22 @@ fun ANTVApp() {
     MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
-        val isFullScreen = remember { mutableStateOf(false) }
+        var isFullScreen by remember { mutableStateOf(false) }
+        var openDialog by rememberSaveable { mutableStateOf(false) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(Routes.PLAYER.value)
+        var contextualRefreshFunction by remember {
+            mutableStateOf({})
+        }
         systemUiController.setStatusBarColor(colorScheme.background)
         // TODO: find why the color is not the same as the navigationBar
         systemUiController.setNavigationBarColor(colorScheme.surface)
         systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        val openDialog = rememberSaveable { mutableStateOf(false) }
-        if (openDialog.value) {
+        if (openDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    openDialog.value = false
+                    openDialog = false
                 },
                 title = {
                     Text(stringResource(resource = MR.strings.info))
@@ -64,7 +67,7 @@ fun ANTVApp() {
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            openDialog.value = false
+                            openDialog = false
                         }
                     ) {
                         Text(stringResource(resource = MR.strings.close))
@@ -74,10 +77,10 @@ fun ANTVApp() {
         }
         Scaffold(
             topBar = {
-                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
+                if (!(isFullScreen && isOnPlayerScreen == true)) {
                     TopAppBar(actions = {
                         IconButton(onClick = {
-                            openDialog.value = true
+                            openDialog = true
                         }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_info_24),
@@ -89,7 +92,18 @@ fun ANTVApp() {
                             CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
                             mediaButton
                         })
-                        IconButton(onClick = { }) {
+                        var reloadEnabled by remember { mutableStateOf(true) }
+                        IconButton(
+                            enabled = reloadEnabled,
+                            onClick = {
+                                if (reloadEnabled) {
+                                    reloadEnabled = false
+                                    contextualRefreshFunction()
+                                    reloadEnabled = true
+                                }
+
+                            }
+                        ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_replay_24),
                                 contentDescription = "reload"
@@ -98,7 +112,7 @@ fun ANTVApp() {
                     }, title = {})
                 }
             }, bottomBar = {
-                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
+                if (!(isFullScreen && isOnPlayerScreen == true)) {
                     var selectedItem by rememberSaveable { mutableStateOf(0) }
                     val items = listOf(
                         getRoute(Routes.LIVE),
@@ -134,9 +148,12 @@ fun ANTVApp() {
             ANTVNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
+                updateContextualRefreshFunction = {
+                    contextualRefreshFunction = it
+                },
                 setFullScreenMode = {
                     systemUiController.isSystemBarsVisible = !it
-                    isFullScreen.value = it
+                    isFullScreen = it
                 }
             )
         }

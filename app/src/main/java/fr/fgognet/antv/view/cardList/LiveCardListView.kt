@@ -22,10 +22,14 @@ fun LiveCardListView(
             NewLiveViewModel().start(Unit)
         }
     ),
+    updateContextualRefreshFunction: (() -> Unit) -> Unit,
     goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
     val state by model.cards.ld().observeAsState()
+    updateContextualRefreshFunction {
+        model.loadCardData(Unit)
+    }
     LiveCardListViewState(
         state = state,
         goToVideo = { url, imageCode, title, description ->
