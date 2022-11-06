@@ -49,7 +49,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             PlayerData(
                 title = "",
                 description = "",
-                isCasting = false,
+                isCasting = MediaSessionServiceImpl.isCasting,
                 isPlaying = false,
                 duration = 1,
                 currentPosition = 0,
@@ -123,6 +123,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         }
     }
 
+
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         this._playerdata.value = this.playerData.value.copy(
             isPlaying = isPlaying,
@@ -152,7 +153,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
             bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
             playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
-            isCasting = false
         )
     }
 
@@ -189,10 +189,8 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
                 bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
                 playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
-                isCasting = false
             )
         }
-
 
     }
 
@@ -221,6 +219,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
                 PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
                 PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
+                PlaybackException.ERROR_CODE_DECODER_INIT_FAILED,
                 PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                     Log.w(TAG, "error on playback: ${error.errorCode}")
                     if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {

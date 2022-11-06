@@ -16,6 +16,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 
@@ -36,38 +37,48 @@ class MediaSessionServiceImpl : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         Log.v(TAG, "onCreate")
-        val castContext = CastContext.getSharedInstance(
-            applicationContext,
-            MoreExecutors.directExecutor()
-        )
-        castPlayer = CastPlayer(
-            castContext.result, DefaultMediaItemConverter(), 5000, 5000
-        )
         localPlayer =
             ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
                 .build()
-        val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
-            castPlayer
-        } else {
-            localPlayer
-        }
-        val servicePlayerListener = MediaSessionServiceListener(this)
-        mediaSession =
-            MediaSession.Builder(this, newPlayer)
-                .setSessionActivity(TaskStackBuilder.create(this).run {
-                    addNextIntentWithParentStack(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("antv://player/" + newPlayer.mediaMetadata.title)
+        CastContext.getSharedInstance(
+            applicationContext,
+            MoreExecutors.directExecutor()
+        ).addOnCompleteListener { result ->
+            castPlayer = CastPlayer(
+                result.result, DefaultMediaItemConverter(), 5000, 5000
+            )
+            result.result.addCastStateListener {
+                isCasting = when (it) {
+                    CastState.CONNECTING, CastState.CONNECTED -> true
+                    CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
+                    else -> false
+                }
+            }
+            val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
+                castPlayer
+            } else {
+                localPlayer
+            }
+            val servicePlayerListener = MediaSessionServiceListener(this)
+            mediaSession =
+                MediaSession.Builder(this, newPlayer)
+                    .setSessionActivity(TaskStackBuilder.create(this).run {
+                        addNextIntentWithParentStack(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("antv://player/" + newPlayer.mediaMetadata.title)
+                            )
                         )
-                    )
-                    getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                }).setCallback(servicePlayerListener)
-                .build()
-        castPlayer.setSessionAvailabilityListener(servicePlayerListener)
+                        getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                    }).setCallback(servicePlayerListener)
+                    .build()
+            castPlayer.setSessionAvailabilityListener(servicePlayerListener)
+        }
+
+
     }
 
 
@@ -133,6 +144,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
         private var listenersFuture: ArrayList<Player.Listener> = arrayListOf()
         val controller: MediaController?
             get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
+        var isCasting: Boolean = false
 
         // waiting for next version of media3
         var currentMediaItem: MediaItem? = null

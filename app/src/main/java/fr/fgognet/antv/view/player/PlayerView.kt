@@ -59,33 +59,39 @@ fun PlayerViewState(
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
-    if (shouldShowControls) {
-        LaunchedEffect(Unit) {
-            val duration = 5
-            delay(duration.seconds)
-            shouldShowControls = shouldShowControls.not()
-        }
-    }
 
-    AndroidView(
-        modifier =
-        Modifier
-            .background(color = Color.Black)
-            .clickable {
-                shouldShowControls = shouldShowControls.not()
-            },
-        factory = {
-            androidx.media3.ui.PlayerView(context).apply {
-                player = controller
-                useController = false
-                layoutParams =
-                    FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-            }
-        })
     if (state != null) {
+        if (state!!.isCasting) {
+            shouldShowControls = true
+        } else {
+            if (shouldShowControls) {
+                LaunchedEffect(Unit) {
+                    val duration = 5
+                    delay(duration.seconds)
+                    shouldShowControls = shouldShowControls.not()
+                }
+            }
+            if (state!!.duration > 0) {
+                AndroidView(
+                    modifier =
+                    Modifier
+                        .background(color = Color.Black)
+                        .clickable {
+                            shouldShowControls = shouldShowControls.not()
+                        },
+                    factory = {
+                        androidx.media3.ui.PlayerView(context).apply {
+                            player = controller
+                            useController = false
+                            layoutParams =
+                                FrameLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                )
+                        }
+                    })
+            }
+        }
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
