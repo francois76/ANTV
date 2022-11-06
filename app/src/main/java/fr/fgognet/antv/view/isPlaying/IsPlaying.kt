@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.isPlaying
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
@@ -8,9 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -33,6 +36,31 @@ fun isPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
 
 @Composable
 fun IsPlayingState(
+    goToCurrentPlaying: () -> Unit,
+    imageCode: String,
+    title: String,
+    description: String,
+) {
+    val configuration = LocalConfiguration.current
+    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        IsPlayingStateLandscape(
+            goToCurrentPlaying = goToCurrentPlaying,
+            imageCode = imageCode,
+            title = title,
+            description = description
+        )
+    } else {
+        IsPlayingStatePortrait(
+            goToCurrentPlaying = goToCurrentPlaying,
+            imageCode = imageCode,
+            title = title,
+            description = description
+        )
+    }
+}
+
+@Composable
+fun IsPlayingStatePortrait(
     goToCurrentPlaying: () -> Unit,
     imageCode: String,
     title: String,
@@ -76,6 +104,52 @@ fun IsPlayingState(
     }
 }
 
+@Composable
+fun IsPlayingStateLandscape(
+    goToCurrentPlaying: () -> Unit,
+    imageCode: String,
+    title: String,
+    description: String,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                goToCurrentPlaying()
+            }
+    ) {
+        Row {
+            Column {
+                AsyncImage(
+                    modifier = Modifier
+                        .width(80.dp),
+                    model = imageCode,
+                    placeholder = painterResource(R.drawable.ic_baseline_image_24),
+                    contentDescription = ""
+                )
+            }
+            Column {
+                Text(
+                    text = stringResource(resource = MR.strings.is_playing),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .height(20.dp)
+                )
+                Text(
+                    text = title,
+                    modifier = Modifier
+                )
+                Text(
+                    text = description,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier
+                )
+            }
+        }
+    }
+}
+
+@Preview(device = Devices.AUTOMOTIVE_1024p, widthDp = 400, heightDp = 50)
 @Preview(widthDp = 300, heightDp = 100)
 @Composable
 fun IsPlayingPreview() {
