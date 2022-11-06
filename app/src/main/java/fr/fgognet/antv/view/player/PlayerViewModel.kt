@@ -162,7 +162,23 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             return
         }
         val entity = VideoDao.get(title)
-        if (entity != null) {
+        if (entity == null) {
+            if (MediaSessionServiceImpl.controller != null && MediaSessionServiceImpl.currentMediaItem != null) {
+                this._playerdata.value = this.playerData.value.copy(
+                    title = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.title.toString(),
+                    description = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.description.toString(),
+                    duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
+                    currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                        0
+                    )
+                        ?: 0,
+                    isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
+                    bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
+                        ?: 0,
+                    playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+                )
+            }
+        } else {
             //this is not the full mediaItem here
             MediaSessionServiceImpl.controller?.setMediaItem(
                 MediaItem.Builder()
