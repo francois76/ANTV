@@ -8,7 +8,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
@@ -41,7 +40,6 @@ data class PlayerData(
 )
 
 
-@UnstableApi
 class PlayerViewModel : ViewModel(), Player.Listener {
 
     fun start(controller: MediaController?) = apply { initialize(c = controller) }
@@ -51,7 +49,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             PlayerData(
                 title = "",
                 description = "",
-                isCasting = false,
+                isCasting = MediaSessionServiceImpl.isCasting,
                 isPlaying = false,
                 duration = 1,
                 currentPosition = 0,
@@ -125,6 +123,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         }
     }
 
+
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         this._playerdata.value = this.playerData.value.copy(
             isPlaying = isPlaying,
@@ -154,7 +153,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
             bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
             playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
-            isCasting = false
         )
     }
 
@@ -164,7 +162,23 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             return
         }
         val entity = VideoDao.get(title)
-        if (entity != null) {
+        if (entity == null) {
+            if (MediaSessionServiceImpl.controller != null && MediaSessionServiceImpl.currentMediaItem != null) {
+                this._playerdata.value = this.playerData.value.copy(
+                    title = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.title.toString(),
+                    description = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.description.toString(),
+                    duration = MediaSessionServiceImpl.controller?.duration?.coerceAtLeast(0) ?: 0,
+                    currentPosition = MediaSessionServiceImpl.controller?.currentPosition?.coerceAtLeast(
+                        0
+                    )
+                        ?: 0,
+                    isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
+                    bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
+                        ?: 0,
+                    playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+                )
+            }
+        } else {
             //this is not the full mediaItem here
             MediaSessionServiceImpl.controller?.setMediaItem(
                 MediaItem.Builder()
@@ -191,10 +205,8 @@ class PlayerViewModel : ViewModel(), Player.Listener {
                 isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
                 bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
                 playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
-                isCasting = false
             )
         }
-
 
     }
 
@@ -218,19 +230,23 @@ class PlayerViewModel : ViewModel(), Player.Listener {
 
     override fun onPlayerError(error: PlaybackException) {
         Log.v(TAG, "onPlayerError")
-        when (error.errorCode) {
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
-            PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
-            PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
-                Log.w(TAG, "error on playback: ${error.errorCode}")
-                if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {
-                    MediaSessionServiceImpl.controller?.seekToDefaultPosition()
-                    MediaSessionServiceImpl.controller?.prepare()
+        try {
+            when (error.errorCode) {
+                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
+                PlaybackException.ERROR_CODE_DECODER_INIT_FAILED,
+                PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
+                    Log.w(TAG, "error on playback: ${error.errorCode}")
+                    if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {
+                        MediaSessionServiceImpl.controller?.seekToDefaultPosition()
+                        MediaSessionServiceImpl.controller?.prepare()
+                    }
                 }
-            }
 
-            else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+                else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+            }
+        } catch (_: Exception) {
         }
     }
 

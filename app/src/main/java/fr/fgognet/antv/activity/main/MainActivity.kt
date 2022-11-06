@@ -10,9 +10,9 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.MoreExecutors
-import fr.fgognet.antv.config.initCommonLogs
-import fr.fgognet.antv.config.resetLogs
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
+import fr.fgognet.antv.utils.initCommonLogs
+import fr.fgognet.antv.utils.resetLogs
 import fr.fgognet.antv.view.main.ANTVApp
 
 private const val TAG = "ANTV/MainActivity"
@@ -37,7 +37,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         Log.v(TAG, "onIsPlayingChanged")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val builder = PictureInPictureParams.Builder()
-            builder.setAutoEnterEnabled(isPlaying)
+            builder.setAutoEnterEnabled(isPlaying && !MediaSessionServiceImpl.isCasting)
             this.setPictureInPictureParams(builder.build())
         }
     }

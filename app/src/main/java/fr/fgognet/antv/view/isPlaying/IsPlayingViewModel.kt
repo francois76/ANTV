@@ -3,7 +3,6 @@ package fr.fgognet.antv.view.isPlaying
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -19,7 +18,6 @@ data class IsPlayingData(
 )
 
 
-@UnstableApi
 class IsPlayingViewModel : ViewModel(), Player.Listener {
 
     fun start() = apply { initialize() }
@@ -39,6 +37,14 @@ class IsPlayingViewModel : ViewModel(), Player.Listener {
     private fun initialize() {
         Log.v(TAG, "initialize")
         MediaSessionServiceImpl.addListener(this)
+        if (MediaSessionServiceImpl.controller != null && MediaSessionServiceImpl.currentMediaItem != null) {
+            this._isPlayingData.value = IsPlayingData(
+                hasPlayingData = true,
+                imageCode = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.artworkUri.toString(),
+                title = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.title.toString(),
+                description = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.description.toString(),
+            )
+        }
 
     }
 
