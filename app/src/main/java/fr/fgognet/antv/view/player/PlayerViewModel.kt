@@ -216,19 +216,22 @@ class PlayerViewModel : ViewModel(), Player.Listener {
 
     override fun onPlayerError(error: PlaybackException) {
         Log.v(TAG, "onPlayerError")
-        when (error.errorCode) {
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
-            PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
-            PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
-                Log.w(TAG, "error on playback: ${error.errorCode}")
-                if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {
-                    MediaSessionServiceImpl.controller?.seekToDefaultPosition()
-                    MediaSessionServiceImpl.controller?.prepare()
+        try {
+            when (error.errorCode) {
+                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED,
+                PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
+                    Log.w(TAG, "error on playback: ${error.errorCode}")
+                    if (MediaSessionServiceImpl.controller?.isCurrentMediaItemLive == true) {
+                        MediaSessionServiceImpl.controller?.seekToDefaultPosition()
+                        MediaSessionServiceImpl.controller?.prepare()
+                    }
                 }
-            }
 
-            else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+                else -> Log.e(TAG, "error on playback: ${error.errorCode}")
+            }
+        } catch (_: Exception) {
         }
     }
 

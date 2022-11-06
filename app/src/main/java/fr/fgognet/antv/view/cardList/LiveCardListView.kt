@@ -13,13 +13,13 @@ import fr.fgognet.antv.MR
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
-import fr.fgognet.antv.view.cardList.live.NewLiveViewModel
+import fr.fgognet.antv.view.cardList.live.LiveViewModel
 
 @Composable
 fun LiveCardListView(
-    model: NewLiveViewModel = viewModel(
+    model: LiveViewModel = viewModel(
         factory = createViewModelFactory {
-            NewLiveViewModel().start(Unit)
+            LiveViewModel().start(Unit)
         }
     ),
     updateContextualRefreshFunction: (() -> Unit) -> Unit,

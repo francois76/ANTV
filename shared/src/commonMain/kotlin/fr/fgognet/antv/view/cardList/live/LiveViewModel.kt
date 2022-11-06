@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/LiveViewModel"
 
-class NewLiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
+class LiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
 
     override fun loadCardData(params: Unit) {
         viewModelScope.launch {
