@@ -14,6 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.utils.ResourceOrText
@@ -21,6 +23,7 @@ import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
+import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
 import fr.fgognet.antv.view.isPlaying.isPlaying
 
 
@@ -29,25 +32,77 @@ fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
     goToCurrentPlaying: () -> Unit,
+    model: IsPlayingViewModel = viewModel(factory = createViewModelFactory {
+        IsPlayingViewModel().start()
+    }
+    ),
     cardDataGenerator: @Composable (T) -> Unit
 ) {
-    AbstractCardListViewState(
-        title = title,
-        cardDatas = cardDatas,
-        goToCurrentPlaying = goToCurrentPlaying,
-        cardDataGenerator = cardDataGenerator
-    )
+    val configuration = LocalConfiguration.current
+    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        AbstractCardListViewLandscape(
+            title = title,
+            cardDatas = cardDatas,
+            goToCurrentPlaying = goToCurrentPlaying,
+            model = model,
+            cardDataGenerator = cardDataGenerator
+        )
+    } else {
+        AbstractCardListViewPortrait(
+            title = title,
+            cardDatas = cardDatas,
+            goToCurrentPlaying = goToCurrentPlaying,
+            model = model,
+            cardDataGenerator = cardDataGenerator
+        )
+    }
 }
 
 @Composable
-fun <T : CardData> AbstractCardListViewState(
+fun <T : CardData> AbstractCardListViewPortrait(
     title: String,
     cardDatas: List<T>,
     goToCurrentPlaying: () -> Unit,
+    model: IsPlayingViewModel,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
+    Column {
+        Text(
+            text = title, modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
+        LazyRow(
+            modifier = Modifier
+                .weight(8f)
+                .padding(bottom = 5.dp)
+        ) {
+            items(cardDatas) { cardData ->
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .width(300.dp)
+                ) {
+                    cardDataGenerator(cardData)
+                }
+            }
+        }
+        Row(modifier = Modifier
+            .weight(1f)
+            .padding(vertical = 5.dp)) {
+            isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
+        }
+    }
+}
 
-    val configuration = LocalConfiguration.current
+@Composable
+fun <T : CardData> AbstractCardListViewLandscape(
+    title: String,
+    cardDatas: List<T>,
+    goToCurrentPlaying: () -> Unit,
+    model: IsPlayingViewModel,
+    cardDataGenerator: @Composable (T) -> Unit
+) {
     Column {
         Text(
             text = title, modifier = Modifier
@@ -57,37 +112,30 @@ fun <T : CardData> AbstractCardListViewState(
         LazyRow(
             modifier = Modifier.weight(8f)
         ) {
-            var modifier = Modifier.padding(horizontal = 2.dp)
-            modifier = when (configuration.orientation) {
-                Configuration.ORIENTATION_LANDSCAPE -> {
-                    modifier.width(600.dp)
-                }
-                else -> {
-                    modifier.width(300.dp)
-                }
-            }
             items(cardDatas) { cardData ->
                 Column(
-                    modifier = modifier
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .width(600.dp)
                 ) {
                     cardDataGenerator(cardData)
                 }
             }
         }
-        Row(modifier = Modifier.weight(1f)) {
-            isPlaying(goToCurrentPlaying = goToCurrentPlaying)
+        Row(modifier = Modifier.weight(3f)) {
+            isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
         }
-
-
     }
 }
 
+@Preview(device = Devices.PIXEL_4_XL)
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 @Composable
 fun CardListViewPreview(
 ) {
-    AbstractCardListViewState(
+    AbstractCardListView(
         title = "mytitle",
+        model = IsPlayingViewModel(),
         cardDatas = arrayListOf(
             PlaylistCardData(
                 ResourceOrText("title1"),

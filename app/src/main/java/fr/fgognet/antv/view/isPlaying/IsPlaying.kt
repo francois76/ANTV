@@ -13,19 +13,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
 
 @Composable
-fun isPlaying(goToCurrentPlaying: () -> Unit) {
-    val model: IsPlayingViewModel = viewModel(factory = createViewModelFactory {
-        IsPlayingViewModel().start()
-    }
-    )
+fun isPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
     val state by model.isPlayingData.ld().observeAsState()
     if (state != null && state?.hasPlayingData == true) {
         IsPlayingState(
