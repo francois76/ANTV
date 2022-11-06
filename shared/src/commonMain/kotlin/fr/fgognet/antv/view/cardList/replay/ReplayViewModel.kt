@@ -5,6 +5,7 @@ import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.repository.SearchDao
 import fr.fgognet.antv.utils.ResourceOrText
+import fr.fgognet.antv.utils.cleanDescription
 import fr.fgognet.antv.view.cardList.AbstractCardListViewModel
 import fr.fgognet.antv.view.cardList.CardListViewData
 import io.github.aakira.napier.Napier
@@ -64,7 +65,7 @@ class ReplayViewModel :
                         eventSearches.map {
                             ReplayCardData(
                                 title = ResourceOrText(it.title ?: "video sans titre"),
-                                description = it.description?.replace("<br>", "\n") ?: "",
+                                description = cleanDescription(it.description) ?: "",
                                 imageCode = if (it.thumbnail != null) it.thumbnail!!.replace(
                                     "\\",
                                     ""

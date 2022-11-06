@@ -1,12 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     // kotlin plugins
-    id("org.jetbrains.kotlin.plugin.serialization").version("1.7.10").apply(false)
-    kotlin("jvm").version("1.7.10").apply(false)
+    alias(libs.plugins.serialization).apply(false)
+    kotlin("jvm").version(libs.versions.kotlin).apply(false)
 
     // android plugins
-    id("com.android.application").version("7.3.1").apply(false)
-    id("com.android.library").version("7.3.1").apply(false)
+    alias(libs.plugins.com.android.application).apply(false)
+    alias(libs.plugins.com.android.library).apply(false)
 }
 
 buildscript {

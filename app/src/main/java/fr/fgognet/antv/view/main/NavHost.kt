@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,11 +24,11 @@ const val TAG = "ANTV/ANTVNavHost"
 
 
 @Composable
-@UnstableApi
 fun ANTVNavHost(
     modifier: Modifier = Modifier,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavHostController,
+    updateContextualRefreshFunction: (() -> Unit) -> Unit,
     setFullScreenMode: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -39,7 +38,7 @@ fun ANTVNavHost(
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     if (context.findActivity()?.isInPictureInPictureMode == true) {
-                        navController.navigateToChild(PlayerRoute.id)
+                        navController.navigateToChild(Routes.PLAYER.value)
                     }
                 }
                 else -> {}
@@ -55,44 +54,46 @@ fun ANTVNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = LiveRoute.id,
+        startDestination = Routes.LIVE.value,
         modifier = modifier
     ) {
 
-        composable(route = LiveRoute.id) {
+        composable(route = Routes.LIVE.value) {
             LiveCardListView(
                 goToVideo = { title ->
                     navController.navigateToChild(
-                        "${PlayerRoute.id}/$title"
+                        "${Routes.PLAYER.value}/$title"
                     )
                 },
+                updateContextualRefreshFunction = updateContextualRefreshFunction,
                 goToCurrentPlaying = {
-                    navController.navigateToChild(PlayerRoute.id)
+                    navController.navigateToChild(Routes.PLAYER.value)
                 },
             )
         }
-        composable(route = SearchRoute.id) {
+        composable(route = Routes.SEARCH.value) {
             ReplaySearchView(query = {
                 navController.navigateToChild(
-                    ReplayRoute.id
+                    Routes.REPLAY.value
                 )
             })
         }
-        composable(route = PlaylistRoute.id) {
+        composable(route = Routes.PLAYLIST.value) {
             PlaylistCardListView(goToVideos = {
                 navController.navigateToChild(
-                    ReplayRoute.id
+                    Routes.REPLAY.value
                 )
             },
                 goToCurrentPlaying = {
-                    navController.navigateToChild(PlayerRoute.id)
+                    navController.navigateToChild(Routes.PLAYER.value)
                 }
             )
         }
+        val playerRoute = getRoute(Routes.PLAYER)
         composable(
-            route = "${PlayerRoute.id}/{title}",
-            arguments = PlayerRoute.arguments,
-            deepLinks = PlayerRoute.deepLinks
+            route = "${Routes.PLAYER.value}/{title}",
+            arguments = playerRoute?.arguments!!,
+            deepLinks = playerRoute.deepLinks!!
         ) {
             val title = getEncodedArgument(it.arguments, "title")
             PlayerView(
@@ -101,23 +102,23 @@ fun ANTVNavHost(
             )
         }
         composable(
-            route = PlayerRoute.id,
+            route = Routes.PLAYER.value,
         ) {
             PlayerView(
                 setFullScreen = setFullScreenMode, title = null,
             )
         }
         composable(
-            route = ReplayRoute.id,
+            route = Routes.REPLAY.value,
         ) {
             ReplayCardListView(
                 goToVideo = { title ->
                     navController.navigateToChild(
-                        "${PlayerRoute.id}/$title"
+                        "${Routes.PLAYER.value}/$title"
                     )
                 },
                 goToCurrentPlaying = {
-                    navController.navigateToChild(PlayerRoute.id)
+                    navController.navigateToChild(Routes.PLAYER.value)
                 })
         }
 

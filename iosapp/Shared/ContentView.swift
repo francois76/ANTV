@@ -10,9 +10,21 @@ import shared
 
 struct ContentView: View {
     var body: some View {
-        Text("loading")
-            .padding()
+        let tabs = [
+            0:shared.AbstractRouteKt.getRoute(routeId: shared.Routes.live).unsafelyUnwrapped,
+            1:shared.AbstractRouteKt.getRoute(routeId: shared.Routes.playlist).unsafelyUnwrapped,
+            2:shared.AbstractRouteKt.getRoute(routeId: shared.Routes.search).unsafelyUnwrapped]
 
+        TabView {
+            ForEach(Array(tabs.keys.sorted()), id:\.self) {  key in
+                Text("The content of the first view")
+                    .tabItem {
+                        Image(systemName: "phone.fill")
+                        Text(tabs[key].unsafelyUnwrapped.nameID.unsafelyUnwrapped.resourceId)
+                    }
+            }
+            
+        }
     }
 }
 

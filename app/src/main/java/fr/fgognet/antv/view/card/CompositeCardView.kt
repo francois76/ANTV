@@ -63,7 +63,7 @@ fun LandscapeCompositeCardView(
                     .fillMaxWidth()
                     .weight(8f)
                     .padding(10.dp),
-                placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
+                placeholder = painterResource(R.drawable.ic_baseline_image_24),
                 model = data.imageCode,
                 contentDescription = data.title
             )
@@ -116,7 +116,7 @@ fun PortraitCompositeCardView(
             modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth(),
-            placeholder = painterResource(R.drawable.ic_baseline_live_tv_24),
+            placeholder = painterResource(R.drawable.ic_baseline_image_24),
             model = data.imageCode,
             contentDescription = data.title
         )

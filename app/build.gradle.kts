@@ -58,7 +58,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
     kotlinOptions {
@@ -86,6 +86,11 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.process)
+    implementation(libs.kotlinx.coroutines.guava)
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // To use CallbackToFutureAdapter
+    implementation("androidx.concurrent:concurrent-futures:1.1.0")
     implementation(libs.compose.theme.adapter.get3())
     implementation(libs.activity.compose)
 

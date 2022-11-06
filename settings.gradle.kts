@@ -16,16 +16,16 @@ dependencyResolutionManagement {
     versionCatalogs {
         // application dependancies
         create("antvLibs") {
-            version("version", "0.0.7")
-            version("versionNumber", "5")
+            version("version", "1.0.0")
+            version("versionNumber", "6")
             version("sdk-compile", "33")
             version("sdk-min", "26")
             version("sdk-target", "33")
         }
 
+
         // libraries dependencies
         create("libs") {
-
             /*
             version definition
              */
@@ -43,6 +43,10 @@ dependencyResolutionManagement {
                 "kotlinx-serialization-json",
                 "1.4.1"
             ) // https://github.com/Kotlin/kotlinx.serialization/releases
+            version(
+                "kotlinx-coroutines-guava",
+                "1.6.4"
+            ) // https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
             version("junit", "4.13.2") // depend on intellij
             version(
                 "play-services-cast-framework",
@@ -80,9 +84,37 @@ dependencyResolutionManagement {
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
             version("compose", "1.3.0")
             version(
+                "compose-compiler",
+                "1.3.2"
+            ) // https://developer.android.com/jetpack/androidx/releases/compose-compiler
+            version(
                 "accompanist-systemuicontroller",
                 "0.27.0" // WARNING! depend on version of compose
             ) // https://github.com/google/accompanist/releases
+            version("kotlin", "1.7.20")
+            version(
+                "android-gradle-plugin",
+                "7.3.1"
+            ) // https://developer.android.com/studio/releases/gradle-plugin
+
+
+            /*
+            * plugins
+             */
+
+            plugin(
+                "serialization",
+                "org.jetbrains.kotlin.plugin.serialization"
+            ).versionRef("kotlin")
+            plugin(
+                "com.android.application",
+                "com.android.application"
+            ).versionRef("android-gradle-plugin")
+            plugin(
+                "com.android.library",
+                "com.android.library"
+            ).versionRef("android-gradle-plugin")
+
             /*
             monoline repos
              */
@@ -92,6 +124,7 @@ dependencyResolutionManagement {
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
+                "kotlinx-coroutines-guava" to "org.jetbrains.kotlinx",
                 "compose-theme-adapter-3" to "com.google.android.material",
                 "activity-compose" to "androidx.activity",
                 "core-ktx" to "androidx.core"

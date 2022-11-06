@@ -4,19 +4,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-import androidx.media3.common.util.UnstableApi
 import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -32,24 +33,28 @@ import fr.fgognet.antv.view.utils.buildColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 @Composable
-@UnstableApi
 fun ANTVApp() {
     val appContext = LocalContext.current
-
-    MaterialTheme(colorScheme = buildColors(context = appContext)) {
+    val colorScheme = buildColors(context = appContext)
+    MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavController()
         val systemUiController = rememberSystemUiController()
-        val isFullScreen = remember { mutableStateOf(false) }
+        var isFullScreen by remember { mutableStateOf(false) }
+        var openDialog by rememberSaveable { mutableStateOf(false) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(PlayerRoute.id)
-        systemUiController.isSystemBarsVisible = false
-        systemUiController.setSystemBarsColor(Color.Transparent)
+        val isOnPlayerScreen = navBackStackEntry?.destination?.route?.contains(Routes.PLAYER.value)
+        var contextualRefreshFunction by remember {
+            mutableStateOf({})
+        }
+        systemUiController.setStatusBarColor(colorScheme.background)
+        // TODO: find why the color is not the same as the navigationBar
+        systemUiController.setNavigationBarColor(colorScheme.surface)
+        systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
         systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        val openDialog = rememberSaveable { mutableStateOf(false) }
-        if (openDialog.value) {
+        if (openDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    openDialog.value = false
+                    openDialog = false
                 },
                 title = {
                     Text(stringResource(resource = MR.strings.info))
@@ -64,7 +69,7 @@ fun ANTVApp() {
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            openDialog.value = false
+                            openDialog = false
                         }
                     ) {
                         Text(stringResource(resource = MR.strings.close))
@@ -74,10 +79,10 @@ fun ANTVApp() {
         }
         Scaffold(
             topBar = {
-                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
+                if (!(isFullScreen && isOnPlayerScreen == true)) {
                     TopAppBar(actions = {
                         IconButton(onClick = {
-                            openDialog.value = true
+                            openDialog = true
                         }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_info_24),
@@ -89,7 +94,18 @@ fun ANTVApp() {
                             CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
                             mediaButton
                         })
-                        IconButton(onClick = { }) {
+                        var reloadEnabled by remember { mutableStateOf(true) }
+                        IconButton(
+                            enabled = reloadEnabled,
+                            onClick = {
+                                if (reloadEnabled) {
+                                    reloadEnabled = false
+                                    contextualRefreshFunction()
+                                    reloadEnabled = true
+                                }
+
+                            }
+                        ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_replay_24),
                                 contentDescription = "reload"
@@ -98,23 +114,32 @@ fun ANTVApp() {
                     }, title = {})
                 }
             }, bottomBar = {
-                if (!(isFullScreen.value && isOnPlayerScreen == true)) {
+                if (!(isFullScreen && isOnPlayerScreen == true)) {
                     var selectedItem by rememberSaveable { mutableStateOf(0) }
-                    val items = listOf(LiveRoute, PlaylistRoute, SearchRoute)
-                    NavigationBar {
+                    val items = listOf(
+                        getRoute(Routes.LIVE),
+                        getRoute(Routes.PLAYLIST),
+                        getRoute(Routes.SEARCH)
+                    )
+                    NavigationBar(modifier = Modifier.height(72.dp)) {
                         items.forEachIndexed { index, item ->
                             NavigationBarItem(
                                 icon = {
                                     Image(
-                                        painterResource(id = item.iconID!!),
-                                        contentDescription = stringResource(resource = item.nameID!!)
+                                        painterResource(
+                                            id = appContext.resources.getIdentifier(
+                                                item?.iconName ?: "ic_baseline_image_24",
+                                                "drawable", appContext.packageName
+                                            )
+                                        ),
+                                        contentDescription = stringResource(resource = item?.nameID!!)
                                     )
                                 },
-                                label = { Text(stringResource(resource = item.nameID!!)) },
+                                label = { Text(stringResource(resource = item?.nameID!!)) },
                                 selected = selectedItem == index,
                                 onClick = {
                                     selectedItem = index
-                                    navController.navigateToTop(item.id)
+                                    navController.navigateToTop(item?.id!!)
                                 }
                             )
                         }
@@ -125,8 +150,12 @@ fun ANTVApp() {
             ANTVNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
+                updateContextualRefreshFunction = {
+                    contextualRefreshFunction = it
+                },
                 setFullScreenMode = {
-                    isFullScreen.value = it
+                    systemUiController.isSystemBarsVisible = !it
+                    isFullScreen = it
                 }
             )
         }

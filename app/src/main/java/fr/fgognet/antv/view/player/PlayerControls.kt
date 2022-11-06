@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
-import androidx.media3.common.util.UnstableApi
 import fr.fgognet.antv.R
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
@@ -92,8 +91,8 @@ private fun TopControl(modifier: Modifier = Modifier, state: PlayerData) {
     Text(
         modifier = modifier.padding(16.dp),
         text = state.title,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary
+        style = MaterialTheme.typography.titleMedium,
+        color = Color.White
     )
 }
 
@@ -191,7 +190,8 @@ private fun BottomControls(
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = "${state.currentPosition.toHour()}/${state.duration.toHour()}",
-                color = MaterialTheme.colorScheme.primary
+                color = Color.White,
+                style = MaterialTheme.typography.titleSmall,
             )
 
         }
@@ -208,7 +208,6 @@ fun Long.toHour(): String {
     }
 }
 
-@UnstableApi
 @Composable
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 fun PlayerControl() {
