@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -87,9 +88,11 @@ fun <T : CardData> AbstractCardListViewPortrait(
                 }
             }
         }
-        Row(modifier = Modifier
-            .weight(1f)
-            .padding(vertical = 5.dp)) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 5.dp)
+        ) {
             isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
         }
     }
@@ -104,11 +107,26 @@ fun <T : CardData> AbstractCardListViewLandscape(
     cardDataGenerator: @Composable (T) -> Unit
 ) {
     Column {
-        Text(
-            text = title, modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
+
+        Row(modifier = Modifier.weight(2f)) {
+            Column(
+                modifier = Modifier.weight(2f), verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title, modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(5f)
+                    .padding(5.dp)
+            ) {
+                isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
+            }
+        }
         LazyRow(
             modifier = Modifier.weight(8f)
         ) {
@@ -122,14 +140,12 @@ fun <T : CardData> AbstractCardListViewLandscape(
                 }
             }
         }
-        Row(modifier = Modifier.weight(3f)) {
-            isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
-        }
+
     }
 }
 
-@Preview(device = Devices.PIXEL_4_XL)
 @Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
+@Preview(device = Devices.PIXEL_4_XL)
 @Composable
 fun CardListViewPreview(
 ) {

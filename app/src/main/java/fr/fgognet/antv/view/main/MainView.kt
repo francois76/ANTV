@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 import androidx.mediarouter.app.MediaRouteButton
@@ -119,7 +121,7 @@ fun ANTVApp() {
                         getRoute(Routes.PLAYLIST),
                         getRoute(Routes.SEARCH)
                     )
-                    NavigationBar {
+                    NavigationBar(modifier = Modifier.height(72.dp)) {
                         items.forEachIndexed { index, item ->
                             NavigationBarItem(
                                 icon = {
