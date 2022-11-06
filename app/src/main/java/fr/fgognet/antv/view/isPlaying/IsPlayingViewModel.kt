@@ -37,6 +37,14 @@ class IsPlayingViewModel : ViewModel(), Player.Listener {
     private fun initialize() {
         Log.v(TAG, "initialize")
         MediaSessionServiceImpl.addListener(this)
+        if (MediaSessionServiceImpl.controller != null && MediaSessionServiceImpl.currentMediaItem != null) {
+            this._isPlayingData.value = IsPlayingData(
+                hasPlayingData = true,
+                imageCode = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.artworkUri.toString(),
+                title = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.title.toString(),
+                description = MediaSessionServiceImpl.currentMediaItem?.mediaMetadata?.description.toString(),
+            )
+        }
 
     }
 
