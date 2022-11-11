@@ -95,42 +95,21 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
         mediaItems: MutableList<MediaItem>
     ): ListenableFuture<MutableList<MediaItem>> {
         Log.v(TAG, "onAddMediaItems")
-        if (mediaItems.size != 1) {
+        val item = currentItems[mediaItems[0].mediaId]
+        if (mediaItems.size != 1 || item == null) {
             return Futures.immediateFuture(
                 mediaItems
             )
         }
         val future = MainScope().async {
-            val item = mediaItems[0]
             val nvs = NvsRepository.getNvsByCode(
                 item.mediaId
             )
-            Log.d(TAG, item.mediaMetadata.title.toString())
-            Log.d(TAG, item.requestMetadata.extras?.getString("test") ?: "null")
-            Log.d(TAG, nvs.getReplayURL().toString())
-            mutableListOf(
-                MediaItem.Builder()
-                    .setMimeType(MimeTypes.APPLICATION_M3U8)
-                    .setMediaId(UUID.randomUUID().toString())
-                    .setUri(nvs.getReplayURL())
-                    .setMediaMetadata(
-                        MediaMetadata.Builder()
-                            .setIsPlayable(true)
-                            .setFolderType(FOLDER_TYPE_NONE)
-                            .setTitle(
-                                "title"
-                            )
-                            .setDescription(
-                                "desc"
-                            )
-                            .setArtworkUri(
-                                Uri.parse(
-                                    "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
-                                )
-                            )
 
-                            .build()
-                    ).build()
+            mutableListOf(
+                item.buildUpon()
+                    .setUri(nvs.getReplayURL())
+                    .build()
             )
         }.asListenableFuture()
         val callBack = object : FutureCallback<MutableList<MediaItem>> {
@@ -222,12 +201,6 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                                             .setMimeType(MimeTypes.APPLICATION_M3U8)
                                             .setMediaId(diffusion.uid_referentiel ?: "0")
                                             .setUri(Uri.parse("https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"))
-                                            .setRequestMetadata(
-                                                MediaItem.RequestMetadata.Builder()
-                                                    .setExtras(Bundle().apply {
-                                                        putString("test", "valuetest")
-                                                    }).build()
-                                            )
                                             .setMediaMetadata(
                                                 MediaMetadata.Builder()
                                                     .setIsPlayable(true)
@@ -269,41 +242,40 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
             } catch (e: Exception) {
                 arrayListOf()
             }
-
-            itemResult.addAll(
-                eventSearches.map {
-                    MediaItem.Builder()
-                        .setMimeType(MimeTypes.APPLICATION_M3U8)
-                        .setMediaId(it.url ?: UUID.randomUUID().toString())
-                        .setUri("")
-                        .setMediaMetadata(
-                            MediaMetadata.Builder()
-                                .setIsPlayable(true)
-                                .setFolderType(FOLDER_TYPE_NONE)
-                                .setTitle(
-                                    it.title
+            val items = eventSearches.map {
+                MediaItem.Builder()
+                    .setMimeType(MimeTypes.APPLICATION_M3U8)
+                    .setMediaId(it.url ?: UUID.randomUUID().toString())
+                    .setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setIsPlayable(true)
+                            .setFolderType(FOLDER_TYPE_NONE)
+                            .setTitle(
+                                it.title
+                            )
+                            .setDescription(
+                                cleanDescription(it.description)
+                                    ?: ""
+                            )
+                            .setArtworkUri(
+                                Uri.parse(
+                                    if (it.thumbnail != null) it.thumbnail!!.replace(
+                                        "\\",
+                                        ""
+                                    ).replace(
+                                        "http",
+                                        "https"
+                                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
                                 )
-                                .setDescription(
-                                    cleanDescription(it.description)
-                                        ?: ""
-                                )
-                                .setArtworkUri(
-                                    Uri.parse(
-                                        if (it.thumbnail != null) it.thumbnail!!.replace(
-                                            "\\",
-                                            ""
-                                        ).replace(
-                                            "http",
-                                            "https"
-                                        ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
-                                    )
-                                )
+                            )
 
-                                .build()
-                        ).build()
-                }
-
-            )
+                            .build()
+                    ).build()
+            }
+            currentItems = items.associateBy {
+                it.mediaId
+            }
+            itemResult.addAll(items)
         }
         return itemResult
 
@@ -320,5 +292,9 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                     .setTitle(title)
                     .build()
             ).build()
+    }
+
+    companion object {
+        var currentItems: Map<String, MediaItem> = hashMapOf()
     }
 }
