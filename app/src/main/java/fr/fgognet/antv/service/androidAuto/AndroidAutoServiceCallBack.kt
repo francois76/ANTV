@@ -64,8 +64,12 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
         Log.v(TAG, "onGetChildren")
         return when (parentId) {
             "root" -> handleRoot()
-            "live" -> handleLive()
-            "replay" -> handleReplay()
+            "live" -> runAsyncMediacall {
+                handleLive()
+            }
+            "replay" -> runAsyncMediacall {
+                handleReplay()
+            }
             else -> handleRoot()
         }
 
@@ -91,61 +95,11 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
         )
     }
 
-
     @UnstableApi
-    private fun handleLive(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+    private fun runAsyncMediacall(function: suspend () -> ArrayList<MediaItem>): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         val future = MainScope().async {
-            val itemResult: ArrayList<MediaItem> = arrayListOf()
-            supervisorScope {
-                val editorial: Editorial? = try {
-                    EditorialRepository.getEditorialInformation()
-                } catch (e: Exception) {
-                    null
-                }
-                if (editorial != null) {
-                    val liveInformation: Map<String, String> =
-                        LiveRepository.getLiveInformation()
-                    if (editorial.diffusions != null) {
-                        for (d in editorial.diffusions!!) {
 
-                            val diffusion = d as Diffusion
-                            if (liveInformation.containsKey(diffusion.flux)) {
-                                val nvs = NvsRepository.getNvsByCode(
-                                    liveInformation[diffusion.flux]!!
-                                )
-                                if (liveInformation.containsKey(diffusion.flux) && diffusion.uid_referentiel == nvs.getMeetingID()) {
-                                    withContext(Dispatchers.Main) {
-                                        itemResult.add(
-                                            MediaItem.Builder()
-                                                .setMimeType(MimeTypes.APPLICATION_M3U8)
-                                                .setMediaId(diffusion.uid_referentiel ?: "0")
-                                                .setUri(Uri.parse("https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"))
-                                                .setMediaMetadata(
-                                                    MediaMetadata.Builder()
-                                                        .setIsPlayable(true)
-                                                        .setTitle(
-                                                            diffusion.libelle
-                                                        ).setSubtitle(diffusion.lieu ?: "")
-                                                        .setDescription(
-                                                            cleanDescription(diffusion.sujet)
-                                                                ?: ""
-                                                        )
-                                                        .setArtworkUri(
-                                                            Uri.parse(if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg")
-                                                        )
-
-                                                        .build()
-                                                ).build()
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            LibraryResult.ofItemList(itemResult, LibraryParams.Builder().setExtras(
+            LibraryResult.ofItemList(function(), LibraryParams.Builder().setExtras(
                 Bundle().apply {
                     putInt(
                         "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
@@ -155,14 +109,11 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
             ).build())
         }.asListenableFuture()
         val callBack = object : FutureCallback<LibraryResult<ImmutableList<MediaItem>>> {
-            override fun onSuccess(result: LibraryResult<ImmutableList<MediaItem>>?) {
-                TODO("Not yet implemented")
-            }
+            override fun onSuccess(result: LibraryResult<ImmutableList<MediaItem>>?) {}
 
             override fun onFailure(t: Throwable) {
                 Log.e(TAG, t.stackTraceToString())
             }
-
         }
         Futures.addCallback(future, callBack, MoreExecutors.directExecutor())
         return future
@@ -170,70 +121,109 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
 
 
     @UnstableApi
-    private fun handleReplay(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        return MainScope().async {
-            val itemResult: ArrayList<MediaItem> = arrayListOf()
-            supervisorScope {
-                withContext(Dispatchers.IO) {
-                    val eventSearches: List<EventSearch> = try {
-                        EventSearchRepository.findEventSearchByParams(
-                            hashMapOf<EventSearchQueryParams, String>()
-                        )
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.toString())
-                        arrayListOf()
-                    }
-                    withContext(Dispatchers.Main) {
-                        Log.i(
-                            TAG, "dispatching regenerated view"
-                        )
+    private suspend fun handleLive(): ArrayList<MediaItem> {
+        val itemResult: ArrayList<MediaItem> = arrayListOf()
+        supervisorScope {
 
-                        itemResult.addAll(
-                            eventSearches.map {
-                                MediaItem.Builder()
-                                    .setMimeType(MimeTypes.APPLICATION_M3U8)
-                                    .setMediaId(UUID.randomUUID().toString())
-                                    .setUri("TODO")
-                                    .setMediaMetadata(
-                                        MediaMetadata.Builder()
-                                            .setIsPlayable(true)
-                                            .setTitle(
-                                                it.title
-                                            )
-                                            .setDescription(
-                                                cleanDescription(it.description)
-                                                    ?: ""
-                                            )
-                                            .setArtworkUri(
-                                                Uri.parse(
-                                                    if (it.thumbnail != null) it.thumbnail!!.replace(
-                                                        "\\",
-                                                        ""
-                                                    ).replace(
-                                                        "http",
-                                                        "https"
-                                                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
-                                                )
-                                            )
-
-                                            .build()
-                                    ).build()
-                            }
-
-                        )
-                    }
-                }
-
+            val editorial: Editorial? = try {
+                EditorialRepository.getEditorialInformation()
+            } catch (e: Exception) {
+                null
             }
-            LibraryResult.ofItemList(itemResult, LibraryParams.Builder().setExtras(
-                Bundle().apply {
-                    putInt(
-                        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
-                        2
-                    )
+            if (editorial != null) {
+                val liveInformation: Map<String, String> =
+                    LiveRepository.getLiveInformation()
+                if (editorial.diffusions != null) {
+                    for (d in editorial.diffusions!!) {
+
+                        val diffusion = d as Diffusion
+                        if (liveInformation.containsKey(diffusion.flux)) {
+                            val nvs = NvsRepository.getNvsByCode(
+                                liveInformation[diffusion.flux]!!
+                            )
+                            if (liveInformation.containsKey(diffusion.flux) && diffusion.uid_referentiel == nvs.getMeetingID()) {
+                                withContext(Dispatchers.Main) {
+                                    itemResult.add(
+                                        MediaItem.Builder()
+                                            .setMimeType(MimeTypes.APPLICATION_M3U8)
+                                            .setMediaId(diffusion.uid_referentiel ?: "0")
+                                            .setUri(Uri.parse("https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"))
+                                            .setMediaMetadata(
+                                                MediaMetadata.Builder()
+                                                    .setIsPlayable(true)
+                                                    .setTitle(
+                                                        diffusion.libelle
+                                                    ).setSubtitle(diffusion.lieu ?: "")
+                                                    .setDescription(
+                                                        cleanDescription(diffusion.sujet)
+                                                            ?: ""
+                                                    )
+                                                    .setArtworkUri(
+                                                        Uri.parse(if (diffusion.id_organe != null) "https://videos.assemblee-nationale.fr/live/images/" + diffusion.id_organe + ".jpg" else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg")
+                                                    )
+
+                                                    .build()
+                                            ).build()
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            ).build())
-        }.asListenableFuture()
+            }
+        }
+        return itemResult
+    }
+
+
+    @UnstableApi
+    private suspend fun handleReplay(): ArrayList<MediaItem> {
+        val itemResult: ArrayList<MediaItem> = arrayListOf()
+        supervisorScope {
+            val eventSearches: List<EventSearch> = try {
+                EventSearchRepository.findEventSearchByParams(
+                    hashMapOf<EventSearchQueryParams, String>()
+                )
+            } catch (e: Exception) {
+                arrayListOf()
+            }
+
+            itemResult.addAll(
+                eventSearches.map {
+                    MediaItem.Builder()
+                        .setMimeType(MimeTypes.APPLICATION_M3U8)
+                        .setMediaId(UUID.randomUUID().toString())
+                        .setUri("TODO")
+                        .setMediaMetadata(
+                            MediaMetadata.Builder()
+                                .setIsPlayable(true)
+                                .setTitle(
+                                    it.title
+                                )
+                                .setDescription(
+                                    cleanDescription(it.description)
+                                        ?: ""
+                                )
+                                .setArtworkUri(
+                                    Uri.parse(
+                                        if (it.thumbnail != null) it.thumbnail!!.replace(
+                                            "\\",
+                                            ""
+                                        ).replace(
+                                            "http",
+                                            "https"
+                                        ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
+                                    )
+                                )
+
+                                .build()
+                        ).build()
+                }
+
+            )
+        }
+        return itemResult
+
     }
 
     @UnstableApi
