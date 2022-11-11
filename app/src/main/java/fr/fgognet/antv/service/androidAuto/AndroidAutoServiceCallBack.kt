@@ -35,6 +35,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
     // TAG
     private val TAG = "ANTV/AndroidAutoServiceCallBack"
 
+
     @UnstableApi
     override fun onGetLibraryRoot(
         session: MediaLibraryService.MediaLibrarySession,
@@ -45,7 +46,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
         val result = LibraryResult.ofItem(
             MediaItem.Builder().setMediaId("root")
                 .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaMetadata(
-                    MediaMetadata.Builder().setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                    MediaMetadata.Builder().setFolderType(FOLDER_TYPE_NONE)
                         .setIsPlayable(false).build()
                 ).build(), null
         )
@@ -65,19 +66,89 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
         Log.v(TAG, "onGetChildren")
         return when (parentId) {
             "root" -> handleRoot()
-            "live" -> runAsyncMediacall {
+            "live" -> runAsyncMediacall(Bundle().apply {
+                putInt(
+                    "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
+                    2
+                )
+            }) {
                 handleLive()
             }
-            "replay" -> runAsyncMediacall {
+            "replay" -> runAsyncMediacall(Bundle().apply {
+                putInt(
+                    "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
+                    2
+                )
+            }) {
                 handleReplay()
             }
-            else -> handleRoot()
+            else -> {
+                Log.e(TAG, parentId)
+                super.onGetChildren(session, browser, parentId, page, pageSize, params)
+            }
         }
-
     }
+
+    override fun onAddMediaItems(
+        mediaSession: MediaSession,
+        controller: MediaSession.ControllerInfo,
+        mediaItems: MutableList<MediaItem>
+    ): ListenableFuture<MutableList<MediaItem>> {
+        Log.v(TAG, "onAddMediaItems")
+        if (mediaItems.size != 1) {
+            return Futures.immediateFuture(
+                mediaItems
+            )
+        }
+        val future = MainScope().async {
+            val item = mediaItems[0]
+            val nvs = NvsRepository.getNvsByCode(
+                item.mediaId
+            )
+            Log.d(TAG, item.mediaMetadata.title.toString())
+            Log.d(TAG, item.requestMetadata.extras?.getString("test") ?: "null")
+            Log.d(TAG, nvs.getReplayURL().toString())
+            mutableListOf(
+                MediaItem.Builder()
+                    .setMimeType(MimeTypes.APPLICATION_M3U8)
+                    .setMediaId(UUID.randomUUID().toString())
+                    .setUri(nvs.getReplayURL())
+                    .setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setIsPlayable(true)
+                            .setFolderType(FOLDER_TYPE_NONE)
+                            .setTitle(
+                                "title"
+                            )
+                            .setDescription(
+                                "desc"
+                            )
+                            .setArtworkUri(
+                                Uri.parse(
+                                    "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
+                                )
+                            )
+
+                            .build()
+                    ).build()
+            )
+        }.asListenableFuture()
+        val callBack = object : FutureCallback<MutableList<MediaItem>> {
+            override fun onSuccess(result: MutableList<MediaItem>?) {
+            }
+
+            override fun onFailure(t: Throwable) {
+                Log.e(TAG, t.stackTraceToString())
+            }
+        }
+        Futures.addCallback(future, callBack, MoreExecutors.directExecutor())
+        return future
+    }
+
 
     @UnstableApi
     private fun handleRoot(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Log.v(TAG, "handleRoot")
         return Futures.immediateFuture(
             LibraryResult.ofItemList(
                 arrayListOf(
@@ -97,17 +168,18 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
     }
 
     @UnstableApi
-    private fun runAsyncMediacall(function: suspend () -> ArrayList<MediaItem>): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+    private fun runAsyncMediacall(
+        extra: Bundle,
+        function: suspend () -> ArrayList<MediaItem>
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Log.v(TAG, "runAsyncMediacall")
         val future = MainScope().async {
 
-            LibraryResult.ofItemList(function(), LibraryParams.Builder().setExtras(
-                Bundle().apply {
-                    putInt(
-                        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
-                        2
-                    )
-                }
-            ).build())
+            LibraryResult.ofItemList(
+                function(), LibraryParams.Builder().setExtras(
+                    extra
+                ).build()
+            )
         }.asListenableFuture()
         val callBack = object : FutureCallback<LibraryResult<ImmutableList<MediaItem>>> {
             override fun onSuccess(result: LibraryResult<ImmutableList<MediaItem>>?) {}
@@ -123,6 +195,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
 
     @UnstableApi
     private suspend fun handleLive(): ArrayList<MediaItem> {
+        Log.v(TAG, "handleLive")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
         supervisorScope {
 
@@ -149,6 +222,12 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                                             .setMimeType(MimeTypes.APPLICATION_M3U8)
                                             .setMediaId(diffusion.uid_referentiel ?: "0")
                                             .setUri(Uri.parse("https://videos.assemblee-nationale.fr/live/live${diffusion.flux}/playlist${diffusion.flux}.m3u8"))
+                                            .setRequestMetadata(
+                                                MediaItem.RequestMetadata.Builder()
+                                                    .setExtras(Bundle().apply {
+                                                        putString("test", "valuetest")
+                                                    }).build()
+                                            )
                                             .setMediaMetadata(
                                                 MediaMetadata.Builder()
                                                     .setIsPlayable(true)
@@ -180,6 +259,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
 
     @UnstableApi
     private suspend fun handleReplay(): ArrayList<MediaItem> {
+        Log.v(TAG, "handleReplay")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
         supervisorScope {
             val eventSearches: List<EventSearch> = try {
@@ -194,8 +274,8 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                 eventSearches.map {
                     MediaItem.Builder()
                         .setMimeType(MimeTypes.APPLICATION_M3U8)
-                        .setMediaId(UUID.randomUUID().toString())
-                        .setUri("TODO")
+                        .setMediaId(it.url ?: UUID.randomUUID().toString())
+                        .setUri("")
                         .setMediaMetadata(
                             MediaMetadata.Builder()
                                 .setIsPlayable(true)
@@ -231,6 +311,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
 
     @UnstableApi
     private fun buildFolder(mediaId: String, title: String): MediaItem {
+        Log.v(TAG, "buildFolder")
         return MediaItem.Builder()
             .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaId(mediaId)
             .setMediaMetadata(
