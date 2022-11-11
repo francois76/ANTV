@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MediaMetadata.FOLDER_TYPE_NONE
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
@@ -151,6 +152,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                                             .setMediaMetadata(
                                                 MediaMetadata.Builder()
                                                     .setIsPlayable(true)
+                                                    .setFolderType(FOLDER_TYPE_NONE)
                                                     .setTitle(
                                                         diffusion.libelle
                                                     ).setSubtitle(diffusion.lieu ?: "")
@@ -197,6 +199,7 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
                         .setMediaMetadata(
                             MediaMetadata.Builder()
                                 .setIsPlayable(true)
+                                .setFolderType(FOLDER_TYPE_NONE)
                                 .setTitle(
                                     it.title
                                 )
