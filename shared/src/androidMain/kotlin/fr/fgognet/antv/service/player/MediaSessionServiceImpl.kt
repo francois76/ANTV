@@ -19,6 +19,7 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import java.util.*
 
 
 class MediaSessionServiceImpl : MediaSessionService() {
@@ -61,7 +62,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
             }
             val servicePlayerListener = MediaSessionServiceListener(this)
             mediaSession =
-                MediaSession.Builder(this, newPlayer)
+                MediaSession.Builder(this, newPlayer).setId(UUID.randomUUID().toString())
                     .setSessionActivity(TaskStackBuilder.create(this).run {
                         addNextIntentWithParentStack(
                             Intent(
