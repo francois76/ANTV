@@ -13,8 +13,8 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
+import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.ListenableFuture
@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import java.util.*
 
 
-class MediaSessionServiceImpl : MediaSessionService() {
+class MediaSessionServiceImpl : MediaLibraryService() {
     // TAG
     private val TAG = "ANTV/MediaSessionServiceImpl"
 
@@ -31,7 +31,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
     private lateinit var castPlayer: CastPlayer
 
     // mediaSession
-    private var mediaSession: MediaSession? = null
+    private var mediaSession: MediaLibrarySession? = null
 
 
     @UnstableApi
@@ -62,7 +62,8 @@ class MediaSessionServiceImpl : MediaSessionService() {
             }
             val servicePlayerListener = MediaSessionServiceListener(this)
             mediaSession =
-                MediaSession.Builder(this, newPlayer).setId(UUID.randomUUID().toString())
+                MediaLibrarySession.Builder(this, newPlayer, MediaSessionServiceListener(this))
+                    .setId(UUID.randomUUID().toString())
                     .setSessionActivity(TaskStackBuilder.create(this).run {
                         addNextIntentWithParentStack(
                             Intent(
@@ -74,7 +75,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
                             0,
                             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                         )
-                    }).setCallback(servicePlayerListener)
+                    })
                     .build()
             castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         }
@@ -98,7 +99,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
         super.onDestroy()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? =
         mediaSession
 
 
