@@ -17,11 +17,15 @@ import com.google.common.util.concurrent.ListenableFuture
 import fr.fgognet.antv.external.editorial.Diffusion
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
+import fr.fgognet.antv.external.eventSearch.EventSearch
+import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
+import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.utils.cleanDescription
 import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.asListenableFuture
+import java.util.*
 
 class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callback {
 
@@ -166,20 +170,69 @@ class AndroidAutoServiceCallBack : MediaLibraryService.MediaLibrarySession.Callb
 
     @UnstableApi
     private fun handleReplay(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        val itemResult: List<MediaItem> = arrayListOf()
-        return Futures.immediateFuture(
-            LibraryResult.ofItemList(
-                itemResult,
-                LibraryParams.Builder().setExtras(
-                    Bundle().apply {
-                        putInt(
-                            "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
-                            2
+        return MainScope().async {
+            val itemResult: ArrayList<MediaItem> = arrayListOf()
+            supervisorScope {
+                withContext(Dispatchers.IO) {
+                    val eventSearches: List<EventSearch> = try {
+                        EventSearchRepository.findEventSearchByParams(
+                            hashMapOf<EventSearchQueryParams, String>()
+                        )
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.toString())
+                        arrayListOf()
+                    }
+                    withContext(Dispatchers.Main) {
+                        Log.i(
+                            TAG, "dispatching regenerated view"
+                        )
+
+                        itemResult.addAll(
+                            eventSearches.map {
+                                MediaItem.Builder()
+                                    .setMimeType(MimeTypes.APPLICATION_M3U8)
+                                    .setMediaId(UUID.randomUUID().toString())
+                                    .setUri("TODO")
+                                    .setMediaMetadata(
+                                        MediaMetadata.Builder()
+                                            .setIsPlayable(true)
+                                            .setTitle(
+                                                it.title
+                                            )
+                                            .setDescription(
+                                                cleanDescription(it.description)
+                                                    ?: ""
+                                            )
+                                            .setArtworkUri(
+                                                Uri.parse(
+                                                    if (it.thumbnail != null) it.thumbnail!!.replace(
+                                                        "\\",
+                                                        ""
+                                                    ).replace(
+                                                        "http",
+                                                        "https"
+                                                    ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg"
+                                                )
+                                            )
+
+                                            .build()
+                                    ).build()
+                            }
+
                         )
                     }
-                ).build()
-            )
-        )
+                }
+
+            }
+            LibraryResult.ofItemList(itemResult, LibraryParams.Builder().setExtras(
+                Bundle().apply {
+                    putInt(
+                        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
+                        2
+                    )
+                }
+            ).build())
+        }.asListenableFuture()
     }
 
     @UnstableApi
