@@ -73,7 +73,7 @@ class ReplayViewModel :
                                     "http",
                                     "https"
                                 ) else "https://videos.assemblee-nationale.fr/Datas/an/12053682_62cebe5145c82/files/S%C3%A9ance.jpg",
-                                nvsCode = it.url ?: "",
+                                nvsCode = it.url?.replace("/", "") ?: "",
                                 nvsUrl = null,
                                 subTitle = null,
                                 buttonEnabled = false
