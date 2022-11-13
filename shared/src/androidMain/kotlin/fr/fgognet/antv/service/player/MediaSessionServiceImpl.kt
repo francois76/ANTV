@@ -7,7 +7,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.DefaultMediaItemConverter
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -40,6 +42,7 @@ class MediaSessionServiceImpl : MediaLibraryService() {
         Log.v(TAG, "onCreate")
         localPlayer =
             ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
+                .setAudioAttributes(AudioAttributes.Builder().setUsage(USAGE_MEDIA).build(), true)
                 .build()
         val servicePlayerListener = MediaSessionServiceListener(this)
         mediaSession =
