@@ -41,6 +41,23 @@ class MediaSessionServiceImpl : MediaLibraryService() {
         localPlayer =
             ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
                 .build()
+        val servicePlayerListener = MediaSessionServiceListener(this)
+        mediaSession =
+            MediaLibrarySession.Builder(this, localPlayer, MediaSessionServiceListener(this))
+                .setId(UUID.randomUUID().toString())
+                .setSessionActivity(TaskStackBuilder.create(this).run {
+                    addNextIntentWithParentStack(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("antv://player/" + localPlayer.mediaMetadata.title)
+                        )
+                    )
+                    getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                })
+                .build()
         CastContext.getSharedInstance(
             applicationContext,
             MoreExecutors.directExecutor()
@@ -55,28 +72,9 @@ class MediaSessionServiceImpl : MediaLibraryService() {
                     else -> false
                 }
             }
-            val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
-                castPlayer
-            } else {
-                localPlayer
+            if (castPlayer.isCastSessionAvailable) {
+                setCurrentPlayer(castPlayer)
             }
-            val servicePlayerListener = MediaSessionServiceListener(this)
-            mediaSession =
-                MediaLibrarySession.Builder(this, newPlayer, MediaSessionServiceListener(this))
-                    .setId(UUID.randomUUID().toString())
-                    .setSessionActivity(TaskStackBuilder.create(this).run {
-                        addNextIntentWithParentStack(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("antv://player/" + newPlayer.mediaMetadata.title)
-                            )
-                        )
-                        getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-                    })
-                    .build()
             castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         }
 
