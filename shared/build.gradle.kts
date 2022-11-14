@@ -39,10 +39,8 @@ kotlin {
                 implementation(libs.play.services.cast.framework)
                 implementation(libs.bundles.navigation)
                 implementation(libs.kotlinx.coroutines.guava)
-                implementation("com.google.guava:guava:31.0.1-android")
-
-                // To use CallbackToFutureAdapter
-                implementation("androidx.concurrent:concurrent-futures:1.1.0")
+                implementation(libs.guava)
+                implementation(libs.concurrent.futures)
             }
         }
         val macosArm64Main by getting

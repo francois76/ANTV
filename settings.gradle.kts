@@ -16,8 +16,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         // application dependancies
         create("antvLibs") {
-            version("version", "1.0.1")
-            version("versionNumber", "8")
+            version("version", "1.1.0")
+            version("versionNumber", "9")
             version("sdk-compile", "33")
             version("sdk-min", "26")
             version("sdk-target", "33")
@@ -70,19 +70,24 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/lifecycle
             version(
                 "material3",
-                "1.0.0"
+                "1.0.1"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-material3
             version(
                 "compose-theme-adapter-3",
                 "1.0.21"
             ) // https://github.com/material-components/material-components-android-compose-theme-adapter/releases
+            version("guava", "31.1-android") // https://github.com/google/guava/releases
+            version(
+                "concurrent-futures",
+                "1.1.0"
+            ) // https://developer.android.com/jetpack/androidx/releases/concurrent
             version(
                 "activity-compose",
                 "1.6.1"
             ) // https://developer.android.com/jetpack/androidx/releases/activity
 
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
-            version("compose", "1.3.0")
+            version("compose", "1.3.1")
             version(
                 "compose-compiler",
                 "1.3.2"
@@ -121,12 +126,14 @@ dependencyResolutionManagement {
             hashMapOf(
                 "napier" to "io.github.aakira",
                 "coil-compose" to "io.coil-kt",
+                "guava" to "com.google.guava",
                 "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
                 "kotlinx-coroutines-guava" to "org.jetbrains.kotlinx",
                 "compose-theme-adapter-3" to "com.google.android.material",
                 "activity-compose" to "androidx.activity",
+                "concurrent-futures" to "androidx.concurrent",
                 "core-ktx" to "androidx.core"
             ).forEach {
                 library(it.key, it.value, it.key).versionRef(it.key)
