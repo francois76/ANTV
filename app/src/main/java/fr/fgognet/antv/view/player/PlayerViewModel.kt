@@ -8,6 +8,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
@@ -18,6 +19,7 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.repository.VideoDao
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
+import fr.fgognet.antv.service.player.MediaSessionServiceListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -130,6 +132,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
+    @UnstableApi
     fun loadMedia(title: String?) {
         Log.v(TAG, "loadMedia")
         if (title == null) {
@@ -156,6 +159,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
+    @UnstableApi
     private fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
         if (title == playerData.value.title) {
@@ -180,17 +184,18 @@ class PlayerViewModel : ViewModel(), Player.Listener {
             }
         } else {
             //this is not the full mediaItem here
-            MediaSessionServiceImpl.controller?.setMediaItem(
-                MediaItem.Builder()
-                    .setMediaId(entity.url)
-                    .setMediaMetadata(
-                        MediaMetadata.Builder().setTitle(entity.title)
-                            .setDescription(entity.description)
-                            .setArtworkUri(Uri.parse(entity.imageCode))
-                            .build()
-                    )
-                    .build()
-            )
+            val item = MediaItem.Builder()
+                .setMediaId(entity.url)
+                .setUri(entity.url)
+                .setMediaMetadata(
+                    MediaMetadata.Builder().setTitle(entity.title)
+                        .setDescription(entity.description)
+                        .setArtworkUri(Uri.parse(entity.imageCode))
+                        .build()
+                )
+                .build()
+            MediaSessionServiceListener.currentItems = mapOf(entity.url to item)
+            MediaSessionServiceImpl.controller?.setMediaItem(item)
             MediaSessionServiceImpl.controller?.prepare()
             MediaSessionServiceImpl.controller?.play()
 
