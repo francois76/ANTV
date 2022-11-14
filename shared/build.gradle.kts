@@ -38,6 +38,9 @@ kotlin {
                 implementation(libs.bundles.media3)
                 implementation(libs.play.services.cast.framework)
                 implementation(libs.bundles.navigation)
+                implementation(libs.kotlinx.coroutines.guava)
+                implementation(libs.guava)
+                implementation(libs.concurrent.futures)
             }
         }
         val macosArm64Main by getting

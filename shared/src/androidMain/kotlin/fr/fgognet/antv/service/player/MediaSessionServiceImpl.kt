@@ -7,21 +7,24 @@ import android.net.Uri
 import android.util.Log
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.DefaultMediaItemConverter
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaController
+import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaSessionService
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import java.util.*
 
 
-class MediaSessionServiceImpl : MediaSessionService() {
+class MediaSessionServiceImpl : MediaLibraryService() {
     // TAG
     private val TAG = "ANTV/MediaSessionServiceImpl"
 
@@ -30,7 +33,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
     private lateinit var castPlayer: CastPlayer
 
     // mediaSession
-    private var mediaSession: MediaSession? = null
+    private var mediaSession: MediaLibrarySession? = null
 
 
     @UnstableApi
@@ -39,6 +42,24 @@ class MediaSessionServiceImpl : MediaSessionService() {
         Log.v(TAG, "onCreate")
         localPlayer =
             ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
+                .setAudioAttributes(AudioAttributes.Builder().setUsage(USAGE_MEDIA).build(), true)
+                .build()
+        val servicePlayerListener = MediaSessionServiceListener(this)
+        mediaSession =
+            MediaLibrarySession.Builder(this, localPlayer, MediaSessionServiceListener(this))
+                .setId(UUID.randomUUID().toString())
+                .setSessionActivity(TaskStackBuilder.create(this).run {
+                    addNextIntentWithParentStack(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("antv://player/" + localPlayer.mediaMetadata.title)
+                        )
+                    )
+                    getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                })
                 .build()
         CastContext.getSharedInstance(
             applicationContext,
@@ -54,27 +75,9 @@ class MediaSessionServiceImpl : MediaSessionService() {
                     else -> false
                 }
             }
-            val newPlayer: Player = if (castPlayer.isCastSessionAvailable) {
-                castPlayer
-            } else {
-                localPlayer
+            if (castPlayer.isCastSessionAvailable) {
+                setCurrentPlayer(castPlayer)
             }
-            val servicePlayerListener = MediaSessionServiceListener(this)
-            mediaSession =
-                MediaSession.Builder(this, newPlayer)
-                    .setSessionActivity(TaskStackBuilder.create(this).run {
-                        addNextIntentWithParentStack(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("antv://player/" + newPlayer.mediaMetadata.title)
-                            )
-                        )
-                        getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-                    }).setCallback(servicePlayerListener)
-                    .build()
             castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         }
 
@@ -97,7 +100,7 @@ class MediaSessionServiceImpl : MediaSessionService() {
         super.onDestroy()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? =
         mediaSession
 
 
