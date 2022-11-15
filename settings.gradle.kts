@@ -16,8 +16,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         // application dependancies
         create("antvLibs") {
-            version("version", "1.1.0")
-            version("versionNumber", "9")
+            version("version", "1.1.1")
+            version("versionNumber", "10")
             version("sdk-compile", "33")
             version("sdk-min", "26")
             version("sdk-target", "33")
