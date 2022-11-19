@@ -35,17 +35,22 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
+        Log.v(TAG, this.hashCode().toString())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val builder = PictureInPictureParams.Builder()
             builder.setAutoEnterEnabled(isPlaying && !MediaSessionServiceImpl.isCasting)
-            this.setPictureInPictureParams(builder.build())
+            if (this.isTaskRoot) {
+                this.setPictureInPictureParams(builder.build())
+            }
         }
     }
 
     override fun onDestroy() {
         Log.v(TAG, "onDestroy")
+        Log.v(TAG, this.hashCode().toString())
         MediaSessionServiceImpl.controller?.removeListener(this)
         if (isFinishing) {
+            Log.v(TAG, "finishing")
             MediaSessionServiceImpl.controller?.release()
             MediaSessionServiceImpl.controllerFuture = null
         }
