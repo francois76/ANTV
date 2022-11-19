@@ -68,6 +68,40 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         return Futures.immediateFuture(result)
     }
 
+    override fun onSearch(
+        session: MediaLibraryService.MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        params: MediaLibraryService.LibraryParams?
+    ): ListenableFuture<LibraryResult<Void>> {
+        Log.v(TAG, "onSearch")
+        session.notifySearchResultChanged(browser, query, 0, params)
+        return Futures.immediateFuture(
+            LibraryResult.ofVoid(
+                MediaLibraryService.LibraryParams.Builder().setRecent(true).build()
+            )
+        )
+    }
+
+    override fun onGetSearchResult(
+        session: MediaLibraryService.MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        page: Int,
+        pageSize: Int,
+        params: MediaLibraryService.LibraryParams?
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Log.v(TAG, "onGetSearchResult")
+        return runAsyncMediacall(Bundle().apply {
+            putInt(
+                "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
+                2
+            )
+        }) {
+            handleReplay()
+        }
+    }
+
 
     @UnstableApi
     override fun onGetChildren(
@@ -114,7 +148,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         item = item?.buildUpon()?.setMimeType(MimeTypes.APPLICATION_M3U8)?.build()
         if (mediaItems.size != 1 || item == null) {
             return Futures.immediateFuture(
-                mediaItems
+                arrayListOf()
             )
         }
         if (item.mediaId == mediaSession.player.currentMediaItem?.mediaId) {
