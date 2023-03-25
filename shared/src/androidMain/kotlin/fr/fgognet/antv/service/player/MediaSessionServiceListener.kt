@@ -7,7 +7,6 @@ import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
@@ -33,7 +32,6 @@ import java.util.*
 
 private const val TAG = "ANTV/MediaSessionServiceListener"
 
-@UnstableApi
 class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) :
     SessionAvailabilityListener,
     MediaLibraryService.MediaLibrarySession.Callback {
@@ -51,7 +49,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
 
-    @UnstableApi
     override fun onGetLibraryRoot(
         session: MediaLibraryService.MediaLibrarySession,
         browser: MediaSession.ControllerInfo,
@@ -103,7 +100,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
 
-    @UnstableApi
     override fun onGetChildren(
         session: MediaLibraryService.MediaLibrarySession,
         browser: MediaSession.ControllerInfo,
@@ -185,7 +181,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
 
-    @UnstableApi
     private fun handleRoot(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         Log.v(TAG, "handleRoot")
         return Futures.immediateFuture(
@@ -206,7 +201,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         )
     }
 
-    @UnstableApi
     private fun runAsyncMediacall(
         extra: Bundle,
         function: suspend () -> ArrayList<MediaItem>
@@ -235,7 +229,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
 
-    @UnstableApi
     private suspend fun handleLive(): ArrayList<MediaItem> {
         Log.v(TAG, "handleLive")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
@@ -289,7 +282,6 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
 
-    @UnstableApi
     private suspend fun handleReplay(): ArrayList<MediaItem> {
         Log.v(TAG, "handleReplay")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
@@ -336,8 +328,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         return itemResult
 
     }
-
-    @UnstableApi
+    
     private fun buildFolder(mediaId: String, title: String): MediaItem {
         Log.v(TAG, "buildFolder")
         return MediaItem.Builder()

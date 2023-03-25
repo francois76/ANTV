@@ -9,17 +9,17 @@ import androidx.compose.runtime.Composable
 @Composable
 fun buildColors(context: Context): ColorScheme {
     val isInDarkMode = isSystemInDarkTheme()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         val scheme = when {
             isInDarkMode -> dynamicDarkColorScheme(context)
             else -> dynamicLightColorScheme(context)
         }
-        return scheme
+        scheme
     } else {
         val scheme = when {
             isInDarkMode -> darkColorScheme()
             else -> lightColorScheme()
         }
-        return scheme
+        scheme
     }
 }

@@ -1,7 +1,7 @@
 package fr.fgognet.antv.external.nvs
 
+import fr.fgognet.antv.config.MyPolicy
 import fr.fgognet.antv.config.httpClient
-import fr.fgognet.antv.config.no_handler
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -32,7 +32,7 @@ object NvsRepository {
         val format = XML {
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
-            unknownChildHandler = no_handler
+            policy = MyPolicy
 
         }
         return format.decodeFromString(resultString)

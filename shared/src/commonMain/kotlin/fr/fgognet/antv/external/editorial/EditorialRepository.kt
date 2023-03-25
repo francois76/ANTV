@@ -2,8 +2,8 @@ package fr.fgognet.antv.external.editorial
 
 import fr.fgognet.antv.config.Config
 import fr.fgognet.antv.config.Environment
+import fr.fgognet.antv.config.MyPolicy
 import fr.fgognet.antv.config.httpClient
-import fr.fgognet.antv.config.no_handler
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -20,6 +20,7 @@ import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 
 private const val TAG = "ANTV/EditorialRepository"
+
 
 object EditorialRepository {
 
@@ -99,7 +100,7 @@ object EditorialRepository {
                 }) {
                     xmlVersion = XmlVersion.XML10
                     xmlDeclMode = XmlDeclMode.Charset
-                    unknownChildHandler = no_handler
+                    policy = MyPolicy
                     autoPolymorphic = true
 
                 }
