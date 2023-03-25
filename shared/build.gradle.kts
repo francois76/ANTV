@@ -10,12 +10,51 @@ plugins {
 kotlin {
     android()
     listOf(
-        iosArm64(),
         iosSimulatorArm64(),
-        macosArm64()
+        iosArm64(),
+        macosArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+        }
+    }
+
+    // See https://youtrack.jetbrains.com/issue/KT-55751
+    val myAttribute = Attribute.of("myOwnAttribute", String::class.java)
+
+// replace releaseFrameworkIosFat by the name of the first configuration that conflicts
+    configurations.named("releaseFrameworkIosFat").configure {
+        attributes {
+            // put a unique attribute
+            attribute(myAttribute, "release-all")
+        }
+    }
+
+// replace debugFrameworkIosFat by the name of the second configuration that conflicts
+    configurations.named("debugFrameworkIosFat").configure {
+        attributes {
+            attribute(myAttribute, "debug-all")
+        }
+    }
+
+    // replace releaseFrameworkIosFat by the name of the first configuration that conflicts
+    configurations.named("releaseFrameworkOsxFat").configure {
+        attributes {
+            // put a unique attribute
+            attribute(myAttribute, "release-all-osx")
+        }
+    }
+
+// replace debugFrameworkIosFat by the name of the second configuration that conflicts
+    configurations.named("releaseFrameworkMacosArm64").configure {
+        attributes {
+            attribute(myAttribute, "release-all-macos")
+        }
+    }
+    // replace debugFrameworkIosFat by the name of the second configuration that conflicts
+    configurations.named("debugFrameworkMacosArm64").configure {
+        attributes {
+            attribute(myAttribute, "debug-all-macos")
         }
     }
 
@@ -44,12 +83,12 @@ kotlin {
             }
         }
         val macosArm64Main by getting
-        val iosArm64Main by getting
+        // val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
             macosArm64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
+            // iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
     }
@@ -57,6 +96,10 @@ kotlin {
 
 android {
     namespace = "fr.fgognet.antv"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
     compileSdk = antvLibs.versions.sdk.compile.get().toInt()
     sourceSets["main"].apply {
         assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
