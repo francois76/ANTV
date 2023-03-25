@@ -29,7 +29,7 @@ dependencyResolutionManagement {
             /*
             version definition
              */
-            version("moko-resource", "0.20.1") // https://github.com/icerockdev/moko-resources
+            version("moko-resource", "0.21.0") // https://github.com/icerockdev/moko-resources
             version("moko-mvvm", "0.15.0") // https://github.com/icerockdev/moko-mvvm/releases
             version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
