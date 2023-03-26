@@ -77,16 +77,16 @@ dependencies {
     implementation(libs.bundles.media3)
     implementation(libs.bundles.navigation)
     implementation(libs.bundles.material3)
+    implementation(libs.bundles.accompanist)
     implementation(libs.bundles.compose)
+
     // libs
     implementation(libs.moko.resources.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.coil.compose)
     implementation(libs.play.services.cast.framework)
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.process)
-    implementation(libs.compose.theme.adapter.get3())
     implementation(libs.activity.compose)
 
     // testing

@@ -16,8 +16,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         // application dependancies
         create("antvLibs") {
-            version("version", "1.1.0")
-            version("versionNumber", "9")
+            version("version", "1.1.2")
+            version("versionNumber", "11")
             version("sdk-compile", "33")
             version("sdk-min", "26")
             version("sdk-target", "33")
@@ -29,19 +29,19 @@ dependencyResolutionManagement {
             /*
             version definition
              */
-            version("moko-resource", "0.20.1") // https://github.com/icerockdev/moko-resources
-            version("moko-mvvm", "0.14.0") // https://github.com/icerockdev/moko-mvvm/releases
+            version("moko-resource", "0.21.0") // https://github.com/icerockdev/moko-resources
+            version("moko-mvvm", "0.15.0") // https://github.com/icerockdev/moko-mvvm/releases
             version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
-            version("ktor", "2.1.3") // https://github.com/ktorio/ktor/releases
-            version("xmlutil", "0.84.3") // https://github.com/pdvrieze/xmlutil/releases
+            version("ktor", "2.2.4") // https://github.com/ktorio/ktor/releases
+            version("xmlutil", "0.85.0") // https://github.com/pdvrieze/xmlutil/releases
             version(
                 "kotlinx-datetime",
                 "0.4.0"
             ) // https://github.com/Kotlin/kotlinx-datetime/releases
             version(
                 "kotlinx-serialization-json",
-                "1.4.1"
+                "1.5.0"
             ) // https://github.com/Kotlin/kotlinx.serialization/releases
             version(
                 "kotlinx-coroutines-guava",
@@ -58,7 +58,7 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/core
             version(
                 "media3",
-                "1.0.0-beta02"
+                "1.0.0"
             ) // https://developer.android.com/jetpack/androidx/releases/media3
             version(
                 "navigation",
@@ -66,16 +66,12 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/navigation
             version(
                 "lifecycle",
-                "2.5.1"
+                "2.6.1"
             ) // https://developer.android.com/jetpack/androidx/releases/lifecycle
             version(
                 "material3",
                 "1.0.1"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-material3
-            version(
-                "compose-theme-adapter-3",
-                "1.0.21"
-            ) // https://github.com/material-components/material-components-android-compose-theme-adapter/releases
             version("guava", "31.1-android") // https://github.com/google/guava/releases
             version(
                 "concurrent-futures",
@@ -83,23 +79,23 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/concurrent
             version(
                 "activity-compose",
-                "1.6.1"
+                "1.7.0"
             ) // https://developer.android.com/jetpack/androidx/releases/activity
 
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
-            version("compose", "1.3.1")
+            version("compose", "1.4.0")
             version(
                 "compose-compiler",
-                "1.3.2"
+                "1.4.4"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-compiler
             version(
-                "accompanist-systemuicontroller",
-                "0.27.0" // WARNING! depend on version of compose
+                "accompanist",
+                "0.30.0" // WARNING! depend on version of compose
             ) // https://github.com/google/accompanist/releases
-            version("kotlin", "1.7.20")
+            version("kotlin", "1.8.10")
             version(
                 "android-gradle-plugin",
-                "7.3.1"
+                "7.4.2"
             ) // https://developer.android.com/studio/releases/gradle-plugin
 
 
@@ -127,11 +123,9 @@ dependencyResolutionManagement {
                 "napier" to "io.github.aakira",
                 "coil-compose" to "io.coil-kt",
                 "guava" to "com.google.guava",
-                "accompanist-systemuicontroller" to "com.google.accompanist",
                 "junit" to "junit",
                 "play-services-cast-framework" to "com.google.android.gms",
                 "kotlinx-coroutines-guava" to "org.jetbrains.kotlinx",
-                "compose-theme-adapter-3" to "com.google.android.material",
                 "activity-compose" to "androidx.activity",
                 "concurrent-futures" to "androidx.concurrent",
                 "core-ktx" to "androidx.core"
@@ -247,6 +241,22 @@ dependencyResolutionManagement {
                 "material3-window-size-class"
             ).versionRef("material3")
             bundle("material3", listOf("material3-core", "material3-window-size"))
+
+            // accompanist
+            library(
+                "accompanist-systemuicontroller",
+                "com.google.accompanist",
+                "accompanist-systemuicontroller"
+            ).versionRef("accompanist")
+            library(
+                "accompanist-themeadapter-material3",
+                "com.google.accompanist",
+                "accompanist-themeadapter-material3"
+            ).versionRef("accompanist")
+            bundle(
+                "accompanist",
+                listOf("accompanist-systemuicontroller", "accompanist-themeadapter-material3")
+            )
 
             // androidx compose
             val composeDependencies = hashMapOf(

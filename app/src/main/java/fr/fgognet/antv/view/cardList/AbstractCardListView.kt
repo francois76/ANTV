@@ -24,8 +24,8 @@ import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
+import fr.fgognet.antv.view.isPlaying.IsPlaying
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
-import fr.fgognet.antv.view.isPlaying.isPlaying
 
 
 @Composable
@@ -93,7 +93,7 @@ fun <T : CardData> AbstractCardListViewPortrait(
                 .weight(1f)
                 .padding(vertical = 5.dp)
         ) {
-            isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
+            IsPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
         }
     }
 }
@@ -124,7 +124,7 @@ fun <T : CardData> AbstractCardListViewLandscape(
                     .weight(5f)
                     .padding(5.dp)
             ) {
-                isPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
+                IsPlaying(goToCurrentPlaying = goToCurrentPlaying, model = model)
             }
         }
         LazyRow(
