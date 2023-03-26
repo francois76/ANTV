@@ -1,4 +1,4 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://github.com/gradle/gradle/issues/22797 is fixed (should be gradle 8.1)
 plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.com.android.library)
@@ -22,39 +22,13 @@ kotlin {
     // See https://youtrack.jetbrains.com/issue/KT-55751
     val myAttribute = Attribute.of("myOwnAttribute", String::class.java)
 
-// replace releaseFrameworkIosFat by the name of the first configuration that conflicts
-    configurations.named("releaseFrameworkIosFat").configure {
-        attributes {
-            // put a unique attribute
-            attribute(myAttribute, "release-all")
-        }
-    }
 
-// replace debugFrameworkIosFat by the name of the second configuration that conflicts
-    configurations.named("debugFrameworkIosFat").configure {
-        attributes {
-            attribute(myAttribute, "debug-all")
-        }
-    }
-
-    // replace releaseFrameworkIosFat by the name of the first configuration that conflicts
-    configurations.named("releaseFrameworkOsxFat").configure {
-        attributes {
-            // put a unique attribute
-            attribute(myAttribute, "release-all-osx")
-        }
-    }
-
-// replace debugFrameworkIosFat by the name of the second configuration that conflicts
-    configurations.named("releaseFrameworkMacosArm64").configure {
-        attributes {
-            attribute(myAttribute, "release-all-macos")
-        }
-    }
-    // replace debugFrameworkIosFat by the name of the second configuration that conflicts
-    configurations.named("debugFrameworkMacosArm64").configure {
-        attributes {
-            attribute(myAttribute, "debug-all-macos")
+    configurations.names.forEach {
+        configurations.named(it).configure {
+            attributes {
+                // put a unique attribute
+                attribute(myAttribute, it)
+            }
         }
     }
 
