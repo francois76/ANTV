@@ -8,7 +8,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
@@ -64,7 +63,7 @@ class PlayerViewModel : ViewModel(), Player.Listener {
     val controller: LiveData<MediaController?> get() = _controller
 
 
-    fun initialize(c: MediaController?) {
+    private fun initialize(c: MediaController?) {
         Log.v(TAG, "initialize")
         if (c != null) {
             this._controller.value = c
@@ -132,7 +131,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
-    @UnstableApi
     fun loadMedia(title: String?) {
         Log.v(TAG, "loadMedia")
         if (title == null) {
@@ -159,7 +157,6 @@ class PlayerViewModel : ViewModel(), Player.Listener {
         )
     }
 
-    @UnstableApi
     private fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
         if (title == playerData.value.title) {

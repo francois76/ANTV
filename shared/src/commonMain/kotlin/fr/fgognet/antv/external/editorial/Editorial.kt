@@ -71,12 +71,16 @@ class Diffusion(
         if (heure == null || heure == "") {
             return ""
         }
-
-        var firstCharacter = heure?.substring(0, 1)
-        if (firstCharacter == "0") {
-            return heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
-        } else {
-            return heure?.substring(0, 2) + "h" + heure?.substring(2, 4)
+        if (heure?.length == 4) {
+            var firstCharacter = heure?.substring(0, 1)
+            if (firstCharacter == "0") {
+                return heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
+            } else {
+                return heure?.substring(0, 2) + "h" + heure?.substring(2, 4)
+            }
+        } else if (heure?.length == 2) {
+            return heure + "h"
         }
+        return heure ?: ""
     }
 }

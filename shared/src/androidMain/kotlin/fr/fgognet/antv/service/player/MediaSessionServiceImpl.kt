@@ -80,8 +80,6 @@ class MediaSessionServiceImpl : MediaLibraryService() {
             }
             castPlayer.setSessionAvailabilityListener(servicePlayerListener)
         }
-
-
     }
 
 
@@ -156,6 +154,7 @@ class MediaSessionServiceImpl : MediaLibraryService() {
             listenersFuture.forEach {
                 controller?.addListener(it)
             }
+            listenersFuture = arrayListOf()
         }
 
         fun addListener(listener: Player.Listener) {
