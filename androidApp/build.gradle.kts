@@ -80,6 +80,10 @@ android {
     }
 }
 dependencies {
+    implementation(libs.play.services.cast.framework)
+    implementation(libs.bundles.media3)
+    implementation(libs.activity.compose)
+
     // testing
     testImplementation(libs.junit)
     testImplementation(libs.navigation.testing)

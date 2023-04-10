@@ -1,11 +1,11 @@
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
-
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://github.com/gradle/gradle/issues/22797 is fixed (should be gradle 8.1)
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization")
+    id("dev.icerock.mobile.multiplatform-resources")
     id("kotlin-parcelize")
 }
 
@@ -37,20 +37,17 @@ kotlin {
                 implementation(libs.napier)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
+                implementation(libs.moko.resources.compose)
                 implementation(libs.bundles.xmlutil)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.serialization.json)
                 api(libs.moko.resources)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material)
-                //implementation(compose.materialIconsExtended) // TODO not working on iOS for now
+                implementation(compose.ui)
+                implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-
-
             }
         }
         val androidMain by getting {
@@ -59,14 +56,10 @@ kotlin {
                 implementation(libs.bundles.moko.mvvm.android)
                 implementation(libs.bundles.media3)
                 implementation(libs.bundles.navigation)
-                implementation(libs.bundles.material3)
                 implementation(libs.bundles.accompanist)
                 implementation(libs.bundles.compose)
 
                 implementation(libs.ktor.client.okhttp)
-                implementation(libs.bundles.media3)
-                implementation(libs.play.services.cast.framework)
-                implementation(libs.bundles.navigation)
                 implementation(libs.kotlinx.coroutines.guava)
                 implementation(libs.guava)
                 implementation(libs.concurrent.futures)
@@ -95,6 +88,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
+                implementation(compose.preview)
             }
         }
     }
@@ -114,6 +108,11 @@ android {
     defaultConfig {
         minSdk = antvLibs.versions.sdk.min.get().toInt()
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "fr.fgognet.antv"
+    disableStaticFrameworkWarning = true
 }
 
 

@@ -1,25 +1,23 @@
 package fr.fgognet.antv.utils
 
+import androidx.compose.runtime.Composable
 import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.ResourceStringDesc
-import dev.icerock.moko.resources.desc.desc
+import dev.icerock.moko.resources.compose.stringResource
 
 class ResourceOrText(
     var string: String? = null,
-    var stringResource: StringResource? = null,
+    var res: StringResource? = null,
 ) {
-    fun toString(context: Any): String {
+    @Composable
+    override fun toString(): String {
         if (string != null) {
             return string!!
         }
-        if (stringResource == null) {
+        if (res == null) {
             return ""
         }
-        return stringResourceDesc(stringResource!!.desc(), context)
-
+        return stringResource(res!!)
     }
 
 
 }
-
-expect fun stringResourceDesc(r: ResourceStringDesc, context: Any): String
