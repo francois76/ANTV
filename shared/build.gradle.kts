@@ -1,35 +1,33 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://github.com/gradle/gradle/issues/22797 is fixed (should be gradle 8.1)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 plugins {
-    alias(libs.plugins.serialization)
-    alias(libs.plugins.com.android.library)
-    id("org.jetbrains.kotlin.multiplatform")
-    id("dev.icerock.mobile.multiplatform-resources")
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")
+    id("com.android.library")
+    id("org.jetbrains.compose")
+    kotlin("plugin.serialization")
+    id("kotlin-parcelize")
 }
 
+version = antvLibs.versions.version.get()
 
 kotlin {
     android()
-    listOf(
-        iosSimulatorArm64(),
-        iosArm64(),
-        macosArm64(),
-    ).forEach {
-        it.binaries.framework {
+    jvm("desktop")
+    ios()
+    iosSimulatorArm64()
+
+    cocoapods {
+        summary = "Shared code for the sample"
+        homepage = "https://github.com/JetBrains/compose-jb"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
             baseName = "shared"
+            isStatic = true
         }
-    }
-
-    // See https://youtrack.jetbrains.com/issue/KT-55751
-    val myAttribute = Attribute.of("myOwnAttribute", String::class.java)
-
-
-    configurations.names.forEach {
-        configurations.named(it).configure {
-            attributes {
-                // put a unique attribute
-                attribute(myAttribute, it)
-            }
-        }
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -43,10 +41,28 @@ kotlin {
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.serialization.json)
                 api(libs.moko.resources)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                //implementation(compose.materialIconsExtended) // TODO not working on iOS for now
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+
             }
         }
         val androidMain by getting {
             dependencies {
+                // bundles
+                implementation(libs.bundles.moko.mvvm.android)
+                implementation(libs.bundles.media3)
+                implementation(libs.bundles.navigation)
+                implementation(libs.bundles.material3)
+                implementation(libs.bundles.accompanist)
+                implementation(libs.bundles.compose)
+
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.bundles.media3)
                 implementation(libs.play.services.cast.framework)
@@ -54,16 +70,32 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.guava)
                 implementation(libs.guava)
                 implementation(libs.concurrent.futures)
+                implementation(libs.lifecycle.process)
+                implementation(libs.moko.resources.compose)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.coil.compose)
+                implementation(libs.play.services.cast.framework)
+                implementation(libs.core.ktx)
+                implementation(libs.activity.compose)
+
+
             }
         }
-        val macosArm64Main by getting
-        // val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            macosArm64Main.dependsOn(this)
-            // iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        val iosMain by getting {
+            dependencies {
+                // Kotlin Coroutines 1.7.0 contains Dispatchers.IO
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
+            }
+        }
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
+        }
+
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.common)
+            }
         }
     }
 }
@@ -81,13 +113,7 @@ android {
     }
     defaultConfig {
         minSdk = antvLibs.versions.sdk.min.get().toInt()
-        targetSdk = antvLibs.versions.sdk.target.get().toInt()
     }
-}
-
-multiplatformResources {
-    multiplatformResourcesPackage = "fr.fgognet.antv"
-    disableStaticFrameworkWarning = true
 }
 
 

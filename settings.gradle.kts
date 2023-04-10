@@ -1,16 +1,18 @@
-@file:Suppress("UnstableApiUsage")
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        google()
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        google()
     }
+
 }
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven { url = uri("https://jitpack.io") }
     }
     versionCatalogs {
@@ -29,7 +31,7 @@ dependencyResolutionManagement {
             /*
             version definition
              */
-            version("moko-resource", "0.21.0") // https://github.com/icerockdev/moko-resources
+            version("moko-resource", "0.21.1") // https://github.com/icerockdev/moko-resources
             version("moko-mvvm", "0.15.0") // https://github.com/icerockdev/moko-mvvm/releases
             version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
@@ -84,6 +86,7 @@ dependencyResolutionManagement {
 
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
             version("compose", "1.4.0")
+            version("compose-multiplatform", "1.4.0-rc03")
             version(
                 "compose-compiler",
                 "1.4.4"
@@ -115,6 +118,10 @@ dependencyResolutionManagement {
                 "com.android.library",
                 "com.android.library"
             ).versionRef("android-gradle-plugin")
+            plugin(
+                "org.jetbrains.compose",
+                "org.jetbrains.compose"
+            ).versionRef("compose-multiplatform")
 
             /*
             monoline repos
@@ -282,10 +289,9 @@ dependencyResolutionManagement {
         }
     }
 }
+
 rootProject.name = "ANTV"
+
+include(":androidApp")
 include(":shared")
-include(":app")
-
-
-
-
+include(":desktopApp")
