@@ -1,12 +1,12 @@
 package fr.fgognet.antv.view.isPlaying
 
-import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
+import io.github.aakira.napier.Napier
 
 private const val TAG = "ANTV/IsPlayingViewModel"
 
@@ -35,7 +35,7 @@ class IsPlayingViewModel : ViewModel(), Player.Listener {
 
 
     private fun initialize() {
-        Log.v(TAG, "initialize")
+        Napier.v(tag = TAG, message = "initialize")
         MediaSessionServiceImpl.addListener(this)
         if (MediaSessionServiceImpl.controller != null && MediaSessionServiceImpl.currentMediaItem != null) {
             this._isPlayingData.value = IsPlayingData(
@@ -49,7 +49,7 @@ class IsPlayingViewModel : ViewModel(), Player.Listener {
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        Log.v(TAG, "onMediaItemTransition")
+        Napier.v(tag = TAG, message = "onMediaItemTransition")
         if (mediaItem != null) {
             this._isPlayingData.value = IsPlayingData(
                 hasPlayingData = true,

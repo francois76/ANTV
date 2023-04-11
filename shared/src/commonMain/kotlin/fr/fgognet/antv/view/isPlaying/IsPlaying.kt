@@ -11,13 +11,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.R
+import fr.fgognet.antv.widget.painterResource
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {

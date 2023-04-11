@@ -96,7 +96,7 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/59046.jpg",
                     )
                 ),
-                ResourceOrText(stringResource = MR.strings.playlist_description)
+                ResourceOrText(res = MR.strings.playlist_description)
             )
     }
 

@@ -32,7 +32,7 @@ dependencyResolutionManagement {
             version definition
              */
             version("moko-resource", "0.21.1") // https://github.com/icerockdev/moko-resources
-            version("moko-mvvm", "0.15.0") // https://github.com/icerockdev/moko-mvvm/releases
+            version("moko-mvvm", "0.16.0") // https://github.com/icerockdev/moko-mvvm/releases
             version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
             version("ktor", "2.2.4") // https://github.com/ktorio/ktor/releases
@@ -155,23 +155,17 @@ dependencyResolutionManagement {
             /*
             Moko MVVM
              */
-            val mokoMvvmAndroidDependencies = arrayOf(
-                "mvvm-livedata-material",
-                "mvvm-livedata-glide",
-                "mvvm-livedata-swiperefresh",
-                "mvvm-databinding",
-                "mvvm-viewbinding"
-            )
-            val mokoMvvmCoreDependencies = arrayOf(
+
+            val mokoMvvmDependencies = arrayOf(
+                "mvvm-compose",
                 "mvvm-core",
                 "mvvm-livedata",
                 "mvvm-state",
             )
-            listOf(*mokoMvvmAndroidDependencies, *mokoMvvmCoreDependencies).forEach {
+            listOf(*mokoMvvmDependencies).forEach {
                 library(it, "dev.icerock.moko", it).versionRef("moko-mvvm")
             }
-            bundle("moko-mvvm-android", mokoMvvmAndroidDependencies.asList())
-            bundle("moko-mvvm-core", mokoMvvmCoreDependencies.asList())
+            bundle("moko-mvvm", mokoMvvmDependencies.asList())
 
             /*
             Ktor

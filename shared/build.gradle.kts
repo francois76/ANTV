@@ -33,7 +33,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.bundles.moko.mvvm.core)
+                implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
@@ -53,7 +53,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 // bundles
-                implementation(libs.bundles.moko.mvvm.android)
+
                 implementation(libs.bundles.media3)
                 implementation(libs.bundles.navigation)
                 implementation(libs.bundles.accompanist)

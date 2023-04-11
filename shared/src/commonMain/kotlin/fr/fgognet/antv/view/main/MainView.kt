@@ -1,8 +1,5 @@
 package fr.fgognet.antv.view.main
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.height
@@ -11,10 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -28,13 +21,14 @@ import fr.fgognet.antv.MR
 import fr.fgognet.antv.R
 import fr.fgognet.antv.view.utils.HtmlText
 import fr.fgognet.antv.view.utils.buildColors
+import fr.fgognet.antv.widget.getPlatformContext
+import fr.fgognet.antv.widget.painterResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
 @Composable
 fun ANTVApp() {
-    val appContext = LocalContext.current
+    val appContext = getPlatformContext()
     val colorScheme = buildColors(context = appContext)
     MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavController()
@@ -85,7 +79,7 @@ fun ANTVApp() {
                             openDialog = true
                         }) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_baseline_info_24),
+                                painter = painterResource(res = R.drawable.ic_baseline_info_24),
                                 contentDescription = "about"
                             )
                         }
@@ -127,10 +121,7 @@ fun ANTVApp() {
                                 icon = {
                                     Image(
                                         painterResource(
-                                            id = appContext.resources.getIdentifier(
-                                                item?.iconName ?: "ic_baseline_image_24",
-                                                "drawable", appContext.packageName
-                                            )
+                                            res = item?.iconName
                                         ),
                                         contentDescription = stringResource(resource = item?.nameID!!)
                                     )
@@ -163,12 +154,5 @@ fun ANTVApp() {
 }
 
 
-fun Context.findActivity(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
-    }
-    return null
-}
+
 

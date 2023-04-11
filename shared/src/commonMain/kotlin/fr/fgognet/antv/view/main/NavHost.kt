@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
+import io.github.aakira.napier.Napier
 
 const val TAG = "ANTV/ANTVNavHost"
 
@@ -89,7 +89,7 @@ fun ANTVNavHost(
                 }
             )
         }
-        val playerRoute = getRoute(Routes.PLAYER)
+        val playerRoute = allRoutes[Routes.PLAYER]
         composable(
             route = "${Routes.PLAYER.value}/{title}",
             arguments = playerRoute?.arguments!!,
@@ -127,7 +127,7 @@ fun ANTVNavHost(
 
 fun NavHostController.navigateToChild(route: String) =
     this.navigate(route) {
-        Log.d(TAG, "navigate to $route")
+        Napier.d(tag = TAG, message = "navigate to $route")
         launchSingleTop = false
         restoreState = false
     }
@@ -135,7 +135,7 @@ fun NavHostController.navigateToChild(route: String) =
 
 fun NavHostController.navigateToTop(route: String) =
     this.navigate(route) {
-        Log.d(TAG, "navigate to $route")
+        Napier.d(tag = TAG, message = "navigate to $route")
         popUpTo(
             this@navigateToTop.graph.findStartDestination().id
         ) {

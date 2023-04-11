@@ -11,12 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
 import fr.fgognet.antv.R
+import fr.fgognet.antv.widget.painterResource
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
@@ -110,7 +108,7 @@ private fun CenterControls(
             Image(
                 modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.ic_baseline_replay_5_24),
+                painter = painterResource(res = R.drawable.ic_baseline_replay_5_24),
                 contentDescription = "Replay 5 seconds"
             )
         }
@@ -122,13 +120,13 @@ private fun CenterControls(
                 painter =
                 when {
                     state.isPlaying -> {
-                        painterResource(id = R.drawable.ic_baseline_pause_24)
+                        painterResource(res = R.drawable.ic_baseline_pause_24)
                     }
                     state.playbackState == STATE_ENDED -> {
-                        painterResource(id = R.drawable.ic_baseline_replay_24)
+                        painterResource(res = R.drawable.ic_baseline_replay_24)
                     }
                     else -> {
-                        painterResource(id = R.drawable.ic_baseline_play_arrow_24)
+                        painterResource(res = R.drawable.ic_baseline_play_arrow_24)
                     }
                 },
                 contentDescription = "Play/Pause"
@@ -139,7 +137,7 @@ private fun CenterControls(
             Image(
                 modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.ic_baseline_forward_5_24),
+                painter = painterResource(res = R.drawable.ic_baseline_forward_5_24),
                 contentDescription = "Forward 5 seconds"
             )
         }
@@ -208,24 +206,3 @@ fun Long.toHour(): String {
     }
 }
 
-@Composable
-@Preview(widthDp = 941, heightDp = 423, device = Devices.AUTOMOTIVE_1024p)
-fun PlayerControl() {
-    PlayerControls(
-        isVisible = { true },
-        state = PlayerData(
-            title = "lorem ipsum",
-            description = "dolor est",
-            isPlaying = false,
-            isCasting = false,
-            playbackState = 0,
-            bufferedPercentage = 100,
-            currentPosition = 200000,
-            duration = 2000000,
-        ),
-        onReplayClick = { },
-        onForwardClick = { },
-        onPauseToggle = { /*TODO*/ },
-        onSeekChanged = {},
-    )
-}

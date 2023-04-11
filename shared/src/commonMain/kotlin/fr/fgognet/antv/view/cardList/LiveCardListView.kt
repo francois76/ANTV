@@ -45,20 +45,20 @@ fun LiveCardListViewState(
     goToVideo: (url: String, imageCode: String, title: String, description: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
-    val context = LocalContext.current
     AbstractCardListView(
-        title = state?.title?.toString(LocalContext.current)
+        title = state?.title?.toString()
             ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData
+        val title = cardData.title.toString()
         if (cardData.isLive) {
             genericCardData = GenericCardData(
-                title = cardData.title.toString(context = context),
+                title = cardData.title.toString(),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel.toString(context = context),
+                buttonName = cardData.buttonLabel.toString(),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.error,
                 buttonTextColor = Color.White,
@@ -66,10 +66,10 @@ fun LiveCardListViewState(
             )
         } else {
             genericCardData = GenericCardData(
-                title = cardData.title.toString(context = context),
+                title = cardData.title.toString(),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel.toString(context = context),
+                buttonName = cardData.buttonLabel.toString(),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.Black,
@@ -82,7 +82,7 @@ fun LiveCardListViewState(
                 goToVideo(
                     cardData.url ?: "",
                     cardData.imageCode,
-                    cardData.title.toString(context = context),
+                    title,
                     cardData.description,
                 )
             },
