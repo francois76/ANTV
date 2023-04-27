@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.main
 
+import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.StringResource
 import fr.fgognet.antv.MR
 
@@ -15,7 +16,7 @@ enum class Routes(val value: String) {
 abstract class RouteDataRaw constructor(
     var id: String,
     var nameID: StringResource?,
-    var iconName: String?,
+    var iconName: ImageResource?,
     var arguments: List<NamedNavArgument>?,
     var deepLinks: List<NavDeepLink>?
 )
@@ -23,7 +24,7 @@ abstract class RouteDataRaw constructor(
 expect class RouteData(
     id: String,
     nameID: StringResource?,
-    iconName: String?,
+    iconName: ImageResource?,
     argumentsRaw: List<String>?,
 ) : RouteDataRaw
 
@@ -35,19 +36,19 @@ val allRoutes = hashMapOf(
         id = Routes.LIVE.value,
         argumentsRaw = arrayListOf(),
         nameID = MR.strings.menu_live,
-        iconName = "ic_baseline_live_tv_24",
+        iconName = MR.images.ic_baseline_live_tv_24,
     ),
     Routes.PLAYLIST to RouteData(
         id = Routes.PLAYLIST.value,
         argumentsRaw = arrayListOf(),
         nameID = MR.strings.menu_playlist,
-        iconName = "ic_baseline_ondemand_video_24",
+        iconName = MR.images.ic_baseline_ondemand_video_24,
     ),
     Routes.SEARCH to RouteData(
         id = Routes.SEARCH.value,
         argumentsRaw = arrayListOf(),
         nameID = MR.strings.menu_search,
-        iconName = "ic_baseline_search_24",
+        iconName = MR.images.ic_baseline_search_24,
     ),
     Routes.REPLAY to RouteData(
         id = Routes.REPLAY.value,

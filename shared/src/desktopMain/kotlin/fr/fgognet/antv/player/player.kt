@@ -3,7 +3,6 @@ package fr.fgognet.antv.player
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import fr.fgognet.antv.view.player.PlayerControls
-import fr.fgognet.antv.view.player.PlayerData
 
 @Composable
 @Preview

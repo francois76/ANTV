@@ -19,6 +19,17 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
 
+data class PlayerData(
+    val title: String,
+    val description: String,
+    val isPlaying: Boolean,
+    val duration: Long,
+    val currentPosition: Long,
+    val isCasting: Boolean,
+    val bufferedPercentage: Int,
+    val playbackState: Int,
+)
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PlayerControls(
@@ -122,9 +133,11 @@ private fun CenterControls(
                     state.isPlaying -> {
                         painterResource(res = R.drawable.ic_baseline_pause_24)
                     }
+
                     state.playbackState == STATE_ENDED -> {
                         painterResource(res = R.drawable.ic_baseline_replay_24)
                     }
+
                     else -> {
                         painterResource(res = R.drawable.ic_baseline_play_arrow_24)
                     }

@@ -30,17 +30,6 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ANTV/PlayerViewModel"
 
-data class PlayerData(
-    val title: String,
-    val description: String,
-    val isPlaying: Boolean,
-    val duration: Long,
-    val currentPosition: Long,
-    val isCasting: Boolean,
-    val bufferedPercentage: Int,
-    val playbackState: Int,
-)
-
 
 actual class PlayerViewModel : ViewModel(), Player.Listener {
 

@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.main
 
+import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.StringResource
 
 
@@ -8,7 +9,13 @@ actual class NavDeepLink
 actual class RouteData actual constructor(
     id: String,
     nameID: StringResource?,
-    iconName: String?,
+    iconName: ImageResource?,
     argumentsRaw: List<String>?,
-    deepLinksRaw: List<String>?
-) : RouteDataRaw()
+
+    ) : RouteDataRaw(
+    id = id,
+    nameID = nameID,
+    iconName = iconName,
+    arguments = arrayListOf(),
+    deepLinks = arrayListOf()
+)

@@ -16,13 +16,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.cast.framework.CastButtonFactory
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.R
 import fr.fgognet.antv.view.utils.HtmlText
 import fr.fgognet.antv.view.utils.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
-import fr.fgognet.antv.widget.painterResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +78,7 @@ fun ANTVApp() {
                             openDialog = true
                         }) {
                             Image(
-                                painter = painterResource(res = R.drawable.ic_baseline_info_24),
+                                painter = painterResource(imageResource = MR.images.ic_baseline_info_24),
                                 contentDescription = "about"
                             )
                         }
@@ -101,7 +100,7 @@ fun ANTVApp() {
                             }
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_baseline_replay_24),
+                                painter = painterResource(imageResource = MR.images.ic_baseline_replay_24),
                                 contentDescription = "reload"
                             )
                         }
@@ -111,9 +110,9 @@ fun ANTVApp() {
                 if (!(isFullScreen && isOnPlayerScreen == true)) {
                     var selectedItem by rememberSaveable { mutableStateOf(0) }
                     val items = listOf(
-                        getRoute(Routes.LIVE),
-                        getRoute(Routes.PLAYLIST),
-                        getRoute(Routes.SEARCH)
+                        allRoutes[Routes.LIVE],
+                        allRoutes[Routes.PLAYLIST],
+                        allRoutes[Routes.SEARCH]
                     )
                     NavigationBar(modifier = Modifier.height(72.dp)) {
                         items.forEachIndexed { index, item ->
@@ -121,9 +120,9 @@ fun ANTVApp() {
                                 icon = {
                                     Image(
                                         painterResource(
-                                            res = item?.iconName
+                                            imageResource = item?.iconName!!,
                                         ),
-                                        contentDescription = stringResource(resource = item?.nameID!!)
+                                        contentDescription = stringResource(resource = item.nameID!!)
                                     )
                                 },
                                 label = { Text(stringResource(resource = item?.nameID!!)) },

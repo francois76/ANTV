@@ -14,10 +14,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
-import fr.fgognet.antv.R
-import fr.fgognet.antv.widget.painterResource
+import fr.fgognet.antv.MR
+import fr.fgognet.antv.widget.AsyncImage
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
@@ -85,7 +85,7 @@ fun IsPlayingStatePortrait(
                         .fillMaxHeight()
                         .width(60.dp),
                     model = imageCode,
-                    placeholder = painterResource(R.drawable.ic_baseline_image_24),
+                    placeholder = painterResource(MR.images.ic_baseline_image_24),
                     contentDescription = ""
                 )
             }
@@ -134,7 +134,7 @@ fun IsPlayingStateLandscape(
                     modifier = Modifier
                         .fillMaxHeight(),
                     model = imageCode,
-                    placeholder = painterResource(R.drawable.ic_baseline_image_24),
+                    placeholder = painterResource(MR.images.ic_baseline_image_24),
                     contentDescription = ""
                 )
             }
