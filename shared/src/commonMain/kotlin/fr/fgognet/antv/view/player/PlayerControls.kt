@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player.STATE_ENDED
-import fr.fgognet.antv.R
-import fr.fgognet.antv.widget.painterResource
+import dev.icerock.moko.resources.compose.painterResource
+import fr.fgognet.antv.MR
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
@@ -119,7 +119,7 @@ private fun CenterControls(
             Image(
                 modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
-                painter = painterResource(res = R.drawable.ic_baseline_replay_5_24),
+                painter = painterResource(imageResource = MR.images.ic_baseline_replay_5_24),
                 contentDescription = "Replay 5 seconds"
             )
         }
@@ -131,11 +131,11 @@ private fun CenterControls(
                 painter =
                 when {
                     state.isPlaying -> {
-                        painterResource(res = R.drawable.ic_baseline_pause_24)
+                        painterResource(imageResource = MR.images.ic_baseline_pause_24)
                     }
 
                     state.playbackState == STATE_ENDED -> {
-                        painterResource(res = R.drawable.ic_baseline_replay_24)
+                        painterResource(imageResource = MR.images.ic_baseline_replay_24)
                     }
 
                     else -> {
@@ -150,7 +150,7 @@ private fun CenterControls(
             Image(
                 modifier = Modifier.fillMaxSize(0.5f),
                 contentScale = ContentScale.Crop,
-                painter = painterResource(res = R.drawable.ic_baseline_forward_5_24),
+                painter = painterResource(imageResource = MR.images.ic_baseline_forward_5_24),
                 contentDescription = "Forward 5 seconds"
             )
         }
