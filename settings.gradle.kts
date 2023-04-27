@@ -101,7 +101,7 @@ dependencyResolutionManagement {
             version("kotlin", "1.8.20")
             version(
                 "android-gradle-plugin",
-                "7.4.2"
+                "8.0.0"
             ) // https://developer.android.com/studio/releases/gradle-plugin
 
 
