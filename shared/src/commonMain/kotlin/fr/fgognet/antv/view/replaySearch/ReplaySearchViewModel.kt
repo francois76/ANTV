@@ -36,11 +36,11 @@ class ReplaySearchViewModel : ViewModel() {
         queryParams[EventSearchQueryParams.Date] = "$dateMorning-$dateEvening"
         SearchDao.set(
             SearchEntity(
-                label = ResourceOrText(stringResource = MR.strings.search_description),
+                label = ResourceOrText(res = MR.strings.search_description),
                 queryParams = queryParams
             )
         )
-        
+
         Napier.d(
             "search Time: $date",
             tag = TAG

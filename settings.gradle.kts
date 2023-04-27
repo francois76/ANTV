@@ -31,11 +31,11 @@ dependencyResolutionManagement {
             /*
             version definition
              */
-            version("moko-resource", "0.21.1") // https://github.com/icerockdev/moko-resources
-            version("moko-mvvm", "0.16.0") // https://github.com/icerockdev/moko-mvvm/releases
-            version("coil-compose", "2.2.2") // https://coil-kt.github.io/coil/
+            version("moko-resource", "0.22.0") // https://github.com/icerockdev/moko-resources
+            version("moko-mvvm", "0.16.1") // https://github.com/icerockdev/moko-mvvm/releases
+            version("coil-compose", "2.3.0") // https://coil-kt.github.io/coil/
             version("napier", "2.6.1") // https://github.com/AAkira/Napier
-            version("ktor", "2.2.4") // https://github.com/ktorio/ktor/releases
+            version("ktor", "2.3.0") // https://github.com/ktorio/ktor/releases
             version("xmlutil", "0.85.0") // https://github.com/pdvrieze/xmlutil/releases
             version(
                 "kotlinx-datetime",
@@ -52,15 +52,15 @@ dependencyResolutionManagement {
             version("junit", "4.13.2") // depend on intellij
             version(
                 "play-services-cast-framework",
-                "21.2.0"
+                "21.3.0"
             ) // https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
             version(
                 "core-ktx",
-                "1.9.0"
+                "1.10.0"
             ) // https://developer.android.com/jetpack/androidx/releases/core
             version(
                 "media3",
-                "1.0.0"
+                "1.0.1"
             ) // https://developer.android.com/jetpack/androidx/releases/media3
             version(
                 "navigation",
@@ -81,21 +81,24 @@ dependencyResolutionManagement {
             ) // https://developer.android.com/jetpack/androidx/releases/concurrent
             version(
                 "activity-compose",
-                "1.7.0"
+                "1.7.1"
             ) // https://developer.android.com/jetpack/androidx/releases/activity
 
             // compose stack: https://developer.android.com/jetpack/androidx/releases/compose
-            version("compose", "1.4.0")
-            version("compose-multiplatform", "1.4.0-rc03")
+            version("compose", "1.4.2")
+            version(
+                "compose-multiplatform",
+                "1.4.0"
+            ) // https://github.com/JetBrains/compose-multiplatform/releases
             version(
                 "compose-compiler",
-                "1.4.4"
+                "1.4.6"
             ) // https://developer.android.com/jetpack/androidx/releases/compose-compiler
             version(
                 "accompanist",
                 "0.30.0" // WARNING! depend on version of compose
             ) // https://github.com/google/accompanist/releases
-            version("kotlin", "1.8.10")
+            version("kotlin", "1.8.20")
             version(
                 "android-gradle-plugin",
                 "7.4.2"
