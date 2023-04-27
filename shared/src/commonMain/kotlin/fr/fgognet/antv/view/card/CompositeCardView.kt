@@ -1,22 +1,26 @@
 package fr.fgognet.antv.view.card
 
-import android.content.res.Configuration
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.icerock.moko.resources.compose.painterResource
+import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.AsyncImage
 
 data class GenericCardData(
@@ -31,22 +35,21 @@ data class GenericCardData(
 )
 
 @Composable
-fun CompositeCardView(
+expect fun CompositeCardView(
+    data: GenericCardData,
+    buttonClicked: () -> Unit,
+)
+
+@Composable
+fun CompositeCardViewCard(
     data: GenericCardData,
     buttonClicked: () -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
     ElevatedCard(colors = CardDefaults.cardColors()) {
-        when (configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                LandscapeCompositeCardView(data = data, buttonClicked = buttonClicked)
-            }
-            else -> {
-                PortraitCompositeCardView(data = data, buttonClicked = buttonClicked)
-            }
-        }
+        CompositeCardView(data, buttonClicked)
     }
 }
+
 
 @Composable
 fun LandscapeCompositeCardView(
@@ -60,7 +63,7 @@ fun LandscapeCompositeCardView(
                     .fillMaxWidth()
                     .weight(8f)
                     .padding(10.dp),
-                placeholder = painterResource(MR.drawable.ic_baseline_image_24),
+                placeholder = painterResource(MR.images.ic_baseline_image_24),
                 model = data.imageCode,
                 contentDescription = data.title
             )
@@ -113,7 +116,7 @@ fun PortraitCompositeCardView(
             modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth(),
-            placeholder = painterResource(R.drawable.ic_baseline_image_24),
+            placeholder = painterResource(MR.images.ic_baseline_image_24),
             model = data.imageCode,
             contentDescription = data.title
         )

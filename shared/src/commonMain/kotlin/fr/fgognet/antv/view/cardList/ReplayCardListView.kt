@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.card.CompositeCardViewCard
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
@@ -44,7 +44,7 @@ fun ReplayCardListViewState(
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
-        title = state?.title?.toString()
+        title = state?.title?.getValue()
             ?: stringResource(resource = MR.strings.title_replay),
         cardDatas = state!!.cards,
         goToCurrentPlaying = goToCurrentPlaying
@@ -52,10 +52,10 @@ fun ReplayCardListViewState(
         if (cardData.nvsUrl == null) {
             loadDestination(cardData.nvsCode)
         }
-        val title = cardData.title.toString()
-        CompositeCardView(
+        val title = cardData.title.getValue()
+        CompositeCardViewCard(
             GenericCardData(
-                title = cardData.title.toString(),
+                title = cardData.title.getValue(),
                 subTitle = cardData.subTitle,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_replay),

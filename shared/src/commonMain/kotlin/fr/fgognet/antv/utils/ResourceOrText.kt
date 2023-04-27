@@ -9,7 +9,7 @@ class ResourceOrText(
     var res: StringResource? = null,
 ) {
     @Composable
-    override fun toString(): String {
+    fun getValue(): String {
         if (string != null) {
             return string!!
         }

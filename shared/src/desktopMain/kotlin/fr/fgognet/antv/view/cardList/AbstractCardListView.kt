@@ -40,7 +40,7 @@ fun CardListViewPreview(
     ) { cardData ->
         CompositeCardView(
             data = GenericCardData(
-                title = cardData.title.toString(),
+                title = cardData.title.getValue(),
                 subTitle = null,
                 description = cardData.description,
                 buttonName = stringResource(MR.strings.card_button_label_playlist),

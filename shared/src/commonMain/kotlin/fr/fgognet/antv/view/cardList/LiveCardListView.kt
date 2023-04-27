@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.card.CompositeCardViewCard
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.cardList.live.LiveViewModel
@@ -46,19 +46,19 @@ fun LiveCardListViewState(
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
-        title = state?.title?.toString()
+        title = state?.title?.getValue()
             ?: stringResource(resource = MR.strings.title_live),
         cardDatas = state!!.cards,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: LiveCardData ->
         val genericCardData: GenericCardData
-        val title = cardData.title.toString()
+        val title = cardData.title.getValue()
         if (cardData.isLive) {
             genericCardData = GenericCardData(
-                title = cardData.title.toString(),
+                title = cardData.title.getValue(),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel.toString(),
+                buttonName = cardData.buttonLabel.getValue(),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.error,
                 buttonTextColor = Color.White,
@@ -66,17 +66,17 @@ fun LiveCardListViewState(
             )
         } else {
             genericCardData = GenericCardData(
-                title = cardData.title.toString(),
+                title = cardData.title.getValue(),
                 subTitle = cardData.subtitle,
                 description = cardData.description,
-                buttonName = cardData.buttonLabel.toString(),
+                buttonName = cardData.buttonLabel.getValue(),
                 imageCode = cardData.imageCode,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = Color.Black,
                 enableButton = false,
             )
         }
-        CompositeCardView(
+        CompositeCardViewCard(
             genericCardData,
             buttonClicked = {
                 goToVideo(

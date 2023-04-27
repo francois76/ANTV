@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.card.CompositeCardView
+import fr.fgognet.antv.view.card.CompositeCardViewCard
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistViewModel
@@ -42,14 +42,14 @@ fun PlaylistCardListViewState(
     goToCurrentPlaying: () -> Unit,
 ) {
     AbstractCardListView(
-        title = state?.title?.toString()
+        title = state?.title?.getValue()
             ?: stringResource(resource = MR.strings.title_playlist),
         cardDatas = state!!.cards,
         goToCurrentPlaying = goToCurrentPlaying
     ) { cardData: PlaylistCardData ->
-        CompositeCardView(
+        CompositeCardViewCard(
             GenericCardData(
-                title = cardData.title.toString(),
+                title = cardData.title.getValue(),
                 subTitle = null,
                 description = cardData.description,
                 buttonName = stringResource(resource = MR.strings.card_button_label_playlist),
