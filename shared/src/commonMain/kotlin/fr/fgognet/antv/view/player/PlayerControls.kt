@@ -139,7 +139,7 @@ private fun CenterControls(
                     }
 
                     else -> {
-                        painterResource(res = R.drawable.ic_baseline_play_arrow_24)
+                        painterResource(imageResource = MR.images.ic_baseline_play_arrow_24)
                     }
                 },
                 contentDescription = "Play/Pause"

@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.session.MediaController
-import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.view.main.findActivity
 import kotlinx.coroutines.delay
@@ -30,11 +30,10 @@ fun PlayerView(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    val model: PlayerViewModel = viewModel(factory = createViewModelFactory {
+    val model: PlayerViewModel = getViewModel(factory = viewModelFactory {
         PlayerViewModel().start(MediaSessionServiceImpl.controller)
-    }
-    )
-    val controller by model.controller.ld().observeAsState()
+    }, key = "PlayerViewModel")
+    val controller by model.controller.observeAsState()
     if (controller == null) {
         model.loadPlayer(context = context)
     } else {
@@ -115,6 +114,7 @@ fun PlayerViewState(
         Configuration.ORIENTATION_LANDSCAPE -> {
             setFullScreen(true)
         }
+
         else -> {
             setFullScreen(!shouldShowControls)
         }

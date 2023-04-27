@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.view.utils.buildColors
@@ -24,11 +24,9 @@ private var currentDate: Long = 0L
 
 @Composable
 fun ReplaySearchView(
-    model: ReplaySearchViewModel = viewModel(
-        factory = createViewModelFactory {
-            ReplaySearchViewModel().start()
-        }
-    ),
+    model: ReplaySearchViewModel = getViewModel(factory = viewModelFactory {
+        ReplaySearchViewModel().start()
+    }, key = "ReplaySearchViewModel"),
     query: (queryParams: Unit) -> Unit
 ) {
     MaterialTheme(colorScheme = buildColors(context = LocalContext.current)) {

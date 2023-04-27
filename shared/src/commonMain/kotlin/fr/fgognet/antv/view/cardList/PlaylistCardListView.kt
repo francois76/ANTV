@@ -3,10 +3,10 @@ package fr.fgognet.antv.view.cardList
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.view.card.CompositeCardViewCard
@@ -16,15 +16,15 @@ import fr.fgognet.antv.view.cardList.playlist.PlaylistViewModel
 
 @Composable
 fun PlaylistCardListView(
-    model: PlaylistViewModel = viewModel(
-        factory = createViewModelFactory {
+    model: PlaylistViewModel = getViewModel(
+        factory = viewModelFactory {
             PlaylistViewModel().start(Unit)
-        }
-    ),
+        }, key = "PlaylistViewModel"
+    ) as PlaylistViewModel,
     goToVideos: () -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
-    val state by model.cards.ld().observeAsState()
+    val state by model.cards.observeAsState()
     PlaylistCardListViewState(
         state = state,
         goToVideos = {

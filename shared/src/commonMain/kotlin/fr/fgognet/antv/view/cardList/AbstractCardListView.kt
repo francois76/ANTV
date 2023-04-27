@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
@@ -22,9 +22,10 @@ fun <T : CardData> AbstractCardListView(
     title: String,
     cardDatas: List<T>,
     goToCurrentPlaying: () -> Unit,
-    model: IsPlayingViewModel = viewModel(factory = createViewModelFactory {
-        IsPlayingViewModel().start()
-    }
+    model: IsPlayingViewModel = getViewModel(
+        factory = viewModelFactory {
+            IsPlayingViewModel().start()
+        }, key = "IsPlayingViewModel"
     ),
     cardDataGenerator: @Composable (T) -> Unit
 ) {

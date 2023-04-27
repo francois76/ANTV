@@ -161,6 +161,8 @@ dependencyResolutionManagement {
 
             val mokoMvvmDependencies = arrayOf(
                 "mvvm-compose",
+                "mvvm-flow-compose",
+                "mvvm-livedata-compose",
                 "mvvm-core",
                 "mvvm-livedata",
                 "mvvm-state",

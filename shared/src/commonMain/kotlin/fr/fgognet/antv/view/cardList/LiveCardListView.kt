@@ -3,10 +3,10 @@ package fr.fgognet.antv.view.cardList
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.view.card.CompositeCardViewCard
@@ -16,16 +16,16 @@ import fr.fgognet.antv.view.cardList.live.LiveViewModel
 
 @Composable
 fun LiveCardListView(
-    model: LiveViewModel = viewModel(
-        factory = createViewModelFactory {
+    model: LiveViewModel = getViewModel(
+        factory = viewModelFactory {
             LiveViewModel().start(Unit)
-        }
-    ),
+        }, key = "viewModelFactory"
+    ) as LiveViewModel,
     updateContextualRefreshFunction: (() -> Unit) -> Unit,
     goToVideo: (title: String) -> Unit,
     goToCurrentPlaying: () -> Unit,
 ) {
-    val state by model.cards.ld().observeAsState()
+    val state by model.cards.observeAsState()
     updateContextualRefreshFunction {
         model.loadCardData(Unit)
     }

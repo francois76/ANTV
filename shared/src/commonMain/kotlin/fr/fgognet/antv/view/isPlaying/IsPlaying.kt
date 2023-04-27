@@ -7,13 +7,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
@@ -21,7 +21,7 @@ import fr.fgognet.antv.widget.AsyncImage
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
-    val state by model.isPlayingData.ld().observeAsState()
+    val state by model.isPlayingData.observeAsState()
     if (state != null && state?.hasPlayingData == true) {
         IsPlayingState(
             goToCurrentPlaying = goToCurrentPlaying,
