@@ -9,7 +9,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.card.CompositeCardViewCard
+import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.live.LiveCardData
 import fr.fgognet.antv.view.cardList.live.LiveViewModel
@@ -76,7 +76,7 @@ fun LiveCardListViewState(
                 enableButton = false,
             )
         }
-        CompositeCardViewCard(
+        CompositeCardView(
             genericCardData,
             buttonClicked = {
                 goToVideo(

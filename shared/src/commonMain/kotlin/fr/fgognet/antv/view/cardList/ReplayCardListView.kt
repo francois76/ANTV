@@ -9,7 +9,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.card.CompositeCardViewCard
+import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayCardData
 import fr.fgognet.antv.view.cardList.replay.ReplayViewModel
@@ -51,7 +51,7 @@ fun ReplayCardListViewState(
             loadDestination(cardData.nvsCode)
         }
         val title = cardData.title.getValue()
-        CompositeCardViewCard(
+        CompositeCardView(
             GenericCardData(
                 title = cardData.title.getValue(),
                 subTitle = cardData.subTitle,

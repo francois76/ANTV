@@ -1,11 +1,9 @@
-package fr.fgognet.antv.view
+package fr.fgognet.antv.view.card
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import fr.fgognet.antv.view.card.CompositeCardView
-import fr.fgognet.antv.view.card.GenericCardData
 
 @Preview
 @Composable

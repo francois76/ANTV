@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import dev.icerock.moko.resources.compose.painterResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.AsyncImage
+import fr.fgognet.antv.widget.orientationWrapper
 
 data class GenericCardData(
     var title: String,
@@ -34,19 +35,18 @@ data class GenericCardData(
     var enableButton: Boolean,
 )
 
-@Composable
-expect fun CompositeCardView(
-    data: GenericCardData,
-    buttonClicked: () -> Unit,
-)
 
 @Composable
-fun CompositeCardViewCard(
+fun CompositeCardView(
     data: GenericCardData,
     buttonClicked: () -> Unit,
 ) {
     ElevatedCard(colors = CardDefaults.cardColors()) {
-        CompositeCardView(data, buttonClicked)
+        orientationWrapper(portrait = {
+            PortraitCompositeCardView(data, buttonClicked)
+        }, landscape = {
+            LandscapeCompositeCardView(data, buttonClicked)
+        })
     }
 }
 
