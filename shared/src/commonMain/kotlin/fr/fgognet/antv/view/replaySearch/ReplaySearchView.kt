@@ -17,7 +17,7 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.utils.buildColors
+import fr.fgognet.antv.widget.buildColors
 
 
 private var currentDate: Long = 0L

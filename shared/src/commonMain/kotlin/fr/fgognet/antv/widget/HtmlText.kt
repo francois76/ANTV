@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.utils
+package fr.fgognet.antv.widget
 
 import android.text.method.LinkMovementMethod
 import android.widget.TextView

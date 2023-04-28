@@ -19,8 +19,8 @@ import com.google.android.gms.cast.framework.CastButtonFactory
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.utils.HtmlText
-import fr.fgognet.antv.view.utils.buildColors
+import fr.fgognet.antv.widget.HtmlText
+import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 
 
