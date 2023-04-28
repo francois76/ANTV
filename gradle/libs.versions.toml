@@ -24,6 +24,7 @@ navigation = "2.5.3"# https://developer.android.com/jetpack/androidx/releases/na
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
 
 material3 = "1.0.1"# https://developer.android.com/jetpack/androidx/releases/compose-material3
+material3-tooling = "1.4.2"# https://developer.android.com/jetpack/androidx/releases/compose-material3
 guava = "31.1-android"# https://github.com/google/guava/releases
 
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
@@ -111,10 +112,10 @@ compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "material3" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "material3" }
 compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "material3" }
-compose-ui-tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "material3" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "material3" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "material3" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "material3-tooling" }
+compose-ui-tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "material3-tooling" }
 
 
 [bundles]
