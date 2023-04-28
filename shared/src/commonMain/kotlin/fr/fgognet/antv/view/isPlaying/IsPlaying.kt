@@ -1,15 +1,20 @@
 package fr.fgognet.antv.view.isPlaying
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,16 +23,17 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.AsyncImage
+import fr.fgognet.antv.widget.orientationWrapper
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
     val state by model.isPlayingData.observeAsState()
-    if (state != null && state?.hasPlayingData == true) {
+    if (state.hasPlayingData) {
         IsPlayingState(
             goToCurrentPlaying = goToCurrentPlaying,
-            imageCode = state!!.imageCode,
-            title = state!!.title,
-            description = state!!.description
+            imageCode = state.imageCode,
+            title = state.title,
+            description = state.description
         )
     }
 }
@@ -39,21 +45,23 @@ fun IsPlayingState(
     title: String,
     description: String,
 ) {
-    val configuration = LocalConfiguration.current
-    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        IsPlayingStateLandscape(
-            goToCurrentPlaying = goToCurrentPlaying,
-            imageCode = imageCode,
-            title = title
-        )
-    } else {
-        IsPlayingStatePortrait(
-            goToCurrentPlaying = goToCurrentPlaying,
-            imageCode = imageCode,
-            title = title,
-            description = description
-        )
-    }
+    orientationWrapper(
+        portrait = {
+            IsPlayingStatePortrait(
+                goToCurrentPlaying = goToCurrentPlaying,
+                imageCode = imageCode,
+                title = title,
+                description = description
+            )
+        }, landscape = {
+            IsPlayingStateLandscape(
+                goToCurrentPlaying = goToCurrentPlaying,
+                imageCode = imageCode,
+                title = title
+            )
+        }
+    )
+
 }
 
 @Composable

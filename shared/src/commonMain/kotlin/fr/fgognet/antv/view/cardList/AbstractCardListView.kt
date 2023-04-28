@@ -1,20 +1,24 @@
 package fr.fgognet.antv.view.cardList
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
+import fr.fgognet.antv.widget.orientationWrapper
 
 
 @Composable
@@ -29,24 +33,25 @@ fun <T : CardData> AbstractCardListView(
     ),
     cardDataGenerator: @Composable (T) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        AbstractCardListViewLandscape(
-            title = title,
-            cardDatas = cardDatas,
-            goToCurrentPlaying = goToCurrentPlaying,
-            model = model,
-            cardDataGenerator = cardDataGenerator
-        )
-    } else {
-        AbstractCardListViewPortrait(
-            title = title,
-            cardDatas = cardDatas,
-            goToCurrentPlaying = goToCurrentPlaying,
-            model = model,
-            cardDataGenerator = cardDataGenerator
-        )
-    }
+    orientationWrapper(
+        portrait = {
+            AbstractCardListViewPortrait(
+                title = title,
+                cardDatas = cardDatas,
+                goToCurrentPlaying = goToCurrentPlaying,
+                model = model,
+                cardDataGenerator = cardDataGenerator
+            )
+        }, landscape = {
+            AbstractCardListViewLandscape(
+                title = title,
+                cardDatas = cardDatas,
+                goToCurrentPlaying = goToCurrentPlaying,
+                model = model,
+                cardDataGenerator = cardDataGenerator
+            )
+        }
+    )
 }
 
 @Composable
