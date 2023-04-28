@@ -7,12 +7,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.media3.session.MediaController
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import fr.fgognet.antv.service.player.MediaSessionServiceImpl
+import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import fr.fgognet.antv.view.main.findActivity
+import fr.fgognet.antv.widget.MediaController
+import fr.fgognet.antv.widget.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.Player
+import fr.fgognet.antv.widget.PlayerViewModelCommon
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -44,48 +46,46 @@ fun PlayerView(
 
 @Composable
 fun PlayerViewState(
-    model: PlayerViewModel,
+    model: PlayerViewModelCommon,
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val state by model.playerData.ld().observeAsState()
+    val state by model.playerData.observeAsState()
     val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
 
-    if (state != null) {
-        if (state!!.isCasting) {
-            shouldShowControls = true
-        } else {
-            if (shouldShowControls) {
-                LaunchedEffect(Unit) {
-                    val duration = 5
-                    delay(duration.seconds)
-                    shouldShowControls = shouldShowControls.not()
-                }
-            }
-            if (state!!.duration > 0) {
-                shouldShowControls = Player(shouldShowControls)
+    if (state!!.isCasting) {
+        shouldShowControls = true
+    } else {
+        if (shouldShowControls) {
+            LaunchedEffect(Unit) {
+                val duration = 5
+                delay(duration.seconds)
+                shouldShowControls = shouldShowControls.not()
             }
         }
-        PlayerControls(
-            modifier = Modifier.fillMaxSize(),
-            isVisible = { shouldShowControls },
-            state = state!!,
-            onReplayClick = { controller.seekBack() },
-            onForwardClick = { controller.seekForward() },
-            onPauseToggle = {
-                if (state!!.isPlaying) {
-                    controller.pause()
-                } else {
-                    controller.play()
-                }
-            },
-            onSeekChanged = { timeMs: Float ->
-                controller.seekTo(timeMs.toLong())
-            },
-        )
+        if (state.duration > 0) {
+            shouldShowControls = Player(shouldShowControls, controller)
+        }
     }
+    PlayerControls(
+        modifier = Modifier.fillMaxSize(),
+        isVisible = { shouldShowControls },
+        state = state,
+        onReplayClick = { controller.seekBack() },
+        onForwardClick = { controller.seekForward() },
+        onPauseToggle = {
+            if (state.isPlaying) {
+                controller.pause()
+            } else {
+                controller.play()
+            }
+        },
+        onSeekChanged = { timeMs: Float ->
+            controller.seekTo(timeMs.toLong())
+        },
+    )
 
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {

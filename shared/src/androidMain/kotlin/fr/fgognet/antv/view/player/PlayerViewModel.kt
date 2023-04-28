@@ -14,12 +14,10 @@ import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.MoreExecutors
-import dev.icerock.moko.mvvm.livedata.LiveData
-import dev.icerock.moko.mvvm.livedata.MutableLiveData
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.repository.VideoDao
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.service.player.MediaSessionServiceListener
+import fr.fgognet.antv.widget.PlayerViewModelCommon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -31,29 +29,10 @@ import kotlinx.coroutines.withContext
 private const val TAG = "ANTV/PlayerViewModel"
 
 
-actual class PlayerViewModel : ViewModel(), Player.Listener {
-
-    fun start(controller: MediaController?) = apply { initialize(c = controller) }
-
-    private val _playerdata: MutableLiveData<PlayerData> =
-        MutableLiveData(
-            PlayerData(
-                title = "",
-                description = "",
-                isCasting = MediaSessionServiceImpl.isCasting,
-                isPlaying = false,
-                duration = 1,
-                currentPosition = 0,
-                bufferedPercentage = 0,
-                playbackState = 0,
-            )
-        )
-    val playerData: LiveData<PlayerData> get() = _playerdata
-    val _controller: MutableLiveData<MediaController?> = MutableLiveData(null)
-    val controller: LiveData<MediaController?> get() = _controller
+actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 
 
-    private fun initialize(c: MediaController?) {
+    fun initialize(c: MediaController?) {
         Log.v(TAG, "initialize")
         if (c != null) {
             this._controller.value = c

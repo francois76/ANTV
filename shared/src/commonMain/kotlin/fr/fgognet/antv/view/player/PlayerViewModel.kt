@@ -1,3 +1,10 @@
 package fr.fgognet.antv.view.player
 
-expect class PlayerViewModel
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.widget.MediaController
+
+expect class PlayerViewModel : ViewModel {
+    fun start(controller: MediaController): PlayerViewModel
+
+    constructor()
+}

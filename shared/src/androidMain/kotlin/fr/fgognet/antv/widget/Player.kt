@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
-actual fun Player(shouldShowControls: Boolean): Boolean {
+actual fun Player(shouldShowControls: Boolean, controller: MediaController): Boolean {
     var shouldShowControls1 = shouldShowControls
     var context = getPlatformContext()
     AndroidView(
@@ -22,7 +22,7 @@ actual fun Player(shouldShowControls: Boolean): Boolean {
             },
         factory = {
             androidx.media3.ui.PlayerView(context.androidContext).apply {
-                player = controller
+                player = controller.androidController
                 useController = false
                 layoutParams =
                     FrameLayout.LayoutParams(
@@ -32,4 +32,17 @@ actual fun Player(shouldShowControls: Boolean): Boolean {
             }
         })
     return shouldShowControls1
+}
+
+actual class MediaController(val androidController: androidx.media3.session.MediaController) {
+
+}
+
+actual class MediaSessionServiceImpl actual constructor() {
+    actual companion object {
+        actual val isCasting: Boolean
+            get() = TODO("Not yet implemented")
+        actual val controller: MediaController
+            get() = TODO("Not yet implemented")
+    }
 }
