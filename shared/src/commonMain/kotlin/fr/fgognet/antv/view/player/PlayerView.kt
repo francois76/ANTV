@@ -1,12 +1,8 @@
 package fr.fgognet.antv.view.player
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
@@ -14,7 +10,9 @@ import fr.fgognet.antv.view.main.findActivity
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.Player
-import fr.fgognet.antv.widget.PlayerViewModelCommon
+import fr.fgognet.antv.widget.PlayerViewModel
+import fr.fgognet.antv.widget.getPlatformContext
+import fr.fgognet.antv.widget.orientationWrapper
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -26,13 +24,12 @@ fun PlayerView(
     title: String?,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    val context = LocalContext.current
     val model: PlayerViewModel = getViewModel(factory = viewModelFactory {
         PlayerViewModel().start(MediaSessionServiceImpl.controller)
-    }, key = "PlayerViewModel")
+    }, key = "PlayerViewModel") as PlayerViewModel
     val controller by model.controller.observeAsState()
     if (controller == null) {
-        model.loadPlayer(context = context)
+        model.loadPlayer(context = getPlatformContext())
     } else {
         model.loadMedia(title)
         PlayerViewState(
@@ -46,16 +43,15 @@ fun PlayerView(
 
 @Composable
 fun PlayerViewState(
-    model: PlayerViewModelCommon,
+    model: PlayerViewModel,
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val state by model.playerData.observeAsState()
-    val configuration = LocalConfiguration.current
     context.findActivity()?.window?.decorView?.keepScreenOn = true
     var shouldShowControls by remember { mutableStateOf(false) }
 
-    if (state!!.isCasting) {
+    if (state.isCasting) {
         shouldShowControls = true
     } else {
         if (shouldShowControls) {
@@ -86,16 +82,12 @@ fun PlayerViewState(
             controller.seekTo(timeMs.toLong())
         },
     )
+    orientationWrapper(portrait = {
+        setFullScreen(!shouldShowControls)
+    }, landscape = {
+        setFullScreen(true)
+    })
 
-    when (configuration.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            setFullScreen(true)
-        }
-
-        else -> {
-            setFullScreen(!shouldShowControls)
-        }
-    }
 }
 
 

@@ -1,7 +1,6 @@
 package fr.fgognet.antv.widget
 
 import android.content.ComponentName
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
@@ -59,7 +58,26 @@ actual fun Player(shouldShowControls: Boolean, controller: MediaController): Boo
     return shouldShowControls1
 }
 
-actual class MediaController(val androidController: androidx.media3.session.MediaController) {
+actual class MediaController(val androidController: androidx.media3.session.MediaController?) {
+    actual fun seekBack() {
+        androidController?.seekBack()
+    }
+
+    actual fun seekForward() {
+        androidController?.seekForward()
+    }
+
+    actual fun pause() {
+        androidController?.pause()
+    }
+
+    actual fun play() {
+        androidController?.play()
+    }
+
+    actual fun seekTo(toLong: Long) {
+        androidController?.seekTo(toLong)
+    }
 
 }
 
@@ -111,21 +129,25 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 
     }
 
-    fun loadPlayer(context: Context) {
+    override fun loadPlayer(context: PlatformContext) {
         if (MediaSessionServiceImpl.controllerFuture == null) {
             MediaSessionServiceImpl.controllerFuture =
                 androidx.media3.session.MediaController.Builder(
-                    context,
+                    context.androidContext,
                     SessionToken(
-                        context,
-                        ComponentName(context, MediaSessionServiceImpl::class.java)
+                        context.androidContext,
+                        ComponentName(context.androidContext, MediaSessionServiceImpl::class.java)
                     )
                 )
                     .buildAsync()
             MediaSessionServiceImpl.controllerFuture?.addListener({
                 Log.d(TAG, "Media service built!")
                 MediaSessionServiceImpl.addFutureListener()
-                initialize(MediaSessionServiceImpl.controller)
+                initialize(
+                    MediaController(
+                        androidController = MediaSessionServiceImpl.controller
+                    )
+                )
             }, MoreExecutors.directExecutor())
         }
     }
@@ -137,7 +159,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
         )
     }
 
-    fun loadMedia(title: String?) {
+    override fun loadMedia(title: String?) {
         Log.v(TAG, "loadMedia")
         if (title == null) {
             loadCurrentMedia()

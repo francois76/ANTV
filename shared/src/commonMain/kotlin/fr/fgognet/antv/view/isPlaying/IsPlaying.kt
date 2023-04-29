@@ -23,6 +23,7 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.AsyncImage
+import fr.fgognet.antv.widget.IsPlayingViewModel
 import fr.fgognet.antv.widget.orientationWrapper
 
 @Composable

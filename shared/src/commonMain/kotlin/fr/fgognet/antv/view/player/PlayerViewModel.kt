@@ -5,6 +5,7 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.MediaSessionServiceImpl
+import fr.fgognet.antv.widget.PlatformContext
 
 abstract class PlayerViewModelCommon : ViewModel() {
 
@@ -29,4 +30,6 @@ abstract class PlayerViewModelCommon : ViewModel() {
 
 
     abstract fun initialize(c: MediaController?)
+    abstract fun loadMedia(title: String?)
+    abstract fun loadPlayer(context: PlatformContext)
 }
