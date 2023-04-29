@@ -15,6 +15,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -339,4 +340,9 @@ actual class IsPlayingViewModel : IsPlayingViewModelCommon(), Player.Listener {
     }
 
 
+}
+
+@Composable
+actual fun getStateEnded(): Int {
+    return STATE_ENDED
 }

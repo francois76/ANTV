@@ -1,17 +1,22 @@
 package fr.fgognet.antv.view.player
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
-import fr.fgognet.antv.view.main.findActivity
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.Player
 import fr.fgognet.antv.widget.PlayerViewModel
 import fr.fgognet.antv.widget.getPlatformContext
+import fr.fgognet.antv.widget.keepScreenOn
 import fr.fgognet.antv.widget.orientationWrapper
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -48,7 +53,7 @@ fun PlayerViewState(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val state by model.playerData.observeAsState()
-    context.findActivity()?.window?.decorView?.keepScreenOn = true
+    keepScreenOn(getPlatformContext())
     var shouldShowControls by remember { mutableStateOf(false) }
 
     if (state.isCasting) {

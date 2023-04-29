@@ -54,4 +54,13 @@ actual class PlayerViewModel actual constructor() :
         TODO("Not yet implemented")
     }
 
+    override fun loadPlayer(context: PlatformContext) {
+        TODO("Not yet implemented")
+    }
+
+}
+
+@Composable
+actual fun getStateEnded(): Int {
+    return 0
 }

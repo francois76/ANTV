@@ -12,12 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.Player.STATE_ENDED
 import dev.icerock.moko.resources.compose.painterResource
 import fr.fgognet.antv.MR
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.toJavaLocalTime
-import java.time.format.DateTimeFormatter
+import fr.fgognet.antv.widget.getStateEnded
 
 data class PlayerData(
     val title: String,
@@ -134,7 +131,7 @@ private fun CenterControls(
                         painterResource(imageResource = MR.images.ic_baseline_pause_24)
                     }
 
-                    state.playbackState == STATE_ENDED -> {
+                    state.playbackState == getStateEnded() -> {
                         painterResource(imageResource = MR.images.ic_baseline_replay_24)
                     }
 
@@ -209,13 +206,6 @@ private fun BottomControls(
     }
 }
 
-fun Long.toHour(): String {
-    return if (this <= 0L) {
-        "..."
-    } else {
-        val current = LocalTime.fromMillisecondOfDay(this.toInt()).toJavaLocalTime()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        current.format(formatter)
-    }
-}
+expect fun Long.toHour(): String
+
 

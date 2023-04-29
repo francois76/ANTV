@@ -8,6 +8,9 @@ import fr.fgognet.antv.view.player.PlayerViewModelCommon
 @Composable
 expect fun Player(shouldShowControls: Boolean, controller: MediaController): Boolean
 
+@Composable
+expect fun getStateEnded(): Int
+
 expect class MediaController {
     fun seekBack()
     fun seekForward()
