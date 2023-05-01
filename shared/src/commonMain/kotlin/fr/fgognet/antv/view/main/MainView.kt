@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -9,19 +8,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-import androidx.mediarouter.app.MediaRouteButton
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.android.gms.cast.framework.CastButtonFactory
+import castButton
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.HtmlText
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
+import fr.fgognet.antv.widget.getSystemUIController
+import fr.fgognet.antv.widget.modal
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +27,7 @@ fun ANTVApp() {
     val colorScheme = buildColors(context = appContext)
     MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavController()
-        val systemUiController = rememberSystemUiController()
+        val systemUiController = getSystemUIController()
         var isFullScreen by remember { mutableStateOf(false) }
         var openDialog by rememberSaveable { mutableStateOf(false) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -39,36 +35,13 @@ fun ANTVApp() {
         var contextualRefreshFunction by remember {
             mutableStateOf({})
         }
-        systemUiController.setStatusBarColor(colorScheme.background)
-        // TODO: find why the color is not the same as the navigationBar
-        systemUiController.setNavigationBarColor(colorScheme.surface)
-        systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
-        systemUiController.systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        systemUiController.setPlatformConfiguration()
         if (openDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    openDialog = false
-                },
-                title = {
-                    Text(stringResource(resource = MR.strings.info))
-                },
-                text = {
-                    HtmlText(
-                        html = stringResource(
-                            resource = MR.strings.credits
-                        )
-                    )
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openDialog = false
-                        }
-                    ) {
-                        Text(stringResource(resource = MR.strings.close))
-                    }
-                }
-            )
+            modal(title = stringResource(resource = MR.strings.info), content = stringResource(
+                resource = MR.strings.credits,
+            ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
+                openDialog = false
+            })
         }
         Scaffold(
             topBar = {
@@ -82,11 +55,7 @@ fun ANTVApp() {
                                 contentDescription = "about"
                             )
                         }
-                        AndroidView(factory = { context ->
-                            val mediaButton = MediaRouteButton(context)
-                            CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
-                            mediaButton
-                        })
+                        castButton()
                         var reloadEnabled by remember { mutableStateOf(true) }
                         IconButton(
                             enabled = reloadEnabled,
@@ -144,7 +113,7 @@ fun ANTVApp() {
                     contextualRefreshFunction = it
                 },
                 setFullScreenMode = {
-                    systemUiController.isSystemBarsVisible = !it
+                    systemUiController.setFullScreen(!it)
                     isFullScreen = it
                 }
             )
