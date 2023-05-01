@@ -75,10 +75,6 @@ kotlin {
             }
         }
         val iosMain by getting {
-            dependencies {
-                // Kotlin Coroutines 1.7.0 contains Dispatchers.IO
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
-            }
         }
         val iosSimulatorArm64Main by getting {
             dependsOn(iosMain)
