@@ -42,7 +42,7 @@ android {
             isDebuggable = true
         }
     }
-    packaging {
+    packagingOptions {
         resources {
             excludes.addAll(
                 arrayListOf(

@@ -40,7 +40,7 @@ compose-compiler = "1.4.6"# https://developer.android.com/jetpack/androidx/relea
 accompanist = "0.30.0" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 kotlin = "1.8.20"
 
-android-gradle-plugin = "8.0.0" # https://developer.android.com/studio/releases/gradle-plugin
+android-gradle-plugin = "7.4.1" # https://developer.android.com/studio/releases/gradle-plugin
 [libraries]
 # single line library
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
