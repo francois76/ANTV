@@ -86,7 +86,6 @@ dependencies {
 
     // testing
     testImplementation(libs.junit)
-    testImplementation(libs.navigation.testing)
     testImplementation(libs.lifecycle.runtime)
     debugImplementation(libs.compose.ui.tooling)
 }

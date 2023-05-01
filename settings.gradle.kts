@@ -12,6 +12,9 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        maven {
+            url = uri("https://repo.repsy.io/mvn/chrynan/public")
+        }
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven { url = uri("https://jitpack.io") }
     }
@@ -25,7 +28,7 @@ dependencyResolutionManagement {
             version("sdk-target", "33")
         }
 
-        
+
     }
 }
 

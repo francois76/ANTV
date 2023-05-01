@@ -4,7 +4,7 @@ import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.StringResource
 import fr.fgognet.antv.MR
 
-enum class Routes(val value: String) {
+enum class Route(val value: String) {
     LIVE("live"),
     PLAYLIST("playlist"),
     SEARCH("search"),
@@ -13,52 +13,43 @@ enum class Routes(val value: String) {
 }
 
 
-abstract class RouteDataRaw constructor(
-    var id: String,
-    var nameID: StringResource?,
-    var iconName: ImageResource?,
-    var arguments: List<NamedNavArgument>?,
-    var deepLinks: List<NavDeepLink>?
-)
+data class RouteData(
+    val id: Route,
+    val nameID: StringResource?,
+    val iconName: ImageResource?,
+    val arguments: List<String>?,
+) {
+}
 
-expect class RouteData(
-    id: String,
-    nameID: StringResource?,
-    iconName: ImageResource?,
-    argumentsRaw: List<String>?,
-) : RouteDataRaw
-
-expect class NamedNavArgument
-expect class NavDeepLink
 
 val allRoutes = hashMapOf(
-    Routes.LIVE to RouteData(
-        id = Routes.LIVE.value,
-        argumentsRaw = arrayListOf(),
+    Route.LIVE to RouteData(
+        id = Route.LIVE,
+        arguments = arrayListOf(),
         nameID = MR.strings.menu_live,
         iconName = MR.images.ic_baseline_live_tv_24,
     ),
-    Routes.PLAYLIST to RouteData(
-        id = Routes.PLAYLIST.value,
-        argumentsRaw = arrayListOf(),
+    Route.PLAYLIST to RouteData(
+        id = Route.PLAYLIST,
+        arguments = arrayListOf(),
         nameID = MR.strings.menu_playlist,
         iconName = MR.images.ic_baseline_ondemand_video_24,
     ),
-    Routes.SEARCH to RouteData(
-        id = Routes.SEARCH.value,
-        argumentsRaw = arrayListOf(),
+    Route.SEARCH to RouteData(
+        id = Route.SEARCH,
+        arguments = arrayListOf(),
         nameID = MR.strings.menu_search,
         iconName = MR.images.ic_baseline_search_24,
     ),
-    Routes.REPLAY to RouteData(
-        id = Routes.REPLAY.value,
-        argumentsRaw = arrayListOf(),
+    Route.REPLAY to RouteData(
+        id = Route.REPLAY,
+        arguments = arrayListOf(),
         nameID = MR.strings.title_replay,
         iconName = null,
     ),
-    Routes.PLAYER to RouteData(
-        id = Routes.PLAYER.value,
-        argumentsRaw = arrayListOf("title"),
+    Route.PLAYER to RouteData(
+        id = Route.PLAYER,
+        arguments = arrayListOf("title"),
         nameID = null,
         iconName = null,
     ),

@@ -1,7 +1,7 @@
 package fr.fgognet.antv.view.main
 
 
-actual fun convertRouteData(routeId: Routes, abstract: AbstractRouteData): RouteData {
+actual fun convertRouteData(routeId: Route, abstract: AbstractRouteData): RouteData {
     return RouteData(
         nameID = abstract.nameID,
         argumentNames = abstract.argumentNames,

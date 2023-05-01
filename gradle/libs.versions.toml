@@ -19,7 +19,7 @@ core-ktx = "1.10.0"# https://developer.android.com/jetpack/androidx/releases/cor
 
 media3 = "1.0.1"# https://developer.android.com/jetpack/androidx/releases/media3
 
-navigation = "2.5.3"# https://developer.android.com/jetpack/androidx/releases/navigation
+navigation = "0.7.0"# https://github.com/chRyNaN/navigation/tree/develop
 
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
 
@@ -73,6 +73,9 @@ ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
+# navigation
+navigation = { module = "com.chrynan.navigation:navigation-compose", version.ref = "navigation" }
+
 # xml util
 xmlutil-core = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "xmlutil" }
 xmlutil-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "xmlutil" }
@@ -88,12 +91,6 @@ media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 media3-cast = { module = "androidx.media3:media3-cast", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 
-# androidx navigation
-navigation-fragment_ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
-navigation-ui_ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
-navigation-dynamic_features_fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigation" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigation" }
 
 # androidx lifecycle
 lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
@@ -127,12 +124,7 @@ material3 = ["material3-core", "material3-window-size"]
 accompanist = ["accompanist-systemuicontroller", "accompanist-themeadapter-material3"]
 compose = ["compose-runtime", "compose-runtime-livedata", "compose-ui", "compose-ui-viewbinding", "compose-ui-tooling-preview",
     "compose-foundation", "compose-foundation-layout", "compose-ui-tooling"]
-navigation = [
-    "navigation-fragment-ktx",
-    "navigation-ui-ktx",
-    "navigation-dynamic-features-fragment",
-    "navigation-compose"
-]
+
 
 [plugins]
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

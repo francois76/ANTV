@@ -35,6 +35,7 @@ kotlin {
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
+                implementation(libs.navigation)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
                 implementation(libs.moko.resources.compose)
@@ -55,7 +56,6 @@ kotlin {
                 // bundles
 
                 implementation(libs.bundles.media3)
-                implementation(libs.bundles.navigation)
                 implementation(libs.bundles.accompanist)
                 implementation(libs.bundles.compose)
 
