@@ -1,7 +1,6 @@
 package fr.fgognet.antv.view.main
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -124,7 +123,7 @@ fun ANTVApp() {
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     PlayerView(
-                        title = destination.arguments?.get(0) ?: null,
+                        title = destination.arguments?.get(0),
                         setFullScreen = {
                             systemUiController.setFullScreen(it)
                         }
@@ -140,8 +139,6 @@ fun ANTVApp() {
                         navController.goTo(allRoutes[Route.REPLAY]!!)
                     })
                 }
-
-                else -> Text("Unexpected Key: $destination")
             }
         }
 
