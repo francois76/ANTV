@@ -42,6 +42,7 @@ kotlin {
                 implementation(libs.bundles.xmlutil)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
                 api(libs.moko.resources)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -83,7 +84,9 @@ kotlin {
 
         val desktopMain by getting {
             dependencies {
+                implementation(libs.kotlinx.coroutines.javafx)
                 implementation(compose.desktop.common)
+                implementation(libs.ktor.client.okhttp)
                 implementation(compose.preview)
             }
         }

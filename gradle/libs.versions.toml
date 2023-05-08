@@ -11,6 +11,7 @@ kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
 kotlinx-serialization-json = "1.5.0"# https://github.com/Kotlin/kotlinx.serialization/releases
 
 kotlinx-coroutines-guava = "1.6.4"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
+kotlinx-coroutines = "1.7.0"# https://github.com/Kotlin/kotlinx.coroutines
 junit = "4.13.2"# depend on intellij
 
 play-services-cast-framework = "21.3.0"# https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
@@ -49,6 +50,8 @@ guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit = { module = "junit:junit", version.ref = "junit" }
 play-services-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "play-services-cast-framework" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "kotlinx-coroutines-guava" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-javafx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx", version.ref = "kotlinx-coroutines" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 concurrent-futures = { module = "androidx.concurrent:concurrent-futures", version.ref = "concurrent-futures" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }

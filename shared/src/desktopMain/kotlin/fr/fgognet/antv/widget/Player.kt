@@ -30,16 +30,15 @@ actual class MediaController {
 actual class MediaSessionServiceImpl actual constructor() {
     actual companion object {
         actual val isCasting: Boolean
-            get() = TODO("Not yet implemented")
+            get() = false
         actual val controller: MediaController
-            get() = TODO("Not yet implemented")
+            get() = MediaController()
     }
 }
 
 actual class IsPlayingViewModel actual constructor() :
     IsPlayingViewModelCommon() {
     override fun initialize() {
-        TODO("Not yet implemented")
     }
 
 }
@@ -47,15 +46,12 @@ actual class IsPlayingViewModel actual constructor() :
 actual class PlayerViewModel actual constructor() :
     PlayerViewModelCommon() {
     override fun initialize(c: MediaController?) {
-        TODO("Not yet implemented")
     }
 
     override fun loadMedia(title: String?) {
-        TODO("Not yet implemented")
     }
 
     override fun loadPlayer(context: PlatformContext) {
-        TODO("Not yet implemented")
     }
 
 }
