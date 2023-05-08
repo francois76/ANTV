@@ -4,7 +4,7 @@ import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
 
 @Composable
-actual fun castButton() {
+actual fun CastButton() {
     AndroidView(factory = { context ->
         val mediaButton = MediaRouteButton(context)
         CastButtonFactory.setUpMediaRouteButton(context, mediaButton)

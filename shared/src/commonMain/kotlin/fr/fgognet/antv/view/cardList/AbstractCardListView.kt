@@ -18,7 +18,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
 import fr.fgognet.antv.widget.IsPlayingViewModel
-import fr.fgognet.antv.widget.orientationWrapper
+import fr.fgognet.antv.widget.OrientationWrapper
 
 
 @Composable
@@ -33,7 +33,7 @@ fun <T : CardData> AbstractCardListView(
     ) as IsPlayingViewModel,
     cardDataGenerator: @Composable (T) -> Unit
 ) {
-    orientationWrapper(
+    OrientationWrapper(
         portrait = {
             AbstractCardListViewPortrait(
                 title = title,

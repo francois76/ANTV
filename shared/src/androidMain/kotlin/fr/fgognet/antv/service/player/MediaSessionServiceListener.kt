@@ -7,6 +7,7 @@ import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
@@ -32,6 +33,7 @@ import java.util.*
 
 private const val TAG = "ANTV/MediaSessionServiceListener"
 
+@UnstableApi
 class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) :
     SessionAvailabilityListener,
     MediaLibraryService.MediaLibrarySession.Callback {
@@ -119,6 +121,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }) {
                 handleLive()
             }
+
             "replay" -> runAsyncMediacall(Bundle().apply {
                 putInt(
                     "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
@@ -127,6 +130,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }) {
                 handleReplay()
             }
+
             else -> {
                 Log.e(TAG, parentId)
                 super.onGetChildren(session, browser, parentId, page, pageSize, params)
@@ -328,7 +332,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         return itemResult
 
     }
-    
+
     private fun buildFolder(mediaId: String, title: String): MediaItem {
         Log.v(TAG, "buildFolder")
         return MediaItem.Builder()

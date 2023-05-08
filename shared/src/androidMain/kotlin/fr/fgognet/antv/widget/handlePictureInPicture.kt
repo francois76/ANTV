@@ -12,7 +12,7 @@ import fr.fgognet.antv.view.main.Route
 import fr.fgognet.antv.view.main.RouteData
 
 @Composable
-actual fun handlePictureInPicture(
+actual fun HandlePictureInPicture(
     context: PlatformContext,
     navController: Navigator<RouteData, SingleNavigationContext<RouteData>>
 ) {

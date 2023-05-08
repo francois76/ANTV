@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 expect class SystemUIController {
     @Composable
-    fun setPlatformConfiguration()
+    fun SetPlatformConfiguration()
 
     fun setFullScreen(fullScreen: Boolean)
 

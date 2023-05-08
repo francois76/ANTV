@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-actual fun Player(shouldShowControls: Boolean, controller: MediaController): Boolean {
+actual fun player(shouldShowControls: Boolean, controller: MediaController): Boolean {
     var shouldShowControls1 = shouldShowControls
     var context = getPlatformContext()
     AndroidView(

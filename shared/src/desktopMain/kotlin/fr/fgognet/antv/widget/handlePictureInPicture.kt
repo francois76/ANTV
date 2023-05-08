@@ -4,7 +4,7 @@ import com.chrynan.navigation.Navigator
 import com.chrynan.navigation.SingleNavigationContext
 import fr.fgognet.antv.view.main.RouteData
 
-actual fun handlePictureInPicture(
+actual fun HandlePictureInPicture(
     context: PlatformContext,
     navController: Navigator<RouteData, SingleNavigationContext<RouteData>>
 ) {

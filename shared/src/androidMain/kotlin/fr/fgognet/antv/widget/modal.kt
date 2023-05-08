@@ -6,7 +6,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun modal(
+actual fun Modal(
     title: String,
     content: String,
     confirmButton: String,

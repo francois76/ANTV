@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 
 actual class SystemUIController {
     @Composable
-    actual fun setPlatformConfiguration() {
+    actual fun SetPlatformConfiguration() {
     }
 
     actual fun setFullScreen(fullScreen: Boolean) {

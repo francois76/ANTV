@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
-actual fun orientationWrapper(
+actual fun OrientationWrapper(
     portrait: @Composable () -> Unit,
     landscape: @Composable () -> Unit
 ) {

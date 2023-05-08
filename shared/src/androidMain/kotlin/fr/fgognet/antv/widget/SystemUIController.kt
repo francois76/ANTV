@@ -11,7 +11,7 @@ actual class SystemUIController(var androidSystemUIController: SystemUiControlle
 
 
     @Composable
-    actual fun setPlatformConfiguration() {
+    actual fun SetPlatformConfiguration() {
         androidSystemUIController.setStatusBarColor(colorScheme.background)
         // TODO: find why the color is not the same as the navigationBar
         androidSystemUIController.setNavigationBarColor(colorScheme.surface)

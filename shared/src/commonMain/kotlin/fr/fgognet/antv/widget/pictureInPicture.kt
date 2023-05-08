@@ -6,7 +6,7 @@ import com.chrynan.navigation.SingleNavigationContext
 import fr.fgognet.antv.view.main.RouteData
 
 @Composable
-expect fun handlePictureInPicture(
+expect fun HandlePictureInPicture(
     context: PlatformContext,
     navController: Navigator<RouteData, SingleNavigationContext<RouteData>>
 )

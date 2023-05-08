@@ -17,7 +17,7 @@ import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
-import fr.fgognet.antv.widget.handlePictureInPicture
+import fr.fgognet.antv.widget.HandlePictureInPicture
 
 
 @OptIn(ExperimentalNavigationApi::class)
@@ -32,7 +32,7 @@ fun ANTVApp() {
     MaterialTheme(colorScheme = colorScheme) {
         val navController = rememberNavigator(allRoutes[Route.LIVE]!!)
         val systemUiController = getSystemUIController()
-        handlePictureInPicture(getPlatformContext(), navController)
+        HandlePictureInPicture(getPlatformContext(), navController)
         NavContainer(navController) { _, destination ->
             when (destination.id) {
                 Route.LIVE -> scaffold(
@@ -142,7 +142,7 @@ fun ANTVApp() {
             }
         }
 
-        systemUiController.setPlatformConfiguration()
+        systemUiController.SetPlatformConfiguration()
     }
 }
 

@@ -24,7 +24,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.AsyncImage
 import fr.fgognet.antv.widget.IsPlayingViewModel
-import fr.fgognet.antv.widget.orientationWrapper
+import fr.fgognet.antv.widget.OrientationWrapper
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
@@ -46,7 +46,7 @@ fun IsPlayingState(
     title: String,
     description: String,
 ) {
-    orientationWrapper(
+    OrientationWrapper(
         portrait = {
             IsPlayingStatePortrait(
                 goToCurrentPlaying = goToCurrentPlaying,

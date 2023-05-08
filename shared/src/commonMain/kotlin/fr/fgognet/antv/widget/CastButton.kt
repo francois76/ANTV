@@ -1,4 +1,4 @@
 import androidx.compose.runtime.Composable
 
 @Composable
-expect fun castButton()
+expect fun CastButton()

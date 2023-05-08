@@ -13,11 +13,11 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.MediaSessionServiceImpl
-import fr.fgognet.antv.widget.Player
+import fr.fgognet.antv.widget.player
 import fr.fgognet.antv.widget.PlayerViewModel
 import fr.fgognet.antv.widget.getPlatformContext
-import fr.fgognet.antv.widget.keepScreenOn
-import fr.fgognet.antv.widget.orientationWrapper
+import fr.fgognet.antv.widget.KeepScreenOn
+import fr.fgognet.antv.widget.OrientationWrapper
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -53,7 +53,7 @@ fun PlayerViewState(
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     val state by model.playerData.observeAsState()
-    keepScreenOn(getPlatformContext())
+    KeepScreenOn(getPlatformContext())
     var shouldShowControls by remember { mutableStateOf(false) }
 
     if (state.isCasting) {
@@ -67,7 +67,7 @@ fun PlayerViewState(
             }
         }
         if (state.duration > 0) {
-            shouldShowControls = Player(shouldShowControls, controller)
+            shouldShowControls = player(shouldShowControls, controller)
         }
     }
     PlayerControls(
@@ -87,7 +87,7 @@ fun PlayerViewState(
             controller.seekTo(timeMs.toLong())
         },
     )
-    orientationWrapper(portrait = {
+    OrientationWrapper(portrait = {
         setFullScreen(!shouldShowControls)
     }, landscape = {
         setFullScreen(true)

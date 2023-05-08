@@ -17,14 +17,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import castButton
+import CastButton
 import com.chrynan.navigation.Navigator
 import com.chrynan.navigation.SingleNavigationContext
 import com.chrynan.navigation.StackDuplicateContentStrategy
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.modal
+import fr.fgognet.antv.widget.Modal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +37,7 @@ fun scaffold(
     var openDialog by rememberSaveable { mutableStateOf(false) }
     val isFullScreen by remember { mutableStateOf(false) }
     if (openDialog) {
-        modal(title = stringResource(resource = MR.strings.info), content = stringResource(
+        Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
             resource = MR.strings.credits,
         ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
             openDialog = false
@@ -55,7 +55,7 @@ fun scaffold(
                             contentDescription = "about"
                         )
                     }
-                    castButton()
+                    CastButton()
                     var reloadEnabled by remember { mutableStateOf(true) }
                     IconButton(
                         enabled = reloadEnabled,

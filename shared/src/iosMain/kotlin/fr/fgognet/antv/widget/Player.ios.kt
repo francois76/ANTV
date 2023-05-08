@@ -5,7 +5,7 @@ import fr.fgognet.antv.view.isPlaying.IsPlayingViewModelCommon
 import fr.fgognet.antv.view.player.PlayerViewModelCommon
 
 @Composable
-actual fun Player(shouldShowControls: Boolean, controller: MediaController): Boolean {
+actual fun player(shouldShowControls: Boolean, controller: MediaController): Boolean {
     return false
 }
 
