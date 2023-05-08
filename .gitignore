@@ -17,3 +17,11 @@
 local.properties
 /androidApp/build/
 /desktopApp/build/
+/.idea/
+build/
+iosApp/Podfile.lock
+iosApp/Pods/*
+iosApp/iosApp.xcworkspace/*
+iosApp/iosApp.xcodeproj/*
+!iosApp/iosApp.xcodeproj/project.pbxproj
+shared/shared.podspec
