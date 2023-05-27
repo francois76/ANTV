@@ -81,6 +81,7 @@ kotlin {
 
 
         val desktopMain by getting {
+            kotlin.srcDirs("src/jvmMain/kotlin")
             dependencies {
                 implementation(libs.kotlinx.coroutines.javafx)
                 implementation(compose.desktop.common)

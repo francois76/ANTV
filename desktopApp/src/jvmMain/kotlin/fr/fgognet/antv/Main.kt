@@ -1,4 +1,4 @@
-package example.imageviewer
+package fr.fgognet.antv
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
