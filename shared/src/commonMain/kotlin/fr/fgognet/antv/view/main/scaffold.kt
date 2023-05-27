@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.main
 
+import CastButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,16 +18,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import CastButton
+import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.Navigator
 import com.chrynan.navigation.SingleNavigationContext
-import com.chrynan.navigation.StackDuplicateContentStrategy
+import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.Modal
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalNavigationApi::class)
 @Composable
 fun scaffold(
     isOnPlayerScreen: Boolean,
@@ -100,7 +101,6 @@ fun scaffold(
                                 selectedItem = index
                                 navController.goTo(
                                     destination = item!!,
-                                    strategy = StackDuplicateContentStrategy.CLEAR_STACK
                                 )
                             }
                         )

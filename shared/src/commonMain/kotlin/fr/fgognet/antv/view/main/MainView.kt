@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.chrynan.navigation.ExperimentalNavigationApi
-import com.chrynan.navigation.compose.NavContainer
+import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberNavigator
 import com.chrynan.navigation.goTo
 import fr.fgognet.antv.view.cardList.LiveCardListView
@@ -14,10 +14,10 @@ import fr.fgognet.antv.view.cardList.PlaylistCardListView
 import fr.fgognet.antv.view.cardList.ReplayCardListView
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
+import fr.fgognet.antv.widget.HandlePictureInPicture
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
-import fr.fgognet.antv.widget.HandlePictureInPicture
 
 
 @OptIn(ExperimentalNavigationApi::class)
@@ -33,7 +33,7 @@ fun ANTVApp() {
         val navController = rememberNavigator(allRoutes[Route.LIVE]!!)
         val systemUiController = getSystemUIController()
         HandlePictureInPicture(getPlatformContext(), navController)
-        NavContainer(navController) { _, destination ->
+        NavigationContainer(navController) { _, destination ->
             when (destination.id) {
                 Route.LIVE -> scaffold(
                     isOnPlayerScreen = false,
