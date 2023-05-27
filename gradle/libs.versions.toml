@@ -25,7 +25,7 @@ navigation = "0.8.0"# https://github.com/chRyNaN/navigation/tree/develop
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
 
 material3 = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/compose-material3
-material3-tooling = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/compose-material3
+material3-tooling = "1.4.3"# https://developer.android.com/jetpack/androidx/releases/compose-material3
 guava = "31.1-android"# https://github.com/google/guava/releases
 
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
