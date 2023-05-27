@@ -5,12 +5,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.Navigator
 import com.chrynan.navigation.SingleNavigationContext
 import com.chrynan.navigation.goTo
 import fr.fgognet.antv.view.main.Route
 import fr.fgognet.antv.view.main.RouteData
 
+@OptIn(ExperimentalNavigationApi::class)
 @Composable
 actual fun HandlePictureInPicture(
     context: PlatformContext,
