@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         maven { url = uri("https://jitpack.io") }
     }
     versionCatalogs {
-        // application dependancies
+        // application dependencies
         create("antvLibs") {
             version("version", "1.1.2")
             version("versionNumber", "11")
