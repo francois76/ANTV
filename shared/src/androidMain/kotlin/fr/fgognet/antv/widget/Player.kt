@@ -16,6 +16,7 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -186,6 +187,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
         )
     }
 
+    @UnstableApi
     private fun updateCurrentMedia(title: String) {
         Log.v(TAG, "updateCurrentMedia")
         if (title == playerData.value.title) {

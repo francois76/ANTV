@@ -11,7 +11,7 @@ kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
 kotlinx-serialization-json = "1.5.1"# https://github.com/Kotlin/kotlinx.serialization/releases
 
 kotlinx-coroutines-guava = "1.6.4"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
-kotlinx-coroutines = "1.7.1"# https://github.com/Kotlin/kotlinx.coroutines
+kotlinx-coroutines = "1.6.4"# https://github.com/Kotlin/kotlinx.coroutines
 junit = "4.13.2"# depend on intellij
 
 play-services-cast-framework = "21.3.0"# https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
