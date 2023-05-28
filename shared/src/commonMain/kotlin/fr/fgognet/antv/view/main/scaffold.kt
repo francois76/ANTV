@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.main
 
-import CastButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +24,7 @@ import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
+import fr.fgognet.antv.widget.CastButton
 import fr.fgognet.antv.widget.Modal
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalNavigationApi::class)

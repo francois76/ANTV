@@ -1,3 +1,5 @@
+package fr.fgognet.antv.widget
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.mediarouter.app.MediaRouteButton
