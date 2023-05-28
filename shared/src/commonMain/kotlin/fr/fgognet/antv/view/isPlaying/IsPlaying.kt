@@ -19,12 +19,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
-import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.AsyncImage
 import fr.fgognet.antv.widget.IsPlayingViewModel
 import fr.fgognet.antv.widget.OrientationWrapper
+import io.kamel.image.KamelImage
+import io.kamel.image.lazyPainterResource
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {
@@ -89,12 +89,11 @@ fun IsPlayingStatePortrait(
                 modifier = Modifier
                     .fillMaxHeight()
             ) {
-                AsyncImage(
+                KamelImage(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(60.dp),
-                    model = imageCode,
-                    placeholder = painterResource(MR.images.ic_baseline_image_24),
+                    resource = lazyPainterResource(data = imageCode),
                     contentDescription = ""
                 )
             }
@@ -139,11 +138,10 @@ fun IsPlayingStateLandscape(
                 .fillMaxWidth()
         ) {
             Column(modifier = Modifier.fillMaxHeight()) {
-                AsyncImage(
+                KamelImage(
                     modifier = Modifier
                         .fillMaxHeight(),
-                    model = imageCode,
-                    placeholder = painterResource(MR.images.ic_baseline_image_24),
+                    resource = lazyPainterResource(data = imageCode),
                     contentDescription = ""
                 )
             }

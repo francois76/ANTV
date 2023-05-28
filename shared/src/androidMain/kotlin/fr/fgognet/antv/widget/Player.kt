@@ -161,6 +161,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
         )
     }
 
+    @UnstableApi
     override fun loadMedia(title: String?) {
         Log.v(TAG, "loadMedia")
         if (title == null) {

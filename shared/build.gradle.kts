@@ -33,6 +33,7 @@ kotlin {
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
+                implementation(libs.kamel)
                 implementation(libs.navigation)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
@@ -65,7 +66,6 @@ kotlin {
                 implementation(libs.lifecycle.process)
                 implementation(libs.moko.resources.compose)
                 implementation(libs.kotlinx.datetime)
-                implementation(libs.coil.compose)
                 implementation(libs.play.services.cast.framework)
                 implementation(libs.core.ktx)
                 implementation(libs.activity.compose)

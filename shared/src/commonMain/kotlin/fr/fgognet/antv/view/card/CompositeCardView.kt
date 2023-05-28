@@ -19,10 +19,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.icerock.moko.resources.compose.painterResource
-import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.AsyncImage
 import fr.fgognet.antv.widget.OrientationWrapper
+import io.kamel.image.KamelImage
+import io.kamel.image.lazyPainterResource
 
 data class GenericCardData(
     var title: String,
@@ -58,13 +57,13 @@ fun LandscapeCompositeCardView(
 ) {
     Row(modifier = Modifier.padding(8.dp)) {
         Column(modifier = Modifier.weight(3f)) {
-            AsyncImage(
+
+            KamelImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(8f)
                     .padding(10.dp),
-                placeholder = painterResource(MR.images.ic_baseline_image_24),
-                model = data.imageCode,
+                resource = lazyPainterResource(data = data.imageCode),
                 contentDescription = data.title
             )
             Button(
@@ -112,12 +111,11 @@ fun PortraitCompositeCardView(
     buttonClicked: () -> Unit,
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
-        AsyncImage(
+        KamelImage(
             modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth(),
-            placeholder = painterResource(MR.images.ic_baseline_image_24),
-            model = data.imageCode,
+            resource = lazyPainterResource(data = data.imageCode),
             contentDescription = data.title
         )
         Column(
