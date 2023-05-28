@@ -25,8 +25,7 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
     }
 
     sourceSets {
@@ -111,6 +110,26 @@ android {
 multiplatformResources {
     multiplatformResourcesPackage = "fr.fgognet.antv"
     disableStaticFrameworkWarning = true
+}
+
+// TODO move to gradle plugin
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask>().configureEach {
+    @Suppress("ObjectLiteralToLambda")
+    doLast(object : Action<Task> {
+        override fun execute(task: Task) {
+            task as org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask
+
+            val frameworkDir = File(task.destinationDir, task.frameworkName.get() + ".framework")
+
+            listOf(
+                "ANTV:shared.bundle"
+            ).forEach { bundleName ->
+                val bundleDir = File(frameworkDir, bundleName)
+                bundleDir.mkdir()
+                File(bundleDir, "dummyFile").writeText("dummy")
+            }
+        }
+    })
 }
 
 
