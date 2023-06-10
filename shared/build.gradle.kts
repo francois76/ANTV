@@ -14,6 +14,7 @@ kotlin {
     android()
     jvm("desktop")
     ios()
+    macosArm64()
     iosSimulatorArm64()
 
     cocoapods {
@@ -28,6 +29,7 @@ kotlin {
         extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
     }
 
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -77,6 +79,12 @@ kotlin {
         val iosSimulatorArm64Main by getting {
             dependsOn(iosMain)
         }
+        val macosMain by creating {
+            dependsOn(commonMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(macosMain)
+        }
 
 
         val desktopMain by getting {
@@ -110,6 +118,12 @@ android {
 multiplatformResources {
     multiplatformResourcesPackage = "fr.fgognet.antv"
     disableStaticFrameworkWarning = true
+}
+
+configurations.configureEach {
+    attributes {
+        attribute(Attribute.of("custom.attr", String::class.java), name)
+    }
 }
 
 // TODO move to gradle plugin
