@@ -12,8 +12,8 @@ xmlutil = "0.86.0"# https://github.com/pdvrieze/xmlutil/releases
 #kotlin dependencies
 kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
 kotlinx-serialization-json = "1.5.1"# https://github.com/Kotlin/kotlinx.serialization/releases
-kotlinx-coroutines-guava = "1.6.4"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
-kotlinx-coroutines = "1.6.4"# https://github.com/Kotlin/kotlinx.coroutines #TODO: broken because of ktor
+kotlinx-coroutines-guava = "1.7.1"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
+kotlinx-coroutines = "1.7.1"# https://github.com/Kotlin/kotlinx.coroutines #
 
 # compose stack: https://developer.android.com/jetpack/androidx/releases/compose
 compose = "1.4.3"
