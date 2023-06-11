@@ -14,7 +14,6 @@ kotlin {
     android()
     jvm("desktop")
     ios()
-    macosArm64()
     iosSimulatorArm64()
 
     cocoapods {
@@ -78,12 +77,6 @@ kotlin {
         val iosMain by getting
         val iosSimulatorArm64Main by getting {
             dependsOn(iosMain)
-        }
-        val macosMain by creating {
-            dependsOn(commonMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(macosMain)
         }
 
 
