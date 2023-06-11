@@ -6,6 +6,7 @@
 import androidx.compose.ui.window.ComposeUIViewController
 import fr.fgognet.antv.view.main.ANTVApp
 import platform.UIKit.UIViewController
+import platform.UIKit.UIInterfaceOrientation
 
 fun MainViewController(): UIViewController = ComposeUIViewController {
     ANTVApp()
