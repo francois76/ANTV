@@ -127,6 +127,14 @@ actual class MediaController(val androidController: androidx.media3.session.Medi
         androidController?.seekToDefaultPosition()
     }
 
+    fun removeListener(listener: Player.Listener) {
+        androidController?.removeListener(listener)
+    }
+
+    fun release() {
+        androidController?.release()
+    }
+
 }
 
 private const val TAG = "ANTV/PlayerViewModel"

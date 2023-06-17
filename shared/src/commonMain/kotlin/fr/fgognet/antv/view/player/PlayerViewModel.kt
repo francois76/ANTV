@@ -3,8 +3,8 @@ package fr.fgognet.antv.view.player
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.MediaController
-import fr.fgognet.antv.widget.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.PlatformContext
 
 abstract class PlayerViewModelCommon : ViewModel() {
