@@ -140,10 +140,15 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
     }
 
 
-    actual companion object {
+/*    actual companion object {
+
+
+    }*/
+
+    actual companion object{
         var controllerFuture: ListenableFuture<MediaController>? = null
         private var listenersFuture: ArrayList<Player.Listener> = arrayListOf()
-        val controller: MediaController?
+        private val androidController: MediaController?
             get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
         var isCastingPrivate: Boolean = false
 
@@ -152,7 +157,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
 
         fun addFutureListener() {
             listenersFuture.forEach {
-                controller?.addListener(it)
+                androidController?.addListener(it)
             }
             listenersFuture = arrayListOf()
         }
@@ -161,9 +166,14 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
             if (controller == null) {
                 listenersFuture.add(listener)
             } else {
-                controller?.addListener(listener)
+                androidController?.addListener(listener)
             }
         }
+
+        actual val isCasting: Boolean
+            get() = isCastingPrivate
+        actual val controller: fr.fgognet.antv.widget.MediaController?
+            get() = fr.fgognet.antv.widget.MediaController(androidController)
 
     }
 

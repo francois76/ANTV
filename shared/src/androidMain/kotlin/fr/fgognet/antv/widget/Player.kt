@@ -61,6 +61,36 @@ actual fun player(shouldShowControls: Boolean, controller: MediaController): Boo
 }
 
 actual class MediaController(val androidController: androidx.media3.session.MediaController?) {
+    val isCurrentMediaItemLive: Boolean?
+        get() {
+            return androidController?.isCurrentMediaItemLive
+        }
+    val isPlaying: Boolean?
+        get() {
+            return androidController?.isPlaying
+        }
+
+    val mediaMetadata: MediaMetadata?
+        get() {
+            return androidController?.mediaMetadata
+        }
+    val playbackState: Int?
+        get() {
+            return androidController?.playbackState
+        }
+    val bufferedPercentage: Int?
+        get() {
+            return androidController?.bufferedPercentage
+        }
+    val duration: Long?
+        get() {
+            return androidController?.duration
+        }
+    val currentPosition: Long?
+        get() {
+          return   androidController?.currentPosition
+        }
+
     actual fun seekBack() {
         androidController?.seekBack()
     }
@@ -79,6 +109,22 @@ actual class MediaController(val androidController: androidx.media3.session.Medi
 
     actual fun seekTo(toLong: Long) {
         androidController?.seekTo(toLong)
+    }
+
+    fun addListener(it: Player.Listener) {
+        androidController?.addListener(it)
+    }
+
+    fun setMediaItem(item: MediaItem) {
+        androidController?.setMediaItem(item)
+    }
+
+    fun prepare() {
+        androidController?.prepare()
+    }
+
+    fun seekToDefaultPosition() {
+        androidController?.seekToDefaultPosition()
     }
 
 }
@@ -146,9 +192,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                 Log.d(TAG, "Media service built!")
                 MediaSessionServiceImpl.addFutureListener()
                 initialize(
-                    MediaController(
-                        androidController = MediaSessionServiceImpl.controller
-                    )
+                    MediaSessionServiceImpl.controller
                 )
             }, MoreExecutors.directExecutor())
         }
