@@ -1,7 +1,10 @@
 package fr.fgognet.antv.view.main
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -124,78 +127,86 @@ fun ANTVApp() {
                         }
                     }
                 }
-            ) {
-                when (destination.id) {
-                    Route.LIVE ->LiveCardListView(
-                        goToVideo = { title ->
-                            navigator.goTo(
-                                RouteData(
-                                    id = Route.PLAYER,
-                                    arguments = arrayListOf(title),
-                                    iconName = null,
-                                    nameID = null
+            ) {paddingValues:PaddingValues->
+                Column(modifier = Modifier.padding(paddingValues)) {
+
+
+                    when (destination.id) {
+                        Route.LIVE -> LiveCardListView(
+                            goToVideo = { title ->
+                                navigator.goTo(
+                                    RouteData(
+                                        id = Route.PLAYER,
+                                        arguments = arrayListOf(title),
+                                        iconName = null,
+                                        nameID = null
+                                    )
                                 )
-                            )
-                        },
-                        updateContextualRefreshFunction = {
-                            contextualRefreshFunction()
-                        },
-                        goToCurrentPlaying = {
-                            navigator.goTo(
-                                RouteData(
-                                    id = Route.PLAYER,
-                                    arguments = null,
-                                    iconName = null,
-                                    nameID = null
+                            },
+                            updateContextualRefreshFunction = {
+                                contextualRefreshFunction()
+                            },
+                            goToCurrentPlaying = {
+                                navigator.goTo(
+                                    RouteData(
+                                        id = Route.PLAYER,
+                                        arguments = null,
+                                        iconName = null,
+                                        nameID = null
+                                    )
                                 )
-                            )
-                        },
-                    )
-                    Route.REPLAY->ReplayCardListView(
-                        goToVideo = { title ->
-                            navigator.goTo(
-                                RouteData(
-                                    id = Route.PLAYER,
-                                    arguments = arrayListOf(title),
-                                    iconName = null,
-                                    nameID = null
+                            },
+                        )
+
+                        Route.REPLAY -> ReplayCardListView(
+                            goToVideo = { title ->
+                                navigator.goTo(
+                                    RouteData(
+                                        id = Route.PLAYER,
+                                        arguments = arrayListOf(title),
+                                        iconName = null,
+                                        nameID = null
+                                    )
                                 )
-                            )
-                        },
-                        goToCurrentPlaying = {
-                            navigator.goTo(
-                                RouteData(
-                                    id = Route.PLAYER,
-                                    arguments = null,
-                                    iconName = null,
-                                    nameID = null
+                            },
+                            goToCurrentPlaying = {
+                                navigator.goTo(
+                                    RouteData(
+                                        id = Route.PLAYER,
+                                        arguments = null,
+                                        iconName = null,
+                                        nameID = null
+                                    )
                                 )
-                            )
+                            },
+                        )
+
+                        Route.PLAYLIST -> PlaylistCardListView(goToVideos = {
+                            navigator.goTo(allRoutes[Route.REPLAY]!!)
                         },
-                    )
-                    Route.PLAYLIST->PlaylistCardListView(goToVideos = {
-                        navigator.goTo(allRoutes[Route.REPLAY]!!)
-                    },
-                        goToCurrentPlaying = {
-                            navigator.goTo(
-                                RouteData(
-                                    id = Route.PLAYER,
-                                    arguments = null,
-                                    iconName = null,
-                                    nameID = null
+                            goToCurrentPlaying = {
+                                navigator.goTo(
+                                    RouteData(
+                                        id = Route.PLAYER,
+                                        arguments = null,
+                                        iconName = null,
+                                        nameID = null
+                                    )
                                 )
-                            )
-                        }
-                    )
-                    Route.SEARCH->ReplaySearchView(query = {
-                        navigator.goTo(allRoutes[Route.REPLAY]!!)
-                    })
-                    Route.PLAYER->PlayerView(
-                        title = destination.arguments?.get(0),
-                        setFullScreen = {
-                            systemUiController.setFullScreen(it)
-                        }
-                    )
+                            }
+                        )
+
+                        Route.SEARCH -> ReplaySearchView(query = {
+                            navigator.goTo(allRoutes[Route.REPLAY]!!)
+                        })
+
+                        Route.PLAYER -> PlayerView(
+                            title = destination.arguments?.get(0),
+                            setFullScreen = {
+                                systemUiController.setFullScreen(it)
+                            }
+                        )
+                    }
                 }
             }
             systemUiController.SetPlatformConfiguration()
