@@ -296,14 +296,6 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 }
 
 
-actual class MediaSessionServiceImpl actual constructor() {
-    actual companion object {
-        actual val isCasting: Boolean
-            get() = TODO("Not yet implemented")
-        actual val controller: MediaController
-            get() = TODO("Not yet implemented")
-    }
-}
 
 
 actual class IsPlayingViewModel : IsPlayingViewModelCommon(), Player.Listener {

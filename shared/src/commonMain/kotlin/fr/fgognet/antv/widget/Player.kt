@@ -19,12 +19,6 @@ expect class MediaController {
     fun seekTo(toLong: Long)
 }
 
-expect class MediaSessionServiceImpl() {
-    companion object {
-        val isCasting: Boolean
-        val controller: MediaController
-    }
-}
 
 expect class PlayerViewModel() : PlayerViewModelCommon {
 

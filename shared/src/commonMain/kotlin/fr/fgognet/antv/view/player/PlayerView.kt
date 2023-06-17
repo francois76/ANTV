@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.MediaController
-import fr.fgognet.antv.widget.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.player
 import fr.fgognet.antv.widget.PlayerViewModel
 import fr.fgognet.antv.widget.getPlatformContext

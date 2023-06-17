@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import java.util.*
 
 
-class MediaSessionServiceImpl : MediaLibraryService() {
+actual class MediaSessionServiceImpl : MediaLibraryService() {
     // TAG
     private val TAG = "ANTV/MediaSessionServiceImpl"
 
@@ -69,7 +69,7 @@ class MediaSessionServiceImpl : MediaLibraryService() {
                 result.result, DefaultMediaItemConverter(), 5000, 5000
             )
             result.result.addCastStateListener {
-                isCasting = when (it) {
+                isCastingPrivate = when (it) {
                     CastState.CONNECTING, CastState.CONNECTED -> true
                     CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
                     else -> false
@@ -140,12 +140,12 @@ class MediaSessionServiceImpl : MediaLibraryService() {
     }
 
 
-    companion object {
+    actual companion object {
         var controllerFuture: ListenableFuture<MediaController>? = null
         private var listenersFuture: ArrayList<Player.Listener> = arrayListOf()
         val controller: MediaController?
             get() = if (controllerFuture?.isDone == true) controllerFuture?.get() else null
-        var isCasting: Boolean = false
+        var isCastingPrivate: Boolean = false
 
         // waiting for next version of media3
         var currentMediaItem: MediaItem? = null
@@ -164,6 +164,7 @@ class MediaSessionServiceImpl : MediaLibraryService() {
                 controller?.addListener(listener)
             }
         }
+
     }
 
 

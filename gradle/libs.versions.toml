@@ -1,6 +1,6 @@
 [versions]
 guava = "32.0.1-android"# https://github.com/google/guava/releases
-kamel = "0.5.0" # https://github.com/Kamel-Media/Kamel/releases
+kamel = "0.5.1" # https://github.com/Kamel-Media/Kamel/releases
 ktor = "2.3.1"# https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1"# https://github.com/icerockdev/moko-mvvm/releases
 moko-resource = "0.23.0"# https://github.com/icerockdev/moko-resources
