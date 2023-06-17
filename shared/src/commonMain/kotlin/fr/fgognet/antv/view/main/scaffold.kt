@@ -32,7 +32,7 @@ import fr.fgognet.antv.widget.Modal
 fun scaffold(
     isOnPlayerScreen: Boolean,
     contextualRefreshFunction: () -> Unit,
-    navController: Navigator<RouteData, SingleNavigationContext<RouteData>>,
+    goTo:(item:RouteData)->Unit,
     component: @Composable () -> Unit
 ) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
@@ -99,9 +99,7 @@ fun scaffold(
                             selected = selectedItem == index,
                             onClick = {
                                 selectedItem = index
-                                navController.goTo(
-                                    destination = item!!,
-                                )
+                                goTo( item!!)
                             }
                         )
                     }

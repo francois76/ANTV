@@ -30,19 +30,21 @@ fun ANTVApp() {
     }
 
     MaterialTheme(colorScheme = colorScheme) {
-        val navController = rememberNavigator(allRoutes[Route.LIVE]!!)
+        val navigator = rememberNavigator(allRoutes[Route.LIVE]!!)
         val systemUiController = getSystemUIController()
-        HandlePictureInPicture(getPlatformContext(), navController)
-        NavigationContainer(navController) { _, destination ->
+        HandlePictureInPicture(getPlatformContext(), navigator)
+        NavigationContainer(navigator) { _, destination ->
             when (destination.id) {
                 Route.LIVE -> scaffold(
                     isOnPlayerScreen = false,
-                    navController = navController,
+                    goTo = {
+                           navigator.goTo(destination = it)
+                    },
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     LiveCardListView(
                         goToVideo = { title ->
-                            navController.goTo(
+                            navigator.goTo(
                                 RouteData(
                                     id = Route.PLAYER,
                                     arguments = arrayListOf(title),
@@ -55,7 +57,7 @@ fun ANTVApp() {
                             contextualRefreshFunction()
                         },
                         goToCurrentPlaying = {
-                            navController.goTo(
+                            navigator.goTo(
                                 RouteData(
                                     id = Route.PLAYER,
                                     arguments = null,
@@ -69,14 +71,16 @@ fun ANTVApp() {
 
                 Route.PLAYLIST -> scaffold(
                     isOnPlayerScreen = false,
-                    navController = navController,
+                    goTo = {
+                        navigator.goTo(destination = it)
+                    },
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     PlaylistCardListView(goToVideos = {
-                        navController.goTo(allRoutes[Route.REPLAY]!!)
+                        navigator.goTo(allRoutes[Route.REPLAY]!!)
                     },
                         goToCurrentPlaying = {
-                            navController.goTo(
+                            navigator.goTo(
                                 RouteData(
                                     id = Route.PLAYER,
                                     arguments = null,
@@ -90,12 +94,14 @@ fun ANTVApp() {
 
                 Route.REPLAY -> scaffold(
                     isOnPlayerScreen = false,
-                    navController = navController,
+                    goTo = {
+                        navigator.goTo(destination = it)
+                    },
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     ReplayCardListView(
                         goToVideo = { title ->
-                            navController.goTo(
+                            navigator.goTo(
                                 RouteData(
                                     id = Route.PLAYER,
                                     arguments = arrayListOf(title),
@@ -105,7 +111,7 @@ fun ANTVApp() {
                             )
                         },
                         goToCurrentPlaying = {
-                            navController.goTo(
+                            navigator.goTo(
                                 RouteData(
                                     id = Route.PLAYER,
                                     arguments = null,
@@ -119,7 +125,9 @@ fun ANTVApp() {
 
                 Route.PLAYER -> scaffold(
                     isOnPlayerScreen = true,
-                    navController = navController,
+                    goTo = {
+                        navigator.goTo(destination = it)
+                    },
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     PlayerView(
@@ -132,11 +140,13 @@ fun ANTVApp() {
 
                 Route.SEARCH -> scaffold(
                     isOnPlayerScreen = false,
-                    navController = navController,
+                    goTo = {
+                        navigator.goTo(destination = it)
+                    },
                     contextualRefreshFunction = contextualRefreshFunction
                 ) {
                     ReplaySearchView(query = {
-                        navController.goTo(allRoutes[Route.REPLAY]!!)
+                        navigator.goTo(allRoutes[Route.REPLAY]!!)
                     })
                 }
             }
