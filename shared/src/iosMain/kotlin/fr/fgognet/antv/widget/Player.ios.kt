@@ -27,14 +27,7 @@ actual class MediaController {
     }
 }
 
-actual class MediaSessionServiceImpl actual constructor() {
-    actual companion object {
-        actual val isCasting: Boolean
-            get() = false
-        actual val controller: MediaController
-            get() = MediaController()
-    }
-}
+
 
 actual class IsPlayingViewModel actual constructor() :
     IsPlayingViewModelCommon() {
