@@ -24,6 +24,7 @@ import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.IsPlayingViewModel
 import fr.fgognet.antv.widget.OrientationWrapper
 import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import io.kamel.image.lazyPainterResource
 
 @Composable
@@ -93,7 +94,7 @@ fun IsPlayingStatePortrait(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(60.dp),
-                    resource = lazyPainterResource(data = imageCode),
+                    resource = asyncPainterResource(data = imageCode),
                     contentDescription = ""
                 )
             }
@@ -141,7 +142,7 @@ fun IsPlayingStateLandscape(
                 KamelImage(
                     modifier = Modifier
                         .fillMaxHeight(),
-                    resource = lazyPainterResource(data = imageCode),
+                    resource = asyncPainterResource(data = imageCode),
                     contentDescription = ""
                 )
             }

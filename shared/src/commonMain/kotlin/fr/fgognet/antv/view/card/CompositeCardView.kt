@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.fgognet.antv.widget.OrientationWrapper
 import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import io.kamel.image.lazyPainterResource
 
 data class GenericCardData(
@@ -63,7 +64,7 @@ fun LandscapeCompositeCardView(
                     .fillMaxWidth()
                     .weight(8f)
                     .padding(10.dp),
-                resource = lazyPainterResource(data = data.imageCode),
+                resource = asyncPainterResource(data = data.imageCode),
                 contentDescription = data.title
             )
             Button(
@@ -115,7 +116,7 @@ fun PortraitCompositeCardView(
             modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth(),
-            resource = lazyPainterResource(data = data.imageCode),
+            resource = asyncPainterResource(data = data.imageCode),
             contentDescription = data.title
         )
         Column(
