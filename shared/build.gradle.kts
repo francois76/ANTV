@@ -47,7 +47,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)
-                implementation(libs.kotlinx.coroutines.core)
                 implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
@@ -87,6 +86,7 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.kotlinx.coroutines.swing)
                 implementation(compose.preview)
             }
         }
