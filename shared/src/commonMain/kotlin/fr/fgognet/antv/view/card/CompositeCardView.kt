@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import fr.fgognet.antv.widget.OrientationWrapper
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import io.kamel.image.lazyPainterResource
 
 data class GenericCardData(
     var title: String,

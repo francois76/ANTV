@@ -25,7 +25,6 @@ import fr.fgognet.antv.widget.IsPlayingViewModel
 import fr.fgognet.antv.widget.OrientationWrapper
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import io.kamel.image.lazyPainterResource
 
 @Composable
 fun IsPlaying(goToCurrentPlaying: () -> Unit, model: IsPlayingViewModel) {

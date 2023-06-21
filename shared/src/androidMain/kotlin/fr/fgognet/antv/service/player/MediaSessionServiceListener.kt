@@ -292,7 +292,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         supervisorScope {
             val eventSearches: List<EventSearch> = try {
                 EventSearchRepository.findEventSearchByParams(
-                    hashMapOf<EventSearchQueryParams, String>()
+                    hashMapOf()
                 )
             } catch (e: Exception) {
                 arrayListOf()
