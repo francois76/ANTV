@@ -94,7 +94,7 @@ kotlin {
 }
 
 android {
-    namespace = "fr.fgognet.antv"
+    namespace = antvLibs.versions.antv.packagename.get()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -110,7 +110,7 @@ android {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "fr.fgognet.antv"
+    multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
     disableStaticFrameworkWarning = true
 }
 

@@ -44,6 +44,6 @@ compose.desktop {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "fr.fgognet.antv"
+    multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
     disableStaticFrameworkWarning = true
 }
