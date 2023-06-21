@@ -9,6 +9,7 @@ plugins {
 kotlin {
     jvm {
     }
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val jvmMain by getting {
             dependencies {

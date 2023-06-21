@@ -8,7 +8,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-version = antvLibs.versions.version.get()
+version = antvLibs.versions.antv.version.get()
 
 kotlin {
     android()
@@ -99,13 +99,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
+    compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
     sourceSets["main"].apply {
         assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
         res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
     }
     defaultConfig {
-        minSdk = antvLibs.versions.sdk.min.get().toInt()
+        minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
 }
 

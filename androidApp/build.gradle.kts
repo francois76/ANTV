@@ -7,6 +7,7 @@ plugins {
 
 kotlin {
     android()
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val androidMain by getting {
             dependencies {
@@ -17,15 +18,15 @@ kotlin {
 }
 
 android {
-    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
-    namespace = "fr.fgognet.antv"
+    compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
+    namespace = antvLibs.versions.antv.packagename.get()
 
     defaultConfig {
-        applicationId = "fr.fgognet.antv"
-        minSdk = antvLibs.versions.sdk.min.get().toInt()
-        targetSdk = antvLibs.versions.sdk.target.get().toInt()
-        versionCode = antvLibs.versions.versionNumber.get().toInt()
-        versionName = antvLibs.versions.version.get()
+        applicationId = antvLibs.versions.antv.packagename.get()
+        minSdk = antvLibs.versions.android.sdk.min.get().toInt()
+        targetSdk = antvLibs.versions.android.sdk.target.get().toInt()
+        versionCode = antvLibs.versions.android.version.number.get().toInt()
+        versionName = antvLibs.versions.antv.version.get()
 
     }
     buildTypes {
