@@ -12,6 +12,8 @@ expect fun player(shouldShowControls: Boolean, controller: MediaController): Boo
 expect fun getStateEnded(): Int
 
 expect class MediaController {
+
+    fun isInit(): Boolean
     fun seekBack()
     fun seekForward()
     fun pause()

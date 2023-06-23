@@ -33,7 +33,7 @@ fun PlayerView(
         PlayerViewModel().start(MediaSessionServiceImpl.controller)
     }, key = "PlayerViewModel") as PlayerViewModel
     val controller by model.controller.observeAsState()
-    if (controller == null) {
+    if (controller == null || !controller!!.isInit()) {
         model.loadPlayer(context = getPlatformContext())
     } else {
         model.loadMedia(title)

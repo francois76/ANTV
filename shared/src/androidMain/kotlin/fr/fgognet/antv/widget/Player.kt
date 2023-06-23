@@ -135,6 +135,10 @@ actual class MediaController(val androidController: androidx.media3.session.Medi
         androidController?.release()
     }
 
+    actual fun isInit(): Boolean {
+        return androidController != null
+    }
+
 }
 
 private const val TAG = "ANTV/PlayerViewModel"
