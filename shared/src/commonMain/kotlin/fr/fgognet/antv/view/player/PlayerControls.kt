@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.compose.painterResource
 import fr.fgognet.antv.MR
 import fr.fgognet.antv.widget.getStateEnded
+import fr.fgognet.antv.widget.toHour
 
 data class PlayerData(
     val title: String,
@@ -206,6 +207,6 @@ private fun BottomControls(
     }
 }
 
-expect fun Long.toHour(): String
+
 
 

@@ -1,4 +1,4 @@
-package fr.fgognet.antv.view.player
+package fr.fgognet.antv.widget
 
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toJavaLocalTime
