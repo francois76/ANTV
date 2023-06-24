@@ -4,10 +4,6 @@ import androidx.compose.runtime.Composable
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModelCommon
 import fr.fgognet.antv.view.player.PlayerViewModelCommon
 
-@Composable
-actual fun player(shouldShowControls: Boolean, controller: MediaController): Boolean {
-    return false
-}
 
 
 actual class MediaController {
@@ -24,6 +20,10 @@ actual class MediaController {
     }
 
     actual fun seekTo(toLong: Long) {
+    }
+
+    actual fun isInit(): Boolean {
+        return false
     }
 }
 

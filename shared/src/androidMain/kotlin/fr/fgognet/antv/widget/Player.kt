@@ -35,30 +35,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Composable
-actual fun player(shouldShowControls: Boolean, controller: MediaController): Boolean {
-    var shouldShowControls1 = shouldShowControls
-    var context = getPlatformContext()
-    AndroidView(
-        modifier =
-        Modifier
-            .background(color = Color.Black)
-            .clickable {
-                shouldShowControls1 = shouldShowControls1.not()
-            },
-        factory = {
-            androidx.media3.ui.PlayerView(context.androidContext).apply {
-                player = controller.androidController
-                useController = false
-                layoutParams =
-                    FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-            }
-        })
-    return shouldShowControls1
-}
+
 
 actual class MediaController(val androidController: androidx.media3.session.MediaController?) {
     val isCurrentMediaItemLive: Boolean?

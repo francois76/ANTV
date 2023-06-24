@@ -5,8 +5,8 @@ import fr.fgognet.antv.view.isPlaying.IsPlayingViewModelCommon
 import fr.fgognet.antv.view.player.PlayerViewModelCommon
 
 @Composable
-actual fun player(shouldShowControls: Boolean, controller: MediaController): Boolean {
-    return false
+actual fun player(context:PlatformContext, controller: MediaController, onclick: ()->Unit) {
+    return
 }
 
 
@@ -24,6 +24,10 @@ actual class MediaController {
     }
 
     actual fun seekTo(toLong: Long) {
+    }
+
+    actual fun isInit(): Boolean {
+        return false
     }
 }
 

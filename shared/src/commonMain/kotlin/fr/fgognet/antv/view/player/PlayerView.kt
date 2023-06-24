@@ -67,7 +67,9 @@ fun PlayerViewState(
             }
         }
         if (state.duration > 0) {
-            shouldShowControls = player(shouldShowControls, controller)
+            player(context = getPlatformContext(), controller = controller, onclick = {
+                shouldShowControls = shouldShowControls.not()
+            })
         }
     }
     PlayerControls(
