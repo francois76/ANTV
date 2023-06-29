@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
-import com.chrynan.navigation.compose.rememberNavigator
+import com.chrynan.navigation.compose.rememberSavableNavigator
 import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -36,18 +36,19 @@ import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 import fr.fgognet.antv.widget.CastButton
 import fr.fgognet.antv.widget.HandlePictureInPicture
 import fr.fgognet.antv.widget.Modal
-import fr.fgognet.antv.widget.PlayerViewModel
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
+import kotlinx.serialization.ExperimentalSerializationApi
 
 
-@OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalSerializationApi::class
+)
 @Composable
 fun ANTVApp() {
-    val appContext = getPlatformContext()
-    val navigator = rememberNavigator(allRoutes[Route.LIVE]!!)
-    val colorScheme = buildColors(context = appContext)
+    val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!, destinationSerializer =RouteData.serializer())
+    val colorScheme = buildColors(context = getPlatformContext())
     val contextualRefreshFunction by remember {
         mutableStateOf({})
     }
@@ -62,7 +63,6 @@ fun ANTVApp() {
             openDialog = false
         })
     }
-    var selectedItem by rememberSaveable { mutableStateOf(0) }
 
     MaterialTheme(colorScheme = colorScheme) {
         NavigationContainer(navigator) { _, destination ->
@@ -100,6 +100,7 @@ fun ANTVApp() {
                     }
                 }, bottomBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
+                        var selectedItem by rememberSaveable { mutableStateOf(0) }
                         val items = listOf(
                             allRoutes[Route.LIVE],
                             allRoutes[Route.PLAYLIST],
@@ -111,12 +112,12 @@ fun ANTVApp() {
                                     icon = {
                                         Image(
                                             painterResource(
-                                                imageResource = item?.iconName!!,
+                                                imageResource = routeIcons[item?.id]!!,
                                             ),
-                                            contentDescription = stringResource(resource = item.nameID!!)
+                                            contentDescription = stringResource(resource = routeNames[item?.id]!!)
                                         )
                                     },
-                                    label = { Text(stringResource(resource = item?.nameID!!)) },
+                                    label = { Text(stringResource(resource = routeNames[item?.id]!!)) },
                                     selected = selectedItem == index,
                                     onClick = {
                                         selectedItem = index
@@ -129,8 +130,6 @@ fun ANTVApp() {
                 }
             ) {paddingValues:PaddingValues->
                 Column(modifier = Modifier.padding(paddingValues)) {
-
-
                     when (destination.id) {
                         Route.LIVE -> LiveCardListView(
                             goToVideo = { title ->
@@ -138,8 +137,6 @@ fun ANTVApp() {
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
-                                        iconName = null,
-                                        nameID = null
                                     )
                                 )
                             },
@@ -150,9 +147,7 @@ fun ANTVApp() {
                                 navigator.goTo(
                                     RouteData(
                                         id = Route.PLAYER,
-                                        arguments = null,
-                                        iconName = null,
-                                        nameID = null
+                                        arguments = arrayListOf(),
                                     )
                                 )
                             },
@@ -164,8 +159,6 @@ fun ANTVApp() {
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
-                                        iconName = null,
-                                        nameID = null
                                     )
                                 )
                             },
@@ -173,9 +166,7 @@ fun ANTVApp() {
                                 navigator.goTo(
                                     RouteData(
                                         id = Route.PLAYER,
-                                        arguments = null,
-                                        iconName = null,
-                                        nameID = null
+                                        arguments = arrayListOf(),
                                     )
                                 )
                             },
@@ -188,9 +179,7 @@ fun ANTVApp() {
                                 navigator.goTo(
                                     RouteData(
                                         id = Route.PLAYER,
-                                        arguments = null,
-                                        iconName = null,
-                                        nameID = null
+                                        arguments = arrayListOf(),
                                     )
                                 )
                             }
@@ -201,7 +190,7 @@ fun ANTVApp() {
                         })
 
                         Route.PLAYER -> PlayerView(
-                            title = destination.arguments?.get(0),
+                            title = destination.arguments.get(0),
                             setFullScreen = {
                                 systemUiController.setFullScreen(it)
                             }

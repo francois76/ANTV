@@ -6,6 +6,7 @@ moko-mvvm = "0.16.1"# https://github.com/icerockdev/moko-mvvm/releases
 moko-resource = "0.23.0"# https://github.com/icerockdev/moko-resources
 napier = "2.6.1"# https://github.com/AAkira/Napier
 navigation = "0.8.0"# https://github.com/chRyNaN/navigation/tree/develop
+parcelable = "0.7.1" # https://github.com/chRyNaN/serialization-parcelable/releases
 play-services-cast-framework = "21.3.0"# https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
 xmlutil = "0.86.0"# https://github.com/pdvrieze/xmlutil/releases
 
@@ -71,6 +72,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 
 # navigation
 navigation = { module = "com.chrynan.navigation:navigation-compose", version.ref = "navigation" }
+parcelable = { module = "com.chrynan.parcelable:parcelable-core", version.ref = "parcelable" }
 
 # xml util
 xmlutil-core = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "xmlutil" }

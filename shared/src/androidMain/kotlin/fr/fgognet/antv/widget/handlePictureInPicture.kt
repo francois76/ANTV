@@ -28,9 +28,7 @@ actual fun HandlePictureInPicture(
                         navController.goTo(
                             RouteData(
                                 id = Route.PLAYER,
-                                arguments = null,
-                                iconName = null,
-                                nameID = null
+                                arguments = arrayListOf(),
                             )
                         )
                     }
