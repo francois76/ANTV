@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
+import com.chrynan.navigation.compose.rememberNavigator
 import com.chrynan.navigation.compose.rememberSavableNavigator
 import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
@@ -47,7 +48,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 )
 @Composable
 fun ANTVApp() {
-    val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!, destinationSerializer =RouteData.serializer())
+    val navigator = rememberNavigator(initialDestination = allRoutes[Route.LIVE]!!) // TODO : fix orientation with savableNavigator
     val colorScheme = buildColors(context = getPlatformContext())
     val contextualRefreshFunction by remember {
         mutableStateOf({})
