@@ -1,14 +1,14 @@
 [versions]
 guava = "32.0.1-android"# https://github.com/google/guava/releases #TODO: broken for now
-kamel = "0.6.0" # https://github.com/Kamel-Media/Kamel/releases
+kamel = "0.6.1" # https://github.com/Kamel-Media/Kamel/releases
 ktor = "2.3.2"# https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1"# https://github.com/icerockdev/moko-mvvm/releases
 moko-resource = "0.23.0"# https://github.com/icerockdev/moko-resources
 napier = "2.6.1"# https://github.com/AAkira/Napier
-navigation = "0.8.0"# https://github.com/chRyNaN/navigation/tree/develop
+navigation = "0.9.0"# https://github.com/chRyNaN/navigation/tree/develop
 parcelable = "0.7.1" # https://github.com/chRyNaN/serialization-parcelable/releases
 play-services-cast-framework = "21.3.0"# https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
-xmlutil = "0.86.0"# https://github.com/pdvrieze/xmlutil/releases
+xmlutil = "0.86.1"# https://github.com/pdvrieze/xmlutil/releases
 
 #kotlin dependencies
 kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
@@ -16,9 +16,8 @@ kotlinx-serialization-json = "1.5.1"# https://github.com/Kotlin/kotlinx.serializ
 kotlinx-coroutines-guava = "1.7.1"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
 kotlinx-coroutines = "1.7.1"# https://github.com/Kotlin/kotlinx.coroutines #
 
-# compose stack: https://developer.android.com/jetpack/androidx/releases/compose
-compose = "1.4.3"
-compose-multiplatform = "1.4.0" # https://github.com/JetBrains/compose-multiplatform/releases
+# compose stack:
+compose-multiplatform = "1.4.1" # https://github.com/JetBrains/compose-multiplatform/releases
 compose-compiler = "1.4.8" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 accompanist = "0.30.1" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 
@@ -29,7 +28,7 @@ core-ktx = "1.10.1"# https://developer.android.com/jetpack/androidx/releases/cor
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
 material3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/compose-material3
 material3-tooling = "1.4.3"# https://developer.android.com/jetpack/androidx/releases/compose-material3
-media3 = "1.0.2"# https://developer.android.com/jetpack/androidx/releases/media3
+media3 = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
 kotlin = "1.8.20" # https://github.com/JetBrains/kotlin/releases TODO: blocked by compose multiplatform 1.4.0
