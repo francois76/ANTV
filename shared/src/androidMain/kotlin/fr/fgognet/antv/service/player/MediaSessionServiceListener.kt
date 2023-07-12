@@ -20,7 +20,6 @@ import fr.fgognet.antv.external.editorial.Diffusion
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.eventSearch.EventSearch
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
@@ -60,7 +59,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         val result = LibraryResult.ofItem(
             MediaItem.Builder().setMediaId("root")
                 .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaMetadata(
-                    MediaMetadata.Builder().setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                    MediaMetadata.Builder().setIsBrowsable(false)
                         .setIsPlayable(false).build()
                 ).build(), null
         )
@@ -261,7 +260,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                                         .setMediaMetadata(
                                             MediaMetadata.Builder()
                                                 .setIsPlayable(true)
-                                                .setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                                                .setIsBrowsable(false)
                                                 .setTitle(
                                                     diffusion.libelle
                                                 ).setSubtitle(diffusion.lieu ?: "")
@@ -305,7 +304,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                     .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setIsPlayable(true)
-                            .setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                            .setIsBrowsable(false)
                             .setTitle(
                                 it.title
                             )
@@ -338,7 +337,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         return MediaItem.Builder()
             .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaId(mediaId)
             .setMediaMetadata(
-                MediaMetadata.Builder().setFolderType(MediaMetadata.FOLDER_TYPE_TITLES)
+                MediaMetadata.Builder().setIsBrowsable(true)
                     .setIsPlayable(false)
                     .setTitle(title)
                     .build()
