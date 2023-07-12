@@ -44,7 +44,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalSerializationApi::class
 )
 @Composable
 fun ANTVApp() {
@@ -66,7 +65,7 @@ fun ANTVApp() {
     }
 
     MaterialTheme(colorScheme = colorScheme) {
-        NavigationContainer(navigator) { _, destination ->
+        NavigationContainer(navigator) { (destination, context) ->
             Scaffold(
                 topBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
