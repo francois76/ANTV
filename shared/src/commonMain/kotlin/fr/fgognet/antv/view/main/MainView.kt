@@ -76,9 +76,6 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
 
     MaterialTheme(colorScheme = colorScheme) {
         NavigationContainer(navigator) { (destination, navigationContext) ->
-            Napier.v(tag = TAG, message ="initialDestination : " + navigationContext.initialDestination.toString())
-            Napier.v(tag = TAG, message = "destination : $destination")
-            Napier.v(tag = TAG, message = "isFullScreen : $isFullScreen")
             Scaffold(
                 topBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
@@ -110,7 +107,7 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                                 )
                             }
                         }, title = {
-                            if(context.getPlatform() == Platform.IOS){
+                            if(context.getPlatform() == Platform.IOS && navigator.canGoBack()){
                                 IconButton(onClick = {
                                     backHandler{
                                         navigator.goBack()
@@ -126,14 +123,13 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                     }
                 }, bottomBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
-                        var selectedItem by rememberSaveable { mutableStateOf(0) }
                         val items = listOf(
                             allRoutes[Route.LIVE],
                             allRoutes[Route.PLAYLIST],
                             allRoutes[Route.SEARCH]
                         )
                         NavigationBar(modifier = Modifier.height(72.dp)) {
-                            items.forEachIndexed { index, item ->
+                            items.forEachIndexed { _, item ->
                                 NavigationBarItem(
                                     icon = {
                                         Image(
@@ -144,9 +140,8 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                                         )
                                     },
                                     label = { Text(stringResource(resource = routeNames[item?.id]!!)) },
-                                    selected = selectedItem == index,
+                                    selected = item?.id == destination.id,
                                     onClick = {
-                                        selectedItem = index
                                         navigator.goTo(item!!)
                                     }
                                 )

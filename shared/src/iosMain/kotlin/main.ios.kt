@@ -11,6 +11,6 @@ import platform.UIKit.UIInterfaceOrientation
 
 fun MainViewController(): UIViewController = ComposeUIViewController {
     ANTVApp(backHandler = {
-
+        it()
     })
 }
