@@ -11,14 +11,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.ui.PlayerView
 
 @Composable
-actual fun player(context: PlatformContext , controller: MediaController, onclick: ()->Unit) {
+actual fun player(modifier:Modifier,context: PlatformContext , controller: MediaController) {
     AndroidView(
         modifier =
-        Modifier
-            .background(color = Color.Black)
-            .clickable {
-                onclick()
-            },
+        modifier,
         factory = {
             PlayerView(context.androidContext).apply {
                 player = controller.androidController

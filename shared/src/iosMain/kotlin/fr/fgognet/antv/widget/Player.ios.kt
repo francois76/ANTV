@@ -1,13 +1,10 @@
 package fr.fgognet.antv.widget
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModelCommon
 import fr.fgognet.antv.view.player.PlayerViewModelCommon
 
-@Composable
-actual fun player(context:PlatformContext, controller: MediaController, onclick: ()->Unit) {
-    return
-}
 
 
 actual class MediaController {
