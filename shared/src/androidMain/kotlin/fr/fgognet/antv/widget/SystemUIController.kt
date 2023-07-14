@@ -20,7 +20,7 @@ actual class SystemUIController(var androidSystemUIController: SystemUiControlle
     }
 
     actual fun setFullScreen(fullScreen: Boolean) {
-        androidSystemUIController.isSystemBarsVisible = fullScreen
+        androidSystemUIController.isSystemBarsVisible = !fullScreen
     }
 
 

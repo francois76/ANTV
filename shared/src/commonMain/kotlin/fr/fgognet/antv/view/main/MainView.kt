@@ -41,11 +41,13 @@ import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
 import io.github.aakira.napier.Napier
+import kotlinx.serialization.ExperimentalSerializationApi
 
 
 private const val TAG = "ANTV/MainView"
 
 @OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalSerializationApi::class,
 )
 @Composable
 fun ANTVApp() {
@@ -57,7 +59,7 @@ fun ANTVApp() {
     val systemUiController = getSystemUIController()
     HandlePictureInPicture(getPlatformContext(), navigator)
     var openDialog by rememberSaveable { mutableStateOf(false) }
-    val isFullScreen by remember { mutableStateOf(false) }
+    var isFullScreen by remember { mutableStateOf(false) }
     if (openDialog) {
         Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
             resource = MR.strings.credits,
@@ -70,6 +72,7 @@ fun ANTVApp() {
         NavigationContainer(navigator) { (destination, context) ->
             Napier.v(tag = TAG, message ="initialDestination : " + context.initialDestination.toString())
             Napier.v(tag = TAG, message = "destination : $destination")
+            Napier.v(tag = TAG, message = "isFullScreen : $isFullScreen")
             Scaffold(
                 topBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
@@ -194,8 +197,9 @@ fun ANTVApp() {
                         })
 
                         Route.PLAYER -> PlayerView(
-                            title = destination.arguments[0],
+                            title = if(destination.arguments.isEmpty())null else destination.arguments[0],
                             setFullScreen = {
+                                isFullScreen = it
                                 systemUiController.setFullScreen(it)
                             }
                         )
