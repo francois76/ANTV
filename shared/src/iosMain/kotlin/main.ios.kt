@@ -9,5 +9,7 @@ import platform.UIKit.UIViewController
 import platform.UIKit.UIInterfaceOrientation
 
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    ANTVApp()
+    ANTVApp(backHandler = {
+
+    })
 }
