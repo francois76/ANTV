@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberNavigator
+import com.chrynan.navigation.compose.rememberSavableNavigator
 import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -39,13 +40,16 @@ import fr.fgognet.antv.widget.Modal
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
+import io.github.aakira.napier.Napier
 
+
+private const val TAG = "ANTV/MainView"
 
 @OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
 )
 @Composable
 fun ANTVApp() {
-    val navigator = rememberNavigator(initialDestination = allRoutes[Route.LIVE]!!) // TODO : fix orientation with savableNavigator
+    val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!)
     val colorScheme = buildColors(context = getPlatformContext())
     val contextualRefreshFunction by remember {
         mutableStateOf({})
@@ -64,6 +68,8 @@ fun ANTVApp() {
 
     MaterialTheme(colorScheme = colorScheme) {
         NavigationContainer(navigator) { (destination, context) ->
+            Napier.v(tag = TAG, message ="initialDestination : " + context.initialDestination.toString())
+            Napier.v(tag = TAG, message = "destination : $destination")
             Scaffold(
                 topBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
