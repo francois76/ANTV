@@ -1,33 +1,35 @@
 package fr.fgognet.antv.widget
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import fr.fgognet.antv.view.isPlaying.IsPlayingViewModelCommon
 import fr.fgognet.antv.view.player.PlayerViewModelCommon
+import platform.AVFoundation.*
 
-
-
-actual class MediaController {
+// inspired by https://github.com/ayodelekehinde/Kicks/blob/master/shared/src/iosMain/kotlin/io/github/kicks/audioplayer/AudioPlayer.kt
+actual class MediaController(private val iosPlayer: AVPlayer) {
     actual fun seekBack() {
+
     }
 
     actual fun seekForward() {
     }
 
     actual fun pause() {
+        this.iosPlayer.pause()
     }
 
     actual fun play() {
+        this.iosPlayer.play()
     }
 
     actual fun seekTo(toLong: Long) {
+
     }
 
     actual fun isInit(): Boolean {
         return false
     }
 }
-
 
 
 actual class IsPlayingViewModel actual constructor() :
