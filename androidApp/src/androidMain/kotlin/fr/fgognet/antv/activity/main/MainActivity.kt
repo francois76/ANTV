@@ -4,8 +4,11 @@ import android.app.PictureInPictureParams
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.framework.CastContext
@@ -25,9 +28,16 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         super.onCreate(savedInstanceState)
         initCommonLogs()
         MediaSessionServiceImpl.addListener(this)
+        val activity = this;
         setContent {
             Log.d(TAG, "recomposing")
-            ANTVApp()
+            ANTVApp(backHandler = {
+                onBackPressedDispatcher.addCallback {
+                    if(!it()){
+                        activity.finish()
+                    }
+                }
+            })
         }
 
         CastContext.getSharedInstance(applicationContext, MoreExecutors.directExecutor())

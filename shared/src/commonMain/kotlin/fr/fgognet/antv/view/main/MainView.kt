@@ -25,6 +25,7 @@ import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberNavigator
 import com.chrynan.navigation.compose.rememberSavableNavigator
+import com.chrynan.navigation.goBack
 import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -50,8 +51,11 @@ private const val TAG = "ANTV/MainView"
     ExperimentalSerializationApi::class,
 )
 @Composable
-fun ANTVApp() {
+fun ANTVApp(backHandler:(()->Boolean)->Unit) {
     val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!)
+    backHandler{
+        navigator.goBack()
+    }
     val colorScheme = buildColors(context = getPlatformContext())
     val contextualRefreshFunction by remember {
         mutableStateOf({})
