@@ -1,9 +1,9 @@
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
-    id("com.android.library")
-    id("org.jetbrains.compose")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.com.android.library)
+    alias(libs.plugins.org.jetbrains.compose)
+    alias(libs.plugins.serialization)
     id("dev.icerock.mobile.multiplatform-resources")
     id("kotlin-parcelize")
 }

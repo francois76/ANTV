@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberNavigator
-import com.chrynan.navigation.compose.rememberSavableNavigator
 import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -40,7 +39,6 @@ import fr.fgognet.antv.widget.Modal
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
-import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
@@ -190,7 +188,7 @@ fun ANTVApp() {
                         })
 
                         Route.PLAYER -> PlayerView(
-                            title = destination.arguments.get(0),
+                            title = destination.arguments[0],
                             setFullScreen = {
                                 systemUiController.setFullScreen(it)
                             }
