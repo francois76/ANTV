@@ -6,7 +6,11 @@ import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-actual class PlatformContext(val androidContext: Context)
+actual class PlatformContext(val androidContext: Context) {
+    actual fun getPlatform(): Platform {
+        return Platform.ANDROID
+    }
+}
 
 @Composable
 actual fun getPlatformContext(): PlatformContext = PlatformContext(LocalContext.current)

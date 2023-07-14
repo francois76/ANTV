@@ -1,8 +1,6 @@
 package fr.fgognet.antv.view.main
 
 import fr.fgognet.antv.MR
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

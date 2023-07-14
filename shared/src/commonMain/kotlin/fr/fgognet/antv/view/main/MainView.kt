@@ -38,6 +38,7 @@ import fr.fgognet.antv.view.replaySearch.ReplaySearchView
 import fr.fgognet.antv.widget.CastButton
 import fr.fgognet.antv.widget.HandlePictureInPicture
 import fr.fgognet.antv.widget.Modal
+import fr.fgognet.antv.widget.Platform
 import fr.fgognet.antv.widget.buildColors
 import fr.fgognet.antv.widget.getPlatformContext
 import fr.fgognet.antv.widget.getSystemUIController
@@ -56,12 +57,13 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
     backHandler{
         navigator.goBack()
     }
-    val colorScheme = buildColors(context = getPlatformContext())
+    val context = getPlatformContext()
+    val colorScheme = buildColors(context = context)
     val contextualRefreshFunction by remember {
         mutableStateOf({})
     }
     val systemUiController = getSystemUIController()
-    HandlePictureInPicture(getPlatformContext(), navigator)
+    HandlePictureInPicture(context, navigator)
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var isFullScreen by remember { mutableStateOf(false) }
     if (openDialog) {
@@ -73,8 +75,8 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
     }
 
     MaterialTheme(colorScheme = colorScheme) {
-        NavigationContainer(navigator) { (destination, context) ->
-            Napier.v(tag = TAG, message ="initialDestination : " + context.initialDestination.toString())
+        NavigationContainer(navigator) { (destination, navigationContext) ->
+            Napier.v(tag = TAG, message ="initialDestination : " + navigationContext.initialDestination.toString())
             Napier.v(tag = TAG, message = "destination : $destination")
             Napier.v(tag = TAG, message = "isFullScreen : $isFullScreen")
             Scaffold(
@@ -107,7 +109,20 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                                     contentDescription = "reload"
                                 )
                             }
-                        }, title = {})
+                        }, title = {
+                            if(context.getPlatform() == Platform.IOS){
+                                IconButton(onClick = {
+                                    backHandler{
+                                        navigator.goBack()
+                                    }
+                                }) {
+                                    Image(
+                                        painter = painterResource(imageResource = MR.images.back_arrow),
+                                        contentDescription = "back"
+                                    )
+                                }
+                            }
+                        })
                     }
                 }, bottomBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {
