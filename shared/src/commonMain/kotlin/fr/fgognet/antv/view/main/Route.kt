@@ -19,21 +19,21 @@ data class RouteData(
     val arguments: List<String>,
 )
 
-val routeNames = hashMapOf(
+val routeNames = mapOf(
     Route.LIVE to MR.strings.menu_live,
     Route.PLAYLIST to MR.strings.menu_playlist,
     Route.SEARCH to MR.strings.menu_search,
     Route.REPLAY to MR.strings.title_replay
 )
 
-val routeIcons = hashMapOf(
+val routeIcons = mapOf(
     Route.LIVE to MR.images.ic_baseline_live_tv_24,
     Route.PLAYLIST to MR.images.ic_baseline_ondemand_video_24,
     Route.SEARCH to MR.images.ic_baseline_search_24,
 )
 
 
-val allRoutes = hashMapOf(
+val allRoutes = mapOf(
     Route.LIVE to RouteData(
         id = Route.LIVE,
         arguments = arrayListOf(),
