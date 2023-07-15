@@ -8,7 +8,8 @@ actual class MediaSessionServiceImpl {
         actual val isCasting: Boolean
             get() = false
         actual val controller: MediaController?
-            get() = fr.fgognet.antv.widget.MediaController(AVPlayer())
+            get() = MediaController(AVPlayer())
+
 
     }
 
