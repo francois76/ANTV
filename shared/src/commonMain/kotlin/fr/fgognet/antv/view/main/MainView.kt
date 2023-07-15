@@ -1,60 +1,35 @@
 package fr.fgognet.antv.view.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.chrynan.navigation.ExperimentalNavigationApi
+import com.chrynan.navigation.*
 import com.chrynan.navigation.compose.NavigationContainer
-import com.chrynan.navigation.compose.rememberNavigator
 import com.chrynan.navigation.compose.rememberSavableNavigator
-import com.chrynan.navigation.goBack
-import com.chrynan.navigation.goTo
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.view.cardList.LiveCardListView
-import fr.fgognet.antv.view.cardList.PlaylistCardListView
-import fr.fgognet.antv.view.cardList.ReplayCardListView
+import fr.fgognet.antv.view.cardList.*
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
-import fr.fgognet.antv.widget.CastButton
-import fr.fgognet.antv.widget.HandlePictureInPicture
-import fr.fgognet.antv.widget.Modal
-import fr.fgognet.antv.widget.Platform
-import fr.fgognet.antv.widget.buildColors
-import fr.fgognet.antv.widget.getPlatformContext
-import fr.fgognet.antv.widget.getSystemUIController
-import io.github.aakira.napier.Napier
+import fr.fgognet.antv.widget.*
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 private const val TAG = "ANTV/MainView"
 
-@OptIn(ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
+@OptIn(
+    ExperimentalNavigationApi::class, ExperimentalMaterial3Api::class,
     ExperimentalSerializationApi::class,
 )
 @Composable
-fun ANTVApp(backHandler:(()->Boolean)->Unit) {
+fun ANTVApp(backHandler: (() -> Boolean) -> Unit) {
     val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!)
-    backHandler{
+    backHandler {
         navigator.goBack()
     }
     val context = getPlatformContext()
@@ -66,15 +41,16 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
     HandlePictureInPicture(context, navigator)
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var isFullScreen by remember { mutableStateOf(false) }
-    if (openDialog) {
-        Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
-            resource = MR.strings.credits,
-        ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
-            openDialog = false
-        })
-    }
+
 
     MaterialTheme(colorScheme = colorScheme) {
+        if (openDialog) {
+            Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
+                resource = MR.strings.credits,
+            ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
+                openDialog = false
+            })
+        }
         NavigationContainer(navigator) { (destination, navigationContext) ->
             Scaffold(
                 topBar = {
@@ -107,9 +83,9 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                                 )
                             }
                         }, title = {
-                            if(context.getPlatform() == Platform.IOS && navigator.canGoBack()){
+                            if (context.getPlatform() == Platform.IOS && navigator.canGoBack()) {
                                 IconButton(onClick = {
-                                    backHandler{
+                                    backHandler {
                                         navigator.goBack()
                                     }
                                 }) {
@@ -149,7 +125,7 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                         }
                     }
                 }
-            ) {paddingValues:PaddingValues->
+            ) { paddingValues: PaddingValues ->
                 Column(modifier = Modifier.padding(paddingValues)) {
                     when (destination.id) {
                         Route.LIVE -> LiveCardListView(
@@ -211,7 +187,7 @@ fun ANTVApp(backHandler:(()->Boolean)->Unit) {
                         })
 
                         Route.PLAYER -> PlayerView(
-                            title = if(destination.arguments.isEmpty())null else destination.arguments[0],
+                            title = if (destination.arguments.isEmpty()) null else destination.arguments[0],
                             setFullScreen = {
                                 isFullScreen = it
                                 systemUiController.setFullScreen(it)
