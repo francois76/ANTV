@@ -51,7 +51,8 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit) {
                 openDialog = false
             })
         }
-        NavigationContainer(navigator) { (destination, navigationContext) ->
+        NavigationContainer(navigator) { (destination, _) ->
+            KeepScreenOn(getPlatformContext(), destination.id == Route.PLAYER)
             Scaffold(
                 topBar = {
                     if (!(isFullScreen && destination.id == Route.PLAYER)) {

@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,17 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
-import fr.fgognet.antv.widget.MediaController
-import fr.fgognet.antv.widget.player
-import fr.fgognet.antv.widget.PlayerViewModel
-import fr.fgognet.antv.widget.getPlatformContext
-import fr.fgognet.antv.widget.KeepScreenOn
-import fr.fgognet.antv.widget.OrientationWrapper
+import fr.fgognet.antv.widget.*
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -60,9 +52,8 @@ fun PlayerViewState(
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    Box{
+    Box {
         val state by model.playerData.observeAsState()
-        KeepScreenOn(getPlatformContext())
         var shouldShowControls by remember { mutableStateOf(false) }
 
         if (state.isCasting) {
@@ -76,12 +67,14 @@ fun PlayerViewState(
                 }
             }
             if (state.duration > 0) {
-                player(modifier = Modifier
-                    .background(color = Color.Black)
-                    .clickable {
-                        Napier.v(tag = TAG, message = "player click")
-                        shouldShowControls = shouldShowControls.not()
-                    },context = getPlatformContext(), controller = controller)
+                player(
+                    modifier = Modifier
+                        .background(color = Color.Black)
+                        .clickable {
+                            Napier.v(tag = TAG, message = "player click")
+                            shouldShowControls = shouldShowControls.not()
+                        }, context = getPlatformContext(), controller = controller
+                )
             }
         }
         Napier.v(tag = TAG, message = "shouldShowControls : $shouldShowControls")
