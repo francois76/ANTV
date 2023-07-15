@@ -24,7 +24,7 @@ fun PlayerViewPreview(
         currentPosition = 24,
         isCasting = false,
         bufferedPercentage = 2,
-        playbackState = 1,
+        isEnded = false,
     )
     KeepScreenOn(getPlatformContext(), true)
     var shouldShowControls by remember { mutableStateOf(false) }
@@ -40,7 +40,7 @@ fun PlayerViewPreview(
             }
         }
         if (state.duration > 0) {
-            player(
+            Player(
                 modifier = Modifier
                     .background(color = Color.Red)
                     .clickable {
@@ -74,7 +74,7 @@ fun PlayerControl() {
             description = "dolor est",
             isPlaying = false,
             isCasting = false,
-            playbackState = 0,
+            isEnded = false,
             bufferedPercentage = 100,
             currentPosition = 200000,
             duration = 2000000,
