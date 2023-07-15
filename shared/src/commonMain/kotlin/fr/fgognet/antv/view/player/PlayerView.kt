@@ -66,7 +66,7 @@ fun PlayerViewState(
                     shouldShowControls = shouldShowControls.not()
                 }
             }
-            if (state.duration > 0) {
+            if (state.duration > 0 || getPlatformContext().getPlatform() == Platform.IOS) {
                 Player(
                     modifier = Modifier
                         .background(color = Color.Black)

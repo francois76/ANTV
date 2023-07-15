@@ -2,16 +2,25 @@ package fr.fgognet.antv.widget
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import platform.AVFoundation.AVPlayer
-import platform.AVFoundation.play
-import platform.AVKit.AVPlayerViewController
 
 
 @Composable
 actual fun Player(modifier: Modifier, context: PlatformContext, controller: MediaController) {
-    val player = AVPlayer()
-    player.play()
+    /*    UIKitView(
+            modifier = modifier,
+            background = Color.Black,
+            factory = {
+                val view = UIView()
 
-    val playerController = AVPlayerViewController()
-    playerController.player = player
+                // configure player
+                val playerItem = AVPlayerItem()
+                val player = AVPlayer(playerItem = playerItem)
+                val playerLayer = AVPlayerLayer(player)
+                playerLayer.frame = view.frame
+
+                view.layer.addSublayer(playerLayer)
+                view
+            }
+        )*/
 }
+

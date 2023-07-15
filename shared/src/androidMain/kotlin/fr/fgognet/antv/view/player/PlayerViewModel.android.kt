@@ -15,6 +15,7 @@ import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.service.player.MediaSessionServiceListener
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.PlatformContext
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,7 +26,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 
 
     override fun initialize(c: MediaController?) {
-        Log.v(TAG, "initialize")
+        Napier.v(tag = TAG, message = "initialize")
         if (c != null) {
             this._controller.value = c
         }
