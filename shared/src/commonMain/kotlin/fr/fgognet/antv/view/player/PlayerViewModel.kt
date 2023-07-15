@@ -21,7 +21,7 @@ abstract class PlayerViewModelCommon : ViewModel() {
                 duration = 1,
                 currentPosition = 0,
                 bufferedPercentage = 0,
-                playbackState = 0,
+                isEnded = false,
             )
         )
     val playerData: LiveData<PlayerData> get() = _playerdata

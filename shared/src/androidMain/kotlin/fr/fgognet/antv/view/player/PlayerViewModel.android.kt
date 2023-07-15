@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.net.Uri
 import android.util.Log
 import androidx.media3.common.*
+import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.SessionToken
 import com.google.android.gms.cast.framework.CastContext
@@ -56,7 +57,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                                 ?: 1,
                             bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
                                 ?: 0,
-                            playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+                            isEnded = STATE_ENDED == MediaSessionServiceImpl.controller?.playbackState,
                         )
                     }
                 }
@@ -116,7 +117,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                 ?: 0,
             isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
             bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
-            playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+            isEnded = STATE_ENDED == MediaSessionServiceImpl.controller?.playbackState,
         )
     }
 
@@ -140,7 +141,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                     isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
                     bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage
                         ?: 0,
-                    playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+                    isEnded = STATE_ENDED == MediaSessionServiceImpl.controller?.playbackState,
                 )
             }
         } else {
@@ -170,7 +171,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                     ?: 0,
                 isPlaying = MediaSessionServiceImpl.controller?.isPlaying == true,
                 bufferedPercentage = MediaSessionServiceImpl.controller?.bufferedPercentage ?: 0,
-                playbackState = MediaSessionServiceImpl.controller?.playbackState ?: 0,
+                isEnded = STATE_ENDED == MediaSessionServiceImpl.controller?.playbackState,
             )
         }
 

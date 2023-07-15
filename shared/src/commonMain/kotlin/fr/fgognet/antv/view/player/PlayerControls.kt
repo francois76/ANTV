@@ -14,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.compose.painterResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.getStateEnded
 import fr.fgognet.antv.widget.toHour
 
 data class PlayerData(
@@ -25,7 +24,7 @@ data class PlayerData(
     val currentPosition: Long,
     val isCasting: Boolean,
     val bufferedPercentage: Int,
-    val playbackState: Int,
+    val isEnded: Boolean,
 )
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -132,7 +131,7 @@ private fun CenterControls(
                         painterResource(imageResource = MR.images.ic_baseline_pause_24)
                     }
 
-                    state.playbackState == getStateEnded() -> {
+                    state.isEnded -> {
                         painterResource(imageResource = MR.images.ic_baseline_replay_24)
                     }
 
