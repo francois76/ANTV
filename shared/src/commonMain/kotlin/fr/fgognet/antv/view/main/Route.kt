@@ -9,7 +9,12 @@ enum class Route(val value: String) {
     PLAYLIST("playlist"),
     SEARCH("search"),
     REPLAY("replay"),
-    PLAYER("player")
+    PLAYER("player"),
+
+}
+
+fun findBy(value: String): Route? {
+    return Route.values().firstOrNull { it.value == value }
 }
 
 

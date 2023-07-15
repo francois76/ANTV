@@ -14,7 +14,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.utils.initCommonLogs
 import fr.fgognet.antv.utils.resetLogs
-import fr.fgognet.antv.view.main.ANTVApp
+import fr.fgognet.antv.view.main.*
 
 private const val TAG = "ANTV/MainActivity"
 
@@ -27,6 +27,14 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         initCommonLogs()
         MediaSessionServiceImpl.addListener(this)
         val activity = this
+        var initialRoute: RouteData? = null;
+        if (intent.data != null && intent.data!!.host != null) {
+            initialRoute =
+                RouteData(
+                    id = findBy(intent.data!!.host!!)!!,
+                    arguments = arrayListOf(),
+                )
+        }
         setContent {
             Log.d(TAG, "recomposing")
             ANTVApp(backHandler = {
@@ -35,7 +43,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
                         activity.finish()
                     }
                 }
-            })
+            }, initialRoute = initialRoute)
         }
 
         CastContext.getSharedInstance(applicationContext, MoreExecutors.directExecutor())

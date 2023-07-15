@@ -27,8 +27,9 @@ private const val TAG = "ANTV/MainView"
     ExperimentalSerializationApi::class,
 )
 @Composable
-fun ANTVApp(backHandler: (() -> Boolean) -> Unit) {
-    val navigator = rememberSavableNavigator(initialDestination = allRoutes[Route.LIVE]!!)
+fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
+    val navigator =
+        rememberSavableNavigator(initialDestination = initialRoute ?: allRoutes[Route.LIVE]!!)
     backHandler {
         navigator.goBack()
     }
