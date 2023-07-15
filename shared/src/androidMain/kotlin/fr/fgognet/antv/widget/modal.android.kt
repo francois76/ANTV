@@ -1,9 +1,12 @@
 package fr.fgognet.antv.widget
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import android.text.method.LinkMovementMethod
+import android.widget.TextView
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.HtmlCompat
 
 @Composable
 actual fun Modal(
@@ -33,5 +36,18 @@ actual fun Modal(
                 Text(confirmButton)
             }
         }
+    )
+}
+
+@Composable
+fun HtmlText(html: String, modifier: Modifier) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            val text = TextView(context)
+            text.movementMethod = LinkMovementMethod.getInstance()
+            text
+        },
+        update = { it.text = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT) }
     )
 }
