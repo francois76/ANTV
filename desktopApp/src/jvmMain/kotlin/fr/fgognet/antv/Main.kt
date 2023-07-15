@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
+import androidx.compose.ui.window.*
 import fr.fgognet.antv.view.main.ANTVApp
 
 
@@ -20,7 +17,7 @@ fun main() = application {
             ),
         ) {
             Surface(modifier = Modifier.fillMaxSize()) {
-                ANTVApp()
+                ANTVApp(backHandler = {})
             }
 
         }

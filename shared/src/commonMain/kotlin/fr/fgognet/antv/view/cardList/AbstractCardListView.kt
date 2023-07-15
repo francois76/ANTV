@@ -1,11 +1,6 @@
 package fr.fgognet.antv.view.cardList
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -17,7 +12,7 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import fr.fgognet.antv.view.card.CardData
 import fr.fgognet.antv.view.isPlaying.IsPlaying
-import fr.fgognet.antv.widget.IsPlayingViewModel
+import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
 import fr.fgognet.antv.widget.OrientationWrapper
 
 
