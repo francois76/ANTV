@@ -33,3 +33,7 @@ abstract class PlayerViewModelCommon : ViewModel() {
     abstract fun loadMedia(title: String?)
     abstract fun loadPlayer(context: PlatformContext)
 }
+
+expect class PlayerViewModel() : PlayerViewModelCommon {
+
+}
