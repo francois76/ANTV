@@ -2,6 +2,7 @@ package fr.fgognet.antv.config
 
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.serialization.DefaultXmlSerializationPolicy
+import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 
 enum class Environment {
     NOTHING, // no current stream
@@ -14,4 +15,8 @@ object Config {
 }
 
 @OptIn(ExperimentalXmlUtilApi::class)
-object MyPolicy : DefaultXmlSerializationPolicy(false, unknownChildHandler = no_handler)
+object MyPolicy : DefaultXmlSerializationPolicy(
+    false,
+    unknownChildHandler = UnknownChildHandler { _, _, _, _, _ ->
+        emptyList()
+    })
