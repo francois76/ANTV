@@ -19,7 +19,7 @@ kotlin {
     cocoapods {
         summary = "Shared code for the sample"
         homepage = "https://github.com/JetBrains/compose-jb"
-        ios.deploymentTarget = "14.1"
+        ios.deploymentTarget = "16.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
