@@ -4,4 +4,4 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-expect fun player(modifier:Modifier,context:PlatformContext, controller: MediaController)
+expect fun Player(modifier: Modifier, context: PlatformContext, controller: MediaController)

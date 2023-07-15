@@ -14,6 +14,4 @@ object Config {
 }
 
 @OptIn(ExperimentalXmlUtilApi::class)
-object MyPolicy : DefaultXmlSerializationPolicy(false, unknownChildHandler = no_handler) {
-
-}
+object MyPolicy : DefaultXmlSerializationPolicy(false, unknownChildHandler = no_handler)

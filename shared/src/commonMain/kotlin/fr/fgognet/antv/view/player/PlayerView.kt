@@ -67,7 +67,7 @@ fun PlayerViewState(
                 }
             }
             if (state.duration > 0) {
-                player(
+                Player(
                     modifier = Modifier
                         .background(color = Color.Black)
                         .clickable {

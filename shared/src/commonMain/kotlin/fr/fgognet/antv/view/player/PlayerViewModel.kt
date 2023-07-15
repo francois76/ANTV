@@ -34,6 +34,4 @@ abstract class PlayerViewModelCommon : ViewModel() {
     abstract fun loadPlayer(context: PlatformContext)
 }
 
-expect class PlayerViewModel() : PlayerViewModelCommon {
-
-}
+expect class PlayerViewModel() : PlayerViewModelCommon

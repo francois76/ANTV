@@ -35,7 +35,5 @@ abstract class IsPlayingViewModelCommon : ViewModel() {
 
 }
 
-expect class IsPlayingViewModel() : IsPlayingViewModelCommon {
-
-}
+expect class IsPlayingViewModel() : IsPlayingViewModelCommon
 

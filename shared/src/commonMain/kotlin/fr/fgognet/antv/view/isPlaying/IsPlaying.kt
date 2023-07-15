@@ -1,14 +1,7 @@
 package fr.fgognet.antv.view.isPlaying
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import fr.fgognet.antv.widget.IsPlayingViewModel
 import fr.fgognet.antv.widget.OrientationWrapper
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource

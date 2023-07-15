@@ -10,9 +10,9 @@ import fr.fgognet.antv.utils.ResourceOrText
 import fr.fgognet.antv.view.card.CompositeCardView
 import fr.fgognet.antv.view.card.GenericCardData
 import fr.fgognet.antv.view.cardList.playlist.PlaylistCardData
-import fr.fgognet.antv.widget.IsPlayingViewModel
+import fr.fgognet.antv.view.isPlaying.IsPlayingViewModel
 
-@Preview()
+@Preview
 @Composable
 fun CardListViewPreview(
 ) {
