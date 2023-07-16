@@ -34,12 +34,10 @@ fun PlayerView(
         PlayerViewModel().start(MediaSessionServiceImpl.controller)
     }, key = "PlayerViewModel") as PlayerViewModel
     val controller by model.controller.observeAsState()
+    Napier.v(tag = TAG, message = "PlayerView")
     if (controller == null || !controller!!.isInit()) {
-        Text(text = "not loaded")
-        Text(text = "Controller null: " + (controller == null))
         model.loadPlayer(context = getPlatformContext())
     } else {
-        Text(text = "loaded")
         model.loadMedia(title)
         PlayerViewState(
             model = model,
@@ -56,8 +54,10 @@ fun PlayerViewState(
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
+    Napier.v(tag = TAG, message = "PlayerViewState")
     Box {
         val state by model.playerData.observeAsState()
+        Napier.v(tag = TAG, message = "state: $state")
         var shouldShowControls by remember { mutableStateOf(false) }
         Text(text = state.toString())
         if (state.isCasting) {
@@ -70,7 +70,7 @@ fun PlayerViewState(
                     shouldShowControls = shouldShowControls.not()
                 }
             }
-            if (state.duration > 0 || getPlatformContext().getPlatform() == Platform.IOS) {
+            if (state.duration > 0) {
 
                 Player(
                     modifier = Modifier
