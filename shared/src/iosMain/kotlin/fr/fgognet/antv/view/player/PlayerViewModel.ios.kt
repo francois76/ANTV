@@ -1,5 +1,6 @@
 package fr.fgognet.antv.view.player
 
+import dev.icerock.moko.mvvm.livedata.setValue
 import fr.fgognet.antv.repository.VideoDao
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.MediaController
@@ -21,7 +22,7 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
     override fun initialize(c: MediaController?) {
         Napier.v(tag = TAG, message = "initialize")
         if (c != null) {
-            this._controller.value = c
+            this._controller.setValue(c, true)
         }
         if (controller.value == null) {
             return
@@ -110,7 +111,9 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
     }
 
     override fun loadPlayer(context: PlatformContext) {
+        Napier.v(tag = TAG, message = "loadPlayer")
         MediaSessionServiceImpl.loadController()
+        this._controller.setValue(MediaSessionServiceImpl.controller, true)
     }
 
     private fun player(): AVPlayer? {

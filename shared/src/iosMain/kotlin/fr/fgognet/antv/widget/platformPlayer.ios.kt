@@ -10,8 +10,6 @@ import platform.UIKit.UIView
 @Composable
 actual fun Player(modifier: Modifier, context: PlatformContext, controller: MediaController) {
 
-
-    // val player = AVPlayer(uRL = streamVideoURL)
     val playerLayer = AVPlayerLayer()
     playerLayer.player = controller.iosMediaController?.player;
     UIKitView(
