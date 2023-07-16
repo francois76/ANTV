@@ -97,7 +97,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 
     @UnstableApi
     override fun loadMedia(title: String?) {
-        Log.v(TAG, "loadMedia")
+        Napier.v(tag = TAG, message = "loadMedia")
         if (title == null) {
             loadCurrentMedia()
         } else {
@@ -106,7 +106,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
     }
 
     private fun loadCurrentMedia() {
-        Log.v(TAG, "loadCurrentMedia")
+        Napier.v(tag = TAG, message = "loadCurrentMedia")
         this._playerdata.value = this.playerData.value.copy(
             title = MediaSessionServiceImpl.controller?.mediaMetadata?.title.toString(),
             description = MediaSessionServiceImpl.controller?.mediaMetadata?.description?.toString()
@@ -124,7 +124,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
 
     @UnstableApi
     private fun updateCurrentMedia(title: String) {
-        Log.v(TAG, "updateCurrentMedia")
+        Napier.v(tag = TAG, message = "updateCurrentMedia")
         if (title == playerData.value.title) {
             return
         }
@@ -197,7 +197,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
     }
 
     override fun onPlayerError(error: PlaybackException) {
-        Log.v(TAG, "onPlayerError")
+        Napier.v(tag = TAG, message = "onPlayerError")
         try {
             when (error.errorCode) {
                 PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
