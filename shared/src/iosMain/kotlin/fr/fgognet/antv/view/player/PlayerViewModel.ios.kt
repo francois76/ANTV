@@ -140,7 +140,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
     private fun ticker(): Flow<Boolean> = flow {
         while (true) {
             delay(1000)
-            emit(player()?.rate != "0".toFloat() && player()?.error == null)
+            // emit(player()?.rate != "0".toFloat() && player()?.error == null)
         }
     }
 

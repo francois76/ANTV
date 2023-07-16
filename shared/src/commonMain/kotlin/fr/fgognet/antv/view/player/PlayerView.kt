@@ -58,7 +58,7 @@ fun PlayerViewState(
     Box {
         val state by model.playerData.observeAsState()
         Napier.v(tag = TAG, message = "state: $state")
-        var shouldShowControls by remember { mutableStateOf(true) }
+        var shouldShowControls by remember { mutableStateOf(false) }
         Text(text = state.toString())
         if (state.isCasting) {
             shouldShowControls = true
@@ -67,7 +67,7 @@ fun PlayerViewState(
                 LaunchedEffect(Unit) {
                     val duration = 5
                     delay(duration.seconds)
-                    // shouldShowControls = shouldShowControls.not()
+                    shouldShowControls = shouldShowControls.not()
                 }
             }
             if (state.duration > 0) {
