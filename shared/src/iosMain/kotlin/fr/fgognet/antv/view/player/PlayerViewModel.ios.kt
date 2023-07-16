@@ -33,9 +33,9 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
                 ticker().collect { isPlaying ->
                     if (isPlaying) {
                         t._playerdata.value = t.playerData.value.copy(
-                            currentPosition = iosTimeToSecond(player()?.currentItem!!.currentTime())
+                            currentPosition = iosTimeToSecond(player()?.currentItem?.currentTime())
                                 ?: 0,
-                            duration = iosTimeToSecond(player()?.currentItem!!.duration)
+                            duration = iosTimeToSecond(player()?.currentItem?.duration)
                                 ?: 1,
                             bufferedPercentage = 50 // TODO
                                 ?: 0,
@@ -61,9 +61,9 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
         this._playerdata.value = this.playerData.value.copy(
             title = "TODO",
             description = "TODO",
-            currentPosition = iosTimeToSecond(player()?.currentItem!!.currentTime())
+            currentPosition = iosTimeToSecond(player()?.currentItem?.currentTime())
                 ?: 0,
-            duration = iosTimeToSecond(player()?.currentItem!!.duration)
+            duration = iosTimeToSecond(player()?.currentItem?.duration)
                 ?: 1,
             bufferedPercentage = 50 // TODO
                 ?: 0,
@@ -97,9 +97,9 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
             this._playerdata.value = this.playerData.value.copy(
                 title = entity.title,
                 description = entity.description,
-                currentPosition = iosTimeToSecond(player()?.currentItem!!.currentTime())
+                currentPosition = iosTimeToSecond(player()?.currentItem?.currentTime())
                     ?: 0,
-                duration = iosTimeToSecond(player()?.currentItem!!.duration)
+                duration = iosTimeToSecond(player()?.currentItem?.duration)
                     ?: 1,
                 bufferedPercentage = 50 // TODO
                     ?: 0,
@@ -117,7 +117,10 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
         return MediaSessionServiceImpl.controller?.iosMediaController?.player
     }
 
-    private fun iosTimeToSecond(value: CValue<CMTime>): Long? {
+    private fun iosTimeToSecond(value: CValue<CMTime>?): Long? {
+        if (value == null) {
+            return null;
+        }
         val cmTime = CMTimeGetSeconds(value);
         return if (cmTime.isNaN()) null else cmTime.toDuration(DurationUnit.SECONDS).inWholeSeconds
     }

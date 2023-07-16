@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,8 +35,11 @@ fun PlayerView(
     }, key = "PlayerViewModel") as PlayerViewModel
     val controller by model.controller.observeAsState()
     if (controller == null || !controller!!.isInit()) {
+        Text(text = "not loaded")
+        Text(text = "Controller null: " + (controller == null))
         model.loadPlayer(context = getPlatformContext())
     } else {
+        Text(text = "loaded")
         model.loadMedia(title)
         PlayerViewState(
             model = model,
@@ -55,7 +59,7 @@ fun PlayerViewState(
     Box {
         val state by model.playerData.observeAsState()
         var shouldShowControls by remember { mutableStateOf(false) }
-
+        Text(text = state.toString())
         if (state.isCasting) {
             shouldShowControls = true
         } else {
@@ -66,7 +70,8 @@ fun PlayerViewState(
                     shouldShowControls = shouldShowControls.not()
                 }
             }
-            if (state.duration > 0) {
+            if (state.duration > 0 || getPlatformContext().getPlatform() == Platform.IOS) {
+
                 Player(
                     modifier = Modifier
                         .background(color = Color.Black)

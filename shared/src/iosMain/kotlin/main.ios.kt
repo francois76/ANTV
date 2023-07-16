@@ -5,6 +5,7 @@
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.ComposeUIViewController
+import fr.fgognet.antv.utils.initCommonLogs
 import fr.fgognet.antv.view.main.ANTVApp
 import platform.UIKit.*
 import platform.UIKit.UIViewController
@@ -14,4 +15,8 @@ fun MainViewController(): UIViewController = ComposeUIViewController {
     ANTVApp(initialRoute = null,backHandler = {
         it()
     })
+}
+
+fun DebugBuild() {
+    initCommonLogs()
 }
