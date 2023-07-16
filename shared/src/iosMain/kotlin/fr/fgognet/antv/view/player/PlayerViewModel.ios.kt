@@ -2,6 +2,7 @@ package fr.fgognet.antv.view.player
 
 import dev.icerock.moko.mvvm.livedata.setValue
 import fr.fgognet.antv.repository.VideoDao
+import fr.fgognet.antv.service.player.AVPlayerListener
 import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.PlatformContext
@@ -18,7 +19,7 @@ import kotlin.time.toDuration
 
 private const val TAG = "ANTV/PlayerViewModel"
 
-actual class PlayerViewModel : PlayerViewModelCommon() {
+actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
     override fun initialize(c: MediaController?) {
         Napier.v(tag = TAG, message = "initialize")
         if (c != null) {
@@ -27,6 +28,7 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
         if (controller.value == null) {
             return
         }
+        MediaSessionServiceImpl.addListener(this)
 
         val t = this
         viewModelScope.launch {
@@ -46,6 +48,13 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
                 }
             }
         }
+    }
+
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        Napier.v(tag = TAG, message = "onIsPlayingChanged")
+        this._playerdata.value = this.playerData.value.copy(
+            isPlaying = isPlaying,
+        )
     }
 
     override fun loadMedia(title: String?) {
@@ -69,7 +78,7 @@ actual class PlayerViewModel : PlayerViewModelCommon() {
             bufferedPercentage = 50 // TODO
                 ?: 0,
             isEnded = false, // TODO
-            isPlaying = true, // TODO
+            isPlaying = player()?.timeControlStatus == AVPlayerTimeControlStatusPlaying,
         )
     }
 

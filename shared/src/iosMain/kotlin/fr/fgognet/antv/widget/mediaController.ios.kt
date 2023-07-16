@@ -1,6 +1,7 @@
 package fr.fgognet.antv.widget
 
 import fr.fgognet.antv.repository.VideoEntity
+import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import io.github.aakira.napier.Napier
 import platform.AVFoundation.*
 import platform.AVKit.AVPlayerViewController
@@ -26,10 +27,12 @@ actual class MediaController(val iosMediaController: AVPlayerViewController?) {
 
     actual fun pause() {
         iosMediaController?.player?.pause()
+        MediaSessionServiceImpl.invokeonIsPlayingChanged(false)
     }
 
     actual fun play() {
         iosMediaController?.player?.play()
+        MediaSessionServiceImpl.invokeonIsPlayingChanged(true)
     }
 
     actual fun seekTo(toLong: Long) {
