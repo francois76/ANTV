@@ -10,7 +10,7 @@ actual class MediaController(val iosMediaController: AVPlayerViewController?) {
 
 
     actual fun isInit(): Boolean {
-        return true
+        return iosMediaController != null
     }
 
     actual fun seekBack() {
