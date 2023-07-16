@@ -11,7 +11,7 @@ import platform.UIKit.UIViewController
 
 @Suppress("FunctionNaming")
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    ANTVApp(backHandler = {
+    ANTVApp(initialRoute = null,backHandler = {
         it()
     })
 }
