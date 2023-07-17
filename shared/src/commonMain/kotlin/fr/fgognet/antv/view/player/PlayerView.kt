@@ -1,6 +1,5 @@
 package fr.fgognet.antv.view.player
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.mvvm.livedata.compose.observeAsState
@@ -74,7 +72,6 @@ fun PlayerViewState(
 
                 Player(
                     modifier = Modifier
-                        .background(color = Color.Black)
                         .clickable {
                             Napier.v(tag = TAG, message = "player click")
                             shouldShowControls = shouldShowControls.not()

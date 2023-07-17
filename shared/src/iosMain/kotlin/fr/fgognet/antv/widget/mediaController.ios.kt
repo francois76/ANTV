@@ -42,7 +42,8 @@ actual class MediaController(val iosMediaController: AVPlayerViewController?) {
 
     fun setMediaItem(entity: VideoEntity) {
         Napier.v(tag = TAG, message = "setMediaItem")
-        val streamVideoURL = NSURL(string = entity.url)
+        val streamVideoURL =
+            NSURL(string = "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4")
         iosMediaController?.player?.replaceCurrentItemWithPlayerItem(AVPlayerItem(uRL = streamVideoURL))
     }
 
