@@ -30,19 +30,30 @@ actual fun Player(modifier: Modifier, context: PlatformContext, controller: Medi
 fun ViewKit(modifier: Modifier, playerLayer: AVPlayerLayer) {
     Napier.v(tag = TAG, message = "ViewKit")
     Box {
-        UIKitView(
-            modifier = Modifier.fillMaxSize(),
-            background = Color.Black,
-            factory = {
+        val factory = remember {
+            {
                 Napier.v(tag = TAG, message = "building UIKIT Player")
                 UIView().apply {
                     layer.addSublayer(playerLayer)
                 }
-            }, onResize = { view, rect ->
+            }
+        }
+        UIKitView(
+            modifier = Modifier.fillMaxSize(),
+            background = Color.Black,
+            factory = factory,
+            onResize = { view, rect ->
                 Napier.v(tag = TAG, message = "Resizing UIKIT Player")
                 view.setFrame(rect)
                 playerLayer.setFrame(rect)
-            }
+            },
+            onRelease = {
+                Napier.v(tag = TAG, message = "releasing UIKIT Player")
+            },
+            update = {
+                Napier.v(tag = TAG, message = "updating UIKIT Player")
+            },
+            interactive = true,
         )
         Row(modifier = modifier.fillMaxSize()) {}
     }
