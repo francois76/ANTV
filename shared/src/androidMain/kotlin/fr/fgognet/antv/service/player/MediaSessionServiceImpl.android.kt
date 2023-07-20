@@ -16,6 +16,7 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import io.github.aakira.napier.Napier
 import java.util.UUID
 
 // TAG
@@ -152,6 +153,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
 
         fun addFutureListener() {
             listenersFuture.forEach {
+                Napier.d(tag = TAG, message = "adding listener $it")
                 androidController?.addListener(it)
             }
             listenersFuture = arrayListOf()

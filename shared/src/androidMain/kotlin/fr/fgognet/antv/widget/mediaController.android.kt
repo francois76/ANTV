@@ -1,8 +1,6 @@
 package fr.fgognet.antv.widget
 
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
+import androidx.media3.common.*
 
 actual class MediaController(val androidController: androidx.media3.session.MediaController?) {
     val isCurrentMediaItemLive: Boolean?
@@ -36,39 +34,39 @@ actual class MediaController(val androidController: androidx.media3.session.Medi
         }
 
     actual fun seekBack() {
-        androidController?.seekBack()
+        androidController!!.seekBack()
     }
 
     actual fun seekForward() {
-        androidController?.seekForward()
+        androidController!!.seekForward()
     }
 
     actual fun pause() {
-        androidController?.pause()
+        androidController!!.pause()
     }
 
     actual fun play() {
-        androidController?.play()
+        androidController!!.play()
     }
 
     actual fun seekTo(toLong: Long) {
-        androidController?.seekTo(toLong)
+        androidController!!.seekTo(toLong)
     }
 
     fun addListener(it: Player.Listener) {
-        androidController?.addListener(it)
+        androidController!!.addListener(it)
     }
 
     fun setMediaItem(item: MediaItem) {
-        androidController?.setMediaItem(item)
+        androidController!!.setMediaItem(item)
     }
 
     fun prepare() {
-        androidController?.prepare()
+        androidController!!.prepare()
     }
 
     fun seekToDefaultPosition() {
-        androidController?.seekToDefaultPosition()
+        androidController!!.seekToDefaultPosition()
     }
 
     fun removeListener(listener: Player.Listener) {

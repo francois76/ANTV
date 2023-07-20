@@ -30,7 +30,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
         if (c != null) {
             this._controller.value = c
         }
-        if (controller.value == null) {
+        if (controller.value == null || controller.value!!.androidController == null) {
             return
         }
         MediaSessionServiceImpl.controller?.addListener(this)
