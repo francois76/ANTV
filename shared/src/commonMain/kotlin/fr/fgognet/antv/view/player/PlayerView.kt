@@ -36,9 +36,8 @@ fun PlayerView(
         model.loadPlayer(context = getPlatformContext())
     } else {
         model.loadMedia(title)
-        val state by model.playerData.observeAsState()
         PlayerViewState(
-            state = state,
+            model = model,
             controller = controller!!,
             setFullScreen = setFullScreen
         )
@@ -48,12 +47,12 @@ fun PlayerView(
 
 @Composable
 fun PlayerViewState(
-    state: PlayerData,
+    model: PlayerViewModel,
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     Napier.v(tag = TAG, message = "PlayerViewState")
-    Napier.v(tag = TAG, message = "state: $state")
+    val state by model.playerData.observeAsState()
     Box {
         var shouldShowControls by remember { mutableStateOf(false) }
         if (state.isCasting) {
@@ -76,7 +75,6 @@ fun PlayerViewState(
                 )
             }
         }
-        Napier.v(tag = TAG, message = "shouldShowControls : $shouldShowControls")
         PlayerControls(
             modifier = Modifier.fillMaxSize(),
             isVisible = { shouldShowControls },
