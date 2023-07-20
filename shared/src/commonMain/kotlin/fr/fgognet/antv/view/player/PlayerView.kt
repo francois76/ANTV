@@ -3,7 +3,6 @@ package fr.fgognet.antv.view.player
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,8 +36,9 @@ fun PlayerView(
         model.loadPlayer(context = getPlatformContext())
     } else {
         model.loadMedia(title)
+        val state by model.playerData.observeAsState()
         PlayerViewState(
-            model = model,
+            state = state,
             controller = controller!!,
             setFullScreen = setFullScreen
         )
@@ -48,16 +48,14 @@ fun PlayerView(
 
 @Composable
 fun PlayerViewState(
-    model: PlayerViewModel,
+    state: PlayerData,
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
     Napier.v(tag = TAG, message = "PlayerViewState")
+    Napier.v(tag = TAG, message = "state: $state")
     Box {
-        val state by model.playerData.observeAsState()
-        Napier.v(tag = TAG, message = "state: $state")
         var shouldShowControls by remember { mutableStateOf(false) }
-        Text(text = state.toString())
         if (state.isCasting) {
             shouldShowControls = true
         } else {
@@ -69,7 +67,6 @@ fun PlayerViewState(
                 }
             }
             if (state.duration > 0) {
-
                 Player(
                     modifier = Modifier
                         .clickable {

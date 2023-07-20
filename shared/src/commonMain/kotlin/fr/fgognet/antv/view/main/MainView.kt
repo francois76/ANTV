@@ -29,7 +29,10 @@ private const val TAG = "ANTV/MainView"
 @Composable
 fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
     val navigator =
-        rememberSavableNavigator(initialDestination = initialRoute ?: allRoutes[Route.LIVE]!!)
+        rememberSavableNavigator(
+            initialDestination = initialRoute ?: allRoutes[Route.LIVE]!!,
+            duplicateDestinationStrategy = NavigationStrategy.DuplicateDestination.CLEAR_TO_ORIGINAL
+        )
     backHandler {
         navigator.goBack()
     }
