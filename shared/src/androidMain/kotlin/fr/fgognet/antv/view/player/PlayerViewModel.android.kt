@@ -79,7 +79,6 @@ actual class PlayerViewModel : PlayerViewModelCommon(), Player.Listener {
                 )
                     .buildAsync()
             MediaSessionServiceImpl.controllerFuture?.addListener({
-                Log.d(TAG, "Media service built!")
                 MediaSessionServiceImpl.addFutureListener()
                 initialize(
                     MediaSessionServiceImpl.controller

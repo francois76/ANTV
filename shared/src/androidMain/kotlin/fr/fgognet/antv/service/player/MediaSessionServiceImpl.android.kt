@@ -160,7 +160,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
         }
 
         fun addListener(listener: Player.Listener) {
-            if (controller == null) {
+            if (controller == null || controller?.androidController == null) {
                 listenersFuture.add(listener)
             } else {
                 androidController?.addListener(listener)
@@ -170,7 +170,9 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
         actual val isCasting: Boolean
             get() = isCastingPrivate
         actual val controller: fr.fgognet.antv.widget.MediaController?
-            get() = fr.fgognet.antv.widget.MediaController(androidController)
+            get() {
+                return fr.fgognet.antv.widget.MediaController(androidController)
+            }
 
     }
 

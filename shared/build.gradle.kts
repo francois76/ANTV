@@ -36,7 +36,6 @@ kotlin {
                 implementation(libs.napier)
                 implementation(libs.kamel)
                 implementation(libs.navigation)
-                implementation(libs.parcelable)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
                 implementation(libs.moko.resources.compose)

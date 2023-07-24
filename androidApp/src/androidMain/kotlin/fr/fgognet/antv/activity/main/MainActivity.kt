@@ -67,7 +67,6 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         MediaSessionServiceImpl.controller?.removeListener(this)
         if (isFinishing) {
             Log.v(TAG, "finishing")
-            MediaSessionServiceImpl.controller?.release()
             MediaSessionServiceImpl.controllerFuture = null
         }
         resetLogs()

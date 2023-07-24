@@ -33,6 +33,7 @@ fun PlayerView(
     val controller by model.controller.observeAsState()
     Napier.v(tag = TAG, message = "PlayerView")
     if (controller == null || !controller!!.isInit()) {
+        Napier.i(tag = TAG, message = "Initializing player")
         model.loadPlayer(context = getPlatformContext())
     } else {
         model.loadMedia(title)
@@ -51,7 +52,6 @@ fun PlayerViewState(
     controller: MediaController,
     setFullScreen: (visible: Boolean) -> Unit
 ) {
-    Napier.v(tag = TAG, message = "PlayerViewState")
     val state by model.playerData.observeAsState()
     Box {
         var shouldShowControls by remember { mutableStateOf(false) }
