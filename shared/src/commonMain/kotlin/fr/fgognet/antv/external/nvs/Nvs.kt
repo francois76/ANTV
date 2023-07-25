@@ -1,14 +1,9 @@
 package fr.fgognet.antv.external.nvs
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import nl.adaptivity.xmlutil.serialization.XmlChildrenName
-import nl.adaptivity.xmlutil.serialization.XmlElement
-import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import nl.adaptivity.xmlutil.serialization.*
 
 @Serializable
 @XmlSerialName("data", "", "")
@@ -27,8 +22,7 @@ class Nvs(
     fun getMeetingID(): String? {
 
         return this.metadatas
-            .filter { it.name == "meeting_id" }.mapNotNull { it.value }
-            .firstOrNull()
+            .filter { it.name == "meeting_id" }.firstNotNullOfOrNull { it.value }
     }
 
     fun getReplayURL(): String? {
@@ -52,6 +46,7 @@ class Nvs(
             1 -> return metadatas["video_type"]?.label ?: ""
             2 -> return metadatas["commission"]?.label ?: metadatas["video_type"]?.label
             ?: ""
+
             else -> ""
         }
     }

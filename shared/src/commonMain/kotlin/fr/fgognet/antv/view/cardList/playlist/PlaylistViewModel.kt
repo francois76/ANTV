@@ -60,43 +60,50 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
                         description = "Tous les replays de la commission au développement durable",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/419865.jpg",
                     ),
-                    // commission des affaires économiques
+                    // commission des affaires sociales
                     PlaylistCardData(
                         id = 7,
+                        title = ResourceOrText("Commission des affaires sociales"),
+                        description = "Tous les replays de la commission des affaires sociales",
+                        imageCode = "https://videos.assemblee-nationale.fr/live/images/420120.jpg",
+                    ),
+                    // commission des affaires économiques
+                    PlaylistCardData(
+                        id = 8,
                         title = ResourceOrText("Commission des affaires économiques"),
                         description = "Tous les replays de la commission des affaires économiques",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/419610.jpg",
                     ),
                     // commission des affaires culturelles
                     PlaylistCardData(
-                        id = 8,
+                        id = 9,
                         title = ResourceOrText("Commission des affaires culturelles et éducation"),
                         description = "Tous les replays de la commission des affaires culturelles et éducation",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/419604.jpg",
                     ),
                     // commission des affaires européennes
                     PlaylistCardData(
-                        id = 9,
+                        id = 10,
                         title = ResourceOrText("Commission des affaires européennes"),
                         description = "Tous les replays de la commission des affaires européennes",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/415287.jpg",
                     ),
                     // commission des affaires étrangères
                     PlaylistCardData(
-                        id = 10,
+                        id = 11,
                         title = ResourceOrText("Commission des affaires étrangères"),
                         description = "Tous les replays de la commission des affaires étrangères",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/59047.jpg",
                     ),
                     // commission de la défense
                     PlaylistCardData(
-                        id = 11,
+                        id = 12,
                         title = ResourceOrText("Commission de la défense"),
                         description = "Tous les replays de la commission de la défense",
                         imageCode = "https://videos.assemblee-nationale.fr/live/images/59046.jpg",
                     )
                 ),
-                ResourceOrText(stringResource = MR.strings.playlist_description)
+                ResourceOrText(res = MR.strings.playlist_description)
             )
     }
 
@@ -107,41 +114,56 @@ class PlaylistViewModel : AbstractCardListViewModel<PlaylistCardData, Unit>() {
             2 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Questions au gouvernement"
             )
+
             3 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Séance publique"
             )
+
             4 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Lois (commission)"
             )
+
             5 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Finances (commission)"
             )
+
             6 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Développement durable (commission)"
             )
+
             7 -> hashMapOf(
+                EventSearchQueryParams.TypeVideo to "Commission",
+                EventSearchQueryParams.Commission to "Affaires sociales (commission)"
+            )
+
+            8 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Affaires économiques (commission)"
             )
-            8 -> hashMapOf(
+
+            9 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Affaires culturelles et éducation (commission)"
             )
-            9 -> hashMapOf(
+
+            10 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Affaires européennes (commission)"
             )
-            10 -> hashMapOf(
+
+            11 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Affaires étrangères (commission)"
             )
-            11 -> hashMapOf(
+
+            12 -> hashMapOf(
                 EventSearchQueryParams.TypeVideo to "Commission",
                 EventSearchQueryParams.Commission to "Défense (commission)"
             )
+
             else -> hashMapOf()
         }
         SearchDao.set(

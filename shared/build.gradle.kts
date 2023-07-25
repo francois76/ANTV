@@ -1,93 +1,143 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://github.com/gradle/gradle/issues/22797 is fixed (should be gradle 8.1)
 plugins {
-    alias(libs.plugins.serialization)
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")
     alias(libs.plugins.com.android.library)
-    id("org.jetbrains.kotlin.multiplatform")
+    alias(libs.plugins.org.jetbrains.compose)
+    alias(libs.plugins.serialization)
     id("dev.icerock.mobile.multiplatform-resources")
+    id("kotlin-parcelize")
 }
 
+version = antvLibs.versions.antv.version.get()
 
 kotlin {
     android()
-    listOf(
-        iosSimulatorArm64(),
-        iosArm64(),
-        macosArm64(),
-    ).forEach {
-        it.binaries.framework {
+    jvm("desktop")
+    ios()
+    iosSimulatorArm64()
+
+    cocoapods {
+        summary = "Shared code for the sample"
+        homepage = "https://github.com/JetBrains/compose-jb"
+        ios.deploymentTarget = "16.2"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
             baseName = "shared"
+            isStatic = true
         }
+        extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
     }
 
-    // See https://youtrack.jetbrains.com/issue/KT-55751
-    val myAttribute = Attribute.of("myOwnAttribute", String::class.java)
-
-
-    configurations.names.forEach {
-        configurations.named(it).configure {
-            attributes {
-                // put a unique attribute
-                attribute(myAttribute, it)
-            }
-        }
-    }
-
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.bundles.moko.mvvm.core)
+                implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
+                implementation(libs.kamel)
+                implementation(libs.navigation)
                 implementation(libs.bundles.ktor.common)
                 implementation(libs.moko.resources)
+                implementation(libs.moko.resources.compose)
                 implementation(libs.bundles.xmlutil)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
                 api(libs.moko.resources)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.ui)
+                implementation(compose.material3)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation(libs.ktor.client.okhttp)
+                // bundles
+
                 implementation(libs.bundles.media3)
-                implementation(libs.play.services.cast.framework)
-                implementation(libs.bundles.navigation)
+                implementation(libs.bundles.accompanist)
+                implementation(libs.bundles.compose)
+
+                implementation(libs.ktor.client.okhttp)
                 implementation(libs.kotlinx.coroutines.guava)
                 implementation(libs.guava)
                 implementation(libs.concurrent.futures)
+                implementation(libs.lifecycle.process)
+                implementation(libs.moko.resources.compose)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.play.services.cast.framework)
+                implementation(libs.core.ktx)
+                implementation(libs.activity.compose)
+
+
             }
         }
-        val macosArm64Main by getting
-        // val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            macosArm64Main.dependsOn(this)
-            // iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        val iosMain by getting
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
+        }
+
+
+        val desktopMain by getting {
+            kotlin.srcDirs("src/jvmMain/kotlin")
+            dependencies {
+                implementation(compose.desktop.common)
+                implementation(compose.desktop.macos_arm64)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(compose.preview)
+            }
         }
     }
 }
 
 android {
-    namespace = "fr.fgognet.antv"
+    namespace = antvLibs.versions.antv.packagename.get()
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    compileSdk = antvLibs.versions.sdk.compile.get().toInt()
+    compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
     sourceSets["main"].apply {
         assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
         res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
     }
     defaultConfig {
-        minSdk = antvLibs.versions.sdk.min.get().toInt()
-        targetSdk = antvLibs.versions.sdk.target.get().toInt()
+        minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "fr.fgognet.antv"
+    multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
     disableStaticFrameworkWarning = true
+}
+
+configurations.configureEach {
+    attributes {
+        attribute(Attribute.of("custom.attr", String::class.java), name)
+    }
+}
+
+// TODO move to gradle plugin
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask>().configureEach {
+    @Suppress("ObjectLiteralToLambda")
+    doLast(object : Action<Task> {
+        override fun execute(task: Task) {
+            task as org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask
+
+            val frameworkDir = File(task.destinationDir, task.frameworkName.get() + ".framework")
+
+            listOf(
+                "ANTV:shared.bundle"
+            ).forEach { bundleName ->
+                val bundleDir = File(frameworkDir, bundleName)
+                bundleDir.mkdir()
+                File(bundleDir, "dummyFile").writeText("dummy")
+            }
+        }
+    })
 }
 
 

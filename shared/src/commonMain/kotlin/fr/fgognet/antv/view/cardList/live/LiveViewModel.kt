@@ -80,7 +80,7 @@ class LiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                         val cardData = LiveCardData(
                             title = ResourceOrText(
                                 string = diffusion.libelle,
-                                stringResource = MR.strings.no_title_broadcast
+                                res = MR.strings.no_title_broadcast
                             ),
                             subtitle = diffusion.lieu ?: "",
                             description = cleanDescription(diffusion.sujet) ?: "",
@@ -93,7 +93,7 @@ class LiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                         )
                         if (liveMeetingIDs[diffusion.uid_referentiel] != null) {
                             cardData.buttonLabel = ResourceOrText(
-                                stringResource = MR.strings.card_button_label_live
+                                res = MR.strings.card_button_label_live
                             )
                             cardData.isLive = true
                             cardData.url =
@@ -110,7 +110,7 @@ class LiveViewModel : AbstractCardListViewModel<LiveCardData, Unit>() {
                 Napier.e(tag = TAG, message = e.stackTraceToString())
                 _cards.value = CardListViewData(
                     arrayListOf(),
-                    ResourceOrText(stringResource = MR.strings.live_error)
+                    ResourceOrText(res = MR.strings.live_error)
                 )
             }
         }

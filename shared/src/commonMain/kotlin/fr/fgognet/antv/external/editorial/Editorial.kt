@@ -2,9 +2,7 @@ package fr.fgognet.antv.external.editorial
 
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
-import nl.adaptivity.xmlutil.serialization.XmlElement
-import nl.adaptivity.xmlutil.serialization.XmlPolyChildren
-import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import nl.adaptivity.xmlutil.serialization.*
 
 @XmlSerialName("editorial", "", "")
 @Serializable
@@ -25,6 +23,7 @@ open class DiffusionBase
 
 @Serializable
 @XmlSerialName("diffusion", "", "")
+@Suppress("unused")
 class Diffusion(
     @XmlElement(true)
     var id_organe: String? = null,
@@ -72,11 +71,11 @@ class Diffusion(
             return ""
         }
         if (heure?.length == 4) {
-            var firstCharacter = heure?.substring(0, 1)
-            if (firstCharacter == "0") {
-                return heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
+            val firstCharacter = heure?.substring(0, 1)
+            return if (firstCharacter == "0") {
+                heure?.substring(1, 2) + "h" + heure?.substring(2, 4)
             } else {
-                return heure?.substring(0, 2) + "h" + heure?.substring(2, 4)
+                heure?.substring(0, 2) + "h" + heure?.substring(2, 4)
             }
         } else if (heure?.length == 2) {
             return heure + "h"
