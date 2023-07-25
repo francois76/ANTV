@@ -8,6 +8,9 @@ napier = "2.6.1"# https://github.com/AAkira/Napier
 navigation = "0.9.0"# https://github.com/chRyNaN/navigation/tree/develop
 play-services-cast-framework = "21.3.0"# https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
 xmlutil = "0.86.1"# https://github.com/pdvrieze/xmlutil/releases
+google-services = "4.3.15"
+firebase = "32.2.0"
+crashlytics = "2.9.7"
 
 #kotlin dependencies
 kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
@@ -25,14 +28,15 @@ activity-compose = "1.7.2"# https://developer.android.com/jetpack/androidx/relea
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
 core-ktx = "1.10.1"# https://developer.android.com/jetpack/androidx/releases/core
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
-material3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/compose-material3
-material3-tooling = "1.4.3"# https://developer.android.com/jetpack/androidx/releases/compose-material3
+compose-material3 = "1.4.3"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
 media3 = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
 kotlin = "1.8.20" # https://github.com/JetBrains/kotlin/releases TODO: blocked by compose multiplatform 1.4.0
 android-gradle-plugin = "8.1.0" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
+
+
 
 [libraries]
 # single line library
@@ -91,31 +95,33 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "lifecycle" }
 
-# material3
-material3-core = { module = "androidx.compose.material3:material3-core", version.ref = "material3" }
-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
 
 # accompanist
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-themeadapter-material3 = { module = "com.google.accompanist:accompanist-themeadapter-material3", version.ref = "accompanist" }
 
 # androidx compose
-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "material3" }
-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "material3" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "material3" }
-compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "material3" }
-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "material3" }
-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "material3" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "material3-tooling" }
-compose-ui-tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "material3-tooling" }
+material3-core = { module = "androidx.compose.material3:material3-core", version.ref = "compose-material3" }
+material3-window-size = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "compose-material3" }
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose-material3" }
+compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "compose-material3" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-material3" }
+compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "compose-material3" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose-material3" }
+compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose-material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-material3" }
+compose-ui-tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-material3" }
 
+#firebase android
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 [bundles]
 moko-mvvm = ["mvvm-compose", "mvvm-flow-compose", "mvvm-livedata-compose", "mvvm-core", "mvvm-livedata", "mvvm-state"]
 ktor-common = ["ktor-client-core", "ktor-client-json", "ktor-client-logging"]
 xmlutil = ["xmlutil-core", "xmlutil-serialization"]
 media3 = ["media3-exoplayer", "media3-exoplayer-hls", "media3-ui", "media3-cast", "media3-session"]
-material3 = ["material3-core", "material3-window-size"]
 accompanist = ["accompanist-systemuicontroller", "accompanist-themeadapter-material3"]
 compose = ["compose-runtime", "compose-runtime-livedata", "compose-ui", "compose-ui-viewbinding", "compose-ui-tooling-preview",
     "compose-foundation", "compose-foundation-layout", "compose-ui-tooling"]
@@ -129,3 +135,5 @@ android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 org-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }

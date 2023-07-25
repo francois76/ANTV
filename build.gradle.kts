@@ -9,8 +9,9 @@ plugins {
         libs.plugins.com.android.application,
         libs.plugins.com.android.library,
         libs.plugins.serialization,
-        libs.plugins.org.jetbrains.compose
-    ).forEach{
+        libs.plugins.google.services,
+        libs.plugins.org.jetbrains.compose,
+    ).forEach {
         alias(it).apply(false)
     }
 }

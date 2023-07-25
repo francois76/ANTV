@@ -1,7 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("com.android.application")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.multiplatform)
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.compose)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.crashlytics)
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -84,6 +86,9 @@ dependencies {
     implementation(libs.play.services.cast.framework)
     implementation(libs.bundles.media3)
     implementation(libs.activity.compose)
+    implementation(libs.napier)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics.ktx)
 
     // testing
     testImplementation(libs.junit)

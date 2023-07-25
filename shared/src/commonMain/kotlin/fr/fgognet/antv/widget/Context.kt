@@ -8,8 +8,8 @@ enum class Platform {
     JAVA,
 }
 
-expect class PlatformContext{
-    fun getPlatform() :Platform
+expect class PlatformContext {
+    fun getPlatform(): Platform
 }
 
 @Composable
