@@ -31,7 +31,7 @@ media3 = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
 kotlin = "1.8.20" # https://github.com/JetBrains/kotlin/releases TODO: blocked by compose multiplatform 1.4.0
-android-gradle-plugin = "8.0.2" # https://developer.android.com/studio/releases/gradle-plugin
+android-gradle-plugin = "8.1.0" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
 
 [libraries]
