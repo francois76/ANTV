@@ -12,7 +12,7 @@ fun cleanDescription(rawDescription: String?): String? {
     }
     // replace end of line separator ;
     result = result.replace(";\n", "\n")
-    // adding cariage return with "-"
+    // adding carriage return with "-"
     result = result.replace(":-", ":\n-")
     // formatting dot list with . :
     result = result.replace(":.", ":\n•").replace(",.", "\n•")

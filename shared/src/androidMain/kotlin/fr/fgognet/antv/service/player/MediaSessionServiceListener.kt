@@ -7,6 +7,7 @@ import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
@@ -19,7 +20,6 @@ import fr.fgognet.antv.external.editorial.Diffusion
 import fr.fgognet.antv.external.editorial.Editorial
 import fr.fgognet.antv.external.editorial.EditorialRepository
 import fr.fgognet.antv.external.eventSearch.EventSearch
-import fr.fgognet.antv.external.eventSearch.EventSearchQueryParams
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
@@ -32,6 +32,7 @@ import java.util.*
 
 private const val TAG = "ANTV/MediaSessionServiceListener"
 
+@UnstableApi
 class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) :
     SessionAvailabilityListener,
     MediaLibraryService.MediaLibrarySession.Callback {
@@ -58,7 +59,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         val result = LibraryResult.ofItem(
             MediaItem.Builder().setMediaId("root")
                 .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaMetadata(
-                    MediaMetadata.Builder().setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                    MediaMetadata.Builder().setIsBrowsable(false)
                         .setIsPlayable(false).build()
                 ).build(), null
         )
@@ -119,6 +120,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }) {
                 handleLive()
             }
+
             "replay" -> runAsyncMediacall(Bundle().apply {
                 putInt(
                     "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
@@ -127,6 +129,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }) {
                 handleReplay()
             }
+
             else -> {
                 Log.e(TAG, parentId)
                 super.onGetChildren(session, browser, parentId, page, pageSize, params)
@@ -257,7 +260,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                                         .setMediaMetadata(
                                             MediaMetadata.Builder()
                                                 .setIsPlayable(true)
-                                                .setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                                                .setIsBrowsable(false)
                                                 .setTitle(
                                                     diffusion.libelle
                                                 ).setSubtitle(diffusion.lieu ?: "")
@@ -288,7 +291,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         supervisorScope {
             val eventSearches: List<EventSearch> = try {
                 EventSearchRepository.findEventSearchByParams(
-                    hashMapOf<EventSearchQueryParams, String>()
+                    hashMapOf()
                 )
             } catch (e: Exception) {
                 arrayListOf()
@@ -301,7 +304,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                     .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setIsPlayable(true)
-                            .setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+                            .setIsBrowsable(false)
                             .setTitle(
                                 it.title
                             )
@@ -328,13 +331,13 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         return itemResult
 
     }
-    
+
     private fun buildFolder(mediaId: String, title: String): MediaItem {
         Log.v(TAG, "buildFolder")
         return MediaItem.Builder()
             .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaId(mediaId)
             .setMediaMetadata(
-                MediaMetadata.Builder().setFolderType(MediaMetadata.FOLDER_TYPE_TITLES)
+                MediaMetadata.Builder().setIsBrowsable(true)
                     .setIsPlayable(false)
                     .setTitle(title)
                     .build()
