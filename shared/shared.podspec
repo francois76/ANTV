@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'shared'
-    spec.version                  = '1.1.2'
+    spec.version                  = '1.2.2'
     spec.homepage                 = 'https://github.com/JetBrains/compose-jb'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
