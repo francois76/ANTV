@@ -1,5 +1,5 @@
 [versions]
-guava = "32.0.1-android" # https://github.com/google/guava/releases #TODO: broken for now
+guava = "32.1.2-android" # https://github.com/google/guava/releases
 kamel = "0.7.1" # https://github.com/Kamel-Media/Kamel/releases
 ktor = "2.3.3" # https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1" # https://github.com/icerockdev/moko-mvvm/releases
@@ -32,11 +32,9 @@ compose-material3 = "1.4.3"# https://mvnrepository.com/artifact/androidx.compose
 media3 = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
-kotlin = "1.8.22" # https://github.com/JetBrains/kotlin/releases
+kotlin = "1.8.22" # https://github.com/JetBrains/kotlin/releases #TODO blocked by moko resource https://github.com/icerockdev/moko-resources/issues/531
 android-gradle-plugin = "8.1.0" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
-
-
 
 [libraries]
 # single line library
