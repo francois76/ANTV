@@ -80,21 +80,16 @@ kotlin {
         }
         val iosSimulatorArm64Main by getting {
             dependsOn(iosMain)
-            resources.srcDirs("build/generated/moko/iosSimulatorArm64Main/src")
         }
         val iosX64Main by getting {
             dependsOn(iosMain)
-            resources.srcDirs("build/generated/moko/iosX64Main/src")
         }
         val iosArm64Main by getting {
             dependsOn(iosMain)
-            resources.srcDirs("build/generated/moko/iosArm64Main/src")
         }
 
 
         val jvmMain by getting {
-            dependsOn(commonMain)
-            resources.srcDirs("build/generated/moko/jvmMain/src")
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)
@@ -113,10 +108,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
-    sourceSets["main"].apply {
-        // assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
-        // res.srcDir(File(buildDir, "generated/moko/androidMain/src"))
-    }
     defaultConfig {
         minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
@@ -128,11 +119,6 @@ multiplatformResources {
 
 }
 
-configurations.configureEach {
-    attributes {
-        attribute(Attribute.of("custom.attr", String::class.java), name)
-    }
-}
 
 
 
