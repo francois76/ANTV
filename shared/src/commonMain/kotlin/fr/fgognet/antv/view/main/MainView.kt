@@ -34,7 +34,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
             duplicateDestinationStrategy = NavigationStrategy.DuplicateDestination.CLEAR_TO_ORIGINAL
         )
     backHandler {
-        navigator.goBack()
+        navigator.popDestination()
     }
     val context = getPlatformContext()
     val colorScheme = buildColors(context = context)
@@ -88,10 +88,10 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 )
                             }
                         }, title = {
-                            if (context.getPlatform() == Platform.IOS && navigator.canGoBack()) {
+                            if (context.getPlatform() == Platform.IOS && navigator.canPopDestination()) {
                                 IconButton(onClick = {
                                     backHandler {
-                                        navigator.goBack()
+                                        navigator.popDestination()
                                     }
                                 }) {
                                     Image(
@@ -123,7 +123,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                     label = { Text(stringResource(resource = routeNames[item?.id]!!)) },
                                     selected = item?.id == destination.id,
                                     onClick = {
-                                        navigator.goTo(item!!)
+                                        navigator.push(item!!)
                                     }
                                 )
                             }
@@ -135,7 +135,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                     when (destination.id) {
                         Route.LIVE -> LiveCardListView(
                             goToVideo = { title ->
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
@@ -146,7 +146,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 contextualRefreshFunction()
                             },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -157,7 +157,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
 
                         Route.REPLAY -> ReplayCardListView(
                             goToVideo = { title ->
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
@@ -165,7 +165,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 )
                             },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -175,10 +175,10 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                         )
 
                         Route.PLAYLIST -> PlaylistCardListView(goToVideos = {
-                            navigator.goTo(allRoutes[Route.REPLAY]!!)
+                            navigator.push(allRoutes[Route.REPLAY]!!)
                         },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -188,7 +188,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                         )
 
                         Route.SEARCH -> ReplaySearchView(query = {
-                            navigator.goTo(allRoutes[Route.REPLAY]!!)
+                            navigator.push(allRoutes[Route.REPLAY]!!)
                         })
 
                         Route.PLAYER -> PlayerView(

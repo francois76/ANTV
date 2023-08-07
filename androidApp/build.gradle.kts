@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.org.jetbrains.compose)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
-    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {

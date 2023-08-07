@@ -17,7 +17,7 @@ fun main() = application {
             ),
         ) {
             Surface(modifier = Modifier.fillMaxSize()) {
-                ANTVApp(backHandler = {})
+                ANTVApp(backHandler = {}, initialRoute = null)
             }
 
         }

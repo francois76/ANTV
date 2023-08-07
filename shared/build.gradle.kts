@@ -12,7 +12,7 @@ version = antvLibs.versions.antv.version.get()
 
 kotlin {
     android()
-    jvm("desktop")
+    jvm()
     ios()
     iosSimulatorArm64()
 
@@ -31,6 +31,7 @@ kotlin {
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
+            resources.srcDirs(File(buildDir, "generated/moko/commonMain/src"))
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
@@ -74,14 +75,26 @@ kotlin {
 
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependsOn(commonMain)
+        }
         val iosSimulatorArm64Main by getting {
             dependsOn(iosMain)
+            resources.srcDirs("build/generated/moko/iosSimulatorArm64Main/src")
+        }
+        val iosX64Main by getting {
+            dependsOn(iosMain)
+            resources.srcDirs("build/generated/moko/iosX64Main/src")
+        }
+        val iosArm64Main by getting {
+            dependsOn(iosMain)
+            resources.srcDirs("build/generated/moko/iosArm64Main/src")
         }
 
 
-        val desktopMain by getting {
-            kotlin.srcDirs("src/jvmMain/kotlin")
+        val jvmMain by getting {
+            dependsOn(commonMain)
+            resources.srcDirs("build/generated/moko/jvmMain/src")
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)
@@ -101,8 +114,8 @@ android {
     }
     compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
     sourceSets["main"].apply {
-        assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
-        res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
+        // assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
+        // res.srcDir(File(buildDir, "generated/moko/androidMain/src"))
     }
     defaultConfig {
         minSdk = antvLibs.versions.android.sdk.min.get().toInt()
@@ -111,7 +124,8 @@ android {
 
 multiplatformResources {
     multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
-    disableStaticFrameworkWarning = true
+    disableStaticFrameworkWarning = false
+
 }
 
 configurations.configureEach {
@@ -120,24 +134,5 @@ configurations.configureEach {
     }
 }
 
-// TODO move to gradle plugin
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask>().configureEach {
-    @Suppress("ObjectLiteralToLambda")
-    doLast(object : Action<Task> {
-        override fun execute(task: Task) {
-            task as org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask
-
-            val frameworkDir = File(task.destinationDir, task.frameworkName.get() + ".framework")
-
-            listOf(
-                "ANTV:shared.bundle"
-            ).forEach { bundleName ->
-                val bundleDir = File(frameworkDir, bundleName)
-                bundleDir.mkdir()
-                File(bundleDir, "dummyFile").writeText("dummy")
-            }
-        }
-    })
-}
 
 
