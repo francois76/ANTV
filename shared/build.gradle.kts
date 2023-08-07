@@ -100,18 +100,19 @@ kotlin {
         }
     }
 }
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 android {
     namespace = antvLibs.versions.antv.packagename.get()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
     defaultConfig {
         minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
 }
+
 
 multiplatformResources {
     multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
