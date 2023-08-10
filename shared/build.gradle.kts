@@ -104,11 +104,6 @@ kotlin {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
 android {
     namespace = antvLibs.versions.antv.packagename.get()
     compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
