@@ -11,10 +11,12 @@ plugins {
 version = antvLibs.versions.antv.version.get()
 
 kotlin {
-    android()
+    androidTarget()
     jvm()
     ios()
     iosSimulatorArm64()
+
+    jvmToolchain(17)
 
     cocoapods {
         summary = "Shared code for the sample"
@@ -54,6 +56,7 @@ kotlin {
             }
         }
         val androidMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 // bundles
 
@@ -100,6 +103,7 @@ kotlin {
         }
     }
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17

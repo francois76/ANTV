@@ -25,7 +25,7 @@ actual fun HandlePictureInPicture(
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     if (context.findActivity()?.isInPictureInPictureMode == true) {
-                        navController.goTo(
+                        navController.push(
                             RouteData(
                                 id = Route.PLAYER,
                                 arguments = arrayListOf(),
