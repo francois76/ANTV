@@ -12,7 +12,7 @@ version = antvLibs.versions.antv.version.get()
 
 kotlin {
     androidTarget()
-    jvm()
+    jvm(name = "desktop")
     ios()
     iosSimulatorArm64()
 
@@ -92,7 +92,7 @@ kotlin {
         }
 
 
-        val jvmMain by getting {
+        val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)

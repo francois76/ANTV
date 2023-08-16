@@ -7,8 +7,8 @@ plugins {
 }
 
 kotlin {
-    android()
-    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
+    androidTarget()
+    @Suppress("UnusedPrivateMember") // False positive
     sourceSets {
         val androidMain by getting {
             dependencies {
@@ -75,7 +75,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
-    
+
 }
 dependencies {
     implementation(libs.play.services.cast.framework)
