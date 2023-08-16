@@ -51,7 +51,6 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.v(TAG, "onIsPlayingChanged")
-        Log.v(TAG, this.hashCode().toString())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val builder = PictureInPictureParams.Builder()
             builder.setAutoEnterEnabled(isPlaying && !MediaSessionServiceImpl.isCasting)
