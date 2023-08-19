@@ -33,7 +33,9 @@ kotlin {
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
-            resources.srcDirs(File(buildDir, "generated/moko/commonMain/src"))
+            resources.srcDirs(
+                rootProject.layout.buildDirectory.file("generated/moko/commonMain/src")
+            )
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
