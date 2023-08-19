@@ -111,6 +111,9 @@ android {
         minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
 }
+dependencies {
+    implementation(libs.ui.text.android)
+}
 
 
 multiplatformResources {

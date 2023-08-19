@@ -13,6 +13,7 @@ import com.chrynan.navigation.compose.rememberSavableNavigator
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
+import fr.fgognet.antv.utils.parseHtml
 import fr.fgognet.antv.view.cardList.*
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
@@ -58,13 +59,10 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                     Text(stringResource(resource = MR.strings.info))
                 },
                 text = {
-/*                    HtmlText(
-                        html = content
-                    )*/
                     Text(
                         stringResource(
                             resource = MR.strings.credits,
-                        )
+                        ).parseHtml()
                     )
                 },
                 confirmButton = {
