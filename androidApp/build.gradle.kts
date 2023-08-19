@@ -7,8 +7,9 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
     androidTarget()
-    @Suppress("UnusedPrivateMember") // False positive
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val androidMain by getting {
             dependencies {

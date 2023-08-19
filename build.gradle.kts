@@ -18,6 +18,7 @@ plugins {
 
 
 
+
 buildscript {
     dependencies {
         classpath(libs.moko.resources.generator)
