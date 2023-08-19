@@ -49,11 +49,34 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
 
     MaterialTheme(colorScheme = colorScheme) {
         if (openDialog) {
-            Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
-                resource = MR.strings.credits,
-            ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
-                openDialog = false
-            })
+
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog = false
+                },
+                title = {
+                    Text(stringResource(resource = MR.strings.info))
+                },
+                text = {
+/*                    HtmlText(
+                        html = content
+                    )*/
+                    Text(
+                        stringResource(
+                            resource = MR.strings.credits,
+                        )
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog = false
+                        }
+                    ) {
+                        Text(stringResource(resource = MR.strings.close))
+                    }
+                }
+            )
         }
         NavigationContainer(navigator) { (destination, _) ->
             KeepScreenOn(getPlatformContext(), destination.id == Route.PLAYER)
