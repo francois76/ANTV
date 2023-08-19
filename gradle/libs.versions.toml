@@ -19,7 +19,7 @@ kotlinx-coroutines-guava = "1.7.3"# https://kotlinlang.org/api/kotlinx.coroutine
 kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
 
 # compose stack:
-compose-multiplatform = "1.4.3" # https://github.com/JetBrains/compose-multiplatform/releases
+compose-multiplatform = "1.5.0-rc01" # https://github.com/JetBrains/compose-multiplatform/releases
 compose-compiler = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 accompanist = "0.30.1" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 
@@ -28,7 +28,7 @@ activity-compose = "1.7.2"# https://developer.android.com/jetpack/androidx/relea
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
 core-ktx = "1.10.1"# https://developer.android.com/jetpack/androidx/releases/core
 lifecycle = "2.6.1"# https://developer.android.com/jetpack/androidx/releases/lifecycle
-compose-material3 = "1.4.3"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
+compose-material3 = "1.5.0-rc01"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
 media3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
