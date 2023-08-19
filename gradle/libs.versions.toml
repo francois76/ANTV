@@ -19,7 +19,7 @@ kotlinx-coroutines-guava = "1.7.3"# https://kotlinlang.org/api/kotlinx.coroutine
 kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
 
 # compose stack:
-compose-multiplatform = "1.5.0-rc01" # https://github.com/JetBrains/compose-multiplatform/releases
+compose-multiplatform = "1.5.0-beta02" # https://github.com/JetBrains/compose-multiplatform/releases
 compose-compiler = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 accompanist = "0.30.1" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 
