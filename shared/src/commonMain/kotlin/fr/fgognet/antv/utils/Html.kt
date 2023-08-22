@@ -26,6 +26,8 @@ fun String.parseHtml(): AnnotatedString {
     }
 }
 
+// TODO: refactor with regex like that: <div +id="(?'id'[^><]+)">(?'text_origin'[^><]+)?(?'bigsubgroup'(?'subgroup'<(?'balise'[[:alnum:]]+)>[[:alnum:]]+<\/(?&balise)>)(?'text'[^><]+)?)*<\/div>
+
 /**
  * Recurses through the given HTML String to convert it to an AnnotatedString.
  *
@@ -35,6 +37,7 @@ fun String.parseHtml(): AnnotatedString {
 private fun recurse(string: String, to: AnnotatedString.Builder) {
     //Find the opening tag that the given String starts with, if any.
     val startTag = tags.keys.find { string.startsWith(it) }
+
 
     //Find the closing tag that the given String starts with, if any.
     val endTag = tags.values.find { string.startsWith(it) }

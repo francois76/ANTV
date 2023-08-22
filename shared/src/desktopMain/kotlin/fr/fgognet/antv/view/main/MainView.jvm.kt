@@ -6,5 +6,5 @@ import androidx.compose.runtime.Composable
 @Preview
 @Composable
 fun AntvAppPreview() {
-    ANTVApp(backHandler = {})
+    ANTVApp(backHandler = {}, initialRoute = null)
 }
