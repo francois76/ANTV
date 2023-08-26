@@ -62,7 +62,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                     HtmlText(
                         htmlText = stringResource(
                             resource = MR.strings.credits,
-                        )
+                        ), colorScheme = colorScheme
                     )
                 },
                 confirmButton = {

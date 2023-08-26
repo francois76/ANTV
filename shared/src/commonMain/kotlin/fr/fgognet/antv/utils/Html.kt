@@ -1,6 +1,7 @@
 package fr.fgognet.antv.utils
 
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -16,11 +17,11 @@ private const val TAG = "ANTV/HTMLUtils"
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
-fun HtmlText(htmlText: String) {
+fun HtmlText(htmlText: String, colorScheme: ColorScheme) {
     val uriHandler = LocalUriHandler.current
     val annotatedString = buildAnnotatedString {
-        pushStyle(SpanStyle(color = buildColors(getPlatformContext()).onPrimaryContainer))
-        recurse(htmlText.replace("<br>", "\n").replace("<br/>", "\n"), this)
+        pushStyle(SpanStyle(color = colorScheme.onSurfaceVariant))
+        recurse(colorScheme, htmlText.replace("<br>", "\n").replace("<br/>", "\n"), this)
         pop()
     }
     ClickableText(text = annotatedString, onClick = { offset ->
@@ -43,7 +44,7 @@ private val tags = listOf(B, I, U, A)
  * @param string the String to examine.
  * @param to the AnnotatedString to append to.
  */
-private fun recurse(string: String, to: AnnotatedString.Builder) {
+private fun recurse(colorScheme: ColorScheme, string: String, to: AnnotatedString.Builder) {
     //Find the opening tag that the given String starts with, if any.
     val startTag = tags.find { string.startsWith(it.startTag()) }
 
@@ -55,13 +56,13 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
         //SpanStyle and continue recursing.
         endTag != null -> {
             endTag.endStyle(to)
-            recurse(string.removeRange(0, endTag.endTag().length), to)
+            recurse(colorScheme, string.removeRange(0, endTag.endTag().length), to)
         }
         //If the String starts with an opening tag, apply the appropriate
         //SpanStyle and continue recursing.
         startTag != null -> {
-            startTag.tagBuilder(string, to)
-            recurse(string.removeRange(0, startTag.tagOffset(string)), to)
+            startTag.tagBuilder(string, to, colorScheme)
+            recurse(colorScheme, string.removeRange(0, startTag.tagOffset(string)), to)
         }
         //If the String doesn't start with an opening or closing tag, but does contain either,
         //find the lowest index (that isn't -1/not found) for either an opening or closing tag.
@@ -81,7 +82,7 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
 
             to.append(string.substring(0, first))
 
-            recurse(string.removeRange(0, first), to)
+            recurse(colorScheme, string.removeRange(0, first), to)
         }
         //There weren't any supported tags found in the text. Just append it all normally.
         else -> {
@@ -102,7 +103,7 @@ interface Tag {
         return "</$tagName>"
     }
 
-    fun tagBuilder(text: String, to: AnnotatedString.Builder)
+    fun tagBuilder(text: String, to: AnnotatedString.Builder, colorScheme: ColorScheme)
     fun tagOffset(text: String): Int {
         return text.indexOf('>') + 1
     }
@@ -114,9 +115,8 @@ interface Tag {
     }
 }
 
-class Property(val regex: Regex) {
+class Property(private val regex: Regex) {
     fun find(text: String): String {
-        Napier.v(tag = TAG, message = "using regex ${this.regex.pattern}")
         return this.regex.find(
             text.subSequence(
                 0,
@@ -140,7 +140,7 @@ object B : Tag {
     override val popperCount: Int
         get() = 1
 
-    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder, colorScheme: ColorScheme) {
         to.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
     }
 
@@ -152,7 +152,7 @@ object I : Tag {
     override val popperCount: Int
         get() = 1
 
-    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder, colorScheme: ColorScheme) {
         to.pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
     }
 
@@ -164,14 +164,13 @@ object U : Tag {
     override val popperCount: Int
         get() = 1
 
-    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder, colorScheme: ColorScheme) {
         to.pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
     }
 
 }
 
 object A : TagWithProperties {
-
 
     override val properties: HashMap<String, Property>
         get() = HashMap<String, Property>().registerProperty("href")
@@ -182,7 +181,7 @@ object A : TagWithProperties {
         get() = 2
 
     @OptIn(ExperimentalTextApi::class)
-    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder, colorScheme: ColorScheme) {
         to.pushUrlAnnotation(
             UrlAnnotation(
                 url = properties["href"]?.find(text) ?: "error"
