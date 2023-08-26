@@ -114,6 +114,24 @@ interface Tag {
     }
 }
 
+class Property(val regex: Regex) {
+    fun find(text: String): String {
+        return this.regex.find(
+            text.subSequence(
+                0,
+                text.indexOf('>') + 1
+            )
+        )?.groups?.get(1)?.value ?: ""
+    }
+};
+
+interface TagWithProperties : Tag {
+    val properties: HashMap<String, Property>
+    fun registerProperty(property: String) {
+        properties[property] = Property("<$tagName.+$property=\"(.+)\"".toRegex())
+    }
+}
+
 object B : Tag {
     override val tagName: String
         get() = "b"
@@ -150,9 +168,14 @@ object U : Tag {
 
 }
 
-object A : Tag {
+object A : TagWithProperties {
+    init {
+        registerProperty("href")
+    }
 
-    private val regex = "<a.+href=\"(.+)\"".toRegex()
+    override val properties: HashMap<String, Property>
+        get() = HashMap()
+
     override val tagName: String
         get() = "a"
     override val popperCount: Int
@@ -162,12 +185,7 @@ object A : Tag {
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushUrlAnnotation(
             UrlAnnotation(
-                url = regex.find(
-                    text.subSequence(
-                        0,
-                        tagOffset(text)
-                    )
-                )?.groups?.get(1)?.value ?: ""
+                url = properties["href"]?.find(text) ?: ""
             )
         )
         to.pushStyle(
