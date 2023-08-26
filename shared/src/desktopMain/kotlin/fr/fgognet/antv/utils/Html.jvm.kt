@@ -1,9 +1,10 @@
 package fr.fgognet.antv.utils
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.ExperimentalTextApi
 
+@OptIn(ExperimentalTextApi::class)
 @Preview
 @Composable
 fun renderHtml() {
@@ -15,6 +16,6 @@ fun renderHtml() {
                 depuis le site  <a href="https://videos.assemblee-nationale.fr">de l'assemblée nationale</a>,
                  aucune ressource appartenant  à l'assemblée nationale n\'a été intégrée à cette application
                 <a href="https://www.assemblee-nationale.fr/dyn/info-site">Crédits du site de l'assemblée nationale</a>
-    """.parseHtml()
-    Text(text = result)
+    """
+    HtmlText(htmlText = result)
 }

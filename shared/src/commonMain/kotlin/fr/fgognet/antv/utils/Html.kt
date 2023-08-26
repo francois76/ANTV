@@ -1,11 +1,33 @@
 package fr.fgognet.antv.utils
 
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import io.github.aakira.napier.Napier
 import kotlin.math.min
 
+private const val TAG = "ANTV/HTMLUtils"
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+fun HtmlText(htmlText: String) {
+    val uriHandler = LocalUriHandler.current
+    val annotatedString = htmlText.parseHtml()
+    ClickableText(text = annotatedString, onClick = { offset ->
+        annotatedString.getUrlAnnotations(
+            start = offset,
+            end = offset
+        ).firstOrNull()?.let { stringAnnotation ->
+            Napier.v(tag = TAG, message = "opened link " + stringAnnotation.item.url)
+            uriHandler.openUri(stringAnnotation.item.url)
+        }
+    })
+}
 
 private val tags = listOf(B, I, U, A)
 
@@ -37,15 +59,15 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
     when {
         //If the String starts with a closing tag, then pop the latest-applied
         //SpanStyle and continue recursing.
-        tags.any { string.startsWith(it.endTag()) } -> {
-            endTag?.endStyle(to)
-            recurse(string.removeRange(0, endTag!!.endTag().length), to)
+        endTag != null -> {
+            endTag.endStyle(to)
+            recurse(string.removeRange(0, endTag.endTag().length), to)
         }
         //If the String starts with an opening tag, apply the appropriate
         //SpanStyle and continue recursing.
-        tags.any { string.startsWith(it.startTag()) } -> {
-            startTag?.tagBuilder(string, to)
-            recurse(string.removeRange(0, startTag?.tagOffset(string)!!), to)
+        startTag != null -> {
+            startTag.tagBuilder(string, to)
+            recurse(string.removeRange(0, startTag.tagOffset(string)), to)
         }
         //If the String doesn't start with an opening or closing tag, but does contain either,
         //find the lowest index (that isn't -1/not found) for either an opening or closing tag.
@@ -77,7 +99,7 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
 
 interface Tag {
     val tagName: String
-    val isStyleTag: Boolean
+    val popperCount: Int
     fun startTag(): String {
         return "<$tagName"
     }
@@ -92,7 +114,7 @@ interface Tag {
     }
 
     fun endStyle(to: AnnotatedString.Builder) {
-        if (isStyleTag) {
+        for (i in 0..<popperCount) {
             to.pop()
         }
     }
@@ -101,8 +123,8 @@ interface Tag {
 object B : Tag {
     override val tagName: String
         get() = "b"
-    override val isStyleTag: Boolean
-        get() = true
+    override val popperCount: Int
+        get() = 1
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
@@ -113,8 +135,8 @@ object B : Tag {
 object I : Tag {
     override val tagName: String
         get() = "i"
-    override val isStyleTag: Boolean
-        get() = true
+    override val popperCount: Int
+        get() = 1
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
@@ -125,8 +147,8 @@ object I : Tag {
 object U : Tag {
     override val tagName: String
         get() = "i"
-    override val isStyleTag: Boolean
-        get() = true
+    override val popperCount: Int
+        get() = 1
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
@@ -136,15 +158,14 @@ object U : Tag {
 
 object A : Tag {
 
-    val regex = "<a(.)+href=\"(.+)\"".toRegex()
+    private val regex = "<a.+href=\"(.+)\"".toRegex()
     override val tagName: String
         get() = "a"
-    override val isStyleTag: Boolean
-        get() = true
+    override val popperCount: Int
+        get() = 2
 
     @OptIn(ExperimentalTextApi::class)
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
-        regex.find(text.subSequence(0, tagOffset(text)))?.value
         to.pushUrlAnnotation(
             UrlAnnotation(
                 url = regex.find(
@@ -152,7 +173,13 @@ object A : Tag {
                         0,
                         tagOffset(text)
                     )
-                )?.value ?: ""
+                )?.groups?.get(1)?.value ?: ""
+            )
+        )
+        to.pushStyle(
+            SpanStyle(
+                color = Color.Blue,
+                textDecoration = TextDecoration.Underline
             )
         )
     }
