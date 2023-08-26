@@ -17,7 +17,9 @@ private const val TAG = "ANTV/HTMLUtils"
 @Composable
 fun HtmlText(htmlText: String) {
     val uriHandler = LocalUriHandler.current
-    val annotatedString = htmlText.parseHtml()
+    val annotatedString = buildAnnotatedString {
+        recurse(htmlText.replace("<br>", "\n").replace("<br/>", "\n"), this)
+    }
     ClickableText(text = annotatedString, onClick = { offset ->
         annotatedString.getUrlAnnotations(
             start = offset,
@@ -30,17 +32,6 @@ fun HtmlText(htmlText: String) {
 }
 
 private val tags = listOf(B, I, U, A)
-
-/**
- * The main entry point. Call this on a String and use the result in a Text.
- */
-fun String.parseHtml(): AnnotatedString {
-    val newlineReplace = this.replace("<br>", "\n").replace("<br/>", "\n")
-
-    return buildAnnotatedString {
-        recurse(newlineReplace, this)
-    }
-}
 
 
 /**
