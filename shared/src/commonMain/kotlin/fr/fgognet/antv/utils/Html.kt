@@ -3,7 +3,6 @@ package fr.fgognet.antv.utils
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
@@ -189,7 +188,7 @@ object A : TagWithProperties {
         )
         to.pushStyle(
             SpanStyle(
-                color = Color.Blue,
+                color = colorScheme.primary,
                 textDecoration = TextDecoration.Underline
             )
         )
