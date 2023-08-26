@@ -8,6 +8,7 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import fr.fgognet.antv.widget.*
 import io.github.aakira.napier.Napier
 import kotlin.math.min
 
@@ -18,7 +19,9 @@ private const val TAG = "ANTV/HTMLUtils"
 fun HtmlText(htmlText: String) {
     val uriHandler = LocalUriHandler.current
     val annotatedString = buildAnnotatedString {
+        pushStyle(SpanStyle(color = buildColors(getPlatformContext()).onPrimaryContainer))
         recurse(htmlText.replace("<br>", "\n").replace("<br/>", "\n"), this)
+        pop()
     }
     ClickableText(text = annotatedString, onClick = { offset ->
         annotatedString.getUrlAnnotations(
@@ -65,10 +68,10 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
         //Append the text normally up until that lowest index, and then recurse starting from that index.
         tags.any { string.contains(it.startTag()) || string.contains(it.endTag()) } -> {
             val firstStart =
-                tags.map { it.startTag() }.map { string.indexOf(it) }.filterNot { it == -1 }
+                tags.map { string.indexOf(it.startTag()) }.filterNot { it == -1 }
                     .minOrNull() ?: -1
             val firstEnd =
-                tags.map { it.endTag() }.map { string.indexOf(it) }.filterNot { it == -1 }
+                tags.map { string.indexOf(it.endTag()) }.filterNot { it == -1 }
                     .minOrNull() ?: -1
             val first = when {
                 firstStart == -1 -> firstEnd
