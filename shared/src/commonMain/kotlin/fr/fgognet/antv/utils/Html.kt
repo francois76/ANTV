@@ -6,10 +6,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import kotlin.math.min
 
-/**
- * The tags to interpret. Add tags here and in [tagToStyle].
- */
-private val tags = listOf(B, I, U)
+
+private val tags = listOf(B, I, U, A)
 
 /**
  * The main entry point. Call this on a String and use the result in a Text.
@@ -40,7 +38,7 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
         //If the String starts with a closing tag, then pop the latest-applied
         //SpanStyle and continue recursing.
         tags.any { string.startsWith(it.endTag()) } -> {
-            to.pop()
+            endTag?.endStyle(to)
             recurse(string.removeRange(0, endTag!!.endTag().length), to)
         }
         //If the String starts with an opening tag, apply the appropriate
@@ -79,6 +77,7 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
 
 interface Tag {
     val tagName: String
+    val isStyleTag: Boolean
     fun startTag(): String {
         return "<$tagName"
     }
@@ -91,11 +90,19 @@ interface Tag {
     fun tagOffset(text: String): Int {
         return text.indexOf('>') + 1
     }
+
+    fun endStyle(to: AnnotatedString.Builder) {
+        if (isStyleTag) {
+            to.pop()
+        }
+    }
 }
 
 object B : Tag {
     override val tagName: String
         get() = "b"
+    override val isStyleTag: Boolean
+        get() = true
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
@@ -106,6 +113,8 @@ object B : Tag {
 object I : Tag {
     override val tagName: String
         get() = "i"
+    override val isStyleTag: Boolean
+        get() = true
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
@@ -116,9 +125,36 @@ object I : Tag {
 object U : Tag {
     override val tagName: String
         get() = "i"
+    override val isStyleTag: Boolean
+        get() = true
 
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+    }
+
+}
+
+object A : Tag {
+
+    val regex = "<a(.)+href=\"(.+)\"".toRegex()
+    override val tagName: String
+        get() = "a"
+    override val isStyleTag: Boolean
+        get() = true
+
+    @OptIn(ExperimentalTextApi::class)
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
+        regex.find(text.subSequence(0, tagOffset(text)))?.value
+        to.pushUrlAnnotation(
+            UrlAnnotation(
+                url = regex.find(
+                    text.subSequence(
+                        0,
+                        tagOffset(text)
+                    )
+                )?.value ?: ""
+            )
+        )
     }
 
 }
