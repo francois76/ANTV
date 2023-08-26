@@ -46,8 +46,8 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
         //If the String starts with an opening tag, apply the appropriate
         //SpanStyle and continue recursing.
         tags.any { string.startsWith(it.startTag()) } -> {
-            startTag?.tagBuilder(to)
-            recurse(string.removeRange(0, startTag?.tagOffset()!!), to)
+            startTag?.tagBuilder(string, to)
+            recurse(string.removeRange(0, startTag?.tagOffset(string)!!), to)
         }
         //If the String doesn't start with an opening or closing tag, but does contain either,
         //find the lowest index (that isn't -1/not found) for either an opening or closing tag.
@@ -87,45 +87,38 @@ interface Tag {
         return "</$tagName>"
     }
 
-    fun tagBuilder(to: AnnotatedString.Builder)
-    fun tagOffset(): Int
+    fun tagBuilder(text: String, to: AnnotatedString.Builder)
+    fun tagOffset(text: String): Int {
+        return text.indexOf('>') + 1
+    }
 }
 
 object B : Tag {
     override val tagName: String
         get() = "b"
 
-    override fun tagBuilder(to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
     }
 
-    override fun tagOffset(): Int {
-        return 3
-    }
 }
 
 object I : Tag {
     override val tagName: String
         get() = "i"
 
-    override fun tagBuilder(to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
     }
 
-    override fun tagOffset(): Int {
-        return 3
-    }
 }
 
 object U : Tag {
     override val tagName: String
         get() = "i"
 
-    override fun tagBuilder(to: AnnotatedString.Builder) {
+    override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
     }
 
-    override fun tagOffset(): Int {
-        return 3
-    }
 }
