@@ -9,11 +9,7 @@ import kotlin.math.min
 /**
  * The tags to interpret. Add tags here and in [tagToStyle].
  */
-private val tags = linkedMapOf(
-    "<b>" to "</b>",
-    "<i>" to "</i>",
-    "<u>" to "</u>"
-)
+private val tags = listOf(B, I, U)
 
 /**
  * The main entry point. Call this on a String and use the result in a Text.
@@ -26,7 +22,6 @@ fun String.parseHtml(): AnnotatedString {
     }
 }
 
-// TODO: refactor with regex like that: <div +id="(?'id'[^><]+)">(?'text_origin'[^><]+)?(?'bigsubgroup'(?'subgroup'<(?'balise'[[:alnum:]]+)>[[:alnum:]]+<\/(?&balise)>)(?'text'[^><]+)?)*<\/div>
 
 /**
  * Recurses through the given HTML String to convert it to an AnnotatedString.
@@ -36,33 +31,34 @@ fun String.parseHtml(): AnnotatedString {
  */
 private fun recurse(string: String, to: AnnotatedString.Builder) {
     //Find the opening tag that the given String starts with, if any.
-    val startTag = tags.keys.find { string.startsWith(it) }
-
+    val startTag = tags.find { string.startsWith(it.startTag()) }
 
     //Find the closing tag that the given String starts with, if any.
-    val endTag = tags.values.find { string.startsWith(it) }
+    val endTag = tags.find { string.startsWith(it.endTag()) }
 
     when {
         //If the String starts with a closing tag, then pop the latest-applied
         //SpanStyle and continue recursing.
-        tags.any { string.startsWith(it.value) } -> {
+        tags.any { string.startsWith(it.endTag()) } -> {
             to.pop()
-            recurse(string.removeRange(0, endTag!!.length), to)
+            recurse(string.removeRange(0, endTag!!.endTag().length), to)
         }
         //If the String starts with an opening tag, apply the appropriate
         //SpanStyle and continue recursing.
-        tags.any { string.startsWith(it.key) } -> {
-            to.pushStyle(tagToStyle(startTag!!))
-            recurse(string.removeRange(0, startTag.length), to)
+        tags.any { string.startsWith(it.startTag()) } -> {
+            startTag?.tagBuilder(to)
+            recurse(string.removeRange(0, startTag?.tagOffset()!!), to)
         }
         //If the String doesn't start with an opening or closing tag, but does contain either,
         //find the lowest index (that isn't -1/not found) for either an opening or closing tag.
         //Append the text normally up until that lowest index, and then recurse starting from that index.
-        tags.any { string.contains(it.key) || string.contains(it.value) } -> {
+        tags.any { string.contains(it.startTag()) || string.contains(it.endTag()) } -> {
             val firstStart =
-                tags.keys.map { string.indexOf(it) }.filterNot { it == -1 }.minOrNull() ?: -1
+                tags.map { it.startTag() }.map { string.indexOf(it) }.filterNot { it == -1 }
+                    .minOrNull() ?: -1
             val firstEnd =
-                tags.values.map { string.indexOf(it) }.filterNot { it == -1 }.minOrNull() ?: -1
+                tags.map { it.endTag() }.map { string.indexOf(it) }.filterNot { it == -1 }
+                    .minOrNull() ?: -1
             val first = when {
                 firstStart == -1 -> firstEnd
                 firstEnd == -1 -> firstStart
@@ -80,28 +76,56 @@ private fun recurse(string: String, to: AnnotatedString.Builder) {
     }
 }
 
-/**
- * Get a [SpanStyle] for a given (opening) tag.
- * Add your own tag styling here by adding its opening tag to
- * the when clause and then instantiating the appropriate [SpanStyle].
- *
- * @return a [SpanStyle] for the given tag.
- */
-private fun tagToStyle(tag: String): SpanStyle {
-    return when (tag) {
-        "<b>" -> {
-            SpanStyle(fontWeight = FontWeight.Bold)
-        }
 
-        "<i>" -> {
-            SpanStyle(fontStyle = FontStyle.Italic)
-        }
+interface Tag {
+    val tagName: String
+    fun startTag(): String {
+        return "<$tagName"
+    }
 
-        "<u>" -> {
-            SpanStyle(textDecoration = TextDecoration.Underline)
-        }
-        //This should only throw if you add a tag to the [tags] Map and forget to add it
-        //to this function.
-        else -> throw IllegalArgumentException("Tag $tag is not valid.")
+    fun endTag(): String {
+        return "</$tagName>"
+    }
+
+    fun tagBuilder(to: AnnotatedString.Builder)
+    fun tagOffset(): Int
+}
+
+object B : Tag {
+    override val tagName: String
+        get() = "b"
+
+    override fun tagBuilder(to: AnnotatedString.Builder) {
+        to.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+    }
+
+    override fun tagOffset(): Int {
+        return 3
+    }
+}
+
+object I : Tag {
+    override val tagName: String
+        get() = "i"
+
+    override fun tagBuilder(to: AnnotatedString.Builder) {
+        to.pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
+    }
+
+    override fun tagOffset(): Int {
+        return 3
+    }
+}
+
+object U : Tag {
+    override val tagName: String
+        get() = "i"
+
+    override fun tagBuilder(to: AnnotatedString.Builder) {
+        to.pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+    }
+
+    override fun tagOffset(): Int {
+        return 3
     }
 }
