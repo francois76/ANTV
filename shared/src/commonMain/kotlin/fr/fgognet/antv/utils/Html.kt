@@ -116,6 +116,7 @@ interface Tag {
 
 class Property(val regex: Regex) {
     fun find(text: String): String {
+        Napier.v(tag = TAG, message = "using regex ${this.regex.pattern}")
         return this.regex.find(
             text.subSequence(
                 0,
@@ -127,8 +128,9 @@ class Property(val regex: Regex) {
 
 interface TagWithProperties : Tag {
     val properties: HashMap<String, Property>
-    fun registerProperty(property: String) {
-        properties[property] = Property("<$tagName.+$property=\"(.+)\"".toRegex())
+    fun HashMap<String, Property>.registerProperty(property: String): HashMap<String, Property> {
+        this[property] = Property("<$tagName.+$property=\"(.+)\"".toRegex())
+        return this
     }
 }
 
@@ -169,12 +171,10 @@ object U : Tag {
 }
 
 object A : TagWithProperties {
-    init {
-        registerProperty("href")
-    }
+
 
     override val properties: HashMap<String, Property>
-        get() = HashMap()
+        get() = HashMap<String, Property>().registerProperty("href")
 
     override val tagName: String
         get() = "a"
@@ -185,7 +185,7 @@ object A : TagWithProperties {
     override fun tagBuilder(text: String, to: AnnotatedString.Builder) {
         to.pushUrlAnnotation(
             UrlAnnotation(
-                url = properties["href"]?.find(text) ?: ""
+                url = properties["href"]?.find(text) ?: "error"
             )
         )
         to.pushStyle(
