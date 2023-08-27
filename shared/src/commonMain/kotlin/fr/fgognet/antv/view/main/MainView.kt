@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.*
 import com.chrynan.navigation.compose.NavigationContainer
@@ -87,7 +88,8 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             }) {
                                 Image(
                                     painter = painterResource(imageResource = MR.images.ic_baseline_info_24),
-                                    contentDescription = "about"
+                                    contentDescription = "about",
+                                    colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                 )
                             }
                             CastButton()
@@ -105,7 +107,8 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             ) {
                                 Image(
                                     painter = painterResource(imageResource = MR.images.ic_baseline_replay_24),
-                                    contentDescription = "reload"
+                                    contentDescription = "reload",
+                                    colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                 )
                             }
                         }, title = {
@@ -117,7 +120,8 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 }) {
                                     Image(
                                         painter = painterResource(imageResource = MR.images.back_arrow),
-                                        contentDescription = "back"
+                                        contentDescription = "back",
+                                        colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                     )
                                 }
                             }
@@ -138,6 +142,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                             painterResource(
                                                 imageResource = routeIcons[item?.id]!!,
                                             ),
+                                            colorFilter = ColorFilter.tint(color = colorScheme.onBackground),
                                             contentDescription = stringResource(resource = routeNames[item?.id]!!)
                                         )
                                     },
