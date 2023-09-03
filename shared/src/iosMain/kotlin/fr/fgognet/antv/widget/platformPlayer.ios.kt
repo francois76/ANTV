@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.interop.UIKitView
 import io.github.aakira.napier.Napier
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFoundation.AVPlayerLayer
 import platform.AVFoundation.currentItem
 import platform.UIKit.UIView
@@ -26,6 +27,7 @@ actual fun Player(modifier: Modifier, context: PlatformContext, controller: Medi
     ViewKit(modifier = modifier, playerLayer = playerLayer)
 }
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 fun ViewKit(modifier: Modifier, playerLayer: AVPlayerLayer) {
     Napier.v(tag = TAG, message = "ViewKit")

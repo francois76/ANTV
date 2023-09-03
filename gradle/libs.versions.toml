@@ -1,7 +1,7 @@
 [versions]
 guava = "32.1.2-android" # https://github.com/google/guava/releases
-kamel = "0.7.1" # https://github.com/Kamel-Media/Kamel/releases
-ktor = "2.3.3" # https://github.com/ktorio/ktor/releases
+kamel = "0.7.2" # https://github.com/Kamel-Media/Kamel/releases
+ktor = "2.3.4" # https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1" # https://github.com/icerockdev/moko-mvvm/releases
 moko-resource = "0.23.0" # https://github.com/icerockdev/moko-resources
 napier = "2.6.1" # https://github.com/AAkira/Napier
@@ -13,14 +13,14 @@ firebase = "32.2.3" # https://maven.google.com/web/index.html?q=firebase-bom#com
 crashlytics = "2.9.9" # https://maven.google.com/web/index.html?q=crashly#com.google.firebase.crashlytics:com.google.firebase.crashlytics.gradle.plugin
 
 #kotlin dependencies
-kotlinx-datetime = "0.4.0"# https://github.com/Kotlin/kotlinx-datetime/releases
+kotlinx-datetime = "0.4.1"# https://github.com/Kotlin/kotlinx-datetime/releases
 kotlinx-serialization-json = "1.6.0"# https://github.com/Kotlin/kotlinx.serialization/releases
 kotlinx-coroutines-guava = "1.7.3"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
 kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
 
 # compose stack:
-compose-multiplatform = "1.5.0-rc06" # https://github.com/JetBrains/compose-multiplatform/releases
-compose-compiler = "1.5.2" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
+compose-multiplatform = "1.5.0" # https://github.com/JetBrains/compose-multiplatform/releases
+compose-compiler = "1.5.3" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 accompanist = "0.30.1" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 
 # other androidx dependencies
