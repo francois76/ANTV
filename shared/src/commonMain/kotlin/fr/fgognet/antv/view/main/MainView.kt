@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.unit.dp
 import com.chrynan.navigation.*
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberSavableNavigator
@@ -133,7 +132,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             allRoutes[Route.PLAYLIST],
                             allRoutes[Route.SEARCH]
                         )
-                        NavigationBar(modifier = Modifier.height(72.dp)) {
+                        NavigationBar() {
                             items.forEachIndexed { _, item ->
                                 NavigationBarItem(
                                     icon = {
