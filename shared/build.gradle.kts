@@ -63,7 +63,6 @@ kotlin {
                 // bundles
 
                 implementation(libs.bundles.media3)
-                implementation(libs.bundles.accompanist)
                 implementation(libs.bundles.compose)
 
                 implementation(libs.ktor.client.okhttp)

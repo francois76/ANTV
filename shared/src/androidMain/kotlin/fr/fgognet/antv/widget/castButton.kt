@@ -8,8 +8,10 @@ import com.google.android.gms.cast.framework.CastButtonFactory
 @Composable
 actual fun CastButton() {
     AndroidView(factory = { context ->
+
         val mediaButton = MediaRouteButton(context)
         CastButtonFactory.setUpMediaRouteButton(context, mediaButton)
         mediaButton
     })
+
 }

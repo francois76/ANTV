@@ -1,6 +1,6 @@
 <resources>
     <!-- base theme-->
-    <style name="Theme.ANTV_base" parent="@style/Theme.Material3.DynamicColors.Light" />
+    <style name="Theme.ANTV_base" parent="Theme.AppCompat.Light" />
 
     <style name="Theme.ANTV" parent="Theme.ANTV_base" />
 

@@ -43,7 +43,6 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
     val contextualRefreshFunction by remember {
         mutableStateOf({})
     }
-    val systemUiController = getSystemUIController()
     HandlePictureInPicture(context, navigator)
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var isFullScreen by remember { mutableStateOf(false) }
@@ -221,13 +220,11 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             title = if (destination.arguments.isEmpty()) null else destination.arguments[0],
                             setFullScreen = {
                                 isFullScreen = it
-                                systemUiController.setFullScreen(it)
                             }
                         )
                     }
                 }
             }
-            systemUiController.SetPlatformConfiguration()
         }
     }
 }

@@ -21,10 +21,9 @@ kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
 # compose stack:
 compose-multiplatform = "1.5.1" # https://github.com/JetBrains/compose-multiplatform/releases
 compose-compiler = "1.5.3" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
-accompanist = "0.32.0" # WARNING! depend on version of compose# https://github.com/google/accompanist/releases
 
 # other androidx dependencies
-activity-compose = "1.7.2"# https://developer.android.com/jetpack/androidx/releases/activity
+activity-compose = "1.8.0-beta01"# https://developer.android.com/jetpack/androidx/releases/activity
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
 core-ktx = "1.12.0"# https://developer.android.com/jetpack/androidx/releases/core
 lifecycle = "2.6.2"# https://developer.android.com/jetpack/androidx/releases/lifecycle
@@ -94,9 +93,6 @@ lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.r
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "lifecycle" }
 
 
-# accompanist
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-themeadapter-material3 = { module = "com.google.accompanist:accompanist-themeadapter-material3", version.ref = "accompanist" }
 
 # androidx compose
 material3-core = { module = "androidx.compose.material3:material3-core", version.ref = "compose-material3" }
@@ -121,7 +117,6 @@ moko-mvvm = ["mvvm-compose", "mvvm-flow-compose", "mvvm-livedata-compose", "mvvm
 ktor-common = ["ktor-client-core", "ktor-client-json", "ktor-client-logging"]
 xmlutil = ["xmlutil-core", "xmlutil-serialization"]
 media3 = ["media3-exoplayer", "media3-exoplayer-hls", "media3-ui", "media3-cast", "media3-session"]
-accompanist = ["accompanist-systemuicontroller", "accompanist-themeadapter-material3"]
 compose = ["compose-runtime", "compose-runtime-livedata", "compose-ui", "compose-ui-viewbinding", "compose-ui-tooling-preview",
     "compose-foundation", "compose-foundation-layout", "compose-ui-tooling"]
 
