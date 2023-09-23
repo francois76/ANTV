@@ -17,6 +17,8 @@ plugins {
 }
 
 
+
+
 buildscript {
     dependencies {
         classpath(libs.moko.resources.generator)
@@ -24,5 +26,5 @@ buildscript {
 }
 
 task<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }

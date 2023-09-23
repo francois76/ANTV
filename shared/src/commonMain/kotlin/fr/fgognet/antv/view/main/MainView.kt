@@ -6,13 +6,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.ColorFilter
 import com.chrynan.navigation.*
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberSavableNavigator
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
+import fr.fgognet.antv.utils.HtmlText
 import fr.fgognet.antv.view.cardList.*
 import fr.fgognet.antv.view.player.PlayerView
 import fr.fgognet.antv.view.replaySearch.ReplaySearchView
@@ -27,21 +28,24 @@ private const val TAG = "ANTV/MainView"
     ExperimentalSerializationApi::class,
 )
 @Composable
-fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
+fun ANTVApp(
+    backHandler: (() -> Boolean) -> Unit,
+    initialRoute: RouteData?,
+    setFullScreen: (Boolean) -> Unit = {}
+) {
     val navigator =
         rememberSavableNavigator(
             initialDestination = initialRoute ?: allRoutes[Route.LIVE]!!,
             duplicateDestinationStrategy = NavigationStrategy.DuplicateDestination.CLEAR_TO_ORIGINAL
         )
     backHandler {
-        navigator.goBack()
+        navigator.popDestination()
     }
     val context = getPlatformContext()
     val colorScheme = buildColors(context = context)
     val contextualRefreshFunction by remember {
         mutableStateOf({})
     }
-    val systemUiController = getSystemUIController()
     HandlePictureInPicture(context, navigator)
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var isFullScreen by remember { mutableStateOf(false) }
@@ -49,11 +53,31 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
 
     MaterialTheme(colorScheme = colorScheme) {
         if (openDialog) {
-            Modal(title = stringResource(resource = MR.strings.info), content = stringResource(
-                resource = MR.strings.credits,
-            ), confirmButton = stringResource(resource = MR.strings.close), closeCallBack = {
-                openDialog = false
-            })
+
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog = false
+                },
+                title = {
+                    Text(stringResource(resource = MR.strings.info))
+                },
+                text = {
+                    HtmlText(
+                        htmlText = stringResource(
+                            resource = MR.strings.credits,
+                        ), colorScheme = colorScheme
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog = false
+                        }
+                    ) {
+                        Text(stringResource(resource = MR.strings.close))
+                    }
+                }
+            )
         }
         NavigationContainer(navigator) { (destination, _) ->
             KeepScreenOn(getPlatformContext(), destination.id == Route.PLAYER)
@@ -66,7 +90,8 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             }) {
                                 Image(
                                     painter = painterResource(imageResource = MR.images.ic_baseline_info_24),
-                                    contentDescription = "about"
+                                    contentDescription = "about",
+                                    colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                 )
                             }
                             CastButton()
@@ -84,19 +109,21 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             ) {
                                 Image(
                                     painter = painterResource(imageResource = MR.images.ic_baseline_replay_24),
-                                    contentDescription = "reload"
+                                    contentDescription = "reload",
+                                    colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                 )
                             }
                         }, title = {
-                            if (context.getPlatform() == Platform.IOS && navigator.canGoBack()) {
+                            if (context.getPlatform() == Platform.IOS && navigator.canPopDestination()) {
                                 IconButton(onClick = {
                                     backHandler {
-                                        navigator.goBack()
+                                        navigator.popDestination()
                                     }
                                 }) {
                                     Image(
                                         painter = painterResource(imageResource = MR.images.back_arrow),
-                                        contentDescription = "back"
+                                        contentDescription = "back",
+                                        colorFilter = ColorFilter.tint(color = colorScheme.onBackground)
                                     )
                                 }
                             }
@@ -109,7 +136,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                             allRoutes[Route.PLAYLIST],
                             allRoutes[Route.SEARCH]
                         )
-                        NavigationBar(modifier = Modifier.height(72.dp)) {
+                        NavigationBar() {
                             items.forEachIndexed { _, item ->
                                 NavigationBarItem(
                                     icon = {
@@ -117,13 +144,14 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                             painterResource(
                                                 imageResource = routeIcons[item?.id]!!,
                                             ),
+                                            colorFilter = ColorFilter.tint(color = colorScheme.onBackground),
                                             contentDescription = stringResource(resource = routeNames[item?.id]!!)
                                         )
                                     },
                                     label = { Text(stringResource(resource = routeNames[item?.id]!!)) },
                                     selected = item?.id == destination.id,
                                     onClick = {
-                                        navigator.goTo(item!!)
+                                        navigator.push(item!!)
                                     }
                                 )
                             }
@@ -135,7 +163,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                     when (destination.id) {
                         Route.LIVE -> LiveCardListView(
                             goToVideo = { title ->
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
@@ -146,7 +174,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 contextualRefreshFunction()
                             },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -157,7 +185,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
 
                         Route.REPLAY -> ReplayCardListView(
                             goToVideo = { title ->
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(title),
@@ -165,7 +193,7 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                                 )
                             },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -175,10 +203,10 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                         )
 
                         Route.PLAYLIST -> PlaylistCardListView(goToVideos = {
-                            navigator.goTo(allRoutes[Route.REPLAY]!!)
+                            navigator.push(allRoutes[Route.REPLAY]!!)
                         },
                             goToCurrentPlaying = {
-                                navigator.goTo(
+                                navigator.push(
                                     RouteData(
                                         id = Route.PLAYER,
                                         arguments = arrayListOf(),
@@ -188,20 +216,19 @@ fun ANTVApp(backHandler: (() -> Boolean) -> Unit, initialRoute: RouteData?) {
                         )
 
                         Route.SEARCH -> ReplaySearchView(query = {
-                            navigator.goTo(allRoutes[Route.REPLAY]!!)
+                            navigator.push(allRoutes[Route.REPLAY]!!)
                         })
 
                         Route.PLAYER -> PlayerView(
                             title = if (destination.arguments.isEmpty()) null else destination.arguments[0],
                             setFullScreen = {
                                 isFullScreen = it
-                                systemUiController.setFullScreen(it)
+                                setFullScreen(it)
                             }
                         )
                     }
                 }
             }
-            systemUiController.SetPlatformConfiguration()
         }
     }
 }

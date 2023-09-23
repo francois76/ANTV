@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.DefaultMediaItemConverter
 import androidx.media3.common.*
@@ -35,7 +34,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
-        Log.v(TAG, "onCreate")
+        Napier.v(tag = TAG, message = "onCreate")
         localPlayer =
             ExoPlayer.Builder(this).setSeekBackIncrementMs(5000).setSeekForwardIncrementMs(5000)
                 .setAudioAttributes(AudioAttributes.Builder().setUsage(USAGE_MEDIA).build(), true)
@@ -80,7 +79,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
 
 
     override fun onDestroy() {
-        Log.v(TAG, "onDestroy")
+        Napier.v(tag = TAG, message = "onDestroy")
         mediaSession?.run {
             player.release()
             release()
@@ -99,18 +98,18 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
 
 
     fun cast() {
-        Log.v(TAG, "cast")
+        Napier.v(tag = TAG, message = "cast")
         setCurrentPlayer(castPlayer)
     }
 
     fun stopCast() {
-        Log.v(TAG, "stopCast")
+        Napier.v(tag = TAG, message = "stopCast")
         setCurrentPlayer(localPlayer)
     }
 
 
     private fun setCurrentPlayer(currentPlayer: Player) {
-        Log.v(TAG, "setCurrentPlayer")
+        Napier.v(tag = TAG, message = "setCurrentPlayer")
         if (currentPlayer === mediaSession?.player || mediaSession == null) {
             return
         }
@@ -131,15 +130,10 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
         previousPlayer.clearMediaItems()
         currentPlayer.playWhenReady = playWhenReady
         currentPlayer.prepare()
-        Log.d(TAG, "updating player")
+        Napier.v(tag = TAG, message = "updating player")
         mediaSession?.player = currentPlayer
     }
-
-
-    /*    actual companion object {
-
-
-        }*/
+    
 
     actual companion object {
         var controllerFuture: ListenableFuture<MediaController>? = null

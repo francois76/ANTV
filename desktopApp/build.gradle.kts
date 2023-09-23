@@ -3,7 +3,6 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
-    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -43,7 +42,3 @@ compose.desktop {
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
-    disableStaticFrameworkWarning = true
-}

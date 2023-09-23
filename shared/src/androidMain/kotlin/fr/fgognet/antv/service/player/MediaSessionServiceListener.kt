@@ -2,33 +2,22 @@ package fr.fgognet.antv.service.player
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.media3.cast.SessionAvailabilityListener
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.MimeTypes
+import androidx.media3.common.*
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.session.LibraryResult
-import androidx.media3.session.MediaLibraryService
-import androidx.media3.session.MediaSession
+import androidx.media3.session.*
 import com.google.common.collect.ImmutableList
-import com.google.common.util.concurrent.FutureCallback
-import com.google.common.util.concurrent.Futures
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
-import fr.fgognet.antv.external.editorial.Diffusion
-import fr.fgognet.antv.external.editorial.Editorial
-import fr.fgognet.antv.external.editorial.EditorialRepository
+import com.google.common.util.concurrent.*
+import fr.fgognet.antv.external.editorial.*
 import fr.fgognet.antv.external.eventSearch.EventSearch
 import fr.fgognet.antv.external.eventSearch.EventSearchRepository
 import fr.fgognet.antv.external.live.LiveRepository
 import fr.fgognet.antv.external.nvs.NvsRepository
 import fr.fgognet.antv.utils.cleanDescription
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.asListenableFuture
-import kotlinx.coroutines.supervisorScope
-import java.util.*
+import java.util.UUID
 
 private const val TAG = "ANTV/MediaSessionServiceListener"
 
@@ -39,13 +28,13 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
 
 
     override fun onCastSessionAvailable() {
-        Log.v(TAG, "onCastSessionAvailable")
+        Napier.v(tag = TAG, message = "onCastSessionAvailable")
         service.cast()
     }
 
 
     override fun onCastSessionUnavailable() {
-        Log.v(TAG, "onCastSessionUnavailable")
+        Napier.v(tag = TAG, message = "onCastSessionUnavailable")
         service.stopCast()
     }
 
@@ -55,7 +44,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         browser: MediaSession.ControllerInfo,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        Log.v(TAG, "onGetLibraryRoot")
+        Napier.v(tag = TAG, message = "onGetLibraryRoot")
         val result = LibraryResult.ofItem(
             MediaItem.Builder().setMediaId("root")
                 .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaMetadata(
@@ -72,7 +61,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         query: String,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<Void>> {
-        Log.v(TAG, "onSearch")
+        Napier.v(tag = TAG, message = "onSearch")
         session.notifySearchResultChanged(browser, query, 0, params)
         return Futures.immediateFuture(
             LibraryResult.ofVoid(
@@ -89,7 +78,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         pageSize: Int,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        Log.v(TAG, "onGetSearchResult")
+        Napier.v(tag = TAG, message = "onGetSearchResult")
         return runAsyncMediacall(Bundle().apply {
             putInt(
                 "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT",
@@ -109,7 +98,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         pageSize: Int,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        Log.v(TAG, "onGetChildren")
+        Napier.v(tag = TAG, message = "onGetChildren")
         return when (parentId) {
             "root" -> handleRoot()
             "live" -> runAsyncMediacall(Bundle().apply {
@@ -131,7 +120,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }
 
             else -> {
-                Log.e(TAG, parentId)
+                Napier.e(tag = TAG, message = parentId)
                 super.onGetChildren(session, browser, parentId, page, pageSize, params)
             }
         }
@@ -142,7 +131,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         controller: MediaSession.ControllerInfo,
         mediaItems: MutableList<MediaItem>
     ): ListenableFuture<MutableList<MediaItem>> {
-        Log.v(TAG, "onAddMediaItems")
+        Napier.v(tag = TAG, message = "onAddMediaItems")
         var item = currentItems[mediaItems[0].mediaId]
         item = item?.buildUpon()?.setMimeType(MimeTypes.APPLICATION_M3U8)?.build()
         if (mediaItems.size != 1 || item == null) {
@@ -176,7 +165,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             }
 
             override fun onFailure(t: Throwable) {
-                Log.e(TAG, t.stackTraceToString())
+                Napier.e(tag = TAG, message = t.stackTraceToString())
             }
         }
         Futures.addCallback(future, callBack, MoreExecutors.directExecutor())
@@ -185,7 +174,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
 
 
     private fun handleRoot(): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        Log.v(TAG, "handleRoot")
+        Napier.v(tag = TAG, message = "handleRoot")
         return Futures.immediateFuture(
             LibraryResult.ofItemList(
                 arrayListOf(
@@ -208,7 +197,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
         extra: Bundle,
         function: suspend () -> ArrayList<MediaItem>
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        Log.v(TAG, "runAsyncMediacall")
+        Napier.v(tag = TAG, message = "runAsyncMediacall")
         val future = MainScope().async {
             val items = function()
             currentItems = items.associateBy {
@@ -224,7 +213,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
             override fun onSuccess(result: LibraryResult<ImmutableList<MediaItem>>?) {}
 
             override fun onFailure(t: Throwable) {
-                Log.e(TAG, t.stackTraceToString())
+                Napier.e(tag = TAG, message = t.stackTraceToString())
             }
         }
         Futures.addCallback(future, callBack, MoreExecutors.directExecutor())
@@ -233,7 +222,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
 
 
     private suspend fun handleLive(): ArrayList<MediaItem> {
-        Log.v(TAG, "handleLive")
+        Napier.v(tag = TAG, message = "handleLive")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
         supervisorScope {
             val editorial: Editorial? = try {
@@ -286,7 +275,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
 
 
     private suspend fun handleReplay(): ArrayList<MediaItem> {
-        Log.v(TAG, "handleReplay")
+        Napier.v(tag = TAG, message = "handleReplay")
         val itemResult: ArrayList<MediaItem> = arrayListOf()
         supervisorScope {
             val eventSearches: List<EventSearch> = try {
@@ -333,7 +322,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
     }
 
     private fun buildFolder(mediaId: String, title: String): MediaItem {
-        Log.v(TAG, "buildFolder")
+        Napier.v(tag = TAG, message = "buildFolder")
         return MediaItem.Builder()
             .setMimeType(MimeTypes.BASE_TYPE_APPLICATION).setMediaId(mediaId)
             .setMediaMetadata(

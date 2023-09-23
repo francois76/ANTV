@@ -11,10 +11,12 @@ plugins {
 version = antvLibs.versions.antv.version.get()
 
 kotlin {
-    android()
-    jvm("desktop")
+    androidTarget()
+    jvm(name = "desktop")
     ios()
     iosSimulatorArm64()
+
+    jvmToolchain(17)
 
     cocoapods {
         summary = "Shared code for the sample"
@@ -31,6 +33,9 @@ kotlin {
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
+            resources.srcDirs(
+                rootProject.layout.buildDirectory.file("generated/moko/commonMain/src")
+            )
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
                 implementation(libs.napier)
@@ -53,11 +58,11 @@ kotlin {
             }
         }
         val androidMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 // bundles
 
                 implementation(libs.bundles.media3)
-                implementation(libs.bundles.accompanist)
                 implementation(libs.bundles.compose)
 
                 implementation(libs.ktor.client.okhttp)
@@ -74,14 +79,22 @@ kotlin {
 
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependsOn(commonMain)
+        }
         val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosX64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosArm64Main by getting {
             dependsOn(iosMain)
         }
 
 
         val desktopMain by getting {
-            kotlin.srcDirs("src/jvmMain/kotlin")
+            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)
@@ -95,49 +108,19 @@ kotlin {
 
 android {
     namespace = antvLibs.versions.antv.packagename.get()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     compileSdk = antvLibs.versions.android.sdk.compile.get().toInt()
-    sourceSets["main"].apply {
-        assets.srcDir(File(buildDir, "generated/moko/androidMain/assets"))
-        res.srcDir(File(buildDir, "generated/moko/androidMain/res"))
-    }
     defaultConfig {
         minSdk = antvLibs.versions.android.sdk.min.get().toInt()
     }
 }
 
+
 multiplatformResources {
     multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
-    disableStaticFrameworkWarning = true
+    disableStaticFrameworkWarning = false
+
 }
 
-configurations.configureEach {
-    attributes {
-        attribute(Attribute.of("custom.attr", String::class.java), name)
-    }
-}
 
-// TODO move to gradle plugin
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask>().configureEach {
-    @Suppress("ObjectLiteralToLambda")
-    doLast(object : Action<Task> {
-        override fun execute(task: Task) {
-            task as org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask
-
-            val frameworkDir = File(task.destinationDir, task.frameworkName.get() + ".framework")
-
-            listOf(
-                "ANTV:shared.bundle"
-            ).forEach { bundleName ->
-                val bundleDir = File(frameworkDir, bundleName)
-                bundleDir.mkdir()
-                File(bundleDir, "dummyFile").writeText("dummy")
-            }
-        }
-    })
-}
 
 

@@ -8,6 +8,7 @@ import fr.fgognet.antv.widget.MediaController
 import fr.fgognet.antv.widget.PlatformContext
 import io.github.aakira.napier.Napier
 import kotlinx.cinterop.CValue
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,6 +21,7 @@ import kotlin.time.toDuration
 private const val TAG = "ANTV/PlayerViewModel"
 
 actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
+    @OptIn(ExperimentalForeignApi::class)
     override fun initialize(c: MediaController?) {
         Napier.v(tag = TAG, message = "initialize")
         if (c != null) {
@@ -66,6 +68,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
         }
     }
 
+    @OptIn(ExperimentalForeignApi::class)
     private fun loadCurrentMedia() {
         Napier.v(tag = TAG, message = "loadCurrentMedia")
         this._playerdata.value = this.playerData.value.copy(
@@ -82,6 +85,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
         )
     }
 
+    @OptIn(ExperimentalForeignApi::class)
     private fun updateCurrentMedia(title: String) {
         Napier.v(tag = TAG, message = "updateCurrentMedia")
         if (title == playerData.value.title) {
@@ -129,6 +133,7 @@ actual class PlayerViewModel : PlayerViewModelCommon(), AVPlayerListener {
         return MediaSessionServiceImpl.controller?.iosMediaController?.player
     }
 
+    @OptIn(ExperimentalForeignApi::class)
     private fun iosTimeToSecond(value: CValue<CMTime>?): Long? {
         if (value == null) {
             return null;

@@ -4,11 +4,11 @@ plugins {
     alias(libs.plugins.org.jetbrains.compose)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
-    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
-    android()
+    jvmToolchain(17)
+    androidTarget()
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val androidMain by getting {
@@ -77,10 +77,6 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 }
 dependencies {
     implementation(libs.play.services.cast.framework)

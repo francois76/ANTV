@@ -1,10 +1,7 @@
 package fr.fgognet.antv.view.replaySearch
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -12,10 +9,10 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
+import kotlinx.datetime.Clock
 
 
-private var currentDate: Long = 0L
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReplaySearchView(
     model: ReplaySearchViewModel = getViewModel(factory = viewModelFactory {
@@ -28,12 +25,20 @@ fun ReplaySearchView(
             .fillMaxWidth()
             .padding(horizontal = Dp(20F))
     ) {
-        DatePicker(currentDate = currentDate, onCurrentDateChange = { date ->
-            currentDate = date
-        })
+        val state = DatePickerState(
+            initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds(),
+            initialDisplayedMonthMillis = null,
+            yearRange = IntRange(2000, 2200), initialDisplayMode = DisplayMode.Picker
+        )
+        DatePicker(
+            state = state
+        )
         Button(
             onClick = {
-                query(model.makeSearchBundle(currentDate))
+                if (state.selectedDateMillis != null) {
+                    query(model.makeSearchBundle(state.selectedDateMillis!!))
+                }
+
             },
             content = {
                 Text(text = stringResource(resource = MR.strings.buttom_search))
@@ -43,7 +48,3 @@ fun ReplaySearchView(
     }
 
 }
-
-@Composable
-expect fun DatePicker(currentDate: Long, onCurrentDateChange: (date: Long) -> Unit)
-
