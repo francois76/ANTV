@@ -11,6 +11,7 @@ plugins {
         libs.plugins.serialization,
         libs.plugins.google.services,
         libs.plugins.org.jetbrains.compose,
+        libs.plugins.compose.compiler,
     ).forEach {
         alias(it).apply(false)
     }
@@ -25,6 +26,6 @@ buildscript {
     }
 }
 
-task<Delete>("clean") {
+tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }

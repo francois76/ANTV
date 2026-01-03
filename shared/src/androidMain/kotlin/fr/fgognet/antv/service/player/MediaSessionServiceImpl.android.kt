@@ -56,25 +56,30 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
                     )
                 })
                 .build()
-        CastContext.getSharedInstance(
-            applicationContext,
-            MoreExecutors.directExecutor()
-        ).addOnCompleteListener { result ->
-            castPlayer = CastPlayer(
-                result.result, DefaultMediaItemConverter(), 5000, 5000
-            )
-            result.result.addCastStateListener {
-                isCastingPrivate = when (it) {
-                    CastState.CONNECTING, CastState.CONNECTED -> true
-                    CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
-                    else -> false
+        try {
+            CastContext.getSharedInstance(
+                applicationContext,
+                MoreExecutors.directExecutor()
+            ).addOnCompleteListener { result ->
+                castPlayer = CastPlayer(
+                    result.result, DefaultMediaItemConverter(), 5000, 5000
+                )
+                result.result.addCastStateListener {
+                    isCastingPrivate = when (it) {
+                        CastState.CONNECTING, CastState.CONNECTED -> true
+                        CastState.NOT_CONNECTED, CastState.NO_DEVICES_AVAILABLE -> false
+                        else -> false
+                    }
                 }
+                if (castPlayer.isCastSessionAvailable) {
+                    setCurrentPlayer(castPlayer)
+                }
+                castPlayer.setSessionAvailabilityListener(servicePlayerListener)
             }
-            if (castPlayer.isCastSessionAvailable) {
-                setCurrentPlayer(castPlayer)
-            }
-            castPlayer.setSessionAvailabilityListener(servicePlayerListener)
+        } catch (e: Exception) {
+            Napier.v(tag = TAG, message = "no cast context")
         }
+
     }
 
 
@@ -133,7 +138,7 @@ actual class MediaSessionServiceImpl : MediaLibraryService() {
         Napier.v(tag = TAG, message = "updating player")
         mediaSession?.player = currentPlayer
     }
-    
+
 
     actual companion object {
         var controllerFuture: ListenableFuture<MediaController>? = null

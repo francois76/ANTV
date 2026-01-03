@@ -1,40 +1,53 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     id("dev.icerock.mobile.multiplatform-resources")
     id("kotlin-parcelize")
 }
+
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 version = antvLibs.versions.antv.version.get()
 
 kotlin {
     androidTarget()
     jvm(name = "desktop")
-    ios()
+
+    applyDefaultHierarchyTemplate()
+
+    // iOS targets declared for compilation but framework generation is commented due to Gradle 9 incompatibility
+    iosX64()
+    iosArm64()
     iosSimulatorArm64()
 
-    jvmToolchain(17)
+    /* XCFramework configuration - Currently incompatible with Gradle 9.0
+     * Uncomment when Kotlin plugin supports Gradle 9 for binaries.framework
+     *
+     * val xcframeworkName = "shared"
+     * val xcframework = XCFramework(xcframeworkName)
+     *
+     * iosX64 {
+     *     binaries.framework {
+     *         baseName = xcframeworkName
+     *         isStatic = true
+     *         xcframework.add(this)
+     *         export(libs.moko.resources)
+     *     }
+     * }
+     * // ... same for iosArm64 and iosSimulatorArm64
+     */
 
-    cocoapods {
-        summary = "Shared code for the sample"
-        homepage = "https://github.com/JetBrains/compose-jb"
-        ios.deploymentTarget = "16.2"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            isStatic = true
-        }
-        extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
-    }
+    // CocoaPods temporarily disabled for Gradle 9 migration
+    // XCFramework also disabled - waiting for Kotlin plugin update for Gradle 9 support
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
         val commonMain by getting {
             resources.srcDirs(
-                rootProject.layout.buildDirectory.file("generated/moko/commonMain/src")
+                rootProject.layout.buildDirectory.dir("generated/moko-resources/commonMain/src")
             )
             dependencies {
                 implementation(libs.bundles.moko.mvvm)
@@ -58,7 +71,6 @@ kotlin {
             }
         }
         val androidMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 // bundles
 
@@ -79,22 +91,9 @@ kotlin {
 
             }
         }
-        val iosMain by getting {
-            dependsOn(commonMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(iosMain)
-        }
-        val iosX64Main by getting {
-            dependsOn(iosMain)
-        }
-        val iosArm64Main by getting {
-            dependsOn(iosMain)
-        }
 
 
         val desktopMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.macos_arm64)
@@ -104,6 +103,10 @@ kotlin {
             }
         }
     }
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 android {
@@ -116,9 +119,14 @@ android {
 
 
 multiplatformResources {
-    multiplatformResourcesPackage = antvLibs.versions.antv.packagename.get()
-    disableStaticFrameworkWarning = false
+    resourcesPackage.set(antvLibs.versions.antv.packagename.get())
+}
 
+// Task to assemble XCFramework for debug
+tasks.register("assembleSharedXCFramework") {
+    dependsOn("assembleSharedDebugXCFramework")
+    group = "build"
+    description = "Assemble debug XCFramework for all iOS targets"
 }
 
 

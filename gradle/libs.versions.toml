@@ -3,7 +3,7 @@ guava = "32.1.2-android" # https://github.com/google/guava/releases
 kamel = "0.7.3" # https://github.com/Kamel-Media/Kamel/releases
 ktor = "2.3.4" # https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1" # https://github.com/icerockdev/moko-mvvm/releases
-moko-resource = "0.23.0" # https://github.com/icerockdev/moko-resources
+moko-resource = "0.24.4" # https://github.com/icerockdev/moko-resources
 napier = "2.6.1" # https://github.com/AAkira/Napier
 navigation = "0.10.0" # https://github.com/chRyNaN/navigation/tree/develop
 play-services-cast-framework = "21.3.0" # https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
@@ -19,20 +19,20 @@ kotlinx-coroutines-guava = "1.7.3"# https://kotlinlang.org/api/kotlinx.coroutine
 kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
 
 # compose stack:
-compose-multiplatform = "1.5.1" # https://github.com/JetBrains/compose-multiplatform/releases
-compose-compiler = "1.5.3" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
+compose-multiplatform = "1.7.1" # https://github.com/JetBrains/compose-multiplatform/releases
+compose-compiler = "1.5.15" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
 # other androidx dependencies
-activity-compose = "1.8.0-rc01"# https://developer.android.com/jetpack/androidx/releases/activity
+activity-compose = "1.8.0"# https://developer.android.com/jetpack/androidx/releases/activity
 concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
 core-ktx = "1.12.0"# https://developer.android.com/jetpack/androidx/releases/core
 lifecycle = "2.6.2"# https://developer.android.com/jetpack/androidx/releases/lifecycle
-compose-material3 = "1.5.1"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
+compose-material3 = "1.5.3"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
 media3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
-kotlin = "1.9.10" # https://github.com/JetBrains/kotlin/releases
-android-gradle-plugin = "8.1.1" # https://developer.android.com/studio/releases/gradle-plugin
+kotlin = "2.1.0" # https://github.com/JetBrains/kotlin/releases
+android-gradle-plugin = "8.7.3" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
 
 [libraries]
@@ -125,6 +125,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 org-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

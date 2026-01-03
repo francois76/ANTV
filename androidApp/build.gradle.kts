@@ -2,12 +2,13 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
     androidTarget()
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     sourceSets {
@@ -72,9 +73,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
 }

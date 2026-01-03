@@ -17,6 +17,7 @@ import fr.fgognet.antv.service.player.MediaSessionServiceImpl
 import fr.fgognet.antv.util.initAndroidLog
 import fr.fgognet.antv.utils.resetLogs
 import fr.fgognet.antv.view.main.*
+import io.github.aakira.napier.Napier
 
 private const val TAG = "ANTV/MainActivity"
 
@@ -39,7 +40,7 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         }
 
         setContent {
-            Log.d(TAG, "recomposing")
+            Napier.v(tag = TAG, message = "recomposing")
             ANTVApp(backHandler = {
                 onBackPressedDispatcher.addCallback {
                     if (!it()) {
@@ -53,8 +54,12 @@ open class MainActivity : FragmentActivity(), Player.Listener {
         fullScreen(false);
 
         enableEdgeToEdge()
+        try {
+            CastContext.getSharedInstance(applicationContext, MoreExecutors.directExecutor())
+        } catch (e: Exception) {
+            Napier.v(tag = TAG, message = "no cast context")
+        }
 
-        CastContext.getSharedInstance(applicationContext, MoreExecutors.directExecutor())
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {

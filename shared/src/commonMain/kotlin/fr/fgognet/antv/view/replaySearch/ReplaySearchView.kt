@@ -25,10 +25,11 @@ fun ReplaySearchView(
             .fillMaxWidth()
             .padding(horizontal = Dp(20F))
     ) {
-        val state = DatePickerState(
+        val state = rememberDatePickerState(
             initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds(),
             initialDisplayedMonthMillis = null,
-            yearRange = IntRange(2000, 2200), initialDisplayMode = DisplayMode.Picker
+            yearRange = IntRange(2000, 2200),
+            initialDisplayMode = DisplayMode.Picker
         )
         DatePicker(
             state = state
