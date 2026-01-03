@@ -32,7 +32,7 @@ media3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
 kotlin = "2.1.0" # https://github.com/JetBrains/kotlin/releases
-android-gradle-plugin = "8.7.3" # https://developer.android.com/studio/releases/gradle-plugin
+android-gradle-plugin = "8.13.2" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
 
 [libraries]
