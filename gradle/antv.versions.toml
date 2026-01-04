@@ -2,7 +2,7 @@
 antv-version = "1.3.0"
 antv-packagename = "fr.fgognet.antv"
 # android
-android-version-number = "14"
+android-version-number = "15"
 android-sdk-compile = "36"
 android-sdk-min = "30"
 android-sdk-target = "35"
