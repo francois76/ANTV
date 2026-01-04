@@ -38,7 +38,7 @@ junit = "4.13.2"# depend on intellij
 [libraries]
 # single line library
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
-kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
+kamel = { module = "media.kamel:kamel-image-default", version.ref = "kamel" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit = { module = "junit:junit", version.ref = "junit" }
 play-services-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "play-services-cast-framework" }
