@@ -9,7 +9,7 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
 import fr.fgognet.antv.MR
-import kotlinx.datetime.Clock
+import kotlin.time.Clock.System
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +26,7 @@ fun ReplaySearchView(
             .padding(horizontal = Dp(20F))
     ) {
         val state = rememberDatePickerState(
-            initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds(),
+            initialSelectedDateMillis = System.now().toEpochMilliseconds(),
             initialDisplayedMonthMillis = null,
             yearRange = IntRange(2000, 2200),
             initialDisplayMode = DisplayMode.Picker

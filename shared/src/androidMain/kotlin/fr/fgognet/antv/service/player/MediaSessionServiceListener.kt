@@ -159,7 +159,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                     .build()
             )
         }.asListenableFuture()
-        val callBack = object : FutureCallback<MutableList<MediaItem>> {
+        val callBack = object : FutureCallback<MutableList<MediaItem>?> {
             override fun onSuccess(result: MutableList<MediaItem>?) {
                 MediaSessionServiceImpl.currentMediaItem = item
             }
@@ -209,7 +209,7 @@ class MediaSessionServiceListener(private val service: MediaSessionServiceImpl) 
                 ).build()
             )
         }.asListenableFuture()
-        val callBack = object : FutureCallback<LibraryResult<ImmutableList<MediaItem>>> {
+        val callBack = object : FutureCallback<LibraryResult<ImmutableList<MediaItem>>?> {
             override fun onSuccess(result: LibraryResult<ImmutableList<MediaItem>>?) {}
 
             override fun onFailure(t: Throwable) {

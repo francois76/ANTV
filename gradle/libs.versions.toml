@@ -1,37 +1,37 @@
 [versions]
-guava = "32.1.2-android" # https://github.com/google/guava/releases
-kamel = "0.7.3" # https://github.com/Kamel-Media/Kamel/releases
-ktor = "2.3.4" # https://github.com/ktorio/ktor/releases
+guava = "33.5.0-android" # https://github.com/google/guava/releases
+kamel = "1.0.8" # https://github.com/Kamel-Media/Kamel/releases
+ktor = "3.3.3" # https://github.com/ktorio/ktor/releases
 moko-mvvm = "0.16.1" # https://github.com/icerockdev/moko-mvvm/releases
-moko-resource = "0.24.4" # https://github.com/icerockdev/moko-resources
-napier = "2.6.1" # https://github.com/AAkira/Napier
+moko-resource = "0.25.2" # https://github.com/icerockdev/moko-resources
+napier = "2.7.1" # https://github.com/AAkira/Napier
 navigation = "0.10.0" # https://github.com/chRyNaN/navigation/tree/develop
-play-services-cast-framework = "21.3.0" # https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
-xmlutil = "0.86.2" # https://github.com/pdvrieze/xmlutil/releases
-google-services = "4.3.15" # https://maven.google.com/web/index.html?q=com.google.gms.google-services#com.google.gms.google-services:com.google.gms.google-services.gradle.plugin
-firebase = "32.3.1" # https://maven.google.com/web/index.html?q=firebase-bom#com.google.firebase:firebase-bom
-crashlytics = "2.9.9" # https://maven.google.com/web/index.html?q=crashly#com.google.firebase.crashlytics:com.google.firebase.crashlytics.gradle.plugin
+play-services-cast-framework = "22.2.0" # https://mvnrepository.com/artifact/com.google.android.gms/play-services-cast-framework?repo=google
+xmlutil = "0.91.3" # https://github.com/pdvrieze/xmlutil/releases
+google-services = "4.4.4" # https://maven.google.com/web/index.html?q=com.google.gms.google-services#com.google.gms.google-services:com.google.gms.google-services.gradle.plugin
+firebase = "34.7.0" # https://maven.google.com/web/index.html?q=firebase-bom#com.google.firebase:firebase-bom
+crashlytics = "3.0.6" # https://maven.google.com/web/index.html?q=crashly#com.google.firebase.crashlytics:com.google.firebase.crashlytics.gradle.plugin
 
 #kotlin dependencies
-kotlinx-datetime = "0.4.1"# https://github.com/Kotlin/kotlinx-datetime/releases
-kotlinx-serialization-json = "1.6.0"# https://github.com/Kotlin/kotlinx.serialization/releases
-kotlinx-coroutines-guava = "1.7.3"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
-kotlinx-coroutines = "1.7.3"# https://github.com/Kotlin/kotlinx.coroutines
+kotlinx-datetime = "0.7.1"# https://github.com/Kotlin/kotlinx-datetime/releases
+kotlinx-serialization-json = "1.9.0"# https://github.com/Kotlin/kotlinx.serialization/releases
+kotlinx-coroutines-guava = "1.10.2"# https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-guava/
+kotlinx-coroutines = "1.10.2"# https://github.com/Kotlin/kotlinx.coroutines
 
 # compose stack:
-compose-multiplatform = "1.7.1" # https://github.com/JetBrains/compose-multiplatform/releases
+compose-multiplatform = "1.9.3" # https://github.com/JetBrains/compose-multiplatform/releases
 compose-compiler = "1.5.15" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
 # other androidx dependencies
-activity-compose = "1.8.0"# https://developer.android.com/jetpack/androidx/releases/activity
-concurrent-futures = "1.1.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
-core-ktx = "1.12.0"# https://developer.android.com/jetpack/androidx/releases/core
-lifecycle = "2.6.2"# https://developer.android.com/jetpack/androidx/releases/lifecycle
-compose-material3 = "1.5.3"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
-media3 = "1.1.1"# https://developer.android.com/jetpack/androidx/releases/media3
+activity-compose = "1.12.2"# https://developer.android.com/jetpack/androidx/releases/activity
+concurrent-futures = "1.3.0"# https://developer.android.com/jetpack/androidx/releases/concurrent
+core-ktx = "1.17.0"# https://developer.android.com/jetpack/androidx/releases/core
+lifecycle = "2.10.0"# https://developer.android.com/jetpack/androidx/releases/lifecycle
+compose-material3 = "1.10.0"# https://mvnrepository.com/artifact/androidx.compose.ui/ui-tooling?repo=google
+media3 = "1.9.0"# https://developer.android.com/jetpack/androidx/releases/media3
 
 # core dependencies
-kotlin = "2.1.0" # https://github.com/JetBrains/kotlin/releases
+kotlin = "2.3.0" # https://github.com/JetBrains/kotlin/releases
 android-gradle-plugin = "8.13.2" # https://developer.android.com/studio/releases/gradle-plugin
 junit = "4.13.2"# depend on intellij
 
@@ -108,8 +108,8 @@ compose-ui-tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview"
 
 #firebase android
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version = "22.5.0" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version = "19.4.4" }
 
 [bundles]
 moko-mvvm = ["mvvm-compose", "mvvm-flow-compose", "mvvm-livedata-compose", "mvvm-core", "mvvm-livedata", "mvvm-state"]

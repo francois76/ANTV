@@ -1,23 +1,18 @@
 package fr.fgognet.antv.external.editorial
 
-import fr.fgognet.antv.config.Config
-import fr.fgognet.antv.config.Environment
-import fr.fgognet.antv.config.MyPolicy
-import fr.fgognet.antv.config.httpClient
+import fr.fgognet.antv.config.*
 import io.github.aakira.napier.Napier
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import kotlinx.datetime.Clock
+import io.ktor.client.call.body
+import io.ktor.client.request.request
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.modules.*
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
+import kotlin.time.Clock
 
 private const val TAG = "ANTV/EditorialRepository"
 
@@ -36,6 +31,7 @@ object EditorialRepository {
                 "Programme du jour",
                 arrayListOf()
             )
+
             Environment.FIXED -> return Editorial(
                 "Mercredi 13 juillet 2022",
                 "Programme du jour",
@@ -84,6 +80,7 @@ object EditorialRepository {
                     )
                 )
             )
+
             Environment.REAL_TIME -> {
                 val client = httpClient()
                 Napier.i(
