@@ -8,7 +8,6 @@ plugins {
     id("kotlin-parcelize")
 }
 
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 version = antvLibs.versions.antv.version.get()
 
