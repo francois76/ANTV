@@ -87,23 +87,13 @@ open class MainActivity : FragmentActivity(), Player.Listener {
 
     private fun fullScreen(isFullScreen: Boolean) {
         if (isFullScreen) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                window?.insetsController?.hide(WindowInsets.Type.systemBars())
-                window?.insetsController?.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-                actionBar?.hide()
-            }
+            window?.insetsController?.hide(WindowInsets.Type.systemBars())
+            window?.insetsController?.systemBarsBehavior =
+                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                window?.insetsController?.show(WindowInsets.Type.systemBars())
-                window?.insetsController?.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                actionBar?.show()
-            }
+            window?.insetsController?.show(WindowInsets.Type.systemBars())
+            window?.insetsController?.systemBarsBehavior =
+                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 
